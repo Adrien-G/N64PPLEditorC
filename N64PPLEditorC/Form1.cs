@@ -1,5 +1,5 @@
 ﻿using System;
-using System.io
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +13,9 @@ namespace N64PPLEditorC
 {
     public partial class Form1 : Form
     {
+
+        FileStream fstream;
+        
         public Form1()
         {
             InitializeComponent();
@@ -25,11 +28,32 @@ namespace N64PPLEditorC
 
         private void buttonGetRomFolder_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openfileDialog = new OpenFileDialog())
+            using (OpenFileDialog openRomFile = new OpenFileDialog())
             {
-                openfileDialog.InitialDirectory = Application.StartupPath;
+                openRomFile.InitialDirectory = Application.StartupPath;
+                openRomFile.Filter = "rom file (*.n64)|*.n64| rom file (*.z64)|*.z64";
+                openRomFile.FilterIndex = 1;
+                openRomFile.RestoreDirectory = true;
 
+                if(openRomFile.ShowDialog() == DialogResult.OK)
+                {
+                    textBoxPPLLocation.Text = openRomFile.FileName;
+                }
             }
+
+        }
+
+        private void buttonLoadRom_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                fstream = File.Open(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+            }
+            
 
         }
     }

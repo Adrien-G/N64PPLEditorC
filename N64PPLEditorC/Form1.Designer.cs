@@ -30,9 +30,9 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonLoadRom = new System.Windows.Forms.Button();
-            this.textBoxPPLLocation = new System.Windows.Forms.TextBox();
             this.buttonGetRomFolder = new System.Windows.Forms.Button();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.textBoxPPLLocation = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,15 +59,7 @@
             this.buttonLoadRom.TabIndex = 0;
             this.buttonLoadRom.Text = "Load rom";
             this.buttonLoadRom.UseVisualStyleBackColor = true;
-            // 
-            // textBoxPPLLocation
-            // 
-            this.textBoxPPLLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPPLLocation.Location = new System.Drawing.Point(6, 19);
-            this.textBoxPPLLocation.Name = "textBoxPPLLocation";
-            this.textBoxPPLLocation.Size = new System.Drawing.Size(702, 20);
-            this.textBoxPPLLocation.TabIndex = 1;
+            this.buttonLoadRom.Click += new System.EventHandler(this.buttonLoadRom_Click);
             // 
             // buttonGetRomFolder
             // 
@@ -86,6 +78,17 @@
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(312, 680);
             this.treeView1.TabIndex = 1;
+            // 
+            // textBoxPPLLocation
+            // 
+            this.textBoxPPLLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxPPLLocation.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::N64PPLEditorC.Properties.Settings.Default, "txtPPLLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.textBoxPPLLocation.Location = new System.Drawing.Point(6, 19);
+            this.textBoxPPLLocation.Name = "textBoxPPLLocation";
+            this.textBoxPPLLocation.Size = new System.Drawing.Size(702, 20);
+            this.textBoxPPLLocation.TabIndex = 1;
+            this.textBoxPPLLocation.Text = global::N64PPLEditorC.Properties.Settings.Default.txtPPLLocation;
             // 
             // Form1
             // 
