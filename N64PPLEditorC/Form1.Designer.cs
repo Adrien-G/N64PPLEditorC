@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.buttonLoadRom = new System.Windows.Forms.Button();
             this.buttonGetRomFolder = new System.Windows.Forms.Button();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.textBoxPPLLocation = new System.Windows.Forms.TextBox();
+            this.buttonLoadRom = new System.Windows.Forms.Button();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.timerSearchContent = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,17 +52,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "PPL location : ";
             // 
-            // buttonLoadRom
-            // 
-            this.buttonLoadRom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLoadRom.Location = new System.Drawing.Point(673, 46);
-            this.buttonLoadRom.Name = "buttonLoadRom";
-            this.buttonLoadRom.Size = new System.Drawing.Size(75, 23);
-            this.buttonLoadRom.TabIndex = 0;
-            this.buttonLoadRom.Text = "Load rom";
-            this.buttonLoadRom.UseVisualStyleBackColor = true;
-            this.buttonLoadRom.Click += new System.EventHandler(this.buttonLoadRom_Click);
-            // 
             // buttonGetRomFolder
             // 
             this.buttonGetRomFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -72,13 +63,6 @@
             this.buttonGetRomFolder.UseVisualStyleBackColor = true;
             this.buttonGetRomFolder.Click += new System.EventHandler(this.buttonGetRomFolder_Click);
             // 
-            // treeView1
-            // 
-            this.treeView1.Location = new System.Drawing.Point(12, 93);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(312, 680);
-            this.treeView1.TabIndex = 1;
-            // 
             // textBoxPPLLocation
             // 
             this.textBoxPPLLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -89,6 +73,28 @@
             this.textBoxPPLLocation.Size = new System.Drawing.Size(702, 20);
             this.textBoxPPLLocation.TabIndex = 1;
             this.textBoxPPLLocation.Text = global::N64PPLEditorC.Properties.Settings.Default.txtPPLLocation;
+            // 
+            // buttonLoadRom
+            // 
+            this.buttonLoadRom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonLoadRom.Location = new System.Drawing.Point(673, 46);
+            this.buttonLoadRom.Name = "buttonLoadRom";
+            this.buttonLoadRom.Size = new System.Drawing.Size(75, 23);
+            this.buttonLoadRom.TabIndex = 0;
+            this.buttonLoadRom.Text = "Load rom";
+            this.buttonLoadRom.UseVisualStyleBackColor = true;
+            this.buttonLoadRom.Click += new System.EventHandler(this.buttonLoadRom_Click);
+            // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(12, 93);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(312, 680);
+            this.treeView1.TabIndex = 1;
+            // 
+            // timerSearchContent
+            // 
+            this.timerSearchContent.Tick += new System.EventHandler(this.timerSearchContent_Tick);
             // 
             // Form1
             // 
@@ -113,6 +119,7 @@
         private System.Windows.Forms.TextBox textBoxPPLLocation;
         private System.Windows.Forms.Button buttonLoadRom;
         private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.Timer timerSearchContent;
     }
 }
 

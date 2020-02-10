@@ -48,12 +48,18 @@ namespace N64PPLEditorC
             try
             {
                 fstream = File.Open(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
+                buttonLoadRom.Enabled = false;
+                buttonLoadRom.Text = "ROM Loaded";
+                timerSearchContent.Start();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
             }
-            
+        }
+
+        private void timerSearchContent_Tick(object sender, EventArgs e)
+        {
 
         }
     }
