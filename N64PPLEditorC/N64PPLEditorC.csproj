@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CGenericFunctions.cs" />
+    <Compile Include="CRessourceList.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

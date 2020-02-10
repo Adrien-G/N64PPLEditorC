@@ -48,7 +48,7 @@ namespace N64PPLEditorC
                 fstream.Close();
                 buttonLoadRom.Enabled = false;
                 buttonLoadRom.Text = "ROM Loaded";
-                LoadTreeViewData();
+                LoadTreeViewRessources();
                 //timerSearchContent.Start();
             }
             catch (Exception ex)
@@ -57,22 +57,28 @@ namespace N64PPLEditorC
             }
         }
 
-        private void LoadTreeViewData()
+        private void LoadTreeViewRessources()
         {
             Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
 
-            // search for ABRA.BIF pattern (start of data array)
+            // search for "ABRA.BIF" pattern (start of array ressources location)
             Byte[] patternAbraBif = { 65, 66, 82, 65, 46, 66, 73, 70 };
-            int indexStart = CGenericFunctions.SearchBytesInArray(buffRom, patternAbraBif);
-            labelStartingData.Text = indexStart.ToString("X");
+            int indexRessourcesArrayStart = CGenericFunctions.SearchBytesInArray(buffRom, patternAbraBif);
+            labelStartingData.Text = indexRessourcesArrayStart.ToString("X");
 
-            // search for N64 PtrTablesV2 pattern (end of data array)
+            // search for "N64 PtrTablesV2" pattern (end of ressources location)
             Byte[] patternN64WaveTable = { 78, 54, 52, 32, 80, 116, 114, 84, 97, 98, 108, 101, 115, 86, 50 };
-            int indexEnd = CGenericFunctions.SearchBytesInArray(buffRom, patternN64WaveTable);
-            labelEndingData.Text = indexEnd.ToString("X");
+            int indexRessourcesEnd = CGenericFunctions.SearchBytesInArray(buffRom, patternN64WaveTable);
+            labelEndingData.Text = indexRessourcesEnd.ToString("X");
 
 
-            //operate adding nodes in treeview...
+            //read header of table data
+            Byte[] nbElements = new Byte[3];
+            Array.Copy(buffRom, indexRessourcesArrayStart, nbElements, 0, nbElements.Length);
+            
+            //send array to the CressourcesListClass between starting and ending data
+
+
 
 
             if (treeView1.Nodes.Count > 0)
