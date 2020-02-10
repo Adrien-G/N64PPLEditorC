@@ -12,10 +12,7 @@ using System.Windows.Forms;
 namespace N64PPLEditorC
 {
     public partial class Form1 : Form
-    {
-
-        FileStream fstream;
-        
+    {   
         public Form1()
         {
             InitializeComponent();
@@ -47,10 +44,12 @@ namespace N64PPLEditorC
         {
             try
             {
-                fstream = File.Open(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
+                FileStream fstream = File.Open(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
+                fstream.Close();
                 buttonLoadRom.Enabled = false;
                 buttonLoadRom.Text = "ROM Loaded";
-                timerSearchContent.Start();
+                LoadTreeViewData();
+                //timerSearchContent.Start();
             }
             catch (Exception ex)
             {
@@ -58,8 +57,28 @@ namespace N64PPLEditorC
             }
         }
 
-        private void timerSearchContent_Tick(object sender, EventArgs e)
+        private void LoadTreeViewData()
         {
+            Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
+
+            // search for ABRA.BIF pattern (start of data array)
+            Byte[] patternAbraBif = { 65, 66, 82, 65, 46, 66, 73, 70 };
+            int indexStart = CGenericFunctions.SearchBytesInArray(buffRom, patternAbraBif);
+            labelStartingData.Text = indexStart.ToString("X");
+
+            // search for N64 PtrTablesV2 pattern (end of data array)
+            Byte[] patternN64WaveTable = { 78, 54, 52, 32, 80, 116, 114, 84, 97, 98, 108, 101, 115, 86, 50 };
+            int indexEnd = CGenericFunctions.SearchBytesInArray(buffRom, patternN64WaveTable);
+            labelEndingData.Text = indexEnd.ToString("X");
+
+
+            //operate adding nodes in treeview...
+
+
+            if (treeView1.Nodes.Count > 0)
+                treeView1.SelectedNode = treeView1.Nodes[0];
+            else
+                treeView1.Nodes.Add("No data were found :(");
 
         }
     }

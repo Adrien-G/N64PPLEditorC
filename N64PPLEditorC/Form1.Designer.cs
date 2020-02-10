@@ -28,14 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonGetRomFolder = new System.Windows.Forms.Button();
             this.textBoxPPLLocation = new System.Windows.Forms.TextBox();
             this.buttonLoadRom = new System.Windows.Forms.Button();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.timerSearchContent = new System.Windows.Forms.Timer(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.labelStartingData = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labelEndingData = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -92,15 +96,61 @@
             this.treeView1.Size = new System.Drawing.Size(312, 680);
             this.treeView1.TabIndex = 1;
             // 
-            // timerSearchContent
+            // label1
             // 
-            this.timerSearchContent.Tick += new System.EventHandler(this.timerSearchContent_Tick);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Starting data : ";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.labelEndingData);
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.labelStartingData);
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Location = new System.Drawing.Point(330, 93);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(335, 193);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Debug Info";
+            // 
+            // labelStartingData
+            // 
+            this.labelStartingData.AutoSize = true;
+            this.labelStartingData.Location = new System.Drawing.Point(88, 16);
+            this.labelStartingData.Name = "labelStartingData";
+            this.labelStartingData.Size = new System.Drawing.Size(13, 13);
+            this.labelStartingData.TabIndex = 3;
+            this.labelStartingData.Text = "0";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(73, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Ending data : ";
+            // 
+            // labelEndingData
+            // 
+            this.labelEndingData.AutoSize = true;
+            this.labelEndingData.Location = new System.Drawing.Point(88, 29);
+            this.labelEndingData.Name = "labelEndingData";
+            this.labelEndingData.Size = new System.Drawing.Size(13, 13);
+            this.labelEndingData.TabIndex = 5;
+            this.labelEndingData.Text = "0";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(778, 785);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
@@ -108,6 +158,8 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -119,7 +171,11 @@
         private System.Windows.Forms.TextBox textBoxPPLLocation;
         private System.Windows.Forms.Button buttonLoadRom;
         private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.Timer timerSearchContent;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label labelStartingData;
+        private System.Windows.Forms.Label labelEndingData;
+        private System.Windows.Forms.Label label2;
     }
 }
 

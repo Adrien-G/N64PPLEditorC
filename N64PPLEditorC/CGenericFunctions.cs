@@ -8,7 +8,7 @@ using System.IO;
 
 namespace N64PPLEditorC
 {
-    public class CGenericFunctions
+    public static class CGenericFunctions
     {
 
         public static String pathExtractedTexture = Application.StartupPath + @"\extractedTexture\";
@@ -23,6 +23,26 @@ namespace N64PPLEditorC
                 Array.Reverse(byteArray);
 
             return BitConverter.ToInt32(byteArray, 0);
+        }
+
+        public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched)
+        {
+            // loop on the first array for find occurence
+            for (int i = 0; i < arraySource.Length - dataSearched.Length; i++)
+            {
+                if (arraySource[i] == dataSearched[0])
+                {
+                    //when occurence founded, check the rest of the array to compare
+                    for (int j = 0; j < dataSearched.Length; j++)
+                    {
+                        if (arraySource[i + j] != dataSearched[j])
+                            break;
+                        if (j == dataSearched.Length - 1)
+                            return i;
+                    }
+                }
+            }
+            return -1;
         }
 
         public static void VerifyExistingPath()
