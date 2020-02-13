@@ -27,7 +27,8 @@ namespace N64PPLEditorC
         public void Init()
         {
             //get bff count and fibName size
-            Byte bffCount = data3Fib[4];
+            textureType = data3Fib[4];
+            Byte bffCount = data3Fib[12];
             Byte fibNameSize = data3Fib[16];
 
             //keep fibName
@@ -47,7 +48,17 @@ namespace N64PPLEditorC
 
         private void MakeBFF2Chunks(Byte[] bffsData,int bffCount)
         {
+            int indexBFF2 = 0;
+            do
+            {
+                //beware, maybe add index pattern to search byte in array... (the n number...)
+                indexBFF2 = CGeneric.SearchBytesInArray(bffsData, CGeneric.patternBFF2);
 
+                
+
+
+
+            } while (indexBFF2 != -1);
         }
 
     }

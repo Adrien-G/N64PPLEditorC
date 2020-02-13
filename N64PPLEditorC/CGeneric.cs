@@ -8,16 +8,32 @@ using System.IO;
 
 namespace N64PPLEditorC
 {
-    public static class CGenericFunctions
+    public static class CGeneric
     {
+        //different path used in the application
+        public static readonly String pathExtractedTexture = Application.StartupPath + @"\extractedTexture\";
+        public static readonly String pathOtherContent = Application.StartupPath + @"\OtherContent\";
+        public static readonly String pathCompressedTexture = Application.StartupPath + @"\compressedTexture\";
+        public static readonly String pathReplacedTexture = Application.StartupPath + @"\replacedTexture\";
 
-        public static String pathExtractedTexture = Application.StartupPath + @"\extractedTexture\";
-        public static String pathOtherContent = Application.StartupPath + @"\OtherContent\";
-        public static String pathCompressedTexture = Application.StartupPath + @"\compressedTexture\";
-        public static String pathReplacedTexture = Application.StartupPath + @"\replacedTexture\";
-
+        //size of the elements present in the table of ressources
         public static int sizeOfElementTable = 24;
 
+        //some different pattern in the rom
+        public static readonly Byte[] patternN64WaveTable = { 78, 54, 52, 32, 80, 116, 114, 84, 97, 98, 108, 101, 115, 86, 50 };
+        public static readonly Byte[] patternAbraBif = { 65, 66, 82, 65, 46, 66, 73, 70 };
+        public static readonly Byte[] patternBFF2 = { 66, 70, 70, 50 };
+        
+        //check the decimal value of ressources type
+        public enum RessourceType : int
+        {
+            FIB = 860244290,
+            HVQM = 1213616461,
+            SBF = 1396852273,
+            BFF = 1111901746
+        }
+
+        
 
         public static Int32 ConvertByteArrayToInt(Byte[] byteArray)
         {

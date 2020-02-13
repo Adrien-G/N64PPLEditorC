@@ -63,24 +63,22 @@ namespace N64PPLEditorC
             Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
 
             // search for "ABRA.BIF" pattern (start of array ressources location)
-            Byte[] patternAbraBif = { 65, 66, 82, 65, 46, 66, 73, 70 };
-            int indexRessourcesArrayStart = CGenericFunctions.SearchBytesInArray(buffRom, patternAbraBif) - 12;
+            int indexRessourcesArrayStart = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternAbraBif) - 12;
             labelStartingData.Text = indexRessourcesArrayStart.ToString("X");
 
             // search for "N64 PtrTablesV2" pattern (end of ressources location)
-            Byte[] patternN64WaveTable = { 78, 54, 52, 32, 80, 116, 114, 84, 97, 98, 108, 101, 115, 86, 50 };
-            int indexRessourcesEnd = CGenericFunctions.SearchBytesInArray(buffRom, patternN64WaveTable);
+            int indexRessourcesEnd = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternN64WaveTable);
             labelEndingData.Text = indexRessourcesEnd.ToString("X");
 
 
             //read header of table data
             Byte[] nbElementsTable = new Byte[4];
             Array.Copy(buffRom, indexRessourcesArrayStart, nbElementsTable, 0, nbElementsTable.Length);
-            int nbElementsInTable = CGenericFunctions.ConvertByteArrayToInt(nbElementsTable);
+            int nbElementsInTable = CGeneric.ConvertByteArrayToInt(nbElementsTable);
 
 
             //read data table for getting data information location and length
-            Byte[] dataTable = new Byte[CGenericFunctions.sizeOfElementTable * nbElementsInTable];
+            Byte[] dataTable = new Byte[CGeneric.sizeOfElementTable * nbElementsInTable];
             Array.Copy(buffRom, indexRessourcesArrayStart+4,dataTable,0,dataTable.Length);
 
             //get array between load and end data

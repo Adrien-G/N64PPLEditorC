@@ -160,6 +160,8 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.tabControl1.Controls.Add(this.tabPageTextures);
             this.tabControl1.Controls.Add(this.tabPageMovies);
             this.tabControl1.Controls.Add(this.tabPageScenes);

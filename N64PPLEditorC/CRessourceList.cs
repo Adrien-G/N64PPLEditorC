@@ -9,13 +9,6 @@ namespace N64PPLEditorC
     class CRessourceList
     {
         
-        private enum RessourceType : int
-        {
-            FIB=860244290,
-            HVQM=1213616461,
-            SBF=1396852273
-        }
-        
         private struct ListFormat
         {
             public Byte[] ressourceSize;
@@ -51,9 +44,9 @@ namespace N64PPLEditorC
                 lst1[i].ressourceIndex = new byte[4];
                 lst1[i].ressourceSize = new byte[4];
                 lst1[i].ressourceName = new byte[16];
-                Array.Copy(ressourcesList, i * CGenericFunctions.sizeOfElementTable, lst1[i].ressourceSize, 0, 4);
-                Array.Copy(ressourcesList, i * CGenericFunctions.sizeOfElementTable + 4, lst1[i].ressourceIndex, 0, 4);
-                Array.Copy(ressourcesList, i * CGenericFunctions.sizeOfElementTable + 8, lst1[i].ressourceName, 0,16);
+                Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable, lst1[i].ressourceSize, 0, 4);
+                Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable + 4, lst1[i].ressourceIndex, 0, 4);
+                Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable + 8, lst1[i].ressourceName, 0,16);
             }
 
             return lst1;
@@ -68,7 +61,7 @@ namespace N64PPLEditorC
             for( int i = 0; i < ressourcesList.Length; i++)
             {
                 //grab only one item by one
-                int sizeElement = CGenericFunctions.ConvertByteArrayToInt(ressourcesList[i].ressourceSize);
+                int sizeElement = CGeneric.ConvertByteArrayToInt(ressourcesList[i].ressourceSize);
                 Byte[] tmpContainerData = new byte[sizeElement];
                 Array.Copy(ressourceData, generalIndex,tmpContainerData,0,tmpContainerData.Length);
 
@@ -76,15 +69,15 @@ namespace N64PPLEditorC
                 Byte[] dataPattern = new byte[4];
                 Array.Copy(tmpContainerData, 0, dataPattern, 0, dataPattern.Length);
 
-                switch (CGenericFunctions.ConvertByteArrayToInt(dataPattern))
+                switch (CGeneric.ConvertByteArrayToInt(dataPattern))
                 {
-                    case (int)RessourceType.FIB:
+                    case (int)CGeneric.RessourceType.FIB:
                         fibList.Add(new C3FIB(tmpContainerData,ressourcesList[i].ressourceName));
                         break;
-                    case (int)RessourceType.HVQM:
+                    case (int)CGeneric.RessourceType.HVQM:
                         hvqmList.Add(new CHVQM(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
-                    case (int)RessourceType.SBF:
+                    case (int)CGeneric.RessourceType.SBF:
                         sbfList.Add(new CSBF1(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                 }

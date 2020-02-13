@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="C3FIB.cs" />
     <Compile Include="CBFF2.cs" />
-    <Compile Include="CGenericFunctions.cs" />
+    <Compile Include="CGeneric.cs" />
     <Compile Include="CHVQM.cs" />
     <Compile Include="CRessourceList.cs" />
     <Compile Include="CSBF1.cs" />
