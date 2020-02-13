@@ -9,10 +9,12 @@ namespace N64PPLEditorC
     class CSBF1
     {
         private Byte[] rawData;
+        private Byte[] ressourceName;
 
-        public CSBF1(Byte[] rawData)
+        public CSBF1(Byte[] rawData, Byte[] ressourceName)
         {
             this.rawData = rawData;
+            this.ressourceName = ressourceName;
         }
     }
 }

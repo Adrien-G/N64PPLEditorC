@@ -41,8 +41,8 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTextures = new System.Windows.Forms.TabPage();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
-            this.tabPageScenes = new System.Windows.Forms.TabPage();
             this.treeViewMovies = new System.Windows.Forms.TreeView();
+            this.tabPageScenes = new System.Windows.Forms.TabPage();
             this.treeViewScenes = new System.Windows.Forms.TreeView();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -61,7 +61,7 @@
             this.groupBox1.Controls.Add(this.buttonLoadRom);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(789, 75);
+            this.groupBox1.Size = new System.Drawing.Size(789, 51);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "PPL location : ";
@@ -69,7 +69,7 @@
             // buttonGetRomFolder
             // 
             this.buttonGetRomFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGetRomFolder.Location = new System.Drawing.Point(749, 16);
+            this.buttonGetRomFolder.Location = new System.Drawing.Point(668, 16);
             this.buttonGetRomFolder.Name = "buttonGetRomFolder";
             this.buttonGetRomFolder.Size = new System.Drawing.Size(34, 23);
             this.buttonGetRomFolder.TabIndex = 1;
@@ -84,14 +84,14 @@
             this.textBoxPPLLocation.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::N64PPLEditorC.Properties.Settings.Default, "txtPPLLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.textBoxPPLLocation.Location = new System.Drawing.Point(6, 19);
             this.textBoxPPLLocation.Name = "textBoxPPLLocation";
-            this.textBoxPPLLocation.Size = new System.Drawing.Size(737, 20);
+            this.textBoxPPLLocation.Size = new System.Drawing.Size(656, 20);
             this.textBoxPPLLocation.TabIndex = 1;
             this.textBoxPPLLocation.Text = global::N64PPLEditorC.Properties.Settings.Default.txtPPLLocation;
             // 
             // buttonLoadRom
             // 
             this.buttonLoadRom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLoadRom.Location = new System.Drawing.Point(708, 46);
+            this.buttonLoadRom.Location = new System.Drawing.Point(708, 17);
             this.buttonLoadRom.Name = "buttonLoadRom";
             this.buttonLoadRom.Size = new System.Drawing.Size(75, 23);
             this.buttonLoadRom.TabIndex = 0;
@@ -101,9 +101,12 @@
             // 
             // treeViewTextures
             // 
+            this.treeViewTextures.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewTextures.Location = new System.Drawing.Point(0, 0);
             this.treeViewTextures.Name = "treeViewTextures";
-            this.treeViewTextures.Size = new System.Drawing.Size(347, 654);
+            this.treeViewTextures.Size = new System.Drawing.Size(347, 678);
             this.treeViewTextures.TabIndex = 1;
             // 
             // label1
@@ -160,10 +163,10 @@
             this.tabControl1.Controls.Add(this.tabPageTextures);
             this.tabControl1.Controls.Add(this.tabPageMovies);
             this.tabControl1.Controls.Add(this.tabPageScenes);
-            this.tabControl1.Location = new System.Drawing.Point(12, 93);
+            this.tabControl1.Location = new System.Drawing.Point(12, 69);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(355, 680);
+            this.tabControl1.Size = new System.Drawing.Size(355, 704);
             this.tabControl1.TabIndex = 4;
             // 
             // tabPageTextures
@@ -172,7 +175,7 @@
             this.tabPageTextures.Location = new System.Drawing.Point(4, 22);
             this.tabPageTextures.Name = "tabPageTextures";
             this.tabPageTextures.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTextures.Size = new System.Drawing.Size(347, 654);
+            this.tabPageTextures.Size = new System.Drawing.Size(347, 678);
             this.tabPageTextures.TabIndex = 0;
             this.tabPageTextures.Text = "Textures";
             this.tabPageTextures.UseVisualStyleBackColor = true;
@@ -183,33 +186,39 @@
             this.tabPageMovies.Location = new System.Drawing.Point(4, 22);
             this.tabPageMovies.Name = "tabPageMovies";
             this.tabPageMovies.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageMovies.Size = new System.Drawing.Size(347, 654);
+            this.tabPageMovies.Size = new System.Drawing.Size(347, 678);
             this.tabPageMovies.TabIndex = 1;
             this.tabPageMovies.Text = "Movies";
             this.tabPageMovies.UseVisualStyleBackColor = true;
+            // 
+            // treeViewMovies
+            // 
+            this.treeViewMovies.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeViewMovies.Location = new System.Drawing.Point(0, 0);
+            this.treeViewMovies.Name = "treeViewMovies";
+            this.treeViewMovies.Size = new System.Drawing.Size(347, 678);
+            this.treeViewMovies.TabIndex = 2;
             // 
             // tabPageScenes
             // 
             this.tabPageScenes.Controls.Add(this.treeViewScenes);
             this.tabPageScenes.Location = new System.Drawing.Point(4, 22);
             this.tabPageScenes.Name = "tabPageScenes";
-            this.tabPageScenes.Size = new System.Drawing.Size(347, 654);
+            this.tabPageScenes.Size = new System.Drawing.Size(347, 678);
             this.tabPageScenes.TabIndex = 2;
             this.tabPageScenes.Text = "Scenes";
             this.tabPageScenes.UseVisualStyleBackColor = true;
             // 
-            // treeViewMovies
-            // 
-            this.treeViewMovies.Location = new System.Drawing.Point(0, 0);
-            this.treeViewMovies.Name = "treeViewMovies";
-            this.treeViewMovies.Size = new System.Drawing.Size(347, 654);
-            this.treeViewMovies.TabIndex = 2;
-            // 
             // treeViewScenes
             // 
+            this.treeViewScenes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewScenes.Location = new System.Drawing.Point(0, 0);
             this.treeViewScenes.Name = "treeViewScenes";
-            this.treeViewScenes.Size = new System.Drawing.Size(347, 654);
+            this.treeViewScenes.Size = new System.Drawing.Size(347, 678);
             this.treeViewScenes.TabIndex = 3;
             // 
             // Form1

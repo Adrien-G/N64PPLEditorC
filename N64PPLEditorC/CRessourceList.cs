@@ -72,7 +72,6 @@ namespace N64PPLEditorC
                 Byte[] tmpContainerData = new byte[sizeElement];
                 Array.Copy(ressourceData, generalIndex,tmpContainerData,0,tmpContainerData.Length);
 
-
                 //determine the type of data and fill in the apropriated list
                 Byte[] dataPattern = new byte[4];
                 Array.Copy(tmpContainerData, 0, dataPattern, 0, dataPattern.Length);
@@ -80,13 +79,13 @@ namespace N64PPLEditorC
                 switch (CGenericFunctions.ConvertByteArrayToInt(dataPattern))
                 {
                     case (int)RessourceType.FIB:
-                        fibList.Add(new C3FIB(tmpContainerData));
+                        fibList.Add(new C3FIB(tmpContainerData,ressourcesList[i].ressourceName));
                         break;
                     case (int)RessourceType.HVQM:
-                        hvqmList.Add(new CHVQM(tmpContainerData));
+                        hvqmList.Add(new CHVQM(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                     case (int)RessourceType.SBF:
-                        sbfList.Add(new CSBF1(tmpContainerData));
+                        sbfList.Add(new CSBF1(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                 }
                 generalIndex += sizeElement;

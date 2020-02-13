@@ -9,13 +9,46 @@ namespace N64PPLEditorC
     class C3FIB
     {
 
-        private Byte[] rawData;
+        private Byte[] data3Fib;
         private List<CBFF2> bff2Childs;
+        private Byte[] ressourceName;
+        private Byte[] fibName;
+        private Byte[] header3FIB;
+        private Byte textureType;
 
-        public C3FIB(Byte[] rawData)
+
+        public C3FIB(Byte[] data3Fib, Byte[] ressourceName)
         {
-            this.rawData = rawData;
+            this.data3Fib = data3Fib;
             bff2Childs = new List<CBFF2>();
+            this.ressourceName = ressourceName;
         }
+
+        public void Init()
+        {
+            //get bff count and fibName size
+            Byte bffCount = data3Fib[4];
+            Byte fibNameSize = data3Fib[16];
+
+            //keep fibName
+            fibName = new byte[16 + fibNameSize];
+            Array.Copy(data3Fib,20,fibName,0,fibNameSize);
+
+            //keep header information
+            header3FIB = new byte[20 + fibNameSize];
+            Array.Copy(data3Fib,0,header3FIB,0,header3FIB.Length);
+
+            //exclude the header and prepare and Chunk each BFF2
+            Byte[] bffData = new byte[data3Fib.Length- fibNameSize - 20];
+            Array.Copy(data3Fib, 20 + fibNameSize,bffData,0,bffData.Length);
+            MakeBFF2Chunks(bffData,bffCount);
+
+        }
+
+        private void MakeBFF2Chunks(Byte[] bffsData,int bffCount)
+        {
+
+        }
+
     }
 }
