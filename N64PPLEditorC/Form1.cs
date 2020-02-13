@@ -56,7 +56,7 @@ namespace N64PPLEditorC
                 MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
             }
         }
-
+        
         private void LoadTreeViewRessources()
         {
             Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
@@ -75,9 +75,9 @@ namespace N64PPLEditorC
             //read header of table data
             Byte[] nbElements = new Byte[3];
             Array.Copy(buffRom, indexRessourcesArrayStart, nbElements, 0, nbElements.Length);
-            
-            //send array to the CressourcesListClass between starting and ending data
 
+            //send array to the CressourcesListClass between starting and ending data
+            CRessourceList ressourcesList = new CRessourceList(CGenericFunctions.ConvertByteArrayToInt(nbElements),1);
 
 
 
