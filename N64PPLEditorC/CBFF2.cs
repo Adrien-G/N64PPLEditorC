@@ -5,17 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace N64PPLEditorC
-{
-    class C3FIB
+{ 
+    class CBFF2
     {
-
         private Byte[] rawData;
-        private List<CBFF2> bff2Childs;
 
-        public C3FIB(Byte[] rawData)
+        public CBFF2()
         {
-            this.rawData = rawData;
-            bff2Childs = new List<CBFF2>();
+
         }
     }
 }
