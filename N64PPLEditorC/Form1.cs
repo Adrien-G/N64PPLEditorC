@@ -12,7 +12,9 @@ using System.Windows.Forms;
 namespace N64PPLEditorC
 {
     public partial class Form1 : Form
-    {   
+    {
+        CRessourceList ressourceList;
+
         public Form1()
         {
             InitializeComponent();
@@ -20,7 +22,7 @@ namespace N64PPLEditorC
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void buttonGetRomFolder_Click(object sender, EventArgs e)
@@ -42,28 +44,27 @@ namespace N64PPLEditorC
 
         private void buttonLoadRom_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 FileStream fstream = File.Open(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
                 fstream.Close();
                 buttonLoadRom.Enabled = false;
                 buttonLoadRom.Text = "ROM Loaded";
-                LoadTreeViewRessources();
-                //timerSearchContent.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
-            }
+                LoadTreeViewAndRessourcesList();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //}
         }
         
-        private void LoadTreeViewRessources()
+        private void LoadTreeViewAndRessourcesList()
         {
             Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
 
             // search for "ABRA.BIF" pattern (start of array ressources location)
             Byte[] patternAbraBif = { 65, 66, 82, 65, 46, 66, 73, 70 };
-            int indexRessourcesArrayStart = CGenericFunctions.SearchBytesInArray(buffRom, patternAbraBif);
+            int indexRessourcesArrayStart = CGenericFunctions.SearchBytesInArray(buffRom, patternAbraBif) - 12;
             labelStartingData.Text = indexRessourcesArrayStart.ToString("X");
 
             // search for "N64 PtrTablesV2" pattern (end of ressources location)
@@ -73,18 +74,29 @@ namespace N64PPLEditorC
 
 
             //read header of table data
-            Byte[] nbElements = new Byte[3];
-            Array.Copy(buffRom, indexRessourcesArrayStart, nbElements, 0, nbElements.Length);
-
-            //send array to the CressourcesListClass between starting and ending data
-            CRessourceList ressourcesList = new CRessourceList(CGenericFunctions.ConvertByteArrayToInt(nbElements),1);
+            Byte[] nbElementsTable = new Byte[4];
+            Array.Copy(buffRom, indexRessourcesArrayStart, nbElementsTable, 0, nbElementsTable.Length);
+            int nbElementsInTable = CGenericFunctions.ConvertByteArrayToInt(nbElementsTable);
 
 
+            //read data table for getting data information location and length
+            Byte[] dataTable = new Byte[CGenericFunctions.sizeOfElementTable * nbElementsInTable];
+            Array.Copy(buffRom, indexRessourcesArrayStart+4,dataTable,0,dataTable.Length);
 
-            if (treeView1.Nodes.Count > 0)
-                treeView1.SelectedNode = treeView1.Nodes[0];
+            //get array between load and end data
+            Byte[] ressourcesData = new Byte[indexRessourcesEnd - indexRessourcesArrayStart - dataTable.Length];
+            Array.Copy(buffRom, indexRessourcesArrayStart + dataTable.Length+4, ressourcesData, 0, ressourcesData.Length);
+
+
+            //init the ressources list and data associated
+            this.ressourceList = new CRessourceList();
+            this.ressourceList.Init(nbElementsInTable, dataTable, ressourcesData);
+
+
+            if (treeViewTextures.Nodes.Count > 0)
+                treeViewTextures.SelectedNode = treeViewTextures.Nodes[0];
             else
-                treeView1.Nodes.Add("No data were found :(");
+                treeViewTextures.Nodes.Add("No data were found :(");
 
         }
     }

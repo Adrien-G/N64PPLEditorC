@@ -16,6 +16,8 @@ namespace N64PPLEditorC
         public static String pathCompressedTexture = Application.StartupPath + @"\compressedTexture\";
         public static String pathReplacedTexture = Application.StartupPath + @"\replacedTexture\";
 
+        public static int sizeOfElementTable = 24;
+
 
         public static Int32 ConvertByteArrayToInt(Byte[] byteArray)
         {
