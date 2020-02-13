@@ -18,8 +18,8 @@ namespace N64PPLEditorC
         
         private struct ListFormat
         {
-            public Byte[] ressourceIndex;
             public Byte[] ressourceSize;
+            public Byte[] ressourceIndex;
             public Byte[] ressourceName;
         }
 
@@ -30,14 +30,15 @@ namespace N64PPLEditorC
         public CRessourceList()
         {
             fibList = new List<C3FIB>();
+            hvqmList = new List<CHVQM>();
+            sbfList = new List<CSBF1>();
         }
 
         public void Init(int nbElements, byte[] ressourcesList, byte[] ressourcesData)
         {
-            
-
             ListFormat[] lst1 = LoadRessourcesList(nbElements,ressourcesList);
             ChunkDataToRessources(lst1, ressourcesData);
+
         }
 
         private ListFormat[] LoadRessourcesList(int nbElements,Byte[] ressourcesList)
@@ -50,8 +51,8 @@ namespace N64PPLEditorC
                 lst1[i].ressourceIndex = new byte[4];
                 lst1[i].ressourceSize = new byte[4];
                 lst1[i].ressourceName = new byte[16];
-                Array.Copy(ressourcesList, i * CGenericFunctions.sizeOfElementTable,lst1[i].ressourceIndex, 0, 4);
-                Array.Copy(ressourcesList, i * CGenericFunctions.sizeOfElementTable + 4, lst1[i].ressourceSize, 0, 4);
+                Array.Copy(ressourcesList, i * CGenericFunctions.sizeOfElementTable, lst1[i].ressourceSize, 0, 4);
+                Array.Copy(ressourcesList, i * CGenericFunctions.sizeOfElementTable + 4, lst1[i].ressourceIndex, 0, 4);
                 Array.Copy(ressourcesList, i * CGenericFunctions.sizeOfElementTable + 8, lst1[i].ressourceName, 0,16);
             }
 
@@ -71,6 +72,7 @@ namespace N64PPLEditorC
                 Byte[] tmpContainerData = new byte[sizeElement];
                 Array.Copy(ressourceData, generalIndex,tmpContainerData,0,tmpContainerData.Length);
 
+
                 //determine the type of data and fill in the apropriated list
                 Byte[] dataPattern = new byte[4];
                 Array.Copy(tmpContainerData, 0, dataPattern, 0, dataPattern.Length);
@@ -86,18 +88,11 @@ namespace N64PPLEditorC
                     case (int)RessourceType.SBF:
                         sbfList.Add(new CSBF1(tmpContainerData));
                         break;
-
-
-
                 }
                 generalIndex += sizeElement;
+                if (sizeElement % 2 == 1)
+                    generalIndex += 1;
             }
-
-
-
-            
-
-
         }
 
 

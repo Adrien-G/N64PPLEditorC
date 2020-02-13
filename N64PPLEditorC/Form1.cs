@@ -22,7 +22,7 @@ namespace N64PPLEditorC
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+            textBoxPPLLocation.Text = Properties.Settings.Default.txtPPLLocation.ToString();
         }
 
         private void buttonGetRomFolder_Click(object sender, EventArgs e)
@@ -84,14 +84,13 @@ namespace N64PPLEditorC
             Array.Copy(buffRom, indexRessourcesArrayStart+4,dataTable,0,dataTable.Length);
 
             //get array between load and end data
-            Byte[] ressourcesData = new Byte[indexRessourcesEnd - indexRessourcesArrayStart - dataTable.Length];
+            Byte[] ressourcesData = new Byte[indexRessourcesEnd - indexRessourcesArrayStart - dataTable.Length-4];
             Array.Copy(buffRom, indexRessourcesArrayStart + dataTable.Length+4, ressourcesData, 0, ressourcesData.Length);
 
 
             //init the ressources list and data associated
             this.ressourceList = new CRessourceList();
             this.ressourceList.Init(nbElementsInTable, dataTable, ressourcesData);
-
 
             if (treeViewTextures.Nodes.Count > 0)
                 treeViewTextures.SelectedNode = treeViewTextures.Nodes[0];
