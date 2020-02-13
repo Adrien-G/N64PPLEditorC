@@ -48,7 +48,9 @@
   <ItemGroup>
     <Compile Include="C3FIB.cs" />
     <Compile Include="CGenericFunctions.cs" />
+    <Compile Include="CHVQM.cs" />
     <Compile Include="CRessourceList.cs" />
+    <Compile Include="CSBF1.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

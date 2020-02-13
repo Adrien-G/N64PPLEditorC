@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class C3FIB
+    class CHVQM
     {
-
         private Byte[] rawData;
 
-        public C3FIB(Byte[] rawData)
+        public CHVQM(Byte[] rawData)
         {
             this.rawData = rawData;
         }

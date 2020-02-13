@@ -8,11 +8,12 @@ namespace N64PPLEditorC
 {
     class CRessourceList
     {
-        public enum RessourceType
+        
+        private enum RessourceType : int
         {
-            FIB,
-            HVQM,
-            SBF
+            FIB=860244290,
+            HVQM=1213616461,
+            SBF=1396852273
         }
         
         private struct ListFormat
@@ -23,6 +24,8 @@ namespace N64PPLEditorC
         }
 
         private List<C3FIB> fibList;
+        private List<CHVQM> hvqmList;
+        private List<CSBF1> sbfList;
 
         public CRessourceList()
         {
@@ -41,7 +44,7 @@ namespace N64PPLEditorC
         {
             ListFormat[] lst1 = new ListFormat[nbElements];
             
-
+            //separate the ressources Index size and name
             for (int i = 0; i < nbElements; i++)
             {
                 lst1[i].ressourceIndex = new byte[4];
@@ -57,7 +60,43 @@ namespace N64PPLEditorC
 
         private void ChunkDataToRessources(ListFormat[] ressourcesList,Byte[] ressourceData)
         {
+
+            int generalIndex = 0;
             
+            // check all the ressources list...
+            for( int i = 0; i < ressourcesList.Length; i++)
+            {
+                //grab only one item by one
+                int sizeElement = CGenericFunctions.ConvertByteArrayToInt(ressourcesList[i].ressourceSize);
+                Byte[] tmpContainerData = new byte[sizeElement];
+                Array.Copy(ressourceData, generalIndex,tmpContainerData,0,tmpContainerData.Length);
+
+                //determine the type of data and fill in the apropriated list
+                Byte[] dataPattern = new byte[4];
+                Array.Copy(tmpContainerData, 0, dataPattern, 0, dataPattern.Length);
+
+                switch (CGenericFunctions.ConvertByteArrayToInt(dataPattern))
+                {
+                    case (int)RessourceType.FIB:
+                        fibList.Add(new C3FIB(tmpContainerData));
+                        break;
+                    case (int)RessourceType.HVQM:
+                        hvqmList.Add(new CHVQM(tmpContainerData));
+                        break;
+                    case (int)RessourceType.SBF:
+                        sbfList.Add(new CSBF1(tmpContainerData));
+                        break;
+
+
+
+                }
+                generalIndex += sizeElement;
+            }
+
+
+
+            
+
 
         }
 
