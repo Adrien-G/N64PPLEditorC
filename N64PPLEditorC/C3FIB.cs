@@ -54,7 +54,7 @@ namespace N64PPLEditorC
                 //beware, maybe add index pattern to search byte in array... (the n number...)
                 indexBFF2 = CGeneric.SearchBytesInArray(bffsData, CGeneric.patternBFF2);
 
-                
+                //decompose each bff2...
 
 
 
