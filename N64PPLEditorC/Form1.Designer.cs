@@ -277,7 +277,6 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "show texture";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // groupBoxTextures
             // 
@@ -426,7 +425,6 @@
             0,
             0,
             0});
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // label4
             // 

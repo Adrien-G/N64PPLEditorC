@@ -43,22 +43,40 @@ namespace N64PPLEditorC
             Byte[] bffData = new byte[data3Fib.Length- fibNameSize - 20];
             Array.Copy(data3Fib, 20 + fibNameSize,bffData,0,bffData.Length);
             MakeBFF2Chunks(bffData,bffCount);
-
         }
 
         private void MakeBFF2Chunks(Byte[] bffsData,int bffCount)
         {
-            int indexBFF2 = 0;
+            //store position and size of all BFF2
+            List<int> indexBFF2 = new List<int>();
+            List<int> sizeBFF2 = new List<int>();
+
+            int tmpPositionBFF2;
+            //search all bff2 present in the 3FIB and grab index
             do
             {
-                //beware, maybe add index pattern to search byte in array... (the n number...)
-                indexBFF2 = CGeneric.SearchBytesInArray(bffsData, CGeneric.patternBFF2);
+                tmpPositionBFF2 = CGeneric.SearchBytesInArray(bffsData, CGeneric.patternBFF2, indexBFF2.Count())-12;
 
-                //decompose each bff2...
+                if (tmpPositionBFF2 != -13)
+                {
+                    //add index
+                    indexBFF2.Add(tmpPositionBFF2);
+                    //calculate size of previous BFF2 (if not the last)
+                    if (tmpPositionBFF2 != 0)
+                        sizeBFF2.Add(indexBFF2[indexBFF2.Count() - 1] - indexBFF2[indexBFF2.Count() - 2]);
+                }
+                else
+                    //calculate size of last BFF2
+                    sizeBFF2.Add(bffsData.Length - indexBFF2[indexBFF2.Count() - 1]);
+            } while (tmpPositionBFF2 != -13);
 
-
-
-            } while (indexBFF2 != -1);
+            //add bff2 list in the bff2Childs
+            for (int i = 0; i < indexBFF2.Count(); i++)
+            {
+                Byte[] tmpByteBFF2 = new byte[sizeBFF2[i]];
+                Array.Copy(bffsData, indexBFF2[i], tmpByteBFF2, 0, sizeBFF2[i]);
+                bff2Childs.Add(new CBFF2(tmpByteBFF2));
+            }
         }
 
     }

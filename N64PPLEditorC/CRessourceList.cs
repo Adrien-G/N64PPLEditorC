@@ -73,6 +73,7 @@ namespace N64PPLEditorC
                 {
                     case (int)CGeneric.RessourceType.FIB:
                         fibList.Add(new C3FIB(tmpContainerData,ressourcesList[i].ressourceName));
+                        fibList[fibList.Count - 1].Init();
                         break;
                     case (int)CGeneric.RessourceType.HVQM:
                         hvqmList.Add(new CHVQM(tmpContainerData, ressourcesList[i].ressourceName));

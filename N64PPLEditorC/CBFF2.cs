@@ -10,7 +10,7 @@ namespace N64PPLEditorC
     {
         private Byte[] rawData;
 
-        public CBFF2()
+        public CBFF2(Byte[] rawData)
         {
 
         }

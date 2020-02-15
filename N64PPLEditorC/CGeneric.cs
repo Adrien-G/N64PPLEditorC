@@ -43,8 +43,11 @@ namespace N64PPLEditorC
             return BitConverter.ToInt32(byteArray, 0);
         }
 
-        public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched)
+        public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched,int nbOccurence=0)
         {
+            //allow to search the second, third (and so on) value of the occurence
+            int nbOcc = 0;
+
             // loop on the first array for find occurence
             for (int i = 0; i < arraySource.Length - dataSearched.Length; i++)
             {
@@ -56,7 +59,10 @@ namespace N64PPLEditorC
                         if (arraySource[i + j] != dataSearched[j])
                             break;
                         if (j == dataSearched.Length - 1)
-                            return i;
+                            if (nbOcc == nbOccurence)
+                                return i;
+                            else
+                                nbOcc += 1;
                     }
                 }
             }
