@@ -79,5 +79,11 @@ namespace N64PPLEditorC
             }
         }
 
+        public string getFIBName()
+        {
+            return System.Text.Encoding.Default.GetString(fibName);
+
+        }
+
     }
 }

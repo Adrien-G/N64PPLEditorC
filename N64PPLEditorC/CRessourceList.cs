@@ -88,6 +88,38 @@ namespace N64PPLEditorC
             }
         }
 
+        //fib public methods..
+        public int GetFIBCount()
+        {
+            return fibList.Count();
+        }
+
+        public string GetFIBName(int index)
+        {
+            return fibList[index].getFIBName();
+        }
+
+        //hvqm public methods...
+        public int GetHVQMCount()
+        {
+            return hvqmList.Count();
+        }
+
+        public string GetHVQMName(int index)
+        {
+            return hvqmList[index].GetRessourceName();
+        }
+
+        //sbf1 public methods...
+        public int GetSBFCount()
+        {
+            return sbfList.Count();
+        }
+
+        public string GetSBFName(int index)
+        {
+            return sbfList[index].GetRessourceName();
+        }
 
 
     }

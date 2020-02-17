@@ -77,8 +77,6 @@ namespace N64PPLEditorC
             } while (cursorCompressed < decompressedTexture.Length);
         }
 
-
-
         private void PerformDecompressReading((byte multiplicator,byte quantity) multiplicatorAndQuantity)
         {
             cursorCompressed += 1;

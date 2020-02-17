@@ -16,5 +16,12 @@ namespace N64PPLEditorC
             this.rawData = rawData;
             this.ressourceName = ressourceName;
         }
+
+        //public methods...
+        public string GetRessourceName()
+        {
+            return System.Text.Encoding.Default.GetString(ressourceName);
+        }
+
     }
 }
