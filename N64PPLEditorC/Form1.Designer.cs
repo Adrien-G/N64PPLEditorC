@@ -50,7 +50,7 @@
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.buttonShowTexture = new System.Windows.Forms.Button();
             this.groupBoxTextures = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -60,7 +60,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxAlwaysShowTexture = new System.Windows.Forms.CheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1.SuspendLayout();
@@ -316,15 +316,14 @@
             this.button1.Text = "Remove this container";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // buttonShowTexture
             // 
-            this.button2.Location = new System.Drawing.Point(6, 19);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(116, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "show texture";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.buttonShowTexture.Location = new System.Drawing.Point(6, 19);
+            this.buttonShowTexture.Name = "buttonShowTexture";
+            this.buttonShowTexture.Size = new System.Drawing.Size(116, 23);
+            this.buttonShowTexture.TabIndex = 1;
+            this.buttonShowTexture.Text = "show texture";
+            this.buttonShowTexture.UseVisualStyleBackColor = true;
             // 
             // groupBoxTextures
             // 
@@ -333,8 +332,8 @@
             this.groupBoxTextures.Controls.Add(this.groupBoxTextureContainer);
             this.groupBoxTextures.Controls.Add(this.groupBox2);
             this.groupBoxTextures.Controls.Add(this.button3);
-            this.groupBoxTextures.Controls.Add(this.checkBox1);
-            this.groupBoxTextures.Controls.Add(this.button2);
+            this.groupBoxTextures.Controls.Add(this.checkBoxAlwaysShowTexture);
+            this.groupBoxTextures.Controls.Add(this.buttonShowTexture);
             this.groupBoxTextures.Location = new System.Drawing.Point(369, 69);
             this.groupBoxTextures.Name = "groupBoxTextures";
             this.groupBoxTextures.Size = new System.Drawing.Size(432, 700);
@@ -431,15 +430,15 @@
             this.button3.Text = "Extract all textures";
             this.button3.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // checkBoxAlwaysShowTexture
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(128, 23);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(86, 17);
-            this.checkBox1.TabIndex = 10;
-            this.checkBox1.Text = "always show";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBoxAlwaysShowTexture.AutoSize = true;
+            this.checkBoxAlwaysShowTexture.Location = new System.Drawing.Point(128, 23);
+            this.checkBoxAlwaysShowTexture.Name = "checkBoxAlwaysShowTexture";
+            this.checkBoxAlwaysShowTexture.Size = new System.Drawing.Size(86, 17);
+            this.checkBoxAlwaysShowTexture.TabIndex = 10;
+            this.checkBoxAlwaysShowTexture.Text = "always show";
+            this.checkBoxAlwaysShowTexture.UseVisualStyleBackColor = true;
             // 
             // statusStrip1
             // 
@@ -448,14 +447,16 @@
             this.helpStatus});
             this.statusStrip1.Location = new System.Drawing.Point(0, 775);
             this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.Size = new System.Drawing.Size(813, 22);
+            this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // helpStatus
             // 
             this.helpStatus.Name = "helpStatus";
-            this.helpStatus.Size = new System.Drawing.Size(767, 17);
+            this.helpStatus.Size = new System.Drawing.Size(798, 17);
             this.helpStatus.Spring = true;
             // 
             // Form1
@@ -515,14 +516,14 @@
         private System.Windows.Forms.TreeView treeViewSBF;
         private System.Windows.Forms.GroupBox groupBoxTextureContainer;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonShowTexture;
         private System.Windows.Forms.GroupBox groupBoxTextures;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBoxAlwaysShowTexture;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RadioButton radioButton3;

@@ -93,18 +93,26 @@ namespace N64PPLEditorC
         {
             return fibList.Count();
         }
-
         public string GetFIBName(int index)
         {
             return fibList[index].getFIBName();
         }
+        public string GetBFFName(int indexFIB, int indexBFF)
+        {
+            return fibList[indexFIB].GetBFFName(indexBFF);
+        }
+        public int GetBFFCount(int indexFIB)
+        {
+            return fibList[indexFIB].GetBFFCount();
+        }
+
+
 
         //hvqm public methods...
         public int GetHVQMCount()
         {
             return hvqmList.Count();
         }
-
         public string GetHVQMName(int index)
         {
             return hvqmList[index].GetRessourceName();
@@ -115,12 +123,9 @@ namespace N64PPLEditorC
         {
             return sbfList.Count();
         }
-
         public string GetSBFName(int index)
         {
             return sbfList[index].GetRessourceName();
         }
-
-
     }
 }

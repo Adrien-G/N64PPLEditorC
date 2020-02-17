@@ -76,13 +76,23 @@ namespace N64PPLEditorC
                 Byte[] tmpByteBFF2 = new byte[sizeBFF2[i]];
                 Array.Copy(bffsData, indexBFF2[i], tmpByteBFF2, 0, sizeBFF2[i]);
                 bff2Childs.Add(new CBFF2(tmpByteBFF2));
+                bff2Childs[bff2Childs.Count - 1].Init();
             }
         }
 
         public string getFIBName()
         {
             return System.Text.Encoding.Default.GetString(fibName);
+        }
 
+        public string GetBFFName(int index)
+        {
+            return bff2Childs[index].GetName();
+        }
+
+        public int GetBFFCount()
+        {
+            return bff2Childs.Count();
         }
 
     }

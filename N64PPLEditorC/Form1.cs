@@ -62,7 +62,8 @@ namespace N64PPLEditorC
                     fstream.Close();
                     buttonLoadRom.Enabled = false;
                     buttonLoadRom.Text = "ROM Loaded";
-                    LoadTreeViewAndRessourcesList();
+                    LoadRessourcesList();
+                    LoadTreeView();
                 }
                 catch (Exception ex)
                 {
@@ -71,7 +72,47 @@ namespace N64PPLEditorC
             }
         }
 
-        private void LoadTreeViewAndRessourcesList()
+        private void LoadTreeView()
+        {
+            //add treeview items' (BIF,HVQM and SBF)
+            treeViewTextures.BeginUpdate();
+            treeViewHVQM.BeginUpdate();
+            treeViewSBF.BeginUpdate();
+            for (int fib = 0; fib < this.ressourceList.GetFIBCount(); fib++)
+            {
+                treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.GetFIBName(fib));
+                for (int bff = 0; bff < this.ressourceList.GetBFFCount(fib); bff++)
+                    treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 +", " + this.ressourceList.GetBFFName(fib,bff));
+            }
+
+            for (int i = 0; i < this.ressourceList.GetHVQMCount(); i++)
+                treeViewHVQM.Nodes.Add(i + 1 + ", " + ressourceList.GetHVQMName(i));
+
+            for (int i = 0; i < this.ressourceList.GetSBFCount(); i++)
+                treeViewSBF.Nodes.Add(i + 1 + ", " + ressourceList.GetSBFName(i));
+
+            if (treeViewTextures.Nodes.Count > 0)
+                treeViewTextures.SelectedNode = treeViewTextures.Nodes[0];
+            else
+                treeViewTextures.Nodes.Add("No data were found :(");
+
+            if (treeViewHVQM.Nodes.Count > 0)
+                treeViewHVQM.SelectedNode = treeViewHVQM.Nodes[0];
+            else
+                treeViewHVQM.Nodes.Add("No data were found :(");
+
+            if (treeViewSBF.Nodes.Count > 0)
+                treeViewSBF.SelectedNode = treeViewSBF.Nodes[0];
+            else
+                treeViewSBF.Nodes.Add("No data were found :(");
+
+            treeViewTextures.EndUpdate();
+            treeViewHVQM.EndUpdate();
+            treeViewSBF.EndUpdate();
+
+        }
+
+        private void LoadRessourcesList()
         {
             Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
 
@@ -102,47 +143,7 @@ namespace N64PPLEditorC
             //init the ressources list and data associated
             this.ressourceList = new CRessourceList();
             this.ressourceList.Init(nbElementsInTable, dataTable, ressourcesData);
-
-            //add treeview items' (BIF,HVQM and SBF)
-            treeViewTextures.BeginUpdate();
-            treeViewHVQM.BeginUpdate();
-            treeViewSBF.BeginUpdate();
-            for (int i = 0; i < this.ressourceList.GetFIBCount(); i++)
-                treeViewTextures.Nodes.Add(i + ", " + ressourceList.GetFIBName(i));
-
-            for (int i = 0; i < this.ressourceList.GetHVQMCount(); i++)
-                treeViewHVQM.Nodes.Add(i + ", " + ressourceList.GetHVQMName(i));
-
-            for (int i = 0; i < this.ressourceList.GetSBFCount(); i++)
-                treeViewSBF.Nodes.Add(i + ", " + ressourceList.GetSBFName(i));
-
-            if (treeViewTextures.Nodes.Count > 0)
-                treeViewTextures.SelectedNode = treeViewTextures.Nodes[0];
-            else
-                treeViewTextures.Nodes.Add("No data were found :(");
-
-            if (treeViewHVQM.Nodes.Count > 0)
-                treeViewHVQM.SelectedNode = treeViewHVQM.Nodes[0];
-            else
-                treeViewHVQM.Nodes.Add("No data were found :(");
-
-            if (treeViewSBF.Nodes.Count > 0)
-                treeViewSBF.SelectedNode = treeViewSBF.Nodes[0];
-            else
-                treeViewSBF.Nodes.Add("No data were found :(");
-
-            treeViewTextures.EndUpdate();
-            treeViewHVQM.EndUpdate();
-            treeViewSBF.EndUpdate();
-
-
         }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
 
 
 
@@ -152,7 +153,5 @@ namespace N64PPLEditorC
 
         private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
         private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
-
-
     }
 }

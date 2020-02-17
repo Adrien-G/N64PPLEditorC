@@ -38,7 +38,10 @@ namespace N64PPLEditorC
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(byteArray);
 
-            return BitConverter.ToInt32(byteArray, 0);
+            if (byteArray.Length == 2)
+                return BitConverter.ToInt16(byteArray, 0);
+            else
+                return BitConverter.ToInt32(byteArray, 0);
         }
 
         public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched,int nbOccurence=0)
