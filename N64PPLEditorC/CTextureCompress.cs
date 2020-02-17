@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class CManageCompression
+    class CTextureCompress
     {
-        public CManageCompression()
+        public CTextureCompress(Byte[] dataDecompressed)
         {
 
         }
+
+
+
+
     }
 }

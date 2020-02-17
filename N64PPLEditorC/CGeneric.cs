@@ -33,8 +33,6 @@ namespace N64PPLEditorC
             BFF = 1111901746
         }
 
-        
-
         public static Int32 ConvertByteArrayToInt(Byte[] byteArray)
         {
             if (BitConverter.IsLittleEndian)

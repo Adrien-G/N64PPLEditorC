@@ -50,9 +50,10 @@
     <Compile Include="CBFF2.cs" />
     <Compile Include="CGeneric.cs" />
     <Compile Include="CHVQM.cs" />
-    <Compile Include="CManageCompression.cs" />
+    <Compile Include="CTextureCompress.cs" />
     <Compile Include="CRessourceList.cs" />
     <Compile Include="CSBF1.cs" />
+    <Compile Include="CTextureDecompress.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
