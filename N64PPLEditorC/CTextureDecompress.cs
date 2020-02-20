@@ -15,7 +15,7 @@ namespace N64PPLEditorC
         int cursorDecompressed;
         int cursorCompressed;
 
-        public CTextureDecompress(Byte[] compressedTexture,Byte[] palette)
+        public CTextureDecompress(Byte[] compressedTexture, Byte[] palette = null)
         {
             this.compressedTexture = compressedTexture;
             this.palette = palette;
@@ -57,13 +57,11 @@ namespace N64PPLEditorC
             return tupleNibble;
         }
 
-        //WARNING : don't forget to decompress indexed texture at the end if needed...
-        public void DecompressTexture(CBFF2.BFFHeader headerBFF2)
+        public Byte[] DecompressTexture(CBFF2.BFFHeader headerBFF2)
         {
-            decompressedTexture = new byte[headerBFF2.sizeX * headerBFF2.sizeY * headerBFF2.bytePerPixel];
+            decompressedTexture = headerBFF2.data;
             cursorCompressed = 0;
             cursorDecompressed = 0;
-
             do
             {
                 if (compressedTexture[cursorCompressed] < 128)
@@ -73,8 +71,8 @@ namespace N64PPLEditorC
                     var tupleNibbleMtAndQt = getMultiplicatorAndPacketQuantity(compressedTexture[cursorCompressed]);
                     PerformDecompressReading(tupleNibbleMtAndQt);
                 }
-
-            } while (cursorCompressed < decompressedTexture.Length);
+            } while (cursorCompressed < compressedTexture.Length);
+            return decompressedTexture;
         }
 
         private void PerformDecompressReading((byte multiplicator,byte quantity) multiplicatorAndQuantity)
@@ -105,10 +103,13 @@ namespace N64PPLEditorC
             cursorDecompressed += dataLength;
         }
 
-
-        private void ConvertIndexedToTexture()
+        public byte[] ConvertIndexedToRGB(CBFF2.BFFHeader headerBFF2)
         {
-            throw new NotImplementedException();
+            Byte[] newData = new byte[headerBFF2.data.Length * headerBFF2.bytePerPixel];
+
+            for (int i = 0; i < headerBFF2.data.Length; i++)
+                Array.Copy(headerBFF2.palette,headerBFF2.data[i],newData, headerBFF2.bytePerPixel*i,headerBFF2.bytePerPixel);
+            return newData;
         }
     }
 }

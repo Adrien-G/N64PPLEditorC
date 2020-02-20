@@ -88,6 +88,11 @@ namespace N64PPLEditorC
             }
         }
 
+        public void ShowTexture(System.Windows.Forms.PictureBox pictureBox,int indexFIB,int indexBFF)
+        {
+            fibList[indexFIB].GetTexture(pictureBox,indexBFF);
+        }
+
         //fib public methods..
         public int GetFIBCount()
         {
@@ -105,8 +110,6 @@ namespace N64PPLEditorC
         {
             return fibList[indexFIB].GetBFFCount();
         }
-
-
 
         //hvqm public methods...
         public int GetHVQMCount()

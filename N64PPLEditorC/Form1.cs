@@ -23,6 +23,17 @@ namespace N64PPLEditorC
         private void Form1_Load(object sender, EventArgs e)
         {
             textBoxPPLLocation.Text = Properties.Settings.Default.txtPPLLocation;
+            if(textBoxPPLLocation.Text == "")
+            {
+                buttonGetRomFolder.TabIndex = 0;
+                buttonLoadRom.TabIndex = 1;
+            }
+            else
+            {
+                buttonGetRomFolder.TabIndex = 1;
+                buttonLoadRom.TabIndex = 0;
+            }
+
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -56,19 +67,19 @@ namespace N64PPLEditorC
             }
             else
             {
-                try
-                {
+                //try
+                //{
                     FileStream fstream = File.Open(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
                     fstream.Close();
                     buttonLoadRom.Enabled = false;
                     buttonLoadRom.Text = "ROM Loaded";
                     LoadRessourcesList();
                     LoadTreeView();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //}
             }
         }
 
@@ -145,6 +156,10 @@ namespace N64PPLEditorC
             this.ressourceList.Init(nbElementsInTable, dataTable, ressourcesData);
         }
 
+        private void buttonShowTexture_Click(object sender, EventArgs e)
+        {
+            this.ressourceList.ShowTexture(pictureBox1,treeViewTextures.SelectedNode.Parent.Index,treeViewTextures.SelectedNode.Index);
+        }
 
 
         //part helping on form..
@@ -153,5 +168,7 @@ namespace N64PPLEditorC
 
         private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
         private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
+
+
     }
 }

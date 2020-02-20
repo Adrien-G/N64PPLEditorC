@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace N64PPLEditorC
 {
@@ -95,5 +98,11 @@ namespace N64PPLEditorC
             return bff2Childs.Count();
         }
 
+        public void GetTexture(PictureBox pictureBox, int index)
+        {
+            bff2Childs[index].DecompressTexture();
+            //Bitmap bmp = bff2Childs[index].GetBmpTexture();
+            //pictureBox.Image = bmp;
+        }
     }
 }

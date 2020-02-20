@@ -110,6 +110,7 @@
             this.textBoxPPLLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPPLLocation.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::N64PPLEditorC.Properties.Settings.Default, "txtPPLLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.textBoxPPLLocation.Enabled = false;
             this.textBoxPPLLocation.Location = new System.Drawing.Point(6, 19);
             this.textBoxPPLLocation.Name = "textBoxPPLLocation";
             this.textBoxPPLLocation.Size = new System.Drawing.Size(649, 20);
@@ -324,6 +325,7 @@
             this.buttonShowTexture.TabIndex = 1;
             this.buttonShowTexture.Text = "show texture";
             this.buttonShowTexture.UseVisualStyleBackColor = true;
+            this.buttonShowTexture.Click += new System.EventHandler(this.buttonShowTexture_Click);
             // 
             // groupBoxTextures
             // 
