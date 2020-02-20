@@ -106,7 +106,7 @@ namespace N64PPLEditorC
             Byte[] newData = new byte[decompressedTex.Length * headerBFF2.bytePerPixel];
 
             for (int i = 0; i < decompressedTex.Length; i++)
-                Array.Copy(headerBFF2.palette, decompressedTex[i],newData, headerBFF2.bytePerPixel*i,headerBFF2.bytePerPixel);
+                Array.Copy(headerBFF2.palette, decompressedTex[i]*headerBFF2.bytePerPixel,newData, headerBFF2.bytePerPixel*i,headerBFF2.bytePerPixel);
             return newData;
         }
     }

@@ -139,6 +139,7 @@
             this.treeViewTextures.Name = "treeViewTextures";
             this.treeViewTextures.Size = new System.Drawing.Size(347, 678);
             this.treeViewTextures.TabIndex = 1;
+            this.treeViewTextures.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewTextures_AfterSelect);
             // 
             // label1
             // 
