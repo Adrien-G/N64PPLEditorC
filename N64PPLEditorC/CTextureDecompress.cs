@@ -10,18 +10,16 @@ namespace N64PPLEditorC
     {
 
         private Byte[] compressedTexture;
-        private Byte[] palette;
         private Byte[] decompressedTexture;
         int cursorDecompressed;
         int cursorCompressed;
 
-        public CTextureDecompress(Byte[] compressedTexture, Byte[] palette = null)
+        public CTextureDecompress(Byte[] compressedTexture)
         {
             this.compressedTexture = compressedTexture;
-            this.palette = palette;
         }
 
-        private (byte multiplicator,byte quantity) getMultiplicatorAndPacketQuantity(byte value)
+        private (byte quantity ,byte multiplicator) getMultiplicatorAndPacketQuantity(byte value)
         {
             (byte multiplicator,byte quantity) tupleNibble = (0,0);
             switch (value)
@@ -59,7 +57,8 @@ namespace N64PPLEditorC
 
         public Byte[] DecompressTexture(CBFF2.BFFHeader headerBFF2)
         {
-            decompressedTexture = headerBFF2.data;
+            decompressedTexture = new Byte[headerBFF2.sizeX*headerBFF2.sizeY*headerBFF2.bytePerPixel];
+            compressedTexture = headerBFF2.dataCompressed;
             cursorCompressed = 0;
             cursorDecompressed = 0;
             do
@@ -75,10 +74,9 @@ namespace N64PPLEditorC
             return decompressedTexture;
         }
 
-        private void PerformDecompressReading((byte multiplicator,byte quantity) multiplicatorAndQuantity)
+        private void PerformDecompressReading((byte quantity, byte multiplicator) multiplicatorAndQuantity)
         {
             cursorCompressed += 1;
-
             //scilly copy same data 'quantity' times...
             for (byte mult = 0; mult < multiplicatorAndQuantity.multiplicator; mult++)
             {
@@ -92,7 +90,7 @@ namespace N64PPLEditorC
 
         private void PerformSimpleReading()
         {
-            int dataLength = compressedTexture[cursorCompressed];
+            int dataLength = compressedTexture[cursorCompressed]+1;
             cursorCompressed += 1;
 
             //paste array in the decompressed data
@@ -103,12 +101,12 @@ namespace N64PPLEditorC
             cursorDecompressed += dataLength;
         }
 
-        public byte[] ConvertIndexedToRGB(CBFF2.BFFHeader headerBFF2)
+        public byte[] ConvertIndexedToRGB(CBFF2.BFFHeader headerBFF2,Byte[] decompressedTex)
         {
-            Byte[] newData = new byte[headerBFF2.data.Length * headerBFF2.bytePerPixel];
+            Byte[] newData = new byte[decompressedTex.Length * headerBFF2.bytePerPixel];
 
-            for (int i = 0; i < headerBFF2.data.Length; i++)
-                Array.Copy(headerBFF2.palette,headerBFF2.data[i],newData, headerBFF2.bytePerPixel*i,headerBFF2.bytePerPixel);
+            for (int i = 0; i < decompressedTex.Length; i++)
+                Array.Copy(headerBFF2.palette, decompressedTex[i],newData, headerBFF2.bytePerPixel*i,headerBFF2.bytePerPixel);
             return newData;
         }
     }

@@ -101,8 +101,8 @@ namespace N64PPLEditorC
         public void GetTexture(PictureBox pictureBox, int index)
         {
             bff2Childs[index].DecompressTexture();
-            //Bitmap bmp = bff2Childs[index].GetBmpTexture();
-            //pictureBox.Image = bmp;
+            Bitmap bmp = bff2Childs[index].GetBmpTexture();
+            pictureBox.Image = bmp;
         }
     }
 }

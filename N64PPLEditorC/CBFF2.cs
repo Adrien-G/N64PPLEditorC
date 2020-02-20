@@ -26,7 +26,8 @@ namespace N64PPLEditorC
             public byte[] textureHeight;
             public byte[] palette;
             public byte[] paletteSize;
-            public byte[] data;
+            public byte[] dataCompressed;
+            public byte[] dataUncompressed;
             public bool isCompressedTexture;
             public bool isIndexedColor;
         }
@@ -87,8 +88,8 @@ namespace N64PPLEditorC
                 startingData +=  headerBFF2.palette.Length + headerBFF2.paletteSize.Length;
             }
 
-            headerBFF2.data = new Byte[rawData.Length - startingData];
-            Array.Copy(rawData, startingData, headerBFF2.data, 0, headerBFF2.data.Length); 
+            headerBFF2.dataCompressed = new Byte[rawData.Length - startingData];
+            Array.Copy(rawData, startingData, headerBFF2.dataCompressed, 0, headerBFF2.dataCompressed.Length); 
         }
 
         private void ExtractPalette(int indexPalette)
@@ -117,9 +118,10 @@ namespace N64PPLEditorC
             else
                 decompressedTex = compressedTex;
             if (headerBFF2.isIndexedColor)
-                decompressedTex = dTex.ConvertIndexedToRGB(headerBFF2);
+                decompressedTex = dTex.ConvertIndexedToRGB(headerBFF2,decompressedTex);
 
-            
+            headerBFF2.dataUncompressed = decompressedTex;
+
         }
 
         public Bitmap GetBmpTexture(){
@@ -131,7 +133,7 @@ namespace N64PPLEditorC
             {
                 for ( int x = 0; x < headerBFF2.sizeX; x++)
                 {
-                    bmp.SetPixel(x,y,Color.FromArgb(headerBFF2.data[indexArray+3], headerBFF2.data[indexArray], headerBFF2.data[indexArray+1], headerBFF2.data[indexArray+2]));
+                    bmp.SetPixel(x,y,Color.FromArgb(headerBFF2.dataUncompressed[indexArray+3], headerBFF2.dataUncompressed[indexArray], headerBFF2.dataUncompressed[indexArray+1], headerBFF2.dataUncompressed[indexArray+2]));
                     indexArray += 4;
                 }
             }
