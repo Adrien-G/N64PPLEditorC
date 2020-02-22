@@ -143,7 +143,7 @@ namespace N64PPLEditorC
 
         public string GetName()
         {
-            return headerBFF2.isCompressedTexture + System.Text.Encoding.UTF8.GetString(headerBFF2.name);
+            return System.Text.Encoding.UTF8.GetString(headerBFF2.name);
         }
     }
 }
