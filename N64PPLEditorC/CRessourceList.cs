@@ -93,9 +93,9 @@ namespace N64PPLEditorC
             fibList[indexFIB].GetTexture(pictureBox,indexBFF);
         }
 
-        public void SaveTexture(int indexFIB, int indexBFF,int id)
+        public void SaveTexture(int indexFIB, int indexBFF)
         {
-            fibList[indexFIB].SaveTexture(indexBFF,id);
+            fibList[indexFIB].SaveTexture(indexBFF,indexFIB);
         }
 
         //fib public methods..

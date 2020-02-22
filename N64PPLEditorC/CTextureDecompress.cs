@@ -63,13 +63,18 @@ namespace N64PPLEditorC
             cursorDecompressed = 0;
             do
             {
-                if (compressedTexture[cursorCompressed] < 128)
-                    PerformSimpleReading();
-                else
+                //surround with try catch because few of texture exceed the size of the texture size...
+                try
                 {
-                    var tupleNibbleMtAndQt = getMultiplicatorAndPacketQuantity(compressedTexture[cursorCompressed]);
-                    PerformDecompressReading(tupleNibbleMtAndQt);
+                    if (compressedTexture[cursorCompressed] < 128)
+                        PerformSimpleReading();
+                    else
+                    {
+                        var tupleNibbleMtAndQt = getMultiplicatorAndPacketQuantity(compressedTexture[cursorCompressed]);
+                        PerformDecompressReading(tupleNibbleMtAndQt);
+                    }
                 }
+                catch { }
             } while (cursorCompressed < compressedTexture.Length);
             return decompressedTexture;
         }
@@ -103,11 +108,111 @@ namespace N64PPLEditorC
 
         public byte[] ConvertIndexedToRGB(CBFF2.BFFHeader headerBFF2,Byte[] decompressedTex)
         {
-            Byte[] newData = new byte[decompressedTex.Length * headerBFF2.bytePerPixel];
+            Byte[] newData;
+            if (headerBFF2.bytePerPixel != 8)
+            {
+                newData = new byte[decompressedTex.Length * headerBFF2.bytePerPixel];
+                for (int i = 0; i < decompressedTex.Length; i++)
+                    Array.Copy(headerBFF2.palette, decompressedTex[i] * headerBFF2.bytePerPixel, newData, headerBFF2.bytePerPixel * i, headerBFF2.bytePerPixel);
+            }
+            else
+            {
+                newData = new byte[decompressedTex.Length * 8 ];
+                byte tmpB1;
+                byte tmpB2;
+                for (int i = 0; i < decompressedTex.Length-1; i++)
+                {
+                    tmpB1 = decompressedTex[i];
+                    tmpB1 >>= 4;
 
-            for (int i = 0; i < decompressedTex.Length; i++)
-                Array.Copy(headerBFF2.palette, decompressedTex[i]*headerBFF2.bytePerPixel,newData, headerBFF2.bytePerPixel*i,headerBFF2.bytePerPixel);
+                    tmpB2 = decompressedTex[i];
+                    tmpB2 <<= 4;
+                    tmpB2 >>= 4;
+                    Array.Copy(headerBFF2.palette, tmpB1, decompressedTex, 8 * i, 4);
+                    Array.Copy(headerBFF2.palette, tmpB2, decompressedTex, 8 * i+4, 4);
+
+                }
+
+            }
             return newData;
+        }
+
+        public Byte[] ConvertByteArrayToRGBA(CBFF2.BFFHeader headerBFF2, byte[] arrayTexture)
+        {
+
+            if (arrayTexture.Length == headerBFF2.sizeX * headerBFF2.sizeY * 4)
+                return arrayTexture;
+
+            Byte[] arrayTextureRGBA = new Byte[headerBFF2.sizeX * headerBFF2.sizeY * 4];
+
+            switch (headerBFF2.textureType)
+            {
+                case 0x22:
+                    //actually unknown color repartition scheme..
+                    arrayTextureRGBA = arrayTexture;
+                    break;
+                case 0x23:
+                    //actually unknown color repartition scheme..
+                    break;
+                case 0x24:
+                    //8 bits for color (greyscale) and 8 bit for transparency
+                    for (int i = 0; i < arrayTexture.Length-1; i+=2)
+                    {
+                        arrayTextureRGBA[i * 2] = arrayTexture[i];
+                        arrayTextureRGBA[i * 2 + 1] = arrayTexture[i];
+                        arrayTextureRGBA[i * 2 + 2] = arrayTexture[i];
+                        arrayTextureRGBA[i * 2 + 3] = arrayTexture[i + 1];
+                    }
+                    break;
+                case 0x54:
+                    //16 bits
+                    byte red, green,green2, blue, alpha;
+                    int R, G, B, A;
+
+                    for (int i = 0; i < arrayTexture.Length-1; i+=2)
+                    {
+                        //red (5 bits)
+                        red = arrayTexture[i];
+                        red >>= 3;
+
+                        //green (5 bits)
+                        green = arrayTexture[i];
+                        green <<= 5;
+                        green >>= 3;
+                        green2 = arrayTexture[i+1];
+                        green2 >>= 6;
+                        green += green2;
+                        
+                        //blue (5 bits)
+                        blue = arrayTexture[i+ 1];
+                        blue <<= 2;
+                        blue >>= 3;
+                        
+                        //alpha 1 bit
+                        alpha = arrayTexture[i + 1];
+                        alpha <<= 7;
+                        alpha >>= 7;
+
+                        
+                        R = red;
+                        G = green;
+                        B = blue;
+                        A = alpha;
+                        R *= 8;
+                        G *= 8;
+                        B *= 8;
+                        A *= 255;
+
+                        arrayTextureRGBA[i * 2] = (byte)R;
+                        arrayTextureRGBA[i * 2 + 1] = (byte)G;
+                        arrayTextureRGBA[i * 2 + 2] = (byte)B;
+                        arrayTextureRGBA[i * 2 + 3] = (byte)A;
+
+                    }
+                    break;
+            }
+
+            return arrayTextureRGBA;
         }
     }
 }

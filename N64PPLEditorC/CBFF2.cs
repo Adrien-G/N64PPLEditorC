@@ -57,17 +57,18 @@ namespace N64PPLEditorC
             //copy basic informations..
             headerBFF2.textureType = rawData[19];
             headerBFF2.nameLength = rawData[35];
+
             headerBFF2.isIndexedColor = (headerBFF2.textureType == 51 || headerBFF2.textureType == 50) ? true : false;
             headerBFF2.textureWidth = new byte[2];
             headerBFF2.textureHeight = new byte[2];
             headerBFF2.name = new byte[headerBFF2.nameLength];
-
+            
             switch (headerBFF2.textureType)
             {
-                case 0x22: headerBFF2.bytePerPixel = 0;  break;
+                case 0x22: headerBFF2.bytePerPixel = 8;  break;
                 case 0x23: headerBFF2.bytePerPixel = 1; break;
                 case 0x24: headerBFF2.bytePerPixel = 2; break;
-                case 0x32: headerBFF2.bytePerPixel = 4; break;
+                case 0x32: headerBFF2.bytePerPixel = 8; break;
                 case 0x33: headerBFF2.bytePerPixel = 4; break;
                 case 0x54: headerBFF2.bytePerPixel = 2; break;
                 case 0x55: headerBFF2.bytePerPixel = 4; break;
@@ -77,7 +78,15 @@ namespace N64PPLEditorC
             Array.Copy(rawData, 26, headerBFF2.textureHeight, 0, 2);
             Array.Copy(rawData, 36, headerBFF2.name, 0, headerBFF2.nameLength);
 
-            headerBFF2.sizeX = CGeneric.ConvertByteArrayToInt(headerBFF2.textureWidth);
+            //remove last not necessary character
+            if (headerBFF2.name[headerBFF2.nameLength-1] == 0)
+            {
+                headerBFF2.name = new byte[headerBFF2.nameLength-1];
+                Array.Copy(rawData, 36, headerBFF2.name, 0, headerBFF2.nameLength-1);
+
+            }
+
+                headerBFF2.sizeX = CGeneric.ConvertByteArrayToInt(headerBFF2.textureWidth);
             headerBFF2.sizeY = CGeneric.ConvertByteArrayToInt(headerBFF2.textureHeight);
 
             //extract palette
@@ -120,6 +129,10 @@ namespace N64PPLEditorC
             if (headerBFF2.isIndexedColor)
                 decompressedTex = dTex.ConvertIndexedToRGB(headerBFF2,decompressedTex);
 
+            if (headerBFF2.bytePerPixel != 4)
+                decompressedTex = dTex.ConvertByteArrayToRGBA(headerBFF2,decompressedTex);
+
+
             headerBFF2.dataUncompressed = decompressedTex;
 
         }
@@ -140,7 +153,6 @@ namespace N64PPLEditorC
             return bmp;
         }
       
-
         public string GetName()
         {
             return System.Text.Encoding.UTF8.GetString(headerBFF2.name);

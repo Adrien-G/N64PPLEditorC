@@ -54,7 +54,6 @@
     <Compile Include="CRessourceList.cs" />
     <Compile Include="CSBF1.cs" />
     <Compile Include="CTextureDecompress.cs" />
-    <Compile Include="CTextureManager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

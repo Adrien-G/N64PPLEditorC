@@ -69,19 +69,19 @@ namespace N64PPLEditorC
             }
             else
             {
-                //try
-                //{
+                try
+                {
                     FileStream fstream = File.Open(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
                     fstream.Close();
                     buttonLoadRom.Enabled = false;
                     buttonLoadRom.Text = "ROM Loaded";
                     LoadRessourcesList();
                     LoadTreeView();
-                //}
-                //catch (Exception ex)
-                //{
-                //    MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //}
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
         }
 
@@ -160,7 +160,8 @@ namespace N64PPLEditorC
 
         private void buttonShowTexture_Click(object sender, EventArgs e)
         {
-            this.ressourceList.ShowTexture(pictureBox1,treeViewTextures.SelectedNode.Parent.Index,treeViewTextures.SelectedNode.Index);
+            if(treeViewTextures.SelectedNode.Level == 1)
+                this.ressourceList.ShowTexture(pictureBox1,treeViewTextures.SelectedNode.Parent.Index,treeViewTextures.SelectedNode.Index);
         }
 
         private void treeViewTextures_AfterSelect(object sender, TreeViewEventArgs e)
@@ -175,21 +176,21 @@ namespace N64PPLEditorC
             if (!bWDecompress.IsBusy)
                 bWDecompress.RunWorkerAsync();
         }
+
         private void bWDecompress_DoWork(object sender, DoWorkEventArgs e)
         {
-            int index = 0;
+            int index = 1;
             for (int i = 0; i < ressourceList.GetFIBCount(); i++)
             {
                 for (int j = 0; j < ressourceList.GetBFFCount(i); j++)
                 {
-                    //try is temporary here while CTextureManager class isn't finished...
                     try
                     {
-                        this.ressourceList.SaveTexture(i, j, index);
+                        this.ressourceList.SaveTexture(i, j);
+                        bWDecompress.ReportProgress(index);
+                        index++;
                     }
                     catch { }
-                    bWDecompress.ReportProgress(index);
-                    index++;
                 }
             }
         }
