@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonGetRomFolder = new System.Windows.Forms.Button();
             this.textBoxPPLLocation = new System.Windows.Forms.TextBox();
@@ -59,10 +60,12 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.buttonExtractAllTextures = new System.Windows.Forms.Button();
             this.checkBoxAlwaysShowTexture = new System.Windows.Forms.CheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timerExtract = new System.Windows.Forms.Timer(this.components);
+            this.bWDecompress = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -334,7 +337,7 @@
             this.groupBoxTextures.Controls.Add(this.groupBox3);
             this.groupBoxTextures.Controls.Add(this.groupBoxTextureContainer);
             this.groupBoxTextures.Controls.Add(this.groupBox2);
-            this.groupBoxTextures.Controls.Add(this.button3);
+            this.groupBoxTextures.Controls.Add(this.buttonExtractAllTextures);
             this.groupBoxTextures.Controls.Add(this.checkBoxAlwaysShowTexture);
             this.groupBoxTextures.Controls.Add(this.buttonShowTexture);
             this.groupBoxTextures.Location = new System.Drawing.Point(369, 69);
@@ -424,14 +427,15 @@
             this.button5.Text = "Replace texture";
             this.button5.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // buttonExtractAllTextures
             // 
-            this.button3.Location = new System.Drawing.Point(6, 48);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(116, 23);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "Extract all textures";
-            this.button3.UseVisualStyleBackColor = true;
+            this.buttonExtractAllTextures.Location = new System.Drawing.Point(6, 48);
+            this.buttonExtractAllTextures.Name = "buttonExtractAllTextures";
+            this.buttonExtractAllTextures.Size = new System.Drawing.Size(116, 23);
+            this.buttonExtractAllTextures.TabIndex = 7;
+            this.buttonExtractAllTextures.Text = "Extract all textures";
+            this.buttonExtractAllTextures.UseVisualStyleBackColor = true;
+            this.buttonExtractAllTextures.Click += new System.EventHandler(this.buttonExtractAllTextures_Click);
             // 
             // checkBoxAlwaysShowTexture
             // 
@@ -461,6 +465,17 @@
             this.helpStatus.Name = "helpStatus";
             this.helpStatus.Size = new System.Drawing.Size(798, 17);
             this.helpStatus.Spring = true;
+            // 
+            // timerExtract
+            // 
+            this.timerExtract.Interval = 1;
+            // 
+            // bWDecompress
+            // 
+            this.bWDecompress.WorkerReportsProgress = true;
+            this.bWDecompress.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bWDecompress_DoWork);
+            this.bWDecompress.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bWDecompress_ProgressChanged);
+            this.bWDecompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bWDecompress_RunWorkerCompleted);
             // 
             // Form1
             // 
@@ -523,7 +538,7 @@
         private System.Windows.Forms.GroupBox groupBoxTextures;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button buttonExtractAllTextures;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.CheckBox checkBoxAlwaysShowTexture;
@@ -536,6 +551,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel helpStatus;
+        private System.Windows.Forms.Timer timerExtract;
+        private System.ComponentModel.BackgroundWorker bWDecompress;
     }
 }
 

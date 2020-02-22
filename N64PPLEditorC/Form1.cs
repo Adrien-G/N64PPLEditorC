@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace N64PPLEditorC
 {
@@ -33,6 +34,7 @@ namespace N64PPLEditorC
                 buttonGetRomFolder.TabIndex = 1;
                 buttonLoadRom.TabIndex = 0;
             }
+            CGeneric.VerifyExistingPath();
 
         }
 
@@ -161,18 +163,52 @@ namespace N64PPLEditorC
             this.ressourceList.ShowTexture(pictureBox1,treeViewTextures.SelectedNode.Parent.Index,treeViewTextures.SelectedNode.Index);
         }
 
+        private void treeViewTextures_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (checkBoxAlwaysShowTexture.Checked && treeViewTextures.SelectedNode.Level != 0)
+                this.ressourceList.ShowTexture(pictureBox1, treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index);
+        }
 
-        //part helping on form..
+        //decompress all texture task..
+        private void buttonExtractAllTextures_Click(object sender, EventArgs e)
+        {
+            if (!bWDecompress.IsBusy)
+                bWDecompress.RunWorkerAsync();
+        }
+        private void bWDecompress_DoWork(object sender, DoWorkEventArgs e)
+        {
+            int index = 0;
+            for (int i = 0; i < ressourceList.GetFIBCount(); i++)
+            {
+                for (int j = 0; j < ressourceList.GetBFFCount(i); j++)
+                {
+                    //try is temporary here while CTextureManager class isn't finished...
+                    try
+                    {
+                        this.ressourceList.SaveTexture(i, j, index);
+                    }
+                    catch { }
+                    bWDecompress.ReportProgress(index);
+                    index++;
+                }
+            }
+        }
+        private void bWDecompress_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            buttonExtractAllTextures.Text = e.ProgressPercentage + "/" + ressourceList.GetTotalBFFCount();
+        }
+        private void bWDecompress_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            buttonExtractAllTextures.Text = "Extract all textures";
+            Process.Start(CGeneric.pathExtractedTexture);
+        }
+
+        //part helping on the form..
         private void buttonLoadRom_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "load PPL rom for editing content"; }
         private void buttonGetRomFolder_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "open PPL rom, can only take .z64 file."; }
 
         private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
         private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
 
-        private void treeViewTextures_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-                if (checkBoxAlwaysShowTexture.Checked && treeViewTextures.SelectedNode.Level != 0)
-                    this.ressourceList.ShowTexture(pictureBox1, treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index);
-        }
     }
 }

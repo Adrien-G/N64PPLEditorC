@@ -93,6 +93,11 @@ namespace N64PPLEditorC
             fibList[indexFIB].GetTexture(pictureBox,indexBFF);
         }
 
+        public void SaveTexture(int indexFIB, int indexBFF,int id)
+        {
+            fibList[indexFIB].SaveTexture(indexBFF,id);
+        }
+
         //fib public methods..
         public int GetFIBCount()
         {
@@ -109,6 +114,15 @@ namespace N64PPLEditorC
         public int GetBFFCount(int indexFIB)
         {
             return fibList[indexFIB].GetBFFCount();
+        }
+        public int GetTotalBFFCount()
+        {
+            int total = 0;
+            for (int i = 0; i < fibList.Count; i++)
+            {
+                total += this.GetBFFCount(i);
+            }
+            return total;
         }
 
         //hvqm public methods...
