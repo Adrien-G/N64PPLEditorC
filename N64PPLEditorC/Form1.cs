@@ -171,15 +171,8 @@ namespace N64PPLEditorC
 
         private void treeViewTextures_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            try
-            {
                 if (checkBoxAlwaysShowTexture.Checked && treeViewTextures.SelectedNode.Level != 0)
                     this.ressourceList.ShowTexture(pictureBox1, treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index);
-            }
-            catch
-            {
-
-            }
         }
     }
 }
