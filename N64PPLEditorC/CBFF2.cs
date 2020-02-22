@@ -52,7 +52,7 @@ namespace N64PPLEditorC
             headerBFF2.transparencyPixelIndex = b1;
 
             // check if the data is compressed and if data had indexed color
-            headerBFF2.isCompressedTexture = (b2 > 7) ? true : false;
+            headerBFF2.isCompressedTexture = (rawData[18] % 16 > 7) ? true : false;
 
             //copy basic informations..
             headerBFF2.textureType = rawData[19];
@@ -143,7 +143,7 @@ namespace N64PPLEditorC
 
         public string GetName()
         {
-            return System.Text.Encoding.UTF8.GetString(headerBFF2.name);
+            return headerBFF2.isCompressedTexture + System.Text.Encoding.UTF8.GetString(headerBFF2.name);
         }
     }
 }
