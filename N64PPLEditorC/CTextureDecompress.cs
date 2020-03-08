@@ -109,7 +109,9 @@ namespace N64PPLEditorC
         public byte[] ConvertIndexedToRGB(CBFF2.BFFHeader headerBFF2,Byte[] decompressedTex)
         {
             Byte[] newData;
-            if (headerBFF2.bytePerPixel != 8)
+  
+            // check the size of the palette (if < to 15 then pixel is stored in half a byte).
+            if (BitConverter.ToInt32(headerBFF2.paletteSize, 0) > 15)
             {
                 newData = new byte[decompressedTex.Length * headerBFF2.bytePerPixel];
                 for (int i = 0; i < decompressedTex.Length; i++)
@@ -128,10 +130,9 @@ namespace N64PPLEditorC
                     tmpB2 = decompressedTex[i];
                     tmpB2 <<= 4;
                     tmpB2 >>= 4;
-                    Array.Copy(headerBFF2.palette, tmpB1, decompressedTex, 8 * i, 4);
-                    Array.Copy(headerBFF2.palette, tmpB2, decompressedTex, 8 * i+4, 4);
+                    Array.Copy(headerBFF2.palette, tmpB1, newData, 8 * i, 4);
+                    Array.Copy(headerBFF2.palette, tmpB2, newData, 8 * i+4, 4);
                 }
-
             }
             return newData;
         }

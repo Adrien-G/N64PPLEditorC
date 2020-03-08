@@ -68,7 +68,7 @@ namespace N64PPLEditorC
                 case 0x22: headerBFF2.bytePerPixel = 8; break;
                 case 0x23: headerBFF2.bytePerPixel = 1; break;
                 case 0x24: headerBFF2.bytePerPixel = 2; break;
-                case 0x32: headerBFF2.bytePerPixel = 8; break;
+                case 0x32: headerBFF2.bytePerPixel = 4; break;
                 case 0x33: headerBFF2.bytePerPixel = 4; break;
                 case 0x54: headerBFF2.bytePerPixel = 2; break;
                 case 0x55: headerBFF2.bytePerPixel = 4; break;

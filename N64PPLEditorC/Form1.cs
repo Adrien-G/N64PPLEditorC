@@ -158,13 +158,23 @@ namespace N64PPLEditorC
         private void buttonShowTexture_Click(object sender, EventArgs e)
         {
             if(treeViewTextures.SelectedNode.Level == 1)
-                this.ressourceList.ShowTexture(pictureBox1,treeViewTextures.SelectedNode.Parent.Index,treeViewTextures.SelectedNode.Index);
+                this.ressourceList.ShowTexture(pictureBoxTexture,treeViewTextures.SelectedNode.Parent.Index,treeViewTextures.SelectedNode.Index);
         }
 
         private void treeViewTextures_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (checkBoxAlwaysShowTexture.Checked && treeViewTextures.SelectedNode.Level != 0)
-                this.ressourceList.ShowTexture(pictureBox1, treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index);
+            int level = treeViewTextures.SelectedNode.Level;
+            if (checkBoxAlwaysShowTexture.Checked && level != 0)
+            {
+                labelIsTextureContainer.Hide();
+                 this.ressourceList.ShowTexture(pictureBoxTexture, treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index);
+                pictureBoxTexture.Show();
+            }
+            if (level == 0)
+            {
+                labelIsTextureContainer.Show();
+                pictureBoxTexture.Hide();
+            }
         }
 
         //decompress all texture task..
@@ -233,6 +243,12 @@ namespace N64PPLEditorC
         private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
         private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
 
-        
+        private void checkBoxAlwaysShowTexture_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxAlwaysShowTexture.Checked)
+                buttonShowTexture.Enabled = false;
+            else
+                buttonShowTexture.Enabled = true;
+        }
     }
 }

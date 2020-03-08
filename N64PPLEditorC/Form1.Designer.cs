@@ -57,13 +57,14 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxTexture = new System.Windows.Forms.PictureBox();
             this.buttonExtractAllTextures = new System.Windows.Forms.Button();
             this.checkBoxAlwaysShowTexture = new System.Windows.Forms.CheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerExtract = new System.Windows.Forms.Timer(this.components);
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
+            this.labelIsTextureContainer = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripForTreeview.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -75,7 +76,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTexture)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -149,19 +150,19 @@
             this.expandAllToolStripMenuItem,
             this.collpseAllToolStripMenuItem});
             this.contextMenuStripForTreeview.Name = "contextMenuStrip1";
-            this.contextMenuStripForTreeview.Size = new System.Drawing.Size(181, 70);
+            this.contextMenuStripForTreeview.Size = new System.Drawing.Size(135, 48);
             // 
             // expandAllToolStripMenuItem
             // 
             this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.expandAllToolStripMenuItem.Text = "Expand all";
             this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
             // 
             // collpseAllToolStripMenuItem
             // 
             this.collpseAllToolStripMenuItem.Name = "collpseAllToolStripMenuItem";
-            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.collpseAllToolStripMenuItem.Text = "Collapse all";
             this.collpseAllToolStripMenuItem.Click += new System.EventHandler(this.collpseAllToolStripMenuItem_Click);
             // 
@@ -295,11 +296,12 @@
             // 
             // buttonShowTexture
             // 
+            this.buttonShowTexture.Enabled = false;
             this.buttonShowTexture.Location = new System.Drawing.Point(6, 19);
             this.buttonShowTexture.Name = "buttonShowTexture";
             this.buttonShowTexture.Size = new System.Drawing.Size(116, 23);
             this.buttonShowTexture.TabIndex = 1;
-            this.buttonShowTexture.Text = "show texture";
+            this.buttonShowTexture.Text = "preview texture";
             this.buttonShowTexture.UseVisualStyleBackColor = true;
             this.buttonShowTexture.Click += new System.EventHandler(this.buttonShowTexture_Click);
             // 
@@ -382,7 +384,8 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.pictureBox1);
+            this.groupBox4.Controls.Add(this.labelIsTextureContainer);
+            this.groupBox4.Controls.Add(this.pictureBoxTexture);
             this.groupBox4.Location = new System.Drawing.Point(6, 329);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(335, 267);
@@ -390,13 +393,13 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Texture";
             // 
-            // pictureBox1
+            // pictureBoxTexture
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(6, 19);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(320, 240);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxTexture.Location = new System.Drawing.Point(6, 19);
+            this.pictureBoxTexture.Name = "pictureBoxTexture";
+            this.pictureBoxTexture.Size = new System.Drawing.Size(320, 240);
+            this.pictureBoxTexture.TabIndex = 0;
+            this.pictureBoxTexture.TabStop = false;
             // 
             // buttonExtractAllTextures
             // 
@@ -415,10 +418,11 @@
             this.checkBoxAlwaysShowTexture.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxAlwaysShowTexture.Location = new System.Drawing.Point(128, 23);
             this.checkBoxAlwaysShowTexture.Name = "checkBoxAlwaysShowTexture";
-            this.checkBoxAlwaysShowTexture.Size = new System.Drawing.Size(86, 17);
+            this.checkBoxAlwaysShowTexture.Size = new System.Drawing.Size(98, 17);
             this.checkBoxAlwaysShowTexture.TabIndex = 10;
-            this.checkBoxAlwaysShowTexture.Text = "always show";
+            this.checkBoxAlwaysShowTexture.Text = "always preview";
             this.checkBoxAlwaysShowTexture.UseVisualStyleBackColor = true;
+            this.checkBoxAlwaysShowTexture.CheckedChanged += new System.EventHandler(this.checkBoxAlwaysShowTexture_CheckedChanged);
             // 
             // statusStrip1
             // 
@@ -450,6 +454,16 @@
             this.bWDecompress.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bWDecompress_ProgressChanged);
             this.bWDecompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bWDecompress_RunWorkerCompleted);
             // 
+            // labelIsTextureContainer
+            // 
+            this.labelIsTextureContainer.AutoSize = true;
+            this.labelIsTextureContainer.Location = new System.Drawing.Point(57, 129);
+            this.labelIsTextureContainer.Name = "labelIsTextureContainer";
+            this.labelIsTextureContainer.Size = new System.Drawing.Size(212, 13);
+            this.labelIsTextureContainer.TabIndex = 1;
+            this.labelIsTextureContainer.Text = "Please select a texture inside the container.";
+            this.labelIsTextureContainer.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -478,7 +492,8 @@
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTexture)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -505,7 +520,7 @@
         private System.Windows.Forms.GroupBox groupBoxTextures;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button buttonExtractAllTextures;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBoxTexture;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.CheckBox checkBoxAlwaysShowTexture;
         private System.Windows.Forms.Button button4;
@@ -523,6 +538,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripForTreeview;
         private System.Windows.Forms.ToolStripMenuItem expandAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collpseAllToolStripMenuItem;
+        private System.Windows.Forms.Label labelIsTextureContainer;
     }
 }
 
