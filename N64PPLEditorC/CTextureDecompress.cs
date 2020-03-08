@@ -130,7 +130,6 @@ namespace N64PPLEditorC
                     tmpB2 >>= 4;
                     Array.Copy(headerBFF2.palette, tmpB1, decompressedTex, 8 * i, 4);
                     Array.Copy(headerBFF2.palette, tmpB2, decompressedTex, 8 * i+4, 4);
-
                 }
 
             }

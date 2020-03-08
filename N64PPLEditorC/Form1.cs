@@ -131,12 +131,9 @@ namespace N64PPLEditorC
 
             // search for "ABRA.BIF" pattern (start of array ressources location)
             int indexRessourcesArrayStart = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternAbraBif) - 12;
-            labelStartingData.Text = indexRessourcesArrayStart.ToString("X");
 
             // search for "N64 PtrTablesV2" pattern (end of ressources location)
             int indexRessourcesEnd = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternN64WaveTable);
-            labelEndingData.Text = indexRessourcesEnd.ToString("X");
-
 
             //read header of table data
             Byte[] nbElementsTable = new Byte[4];
@@ -204,6 +201,31 @@ namespace N64PPLEditorC
             Process.Start(CGeneric.pathExtractedTexture);
         }
 
+        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            treeViewTextures.BeginUpdate();
+            treeViewHVQM.BeginUpdate();
+            treeViewSBF.BeginUpdate();
+            treeViewTextures.ExpandAll();
+            treeViewSBF.ExpandAll();
+            treeViewHVQM.ExpandAll();
+            treeViewTextures.EndUpdate();
+            treeViewHVQM.EndUpdate();
+            treeViewSBF.EndUpdate();
+        }
+        private void collpseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            treeViewTextures.BeginUpdate();
+            treeViewHVQM.BeginUpdate();
+            treeViewSBF.BeginUpdate();
+            treeViewTextures.CollapseAll();
+            treeViewSBF.CollapseAll();
+            treeViewHVQM.CollapseAll();
+            treeViewTextures.EndUpdate();
+            treeViewHVQM.EndUpdate();
+            treeViewSBF.EndUpdate();
+        }
+
         //part helping on the form..
         private void buttonLoadRom_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "load PPL rom for editing content"; }
         private void buttonGetRomFolder_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "open PPL rom, can only take .z64 file."; }
@@ -211,5 +233,6 @@ namespace N64PPLEditorC
         private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
         private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
 
+        
     }
 }
