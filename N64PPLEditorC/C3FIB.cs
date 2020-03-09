@@ -18,6 +18,7 @@ namespace N64PPLEditorC
         private Byte[] fibName;
         private Byte[] header3FIB;
         private Byte textureType;
+        private byte fibNameSize;
 
 
         public C3FIB(Byte[] data3Fib, Byte[] ressourceName)
@@ -32,7 +33,7 @@ namespace N64PPLEditorC
             //get bff count and fibName size
             textureType = data3Fib[4];
             Byte bffCount = data3Fib[12];
-            Byte fibNameSize = data3Fib[16];
+            fibNameSize = data3Fib[16];
 
             //keep fibName
             fibName = new byte[16 + fibNameSize];
@@ -111,6 +112,16 @@ namespace N64PPLEditorC
             bff2Childs[index].DecompressTexture();
             Bitmap bmp = bff2Childs[index].GetBmpTexture();
             pictureBox.Image = bmp;
+        }
+
+        public Int32 GetSize()
+        {
+            int totalSize = fibNameSize + 20;
+            for(int i = 0; i < bff2Childs.Count; i++)
+            {
+                totalSize += bff2Childs[i].GetSize();
+            }
+            return totalSize;
         }
     }
 }
