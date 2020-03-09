@@ -44,6 +44,15 @@ namespace N64PPLEditorC
                 return BitConverter.ToInt32(byteArray, 0);
         }
 
+        public static Byte[] ConvertIntArrayToByte(Int32 nb)
+        {
+            byte[] res = BitConverter.GetBytes(nb);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(res);
+
+            return res;
+        }
+
         public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched,int nbOccurence=0)
         {
             //allow to search the second, third (and so on) value of the occurence
