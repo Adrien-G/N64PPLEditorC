@@ -111,18 +111,13 @@ namespace N64PPLEditorC
             Byte[] newData;
   
             // check the size of the palette (if < to 15 then pixel is stored in half a byte).
-            if (BitConverter.ToInt32(headerBFF2.paletteSize, 0) > 15)
+
+            if(BitConverter.ToInt32(headerBFF2.paletteSize, 0) < 15 && (headerBFF2.textureType == 0x22 || headerBFF2.textureType == 0x32))
             {
-                newData = new byte[decompressedTex.Length * headerBFF2.bytePerPixel];
-                for (int i = 0; i < decompressedTex.Length; i++)
-                    Array.Copy(headerBFF2.palette, decompressedTex[i] * headerBFF2.bytePerPixel, newData, headerBFF2.bytePerPixel * i, headerBFF2.bytePerPixel);
-            }
-            else
-            {
-                newData = new byte[decompressedTex.Length * 8 ];
+                newData = new byte[decompressedTex.Length * 8];
                 byte tmpB1;
                 byte tmpB2;
-                for (int i = 0; i < decompressedTex.Length-1; i++)
+                for (int i = 0; i < decompressedTex.Length - 1; i++)
                 {
                     tmpB1 = decompressedTex[i];
                     tmpB1 >>= 4;
@@ -130,10 +125,16 @@ namespace N64PPLEditorC
                     tmpB2 = decompressedTex[i];
                     tmpB2 <<= 4;
                     tmpB2 >>= 4;
-                    Array.Copy(headerBFF2.palette, tmpB1, newData, 8 * i, 4);
-                    Array.Copy(headerBFF2.palette, tmpB2, newData, 8 * i+4, 4);
+                    Array.Copy(headerBFF2.palette, tmpB1*4, newData, 8 * i, 4);
+                    Array.Copy(headerBFF2.palette, tmpB2*4, newData, 8 * i + 4, 4);
                 }
             }
+            else
+            {
+               newData = new byte[decompressedTex.Length * headerBFF2.bytePerPixel];
+                for (int i = 0; i<decompressedTex.Length; i++)
+                    Array.Copy(headerBFF2.palette, decompressedTex[i] * headerBFF2.bytePerPixel, newData, headerBFF2.bytePerPixel* i, headerBFF2.bytePerPixel);
+            }   
             return newData;
         }
 
@@ -147,12 +148,9 @@ namespace N64PPLEditorC
 
             switch (headerBFF2.textureType)
             {
-                case 0x22:
-                    //actually unknown color repartition scheme..
-                    arrayTextureRGBA = arrayTexture;
-                    break;
                 case 0x23:
                     //actually unknown color repartition scheme..
+                    arrayTextureRGBA = arrayTexture;
                     break;
                 case 0x24:
                     //8 bits for color (greyscale) and 8 bit for transparency

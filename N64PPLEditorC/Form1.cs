@@ -193,9 +193,10 @@ namespace N64PPLEditorC
                 {
                     try
                     {
+                        index++;
                         this.ressourceList.SaveTexture(i, j);
                         bWDecompress.ReportProgress(index);
-                        index++;
+                        
                     }
                     catch { }
                 }

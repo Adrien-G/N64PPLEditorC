@@ -103,7 +103,7 @@ namespace N64PPLEditorC
             bff2Childs[index].DecompressTexture();
             Bitmap bmp = bff2Childs[index].GetBmpTexture();
 
-            bmp.Save(CGeneric.pathExtractedTexture + (indexFIB+1) + "-" + (index+1) + ", " + bff2Childs[index].GetName() + ".bmp");
+            bmp.Save(CGeneric.pathExtractedTexture + (indexFIB+1) + "-" + (index+1) + ", " + bff2Childs[index].GetName() + ".png");
         }
 
         public void GetTexture(PictureBox pictureBox, int index)
