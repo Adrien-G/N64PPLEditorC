@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +21,16 @@ namespace N64PPLEditorC
         private List<CHVQM> hvqmList;
         private List<CSBF1> sbfList;
 
-        public CRessourceList()
+        private int indexRessourcesStart;
+        private int indexRessourcesEnd;
+
+        public CRessourceList(int indexRessourcesStart,int indexRessourcesEnd)
         {
             fibList = new List<C3FIB>();
             hvqmList = new List<CHVQM>();
             sbfList = new List<CSBF1>();
+            this.indexRessourcesStart = indexRessourcesStart;
+            this.indexRessourcesEnd = indexRessourcesEnd;
         }
 
         public void Init(int nbElements, byte[] ressourcesList, byte[] ressourcesData)
@@ -143,6 +149,29 @@ namespace N64PPLEditorC
         public string GetSBFName(int index)
         {
             return sbfList[index].GetRessourceName();
+        }
+
+        public void WriteAllData(string path)
+        {
+            FileStream fs = new FileStream(path,FileMode.Open,FileAccess.Write);
+
+            // write the number of elements
+            fs.Write(CGeneric.ConvertIntArrayToByte(GetFIBCount() + GetHVQMCount() + GetSBFCount()), 0, 4);
+
+            // index of data (for writing header)
+            int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount()) * 24 + 4;
+
+            //write list header (FIB)
+            for (int index = 0; index < GetFIBCount(); index++)
+            {
+                //write size
+                fs.Write(CGeneric.ConvertIntArrayToByte(fibList[index].GetSize()), 0, 4);
+
+                //TO-DONE..
+
+            }
+
+
         }
     }
 }
