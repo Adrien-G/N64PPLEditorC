@@ -151,7 +151,7 @@ namespace N64PPLEditorC
 
 
             //init the ressources list and data associated
-            this.ressourceList = new CRessourceList();
+            this.ressourceList = new CRessourceList(indexRessourcesArrayStart,indexRessourcesEnd);
             this.ressourceList.Init(nbElementsInTable, dataTable, ressourcesData);
         }
 
@@ -202,6 +202,8 @@ namespace N64PPLEditorC
                 }
             }
         }
+
+
         private void bWDecompress_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             buttonExtractAllTextures.Text = e.ProgressPercentage + "/" + ressourceList.GetTotalBFFCount();
@@ -237,13 +239,6 @@ namespace N64PPLEditorC
             treeViewSBF.EndUpdate();
         }
 
-        //part helping on the form..
-        private void buttonLoadRom_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "load PPL rom for editing content"; }
-        private void buttonGetRomFolder_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "open PPL rom, can only take .z64 file."; }
-
-        private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
-        private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
-
         private void checkBoxAlwaysShowTexture_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxAlwaysShowTexture.Checked)
@@ -251,5 +246,20 @@ namespace N64PPLEditorC
             else
                 buttonShowTexture.Enabled = true;
         }
+
+        private void buttonModifyRom_Click(object sender, EventArgs e)
+        {
+            ressourceList.WriteAllData(textBoxPPLLocation.Text);
+            buttonModifyRom.BackColor = Color.LimeGreen;
+        }
+
+        //part helping on the form..
+        private void buttonLoadRom_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "load PPL rom for editing content"; }
+        private void buttonGetRomFolder_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "open PPL rom, can only take .z64 file."; }
+
+        private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
+        private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
+
+
     }
 }

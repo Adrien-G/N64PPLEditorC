@@ -57,6 +57,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.labelIsTextureContainer = new System.Windows.Forms.Label();
             this.pictureBoxTexture = new System.Windows.Forms.PictureBox();
             this.buttonExtractAllTextures = new System.Windows.Forms.Button();
             this.checkBoxAlwaysShowTexture = new System.Windows.Forms.CheckBox();
@@ -64,7 +65,7 @@
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerExtract = new System.Windows.Forms.Timer(this.components);
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
-            this.labelIsTextureContainer = new System.Windows.Forms.Label();
+            this.buttonModifyRom = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripForTreeview.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -307,6 +308,7 @@
             // 
             // groupBoxTextures
             // 
+            this.groupBoxTextures.Controls.Add(this.buttonModifyRom);
             this.groupBoxTextures.Controls.Add(this.button5);
             this.groupBoxTextures.Controls.Add(this.button4);
             this.groupBoxTextures.Controls.Add(this.groupBox2);
@@ -393,6 +395,16 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Texture";
             // 
+            // labelIsTextureContainer
+            // 
+            this.labelIsTextureContainer.AutoSize = true;
+            this.labelIsTextureContainer.Location = new System.Drawing.Point(57, 129);
+            this.labelIsTextureContainer.Name = "labelIsTextureContainer";
+            this.labelIsTextureContainer.Size = new System.Drawing.Size(212, 13);
+            this.labelIsTextureContainer.TabIndex = 1;
+            this.labelIsTextureContainer.Text = "Please select a texture inside the container.";
+            this.labelIsTextureContainer.Visible = false;
+            // 
             // pictureBoxTexture
             // 
             this.pictureBoxTexture.Location = new System.Drawing.Point(6, 19);
@@ -454,15 +466,15 @@
             this.bWDecompress.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bWDecompress_ProgressChanged);
             this.bWDecompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bWDecompress_RunWorkerCompleted);
             // 
-            // labelIsTextureContainer
+            // buttonModifyRom
             // 
-            this.labelIsTextureContainer.AutoSize = true;
-            this.labelIsTextureContainer.Location = new System.Drawing.Point(57, 129);
-            this.labelIsTextureContainer.Name = "labelIsTextureContainer";
-            this.labelIsTextureContainer.Size = new System.Drawing.Size(212, 13);
-            this.labelIsTextureContainer.TabIndex = 1;
-            this.labelIsTextureContainer.Text = "Please select a texture inside the container.";
-            this.labelIsTextureContainer.Visible = false;
+            this.buttonModifyRom.Location = new System.Drawing.Point(265, 287);
+            this.buttonModifyRom.Name = "buttonModifyRom";
+            this.buttonModifyRom.Size = new System.Drawing.Size(82, 40);
+            this.buttonModifyRom.TabIndex = 12;
+            this.buttonModifyRom.Text = "modify ROM";
+            this.buttonModifyRom.UseVisualStyleBackColor = true;
+            this.buttonModifyRom.Click += new System.EventHandler(this.buttonModifyRom_Click);
             // 
             // Form1
             // 
@@ -539,6 +551,7 @@
         private System.Windows.Forms.ToolStripMenuItem expandAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collpseAllToolStripMenuItem;
         private System.Windows.Forms.Label labelIsTextureContainer;
+        private System.Windows.Forms.Button buttonModifyRom;
     }
 }
 
