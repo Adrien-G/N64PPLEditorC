@@ -112,7 +112,12 @@ namespace N64PPLEditorC
             headerBFF2.palette = new Byte[paletteSize1*headerBFF2.bytePerPixel];
             Array.Copy(rawData, indexPalette + headerBFF2.paletteSize.Length, headerBFF2.palette, 0, headerBFF2.palette.Length);
         }
-        
+
+        public int GetSize()
+        {
+            return rawData.Length;
+        }
+
         public void DecompressTexture()
         {
             Byte[] compressedTex;
