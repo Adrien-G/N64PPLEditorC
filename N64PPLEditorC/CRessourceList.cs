@@ -54,7 +54,6 @@ namespace N64PPLEditorC
                 Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable + 4, lst1[i].ressourceIndex, 0, 4);
                 Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable + 8, lst1[i].ressourceName, 0,16);
             }
-
             return lst1;
         }
 
@@ -161,17 +160,42 @@ namespace N64PPLEditorC
             // index of data (for writing header)
             int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount()) * 24 + 4;
 
-            //write list header (FIB)
+            // write list header (FIB)
             for (int index = 0; index < GetFIBCount(); index++)
-            {
+                indexData += WriteListHeader(fs,indexData, fibList[index].GetSize(), fibList[index].getFIBName());
+
+            // write list header (HVQM)
+            for (int index = 0; index < GetHVQMCount(); index++)
+                indexData += WriteListHeader(fs, indexData, hvqmList[index].GetSize(), hvqmList[index].getFIBName());
+
+            // write list header (FIB)
+            for (int index = 0; index < GetSBFCount(); index++)
+                indexData += WriteListHeader(fs, indexData, sbfList[index].GetSize(), sbfList[index].getFIBName());
+
+        }
+
+        private int WriteListHeader(FileStream fs, int indexData,int sizeItem,string nameItem)
+        {
+
                 //write size
-                fs.Write(CGeneric.ConvertIntArrayToByte(fibList[index].GetSize()), 0, 4);
+                fs.Write(CGeneric.ConvertIntArrayToByte(sizeItem), 0, 4);
 
-                //TO-DONE..
+                // write index start
+                fs.Write(CGeneric.ConvertIntArrayToByte(indexData), 0, 4);
 
-            }
+                //write name of FIB (BIF Name)
+                byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(nameItem);
+                fs.Write(nameBIF, 0, nameBIF.Length);
 
+                //fill free space (of name) by 0
+                for (int freeSpace = 0; freeSpace < 16 - nameBIF.Length; freeSpace++)
+                    fs.WriteByte(0);
 
+                //if data is not pair, add a FF for to be sure it's pair... (because !)
+                if (sizeItem % 2 == 1)
+                    indexData++;
+
+            return indexData + sizeItem;
         }
     }
 }
