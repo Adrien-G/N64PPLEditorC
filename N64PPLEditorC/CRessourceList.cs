@@ -196,7 +196,7 @@ namespace N64PPLEditorC
                     fs.WriteByte(0);
 
                 //if data is not pair, add a FF for to be sure it's pair... (because !)
-                if (sizeItem % 2 == 1)
+                if (listOfressource[index].GetSize() % 2 == 1)
                     indexData++;
 
                 indexData += listOfressource[index].GetSize();
