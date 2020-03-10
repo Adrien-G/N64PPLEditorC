@@ -6,21 +6,11 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class CHVQM
+    class CHVQM : AbsRessource
     {
-        private Byte[] rawData;
-        private Byte[] ressourceName;
 
-        public CHVQM(Byte[] rawData, Byte[] ressourceName)
+        public CHVQM(Byte[] rawData, Byte[] ressourceName) : base(rawData,ressourceName)
         {
-            this.rawData = rawData;
-            this.ressourceName = ressourceName;
-        }
-
-        //public methods...
-        public string GetRessourceName()
-        {
-            return System.Text.Encoding.Default.GetString(ressourceName);
         }
 
     }

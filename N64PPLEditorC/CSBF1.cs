@@ -6,21 +6,12 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class CSBF1
+    class CSBF1 : AbsRessource
     {
-        private Byte[] rawData;
-        private Byte[] ressourceName;
 
-        public CSBF1(Byte[] rawData, Byte[] ressourceName)
+        public CSBF1(Byte[] rawData, Byte[] ressourceName) : base(rawData,ressourceName)
         {
-            this.rawData = rawData;
-            this.ressourceName = ressourceName;
         }
 
-        //public methods...
-        public string GetRessourceName()
-        {
-            return System.Text.Encoding.Default.GetString(ressourceName);
-        }
     }
 }

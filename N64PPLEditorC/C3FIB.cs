@@ -9,43 +9,37 @@ using System.Windows.Forms;
 
 namespace N64PPLEditorC
 {
-    class C3FIB
+    class C3FIB : AbsRessource
     {
-
-        private Byte[] data3Fib;
         private List<CBFF2> bff2Childs;
-        private Byte[] ressourceName;
         private Byte[] fibName;
         private Byte[] header3FIB;
         private Byte textureType;
         private byte fibNameSize;
-
-
-        public C3FIB(Byte[] data3Fib, Byte[] ressourceName)
+        
+        public C3FIB(Byte[] rawData, Byte[] ressourceName)  : base(rawData, ressourceName)
         {
-            this.data3Fib = data3Fib;
             bff2Childs = new List<CBFF2>();
-            this.ressourceName = ressourceName;
         }
 
         public void Init()
         {
             //get bff count and fibName size
-            textureType = data3Fib[4];
-            Byte bffCount = data3Fib[12];
-            fibNameSize = data3Fib[16];
+            textureType = rawData[4];
+            Byte bffCount = rawData[12];
+            fibNameSize = rawData[16];
 
             //keep fibName
             fibName = new byte[16 + fibNameSize];
-            Array.Copy(data3Fib,20,fibName,0,fibNameSize);
+            Array.Copy(rawData,20,fibName,0,fibNameSize);
 
             //keep header information
             header3FIB = new byte[20 + fibNameSize];
-            Array.Copy(data3Fib,0,header3FIB,0,header3FIB.Length);
+            Array.Copy(rawData,0,header3FIB,0,header3FIB.Length);
 
             //exclude the header and prepare and Chunk each BFF2
-            Byte[] bffData = new byte[data3Fib.Length- fibNameSize - 20];
-            Array.Copy(data3Fib, 20 + fibNameSize,bffData,0,bffData.Length);
+            Byte[] bffData = new byte[rawData.Length- fibNameSize - 20];
+            Array.Copy(rawData, 20 + fibNameSize,bffData,0,bffData.Length);
             MakeBFF2Chunks(bffData,bffCount);
         }
 
