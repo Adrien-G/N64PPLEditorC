@@ -12,7 +12,7 @@ namespace N64PPLEditorC
     class C3FIB : AbsRessource
     {
         private List<CBFF2> bff2Childs;
-        private Byte[] fibName;
+        //private Byte[] fibName;
         private Byte[] header3FIB;
         private Byte textureType;
         private byte fibNameSize;
@@ -30,8 +30,8 @@ namespace N64PPLEditorC
             fibNameSize = rawData[16];
 
             //keep fibName
-            fibName = new byte[16 + fibNameSize];
-            Array.Copy(rawData,20,fibName,0,fibNameSize);
+            ressourceName = new byte[16 + fibNameSize];
+            Array.Copy(rawData,20, ressourceName, 0,fibNameSize);
 
             //keep header information
             header3FIB = new byte[20 + fibNameSize];
@@ -78,11 +78,6 @@ namespace N64PPLEditorC
             }
         }
 
-        public string getFIBName()
-        {
-            return System.Text.Encoding.Default.GetString(fibName);
-        }
-
         public string GetBFFName(int index)
         {
             return bff2Childs[index].GetName();
@@ -108,7 +103,7 @@ namespace N64PPLEditorC
             pictureBox.Image = bmp;
         }
 
-        public Int32 GetSize()
+        public override Int32 GetSize()
         {
             int totalSize = fibNameSize + 20;
             for(int i = 0; i < bff2Childs.Count; i++)

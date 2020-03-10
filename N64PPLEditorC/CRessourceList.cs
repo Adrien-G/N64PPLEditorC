@@ -110,7 +110,7 @@ namespace N64PPLEditorC
         }
         public string GetFIBName(int index)
         {
-            return fibList[index].getFIBName();
+            return fibList[index].GetRessourceName();
         }
         public string GetBFFName(int indexFIB, int indexBFF)
         {
@@ -160,31 +160,35 @@ namespace N64PPLEditorC
             // index of data (for writing header)
             int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount()) * 24 + 4;
 
-            // write list header (FIB)
-            for (int index = 0; index < GetFIBCount(); index++)
-                indexData += WriteListHeader(fs,indexData, fibList[index].GetSize(), fibList[index].getFIBName());
-
-            // write list header (HVQM)
-            for (int index = 0; index < GetHVQMCount(); index++)
-                indexData += WriteListHeader(fs, indexData, hvqmList[index].GetSize(), hvqmList[index].getFIBName());
+            //write list header (FIB)
+            WriteListHeader(fs,indexData,fibList) ;
 
             // write list header (FIB)
-            for (int index = 0; index < GetSBFCount(); index++)
-                indexData += WriteListHeader(fs, indexData, sbfList[index].GetSize(), sbfList[index].getFIBName());
+            //for (int index = 0; index < GetFIBCount(); index++)
+            //    indexData += WriteListHeader(fs,indexData, fibList[index].GetSize(), fibList[index].GetRessourceName());
+
+            //// write list header (HVQM)
+            //for (int index = 0; index < GetHVQMCount(); index++)
+            //    indexData += WriteListHeader(fs, indexData, hvqmList[index].GetSize(), hvqmList[index].GetRessourceName());
+
+            //// write list header (FIB)
+            //for (int index = 0; index < GetSBFCount(); index++)
+            //    indexData += WriteListHeader(fs, indexData, sbfList[index].GetSize(), sbfList[index].GetRessourceName());
 
         }
 
-        private int WriteListHeader(FileStream fs, int indexData,int sizeItem,string nameItem)
+        private void WriteListHeader(FileStream fs, int indexData,List<AbsRessource> listOfressource)
         {
-
+            for (int index = 0; index < listOfressource.Count(); index++)
+            {
                 //write size
-                fs.Write(CGeneric.ConvertIntArrayToByte(sizeItem), 0, 4);
+                fs.Write(CGeneric.ConvertIntArrayToByte(listOfressource[index].GetSize()), 0, 4);
 
                 // write index start
                 fs.Write(CGeneric.ConvertIntArrayToByte(indexData), 0, 4);
 
                 //write name of FIB (BIF Name)
-                byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(nameItem);
+                byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(listOfressource[index].GetRessourceName());
                 fs.Write(nameBIF, 0, nameBIF.Length);
 
                 //fill free space (of name) by 0
@@ -195,7 +199,9 @@ namespace N64PPLEditorC
                 if (sizeItem % 2 == 1)
                     indexData++;
 
-            return indexData + sizeItem;
+                indexData += listOfressource[index].GetSize();
+
+            }
         }
     }
 }

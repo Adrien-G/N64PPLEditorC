@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    abstract class AbsRessource
+    public abstract class AbsRessource
     {
 
         protected Byte[] rawData;
@@ -18,11 +18,13 @@ namespace N64PPLEditorC
             this.ressourceName = ressourceName;
         }
 
-
         public string GetRessourceName()
         {
             return System.Text.Encoding.Default.GetString(ressourceName);
         }
+
+        public abstract Int32 GetSize();
+
 
 
 
