@@ -160,24 +160,13 @@ namespace N64PPLEditorC
             // index of data (for writing header)
             int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount()) * 24 + 4;
 
-            //write list header (FIB)
+            //write list header (FIB,HVQM,SBF1)
             WriteListHeader(fs,indexData,fibList) ;
-
-            // write list header (FIB)
-            //for (int index = 0; index < GetFIBCount(); index++)
-            //    indexData += WriteListHeader(fs,indexData, fibList[index].GetSize(), fibList[index].GetRessourceName());
-
-            //// write list header (HVQM)
-            //for (int index = 0; index < GetHVQMCount(); index++)
-            //    indexData += WriteListHeader(fs, indexData, hvqmList[index].GetSize(), hvqmList[index].GetRessourceName());
-
-            //// write list header (FIB)
-            //for (int index = 0; index < GetSBFCount(); index++)
-            //    indexData += WriteListHeader(fs, indexData, sbfList[index].GetSize(), sbfList[index].GetRessourceName());
-
+            WriteListHeader(fs, indexData, hvqmList);
+            WriteListHeader(fs, indexData, sbfList);
         }
 
-        private void WriteListHeader(FileStream fs, int indexData,List<AbsRessource> listOfressource)
+        private void WriteListHeader<T>(FileStream fs, int indexData, List<T> listOfressource) where T : AbsRessource
         {
             for (int index = 0; index < listOfressource.Count(); index++)
             {
