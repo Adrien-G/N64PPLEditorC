@@ -51,6 +51,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.buttonShowTexture = new System.Windows.Forms.Button();
             this.groupBoxTextures = new System.Windows.Forms.GroupBox();
+            this.buttonModifyRom = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -65,7 +66,6 @@
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerExtract = new System.Windows.Forms.Timer(this.components);
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
-            this.buttonModifyRom = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripForTreeview.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -237,7 +237,7 @@
             this.groupBoxTextureContainer.Controls.Add(this.radioButton1);
             this.groupBoxTextureContainer.Controls.Add(this.label3);
             this.groupBoxTextureContainer.Controls.Add(this.button1);
-            this.groupBoxTextureContainer.Location = new System.Drawing.Point(6, 186);
+            this.groupBoxTextureContainer.Location = new System.Drawing.Point(6, 146);
             this.groupBoxTextureContainer.Name = "groupBoxTextureContainer";
             this.groupBoxTextureContainer.Size = new System.Drawing.Size(253, 137);
             this.groupBoxTextureContainer.TabIndex = 5;
@@ -308,7 +308,6 @@
             // 
             // groupBoxTextures
             // 
-            this.groupBoxTextures.Controls.Add(this.buttonModifyRom);
             this.groupBoxTextures.Controls.Add(this.button5);
             this.groupBoxTextures.Controls.Add(this.button4);
             this.groupBoxTextures.Controls.Add(this.groupBox2);
@@ -319,10 +318,20 @@
             this.groupBoxTextures.Controls.Add(this.buttonShowTexture);
             this.groupBoxTextures.Location = new System.Drawing.Point(283, 69);
             this.groupBoxTextures.Name = "groupBoxTextures";
-            this.groupBoxTextures.Size = new System.Drawing.Size(352, 604);
+            this.groupBoxTextures.Size = new System.Drawing.Size(352, 562);
             this.groupBoxTextures.TabIndex = 6;
             this.groupBoxTextures.TabStop = false;
             this.groupBoxTextures.Text = "Rom Management";
+            // 
+            // buttonModifyRom
+            // 
+            this.buttonModifyRom.Location = new System.Drawing.Point(553, 637);
+            this.buttonModifyRom.Name = "buttonModifyRom";
+            this.buttonModifyRom.Size = new System.Drawing.Size(82, 40);
+            this.buttonModifyRom.TabIndex = 12;
+            this.buttonModifyRom.Text = "modify ROM";
+            this.buttonModifyRom.UseVisualStyleBackColor = true;
+            this.buttonModifyRom.Click += new System.EventHandler(this.buttonModifyRom_Click);
             // 
             // button5
             // 
@@ -341,14 +350,15 @@
             this.button4.TabIndex = 11;
             this.button4.Text = "insert new texture";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.numericUpDown1);
-            this.groupBox2.Location = new System.Drawing.Point(6, 135);
+            this.groupBox2.Location = new System.Drawing.Point(128, 48);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(200, 45);
+            this.groupBox2.Size = new System.Drawing.Size(191, 45);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Texture option";
@@ -388,7 +398,7 @@
             // 
             this.groupBox4.Controls.Add(this.labelIsTextureContainer);
             this.groupBox4.Controls.Add(this.pictureBoxTexture);
-            this.groupBox4.Location = new System.Drawing.Point(6, 329);
+            this.groupBox4.Location = new System.Drawing.Point(6, 289);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(335, 267);
             this.groupBox4.TabIndex = 7;
@@ -466,21 +476,12 @@
             this.bWDecompress.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bWDecompress_ProgressChanged);
             this.bWDecompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bWDecompress_RunWorkerCompleted);
             // 
-            // buttonModifyRom
-            // 
-            this.buttonModifyRom.Location = new System.Drawing.Point(265, 287);
-            this.buttonModifyRom.Name = "buttonModifyRom";
-            this.buttonModifyRom.Size = new System.Drawing.Size(82, 40);
-            this.buttonModifyRom.TabIndex = 12;
-            this.buttonModifyRom.Text = "modify ROM";
-            this.buttonModifyRom.UseVisualStyleBackColor = true;
-            this.buttonModifyRom.Click += new System.EventHandler(this.buttonModifyRom_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(642, 702);
+            this.Controls.Add(this.buttonModifyRom);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBoxTextures);
             this.Controls.Add(this.tabControl1);

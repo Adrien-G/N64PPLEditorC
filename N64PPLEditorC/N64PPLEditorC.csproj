@@ -50,6 +50,12 @@
     <Compile Include="CBFF2.cs" />
     <Compile Include="CGeneric.cs" />
     <Compile Include="CHVQM.cs" />
+    <Compile Include="CompressTexture.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CompressTexture.Designer.cs">
+      <DependentUpon>CompressTexture.cs</DependentUpon>
+    </Compile>
     <Compile Include="CRTF.cs" />
     <Compile Include="CTextureCompress.cs" />
     <Compile Include="CRessourceList.cs" />
@@ -64,6 +70,9 @@
     <Compile Include="AbsRessource.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CompressTexture.resx">
+      <DependentUpon>CompressTexture.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

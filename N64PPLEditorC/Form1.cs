@@ -203,7 +203,6 @@ namespace N64PPLEditorC
             }
         }
 
-
         private void bWDecompress_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             buttonExtractAllTextures.Text = e.ProgressPercentage + "/" + ressourceList.GetTotalBFFCount();
@@ -260,6 +259,10 @@ namespace N64PPLEditorC
         private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
         private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
 
-
+        private void button4_Click(object sender, EventArgs e)
+        {
+            CompressTexture formCT = new CompressTexture();
+            formCT.Show();
+        }
     }
 }
