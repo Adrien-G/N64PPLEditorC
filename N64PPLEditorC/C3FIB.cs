@@ -12,12 +12,12 @@ namespace N64PPLEditorC
     class C3FIB : AbsRessource
     {
         private List<CBFF2> bff2Childs;
-        //private Byte[] fibName;
         private Byte[] header3FIB;
         private Byte textureType;
+        private Byte[] fibName;
         private byte fibNameSize;
-        
-        public C3FIB(Byte[] rawData, Byte[] ressourceName)  : base(rawData, ressourceName)
+
+        public C3FIB(Byte[] rawData, Byte[] ressourceName) : base(rawData, ressourceName)
         {
             bff2Childs = new List<CBFF2>();
         }
@@ -30,20 +30,20 @@ namespace N64PPLEditorC
             fibNameSize = rawData[16];
 
             //keep fibName
-            ressourceName = new byte[16 + fibNameSize];
-            Array.Copy(rawData,20, ressourceName, 0,fibNameSize);
+            fibName = new byte[16 + fibNameSize];
+            Array.Copy(rawData, 20, fibName, 0, fibNameSize);
 
             //keep header information
             header3FIB = new byte[20 + fibNameSize];
-            Array.Copy(rawData,0,header3FIB,0,header3FIB.Length);
+            Array.Copy(rawData, 0, header3FIB, 0, header3FIB.Length);
 
             //exclude the header and prepare and Chunk each BFF2
-            Byte[] bffData = new byte[rawData.Length- fibNameSize - 20];
-            Array.Copy(rawData, 20 + fibNameSize,bffData,0,bffData.Length);
-            MakeBFF2Chunks(bffData,bffCount);
+            Byte[] bffData = new byte[rawData.Length - fibNameSize - 20];
+            Array.Copy(rawData, 20 + fibNameSize, bffData, 0, bffData.Length);
+            MakeBFF2Chunks(bffData, bffCount);
         }
 
-        private void MakeBFF2Chunks(Byte[] bffsData,int bffCount)
+        private void MakeBFF2Chunks(Byte[] bffsData, int bffCount)
         {
             //store position and size of all BFF2
             List<int> indexBFF2 = new List<int>();
@@ -53,7 +53,7 @@ namespace N64PPLEditorC
             //search all bff2 present in the 3FIB and grab index
             do
             {
-                tmpPositionBFF2 = CGeneric.SearchBytesInArray(bffsData, CGeneric.patternBFF2, indexBFF2.Count())-12;
+                tmpPositionBFF2 = CGeneric.SearchBytesInArray(bffsData, CGeneric.patternBFF2, indexBFF2.Count()) - 12;
 
                 if (tmpPositionBFF2 != -13)
                 {
@@ -88,12 +88,12 @@ namespace N64PPLEditorC
             return bff2Childs.Count();
         }
 
-        public void SaveTexture(int index,int indexFIB)
+        public void SaveTexture(int index, int indexFIB)
         {
             bff2Childs[index].DecompressTexture();
             Bitmap bmp = bff2Childs[index].GetBmpTexture();
 
-            bmp.Save(CGeneric.pathExtractedTexture + (indexFIB+1) + "-" + (index+1) + ", " + bff2Childs[index].GetName() + ".png");
+            bmp.Save(CGeneric.pathExtractedTexture + (indexFIB + 1) + "-" + (index + 1) + ", " + bff2Childs[index].GetName() + ".png");
         }
 
         public void GetTexture(PictureBox pictureBox, int index)
@@ -106,11 +106,32 @@ namespace N64PPLEditorC
         public override Int32 GetSize()
         {
             int totalSize = fibNameSize + 20;
-            for(int i = 0; i < bff2Childs.Count; i++)
+            for (int i = 0; i < bff2Childs.Count; i++)
             {
                 totalSize += bff2Childs[i].GetSize();
             }
             return totalSize;
+        }
+
+        public string GetFIBName()
+        {
+            return System.Text.Encoding.UTF8.GetString(fibName);
+        }
+
+        public override byte[] GetRawData()
+        {
+            Byte[] res = new byte[this.GetSize()];
+
+            
+            Buffer.BlockCopy(header3FIB, 0, res, 0,header3FIB.Length);
+            int indexDst = header3FIB.Length;
+
+            for (int i = 0; i < bff2Childs.Count; i++)
+            {
+                Buffer.BlockCopy(bff2Childs[i].GetRawData(),0,res, indexDst,bff2Childs[i].GetSize());
+                indexDst += bff2Childs[i].GetSize();
+            }
+            return res;
         }
     }
 }

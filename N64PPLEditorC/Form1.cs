@@ -93,7 +93,7 @@ namespace N64PPLEditorC
             treeViewSBF.BeginUpdate();
             for (int fib = 0; fib < this.ressourceList.GetFIBCount(); fib++)
             {
-                treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.GetFIBName(fib));
+                treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.GetBIFName(fib));
                 for (int bff = 0; bff < this.ressourceList.GetBFFCount(fib); bff++)
                     treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 +", " + this.ressourceList.GetBFFName(fib,bff));
             }

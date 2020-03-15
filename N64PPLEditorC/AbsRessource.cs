@@ -10,7 +10,7 @@ namespace N64PPLEditorC
     {
 
         protected Byte[] rawData;
-        protected Byte[] ressourceName;
+        protected Byte[] ressourceName { get; }
 
         public AbsRessource(Byte[] rawData, Byte[] ressourceName)
         {
@@ -23,7 +23,15 @@ namespace N64PPLEditorC
             return System.Text.Encoding.Default.GetString(ressourceName);
         }
 
-        public abstract Int32 GetSize();
+        public virtual Int32 GetSize() 
+        { 
+            return rawData.Length; 
+        }
+
+        public virtual byte[] GetRawData()
+        {
+            return rawData;
+        }
 
 
 

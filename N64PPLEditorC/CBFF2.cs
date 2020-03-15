@@ -118,6 +118,11 @@ namespace N64PPLEditorC
             return rawData.Length;
         }
 
+        public Byte[] GetRawData()
+        {
+            return rawData;
+        }
+
         public void DecompressTexture()
         {
             Byte[] compressedTex;

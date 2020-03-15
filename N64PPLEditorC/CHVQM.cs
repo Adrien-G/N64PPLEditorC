@@ -13,10 +13,5 @@ namespace N64PPLEditorC
         {
         }
 
-        public override int GetSize()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

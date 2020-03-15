@@ -112,6 +112,10 @@ namespace N64PPLEditorC
         {
             return fibList[index].GetRessourceName();
         }
+        public string GetBIFName(int index)
+        {
+            return fibList[index].GetFIBName();
+        }
         public string GetBFFName(int indexFIB, int indexBFF)
         {
             return fibList[indexFIB].GetBFFName(indexBFF);
@@ -153,6 +157,7 @@ namespace N64PPLEditorC
         public void WriteAllData(string path)
         {
             FileStream fs = new FileStream(path,FileMode.Open,FileAccess.Write);
+            fs.Position = indexRessourcesStart;
 
             // write the number of elements
             fs.Write(CGeneric.ConvertIntArrayToByte(GetFIBCount() + GetHVQMCount() + GetSBFCount()), 0, 4);
@@ -161,12 +166,32 @@ namespace N64PPLEditorC
             int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount()) * 24 + 4;
 
             //write list header (FIB,HVQM,SBF1)
-            WriteListHeader(fs,indexData,fibList) ;
-            WriteListHeader(fs, indexData, hvqmList);
-            WriteListHeader(fs, indexData, sbfList);
+            WriteListHeader(ref fs, ref indexData, fibList) ;
+            WriteListHeader(ref fs, ref indexData, hvqmList);
+            WriteListHeader(ref fs, ref indexData, sbfList);
+
+            //write data associated
+            WriteRessourceData(ref fs, fibList);
+            WriteRessourceData(ref fs, hvqmList);
+            WriteRessourceData(ref fs, sbfList);
+
+            fs.Close();
         }
 
-        private void WriteListHeader<T>(FileStream fs, int indexData, List<T> listOfressource) where T : AbsRessource
+        private void WriteRessourceData<T>(ref FileStream fs, List<T> listOfressource) where T : AbsRessource
+        {
+            for (int index = 0; index < listOfressource.Count(); index++)
+            {
+                fs.Write(listOfressource[index].GetRawData(), 0,listOfressource[index].GetSize());
+
+                //check if the size is pair, if not add a byte. (don't know why..but required)
+                if(listOfressource[index].GetSize() % 2 == 1){
+                    fs.WriteByte(255);
+                }
+            }
+        }
+
+        private void WriteListHeader<T>(ref FileStream fs, ref int indexData, List<T> listOfressource) where T : AbsRessource
         {
             for (int index = 0; index < listOfressource.Count(); index++)
             {
@@ -189,7 +214,6 @@ namespace N64PPLEditorC
                     indexData++;
 
                 indexData += listOfressource[index].GetSize();
-
             }
         }
     }
