@@ -20,6 +20,7 @@ namespace N64PPLEditorC
         private List<C3FIB> fibList;
         private List<CHVQM> hvqmList;
         private List<CSBF1> sbfList;
+        private List<CRTF> rtfList;
 
         private int indexRessourcesStart;
         private int indexRessourcesEnd;
@@ -29,6 +30,7 @@ namespace N64PPLEditorC
             fibList = new List<C3FIB>();
             hvqmList = new List<CHVQM>();
             sbfList = new List<CSBF1>();
+            rtfList = new List<CRTF>();
             this.indexRessourcesStart = indexRessourcesStart;
             this.indexRessourcesEnd = indexRessourcesEnd;
         }
@@ -85,6 +87,9 @@ namespace N64PPLEditorC
                         break;
                     case (int)CGeneric.RessourceType.SBF:
                         sbfList.Add(new CSBF1(tmpContainerData, ressourcesList[i].ressourceName));
+                        break;
+                    default:
+                        rtfList.Add(new CRTF(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                 }
                 generalIndex += sizeElement;
@@ -166,14 +171,16 @@ namespace N64PPLEditorC
             int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount()) * 24 + 4;
 
             //write list header (FIB,HVQM,SBF1)
-            WriteListHeader(ref fs, ref indexData, fibList) ;
+            WriteListHeader(ref fs, ref indexData, fibList);
             WriteListHeader(ref fs, ref indexData, hvqmList);
             WriteListHeader(ref fs, ref indexData, sbfList);
+            WriteListHeader(ref fs, ref indexData, rtfList);
 
             //write data associated
             WriteRessourceData(ref fs, fibList);
             WriteRessourceData(ref fs, hvqmList);
             WriteRessourceData(ref fs, sbfList);
+            WriteRessourceData(ref fs, rtfList);
 
             fs.Close();
         }
