@@ -113,6 +113,10 @@ namespace N64PPLEditorC
         {
             return fibList.Count();
         }
+        public int GetRTFCount()
+        {
+            return rtfList.Count();
+        }
         public string GetFIBName(int index)
         {
             return fibList[index].GetRessourceName();
@@ -165,10 +169,10 @@ namespace N64PPLEditorC
             fs.Position = indexRessourcesStart;
 
             // write the number of elements
-            fs.Write(CGeneric.ConvertIntArrayToByte(GetFIBCount() + GetHVQMCount() + GetSBFCount()), 0, 4);
+            fs.Write(CGeneric.ConvertIntArrayToByte(GetFIBCount() + GetHVQMCount() + GetSBFCount()+GetRTFCount()), 0, 4);
 
             // index of data (for writing header)
-            int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount()) * 24 + 4;
+            int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount() + GetRTFCount()) * 24 + 4;
 
             //write list header (FIB,HVQM,SBF1)
             WriteListHeader(ref fs, ref indexData, fibList);
