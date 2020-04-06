@@ -51,7 +51,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.buttonShowTexture = new System.Windows.Forms.Button();
             this.groupBoxTextures = new System.Windows.Forms.GroupBox();
-            this.buttonModifyRom = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -62,10 +61,12 @@
             this.pictureBoxTexture = new System.Windows.Forms.PictureBox();
             this.buttonExtractAllTextures = new System.Windows.Forms.Button();
             this.checkBoxAlwaysShowTexture = new System.Windows.Forms.CheckBox();
+            this.buttonModifyRom = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerExtract = new System.Windows.Forms.Timer(this.components);
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripForTreeview.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -90,7 +91,7 @@
             this.groupBox1.Controls.Add(this.buttonLoadRom);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(622, 51);
+            this.groupBox1.Size = new System.Drawing.Size(799, 51);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "PPL location : ";
@@ -98,7 +99,7 @@
             // buttonGetRomFolder
             // 
             this.buttonGetRomFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGetRomFolder.Location = new System.Drawing.Point(494, 17);
+            this.buttonGetRomFolder.Location = new System.Drawing.Point(671, 17);
             this.buttonGetRomFolder.Name = "buttonGetRomFolder";
             this.buttonGetRomFolder.Size = new System.Drawing.Size(34, 23);
             this.buttonGetRomFolder.TabIndex = 1;
@@ -116,14 +117,14 @@
             this.textBoxPPLLocation.Enabled = false;
             this.textBoxPPLLocation.Location = new System.Drawing.Point(6, 19);
             this.textBoxPPLLocation.Name = "textBoxPPLLocation";
-            this.textBoxPPLLocation.Size = new System.Drawing.Size(482, 20);
+            this.textBoxPPLLocation.Size = new System.Drawing.Size(659, 20);
             this.textBoxPPLLocation.TabIndex = 1;
             this.textBoxPPLLocation.Text = global::N64PPLEditorC.Properties.Settings.Default.txtPPLLocation;
             // 
             // buttonLoadRom
             // 
             this.buttonLoadRom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLoadRom.Location = new System.Drawing.Point(534, 17);
+            this.buttonLoadRom.Location = new System.Drawing.Point(711, 17);
             this.buttonLoadRom.Name = "buttonLoadRom";
             this.buttonLoadRom.Size = new System.Drawing.Size(82, 23);
             this.buttonLoadRom.TabIndex = 0;
@@ -309,7 +310,6 @@
             // groupBoxTextures
             // 
             this.groupBoxTextures.Controls.Add(this.button5);
-            this.groupBoxTextures.Controls.Add(this.button4);
             this.groupBoxTextures.Controls.Add(this.groupBox2);
             this.groupBoxTextures.Controls.Add(this.groupBox4);
             this.groupBoxTextures.Controls.Add(this.groupBoxTextureContainer);
@@ -323,16 +323,6 @@
             this.groupBoxTextures.TabStop = false;
             this.groupBoxTextures.Text = "Rom Management";
             // 
-            // buttonModifyRom
-            // 
-            this.buttonModifyRom.Location = new System.Drawing.Point(553, 637);
-            this.buttonModifyRom.Name = "buttonModifyRom";
-            this.buttonModifyRom.Size = new System.Drawing.Size(82, 40);
-            this.buttonModifyRom.TabIndex = 12;
-            this.buttonModifyRom.Text = "modify ROM";
-            this.buttonModifyRom.UseVisualStyleBackColor = true;
-            this.buttonModifyRom.Click += new System.EventHandler(this.buttonModifyRom_Click);
-            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(6, 106);
@@ -344,7 +334,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(6, 77);
+            this.button4.Location = new System.Drawing.Point(641, 139);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(116, 23);
             this.button4.TabIndex = 11;
@@ -358,7 +348,7 @@
             this.groupBox2.Controls.Add(this.numericUpDown1);
             this.groupBox2.Location = new System.Drawing.Point(128, 48);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(191, 45);
+            this.groupBox2.Size = new System.Drawing.Size(175, 45);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Texture option";
@@ -366,15 +356,15 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 16);
+            this.label4.Location = new System.Drawing.Point(6, 21);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(121, 13);
+            this.label4.Size = new System.Drawing.Size(106, 13);
             this.label4.TabIndex = 14;
-            this.label4.Text = "Texture showed length :";
+            this.label4.Text = "Texture display time :";
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(133, 14);
+            this.numericUpDown1.Location = new System.Drawing.Point(118, 14);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             255,
             0,
@@ -446,6 +436,16 @@
             this.checkBoxAlwaysShowTexture.UseVisualStyleBackColor = true;
             this.checkBoxAlwaysShowTexture.CheckedChanged += new System.EventHandler(this.checkBoxAlwaysShowTexture_CheckedChanged);
             // 
+            // buttonModifyRom
+            // 
+            this.buttonModifyRom.Location = new System.Drawing.Point(553, 637);
+            this.buttonModifyRom.Name = "buttonModifyRom";
+            this.buttonModifyRom.Size = new System.Drawing.Size(82, 40);
+            this.buttonModifyRom.TabIndex = 12;
+            this.buttonModifyRom.Text = "modify ROM";
+            this.buttonModifyRom.UseVisualStyleBackColor = true;
+            this.buttonModifyRom.Click += new System.EventHandler(this.buttonModifyRom_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.BackColor = System.Drawing.Color.LightSkyBlue;
@@ -454,7 +454,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 680);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(642, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(819, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
@@ -462,7 +462,7 @@
             // helpStatus
             // 
             this.helpStatus.Name = "helpStatus";
-            this.helpStatus.Size = new System.Drawing.Size(627, 17);
+            this.helpStatus.Size = new System.Drawing.Size(804, 17);
             this.helpStatus.Spring = true;
             // 
             // timerExtract
@@ -476,11 +476,30 @@
             this.bWDecompress.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bWDecompress_ProgressChanged);
             this.bWDecompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bWDecompress_RunWorkerCompleted);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "22 (greyscale, less than 32 color, with alpha)",
+            "23 (greyscale, less than 64 color, with alpha)",
+            "24 (greyscale, with alpha)",
+            "32 (indexed, less than 15 colors, no alpha)",
+            "33 (indexed, more than 15 colors, no alpha)",
+            "54 (true color 16 bit, with alpha)",
+            "55 (true color 32 bit, with alpha)"});
+            this.comboBox1.Location = new System.Drawing.Point(641, 112);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(170, 21);
+            this.comboBox1.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(642, 702);
+            this.ClientSize = new System.Drawing.Size(819, 702);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.buttonModifyRom);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBoxTextures);
@@ -553,6 +572,7 @@
         private System.Windows.Forms.ToolStripMenuItem collpseAllToolStripMenuItem;
         private System.Windows.Forms.Label labelIsTextureContainer;
         private System.Windows.Forms.Button buttonModifyRom;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

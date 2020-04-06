@@ -77,11 +77,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 38);
+            this.label1.Location = new System.Drawing.Point(12, 53);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(96, 13);
+            this.label1.Size = new System.Drawing.Size(111, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Compression type :";
+            this.label1.Text = "Compression method :";
             // 
             // comboBox1
             // 
@@ -95,7 +95,7 @@
             "33 (indexed, more than 15 colors, no alpha)",
             "54 (true color 16 bit, with alpha)",
             "55 (true color 32 bit, with alpha)"});
-            this.comboBox1.Location = new System.Drawing.Point(12, 54);
+            this.comboBox1.Location = new System.Drawing.Point(15, 69);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(195, 21);
             this.comboBox1.TabIndex = 2;

@@ -261,8 +261,10 @@ namespace N64PPLEditorC
 
         private void button4_Click(object sender, EventArgs e)
         {
-            CompressTexture formCT = new CompressTexture();
-            formCT.Show();
+
+
+            //CompressTexture formCT = new CompressTexture();
+            //formCT.Show();
         }
     }
 }

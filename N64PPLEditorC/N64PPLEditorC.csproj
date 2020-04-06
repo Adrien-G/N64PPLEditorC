@@ -50,6 +50,7 @@
     <Compile Include="CBFF2.cs" />
     <Compile Include="CGeneric.cs" />
     <Compile Include="CHVQM.cs" />
+    <Compile Include="CGenerateBFF2.cs" />
     <Compile Include="CompressTexture.cs">
       <SubType>Form</SubType>
     </Compile>
