@@ -33,6 +33,35 @@ namespace N64PPLEditorC
             BFF = 1111901746
         }
 
+        public static List<byte> ByteToNibble(byte byteToDecompose)
+        {
+            List<byte> byteList = new List<byte>();
+            byte nibble1 = byteToDecompose;
+            byte nibble2 = byteToDecompose;
+
+            nibble1 /= 16;
+            nibble2 %= 16;
+
+            byteList.Add(nibble1);
+            byteList.Add(nibble2);
+
+            return byteList;
+        }
+
+        public static byte NibbleToByte(byte nibble1, byte nibble2)
+        {
+            if(nibble1 > 15 || nibble2 > 15)
+                throw new OverflowException();
+
+            byte res;
+            res = nibble1;
+            res <<= 4;
+            res += nibble2;
+
+            return res;
+
+        }
+
         public static Int32 ConvertByteArrayToInt(Byte[] byteArray)
         {
             if (BitConverter.IsLittleEndian)
