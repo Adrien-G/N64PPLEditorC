@@ -33,6 +33,14 @@ namespace N64PPLEditorC
             BFF = 1111901746
         }
 
+        public enum Compression : byte
+        {
+            greyscale = 0,
+            max16Colors=1,
+            max256Colors=2,
+            trueColor16bits=3,
+            trueColor32Bits=4
+        }
         public static List<byte> ByteToNibble(byte byteToDecompose)
         {
             List<byte> byteList = new List<byte>();
