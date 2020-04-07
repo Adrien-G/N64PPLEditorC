@@ -75,9 +75,22 @@ namespace N64PPLEditorC
 
         }
 
-        public static List<Color> extractPaletteFromBitmap()
+        public static List<Color> ExtractPaletteFromBitmap(Bitmap bmp)
         {
-            return new List<Color>();
+            HashSet<Color> colors = new HashSet<Color>();
+            for (int y = 0; y < bmp.Height; y++)
+            {
+                for (int x = 0; x < bmp.Width; x++)
+                {
+                    colors.Add(bmp.GetPixel(x, y));
+                }
+            }
+            return colors.ToList<Color>();
+        }
+
+        public static byte GetGreenAlphaValueIndex()
+        {
+            
         }
 
         public static bool isGreyscaleTexture(Bitmap bmp)
