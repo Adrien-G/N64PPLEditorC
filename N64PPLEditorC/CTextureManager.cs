@@ -9,7 +9,7 @@ namespace N64PPLEditorC
 {
     static class CTextureManager
     {
-        public static byte[] ConvertPixelsToCompressedFormat(byte[] texture, int textureType)
+        public static byte[] ConvertPixelsToCompressedFormat(byte[] texture, CGeneric.Compression textureType)
         {
 
             byte[] finalArray = new byte[0];
@@ -19,7 +19,7 @@ namespace N64PPLEditorC
             switch (textureType)
             {
                 //greyscale with alpha
-                case 0:
+                case CGeneric.Compression.greyscale:
                     finalArray = new byte[texture.Length / 2];
                     for (int i = 0; i < texture.Length; i += 4)
                     {
@@ -29,18 +29,16 @@ namespace N64PPLEditorC
                         index += 2;
                     }
                     break;
-                //indexed, less than 15 colors, no alpha
-                case 1:
+                case CGeneric.Compression.max16Colors :
 
                     break;
-                //indexed, more than 15 colors, no alpha
-                case 2:
+                case CGeneric.Compression.max256Colors :
                     break;
                 //true color 16 bit, with alpha
-                case 3:
+                case CGeneric.Compression.trueColor16Bits :
                     break;
                 //true color 32 bit, with alpha
-                case 4:
+                case CGeneric.Compression.trueColor32Bits:
                     break;
             }
             return finalArray;
@@ -55,7 +53,7 @@ namespace N64PPLEditorC
             else if (!CTextureManager.isMoreColorThanExpected(bmp, 256))
                 return CGeneric.Compression.max256Colors;
             else if (!CTextureManager.isAlphaVariation(bmp))
-                return CGeneric.Compression.trueColor16bits;
+                return CGeneric.Compression.trueColor16Bits;
             else
                 return CGeneric.Compression.trueColor32Bits;
         }
@@ -75,6 +73,11 @@ namespace N64PPLEditorC
             }
             return false;
 
+        }
+
+        public static List<Color> extractPaletteFromBitmap()
+        {
+            return new List<Color>();
         }
 
         public static bool isGreyscaleTexture(Bitmap bmp)

@@ -271,11 +271,28 @@ namespace N64PPLEditorC
                         Image img = System.Drawing.Image.FromFile(openTexture.FileName);
                         if (img.Width <= 320 && img.Height <= 240)
                         {
+                            //load texture
                             pictureBoxTexture.Width = img.Width;
                             pictureBoxTexture.Height = img.Height;
                             pictureBoxTexture.Image = img;
 
-                            CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
+                            //test the best compression available
+                            var compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
+                            
+                            //convert texture to byte array fr future treatment 
+                            byte[] dataBFF2 = CTextureManager.ConvertTextureToByteArray((Bitmap)pictureBoxTexture.Image);
+
+                            //first compress number of bytes per pixels
+                            dataBFF2 = CTextureManager.ConvertPixelsToCompressedFormat(dataBFF2, compressionMethod);
+
+                            //secondly, use compression method for injecting.
+                            dataBFF2 = CTextureCompress.MakeCompression(dataBFF2);
+
+                            //create BFF2 structure and add it to the program.
+                            byte[] headerBFF2 = CBFF2.GenerateBFF2(compressionMethod);
+
+                            //write it to the treeview
+
                         }
                         else
                             MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
