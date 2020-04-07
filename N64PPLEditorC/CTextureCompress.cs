@@ -129,7 +129,7 @@ namespace N64PPLEditorC
             }
             while (globalIndex < uncompressedArray.Length);
 
-            return new byte[0];
+            return compressedArray.ToArray();
         }
 
         private static bool CheckIfSameArray(byte[] array, int index1,int index2, int size)
