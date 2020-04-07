@@ -9,16 +9,6 @@ namespace N64PPLEditorC
     static class CTextureDecompress
     {
 
-        //private Byte[] compressedTexture;
-        //private Byte[] decompressedTexture;
-        //int cursorDecompressed;
-        //int cursorCompressed;
-
-        //public CTextureDecompress(Byte[] compressedTexture)
-        //{
-        //    this.compressedTexture = compressedTexture;
-        //}
-
         private static (byte quantity ,byte multiplicator) getMultiplicatorAndPacketQuantity(byte value)
         {
             (byte multiplicator,byte quantity) tupleNibble = (0,0);
@@ -148,12 +138,11 @@ namespace N64PPLEditorC
 
             switch (headerBFF2.textureType)
             {
-                case 0x23:
+                case (byte)CGeneric.Compression.unknow23:
                     //actually unknown color repartition scheme..
                     arrayTextureRGBA = arrayTexture;
                     break;
-                case 0x24:
-                    //8 bits for color (greyscale) and 8 bit for transparency
+                case (byte)CGeneric.Compression.greyscale:
                     for (int i = 0; i < arrayTexture.Length-1; i+=2)
                     {
                         arrayTextureRGBA[i * 2] = arrayTexture[i];
@@ -162,8 +151,7 @@ namespace N64PPLEditorC
                         arrayTextureRGBA[i * 2 + 3] = arrayTexture[i + 1];
                     }
                     break;
-                case 0x54:
-                    //16 bits
+                case (byte)CGeneric.Compression.trueColor16Bits:
                     byte red, green,green2, blue, alpha;
                     int R, G, B, A;
 
