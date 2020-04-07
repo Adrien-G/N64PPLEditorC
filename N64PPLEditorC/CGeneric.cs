@@ -38,7 +38,7 @@ namespace N64PPLEditorC
             greyscale = 0,
             max16Colors=1,
             max256Colors=2,
-            trueColor16bits=3,
+            trueColor16Bits=3,
             trueColor32Bits=4
         }
         public static List<byte> ByteToNibble(byte byteToDecompose)
