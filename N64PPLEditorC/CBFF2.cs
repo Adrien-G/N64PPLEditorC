@@ -113,17 +113,41 @@ namespace N64PPLEditorC
             Array.Copy(rawData, indexPalette + headerBFF2.paletteSize.Length, headerBFF2.palette, 0, headerBFF2.palette.Length);
         }
 
-        public static byte[] GenerateBFF2(CGeneric.Compression compressionMethod)
+        //TODO
+        public static byte[] GenerateBFF2Packet(CGeneric.Compression compressionMethod,byte[] dataBFF2)
         {
-            //grab information part..
-            byte greenAlphaColor = 0;
-            byte[] palette = null;
+            //needed for bffheader
+            byte greenAlphaIndex = 0;
 
+            //if indexedColor generate palette first (need greenAlpha index for header)
             if (compressionMethod == CGeneric.Compression.max16Colors || compressionMethod == CGeneric.Compression.max256Colors)
             {
-               //palette = SetPalette();
-               // greenAlphaColor = GetGreenAlphaColorIndex();
+                //generate palette
+
+                //extract green alpha index
+
+                
             }
+
+            //generate header
+
+            //generate palette (when texture is indexed)
+            if (compressionMethod == CGeneric.Compression.max16Colors || compressionMethod == CGeneric.Compression.max256Colors)
+            {
+
+            }
+
+            //generate data
+
+            // compress the data
+            byte[] compressedData = CTextureCompress.MakeCompression(dataBFF2);
+
+
+
+
+
+            //palette = SetPalette();
+            // greenAlphaColor = GetGreenAlphaColorIndex();
 
             //Byte[] headerBFF2 = SetHeader();
 
@@ -131,22 +155,7 @@ namespace N64PPLEditorC
             //CTextureCompress compress = new CTextureCompress();
             //byte[] dataBFF2 = compress.MakeCompression();
 
-            //writing information part
-            if (palette != null)
-            {
-
-            }
             return new byte[0];
-        }
-        private byte[] SetPalette()
-        {
-            //set length, set data.
-            return new byte[0];
-        }
-
-        private byte GetGreenAlphaColorIndex()
-        {
-            return new byte();
         }
 
         //specific format for BFF header

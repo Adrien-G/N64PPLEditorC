@@ -279,20 +279,17 @@ namespace N64PPLEditorC
                             //test the best compression available
                             var compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
                             
-                            //convert texture to byte array fr future treatment 
+                            //convert texture to byte array for future treatment 
                             byte[] dataBFF2 = CTextureManager.ConvertTextureToByteArray((Bitmap)pictureBoxTexture.Image);
 
-                            //first compress number of bytes per pixels
+                            //make it at good format
                             dataBFF2 = CTextureManager.ConvertPixelsToCompressedFormat(dataBFF2, compressionMethod);
 
-                            //secondly, use compression method for injecting.
-                            dataBFF2 = CTextureCompress.MakeCompression(dataBFF2);
-
                             //create BFF2 structure and add it to the program.
-                            byte[] headerBFF2 = CBFF2.GenerateBFF2(compressionMethod);
+                            byte[] BFF2packet = CBFF2.GenerateBFF2Packet(compressionMethod,dataBFF2);
 
                             //write it to the treeview
-
+                            //TODO
                         }
                         else
                             MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
