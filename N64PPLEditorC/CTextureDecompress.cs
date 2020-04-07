@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class CTextureDecompress
+    static class CTextureDecompress
     {
 
-        private Byte[] compressedTexture;
-        private Byte[] decompressedTexture;
-        int cursorDecompressed;
-        int cursorCompressed;
+        //private Byte[] compressedTexture;
+        //private Byte[] decompressedTexture;
+        //int cursorDecompressed;
+        //int cursorCompressed;
 
-        public CTextureDecompress(Byte[] compressedTexture)
-        {
-            this.compressedTexture = compressedTexture;
-        }
+        //public CTextureDecompress(Byte[] compressedTexture)
+        //{
+        //    this.compressedTexture = compressedTexture;
+        //}
 
-        private (byte quantity ,byte multiplicator) getMultiplicatorAndPacketQuantity(byte value)
+        private static (byte quantity ,byte multiplicator) getMultiplicatorAndPacketQuantity(byte value)
         {
             (byte multiplicator,byte quantity) tupleNibble = (0,0);
             switch (value)
@@ -55,23 +55,23 @@ namespace N64PPLEditorC
             return tupleNibble;
         }
 
-        public Byte[] DecompressTexture(CBFF2.BFFHeader headerBFF2)
+        public static byte[] DecompressTexture(CBFF2.BFFHeader headerBFF2)
         {
-            decompressedTexture = new Byte[headerBFF2.sizeX*headerBFF2.sizeY*headerBFF2.bytePerPixel];
-            compressedTexture = headerBFF2.dataCompressed;
-            cursorCompressed = 0;
-            cursorDecompressed = 0;
+            byte[] decompressedTexture = new Byte[headerBFF2.sizeX*headerBFF2.sizeY*headerBFF2.bytePerPixel];
+            byte[] compressedTexture = headerBFF2.dataCompressed;
+            int cursorCompressed = 0;
+            int cursorDecompressed = 0;
             do
             {
                 //surround with try catch because few of texture exceed the size of the texture size...
                 try
                 {
                     if (compressedTexture[cursorCompressed] < 128)
-                        PerformSimpleReading();
+                        PerformSimpleReading(ref compressedTexture,ref cursorCompressed,ref decompressedTexture,ref cursorDecompressed);
                     else
                     {
                         var tupleNibbleMtAndQt = getMultiplicatorAndPacketQuantity(compressedTexture[cursorCompressed]);
-                        PerformDecompressReading(tupleNibbleMtAndQt);
+                        PerformDecompressReading(tupleNibbleMtAndQt, ref compressedTexture, ref cursorCompressed, ref decompressedTexture, ref cursorDecompressed);
                     }
                 }
                 catch { }
@@ -79,7 +79,7 @@ namespace N64PPLEditorC
             return decompressedTexture;
         }
 
-        private void PerformDecompressReading((byte quantity, byte multiplicator) multiplicatorAndQuantity)
+        private static void PerformDecompressReading((byte quantity, byte multiplicator) multiplicatorAndQuantity, ref byte[] compressedTexture, ref int cursorCompressed, ref byte[] decompressedTexture, ref int cursorDecompressed)
         {
             cursorCompressed += 1;
             //scilly copy same data 'quantity' times...
@@ -93,7 +93,7 @@ namespace N64PPLEditorC
             cursorCompressed += multiplicatorAndQuantity.quantity;
         }
 
-        private void PerformSimpleReading()
+        private static void PerformSimpleReading(ref byte[] compressedTexture,ref int cursorCompressed,ref byte[] decompressedTexture,ref int cursorDecompressed)
         {
             int dataLength = compressedTexture[cursorCompressed]+1;
             cursorCompressed += 1;
@@ -106,7 +106,7 @@ namespace N64PPLEditorC
             cursorDecompressed += dataLength;
         }
 
-        public byte[] ConvertIndexedToRGB(CBFF2.BFFHeader headerBFF2,Byte[] decompressedTex)
+        public static byte[] ConvertIndexedToRGB(CBFF2.BFFHeader headerBFF2,Byte[] decompressedTex)
         {
             Byte[] newData;
   
@@ -138,7 +138,7 @@ namespace N64PPLEditorC
             return newData;
         }
 
-        public Byte[] ConvertByteArrayToRGBA(CBFF2.BFFHeader headerBFF2, byte[] arrayTexture)
+        public static byte[] ConvertByteArrayToRGBA(CBFF2.BFFHeader headerBFF2, byte[] arrayTexture)
         {
 
             if (arrayTexture.Length == headerBFF2.sizeX * headerBFF2.sizeY * 4)
