@@ -58,7 +58,6 @@ namespace N64PPLEditorC
                     textBoxPPLLocation.Text = openRomFile.FileName;
                 }
             }
-
         }
 
         private void buttonLoadRom_Click(object sender, EventArgs e)
@@ -259,12 +258,34 @@ namespace N64PPLEditorC
         private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
         private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void buttonInsertNewTexture_Click(object sender, EventArgs e)
         {
+            using (OpenFileDialog openTexture = new OpenFileDialog())
+            {
+                openTexture.InitialDirectory = Application.StartupPath;
+                openTexture.RestoreDirectory = true;
+                if (openTexture.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        Image img = System.Drawing.Image.FromFile(openTexture.FileName);
+                        if (img.Width <= 320 && img.Height <= 240)
+                        {
+                            pictureBoxTexture.Width = img.Width;
+                            pictureBoxTexture.Height = img.Height;
+                            pictureBoxTexture.Image = img;
 
-
-            //CompressTexture formCT = new CompressTexture();
-            //formCT.Show();
+                            CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
+                        }
+                        else
+                            MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
     }
 }
