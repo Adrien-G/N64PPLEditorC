@@ -113,6 +113,99 @@ namespace N64PPLEditorC
             Array.Copy(rawData, indexPalette + headerBFF2.paletteSize.Length, headerBFF2.palette, 0, headerBFF2.palette.Length);
         }
 
+        public static byte[] GenerateBFF2(CGeneric.Compression compressionMethod)
+        {
+            //grab information part..
+            byte greenAlphaColor = 0;
+            byte[] palette = null;
+
+            if (compressionMethod == CGeneric.Compression.max16Colors || compressionMethod == CGeneric.Compression.max256Colors)
+            {
+               //palette = SetPalette();
+               // greenAlphaColor = GetGreenAlphaColorIndex();
+            }
+
+            //Byte[] headerBFF2 = SetHeader();
+
+            // compression part..
+            //CTextureCompress compress = new CTextureCompress();
+            //byte[] dataBFF2 = compress.MakeCompression();
+
+            //writing information part
+            if (palette != null)
+            {
+
+            }
+            return new byte[0];
+        }
+        private byte[] SetPalette()
+        {
+            //set length, set data.
+            return new byte[0];
+        }
+
+        private byte GetGreenAlphaColorIndex()
+        {
+            return new byte();
+        }
+
+        //specific format for BFF header
+        private byte[] SetHeader(byte displayTime, byte textureType, byte compressedValue, byte[] displayedWidth, byte[] pixelWidth, byte[] displayHeight, byte[] instructLength, byte[] bffName)
+        {
+            //size = 35 + bffName + 1 if bffName size is not pair
+            byte[] headerBFF2 = new Byte[35 + bffName.Length + bffName.Length % 2];
+
+            headerBFF2[9] = displayTime;
+
+            //write "BFF2"
+            for (int i = 0; i < CGeneric.patternBFF2.Length; i++)
+                headerBFF2[13 + i] = CGeneric.patternBFF2[i];
+
+            //decompose the next two bytes in nibbles
+            //grab the nibbles of alpha color
+            List<byte> alphaColor = CGeneric.ByteToNibble(GetGreenAlphaColorIndex());
+
+            //write two nibbles for the both bytes..
+            headerBFF2[18] = CGeneric.NibbleToByte(2, alphaColor[0]);
+            headerBFF2[19] = CGeneric.NibbleToByte(alphaColor[1], compressedValue);
+
+            //write texture type
+            headerBFF2[20] = textureType;
+
+            //write displayed width
+            for (int i = 0; i < displayedWidth.Length; i++)
+                headerBFF2[21 + i] = displayedWidth[i];
+
+            //write pixel width
+            for (int i = 0; i < pixelWidth.Length; i++)
+                headerBFF2[23 + i] = pixelWidth[i];
+
+            //write display height
+            for (int i = 0; i < displayHeight.Length; i++)
+                headerBFF2[27 + i] = displayHeight[i];
+
+            //write instruction length
+            for (int i = 0; i < instructLength.Length; i++)
+                headerBFF2[29 + i] = instructLength[i];
+
+            //length of file name 
+            if (bffName.Length % 2 == 0)
+                headerBFF2[34] = (byte)bffName.Length;
+            else
+                headerBFF2[34] = (byte)(bffName.Length + 1);
+
+            //write bff name
+            for (int i = 0; i < bffName.Length; i++)
+                headerBFF2[35 + i] = bffName[i];
+
+            return headerBFF2;
+        }
+
+
+
+
+
+
         public int GetSize()
         {
             return rawData.Length;
@@ -129,38 +222,23 @@ namespace N64PPLEditorC
             compressedTex = new Byte[rawData.Length - 35 + headerBFF2.nameLength];
 
             Byte[] decompressedTex;
-            CTextureDecompress dTex = new CTextureDecompress(compressedTex);
 
-            //check because few are not compressed...
             if (headerBFF2.isCompressedTexture)
-                decompressedTex = dTex.DecompressTexture(headerBFF2);
+                decompressedTex = CTextureDecompress.DecompressTexture(headerBFF2);
             else
                 decompressedTex = compressedTex;
+
             if (headerBFF2.isIndexedColor)
-                decompressedTex = dTex.ConvertIndexedToRGB(headerBFF2,decompressedTex);
-
-            if (headerBFF2.bytePerPixel != 4)
-                decompressedTex = dTex.ConvertByteArrayToRGBA(headerBFF2,decompressedTex);
-
+                decompressedTex = CTextureDecompress.ConvertIndexedToRGB(headerBFF2, decompressedTex);
+            else
+                decompressedTex = CTextureDecompress.ConvertByteArrayToRGBA(headerBFF2, decompressedTex);
 
             headerBFF2.dataUncompressed = decompressedTex;
 
         }
 
         public Bitmap GetBmpTexture(){
-            //prepare the new texture
-            Bitmap bmp = new Bitmap(headerBFF2.sizeX, headerBFF2.sizeY);
-
-            int indexArray = 0;
-            for (int y = 0; y < headerBFF2.sizeY; y++)
-            {
-                for ( int x = 0; x < headerBFF2.sizeX; x++)
-                {
-                    bmp.SetPixel(x,y,Color.FromArgb(headerBFF2.dataUncompressed[indexArray+3], headerBFF2.dataUncompressed[indexArray], headerBFF2.dataUncompressed[indexArray+1], headerBFF2.dataUncompressed[indexArray+2]));
-                    indexArray += 4;
-                }
-            }
-            return bmp;
+            return CTextureManager.ConvertByteArrayToBitmap(headerBFF2.dataUncompressed, headerBFF2.sizeX, headerBFF2.sizeY);
         }
       
         public string GetName()
