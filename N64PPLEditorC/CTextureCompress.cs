@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,20 +9,10 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class CTextureCompress
+    static class CTextureCompress
     {
 
-        public CTextureCompress(Byte[] dataUncompressed)
-        {
-        }
-
-
-        public byte[] ConvertPixelsToCompressedFormat()
-        {
-            return new byte[0];
-        }
-
-        private byte GetByteForCompression(int qtReaded,int qtRepeated)
+        private static byte GetByteForCompression(int qtReaded,int qtRepeated)
         {
             byte nib1 = 0;
             
@@ -41,11 +33,9 @@ namespace N64PPLEditorC
             return CGeneric.NibbleToByte(nib1,nib2);
         }
 
-
-
-        public byte[] MakeCompression(byte[] uncompressedArray, byte textureType,bool isCompressed)
+        public static byte[] MakeCompression(byte[] uncompressedArray)
         {
-            //set the bounds of arrays...
+            //set the bounds for "virtual arrays"...
             int boundIndex1;
             int boundIndex2;
             int boundSize;
@@ -142,7 +132,7 @@ namespace N64PPLEditorC
             return new byte[0];
         }
 
-        private bool CheckIfSameArray(byte[] array, int index1,int index2, int size)
+        private static bool CheckIfSameArray(byte[] array, int index1,int index2, int size)
         {
             for(int i = 0; i < size; i++)
             {
