@@ -35,11 +35,13 @@ namespace N64PPLEditorC
 
         public enum Compression : byte
         {
-            greyscale = 0,
-            max16Colors=1,
-            max256Colors=2,
-            trueColor16Bits=3,
-            trueColor32Bits=4
+            unknow22 = 0x22, 
+            unknow23 = 0x23,
+            greyscale = 0x24,       // 8 bits for color (R,G,B shared) and 8 bits for alpha
+            max16Colors = 0x32,     // indexed color, palette reference a 16 bit color
+            max256Colors = 0x33,    // indexed color, palette reference a 32 bit color
+            trueColor16Bits = 0x54, // 5 bits for R, G and B, one bit for Alpha
+            trueColor32Bits = 0x55  // 8 bits for each R,G,B,A
         }
         public static List<byte> ByteToNibble(byte byteToDecompose)
         {
