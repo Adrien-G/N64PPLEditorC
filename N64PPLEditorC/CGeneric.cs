@@ -69,7 +69,6 @@ namespace N64PPLEditorC
             res += nibble2;
 
             return res;
-
         }
 
         public static Int32 ConvertByteArrayToInt(Byte[] byteArray)
@@ -83,13 +82,27 @@ namespace N64PPLEditorC
                 return BitConverter.ToInt32(byteArray, 0);
         }
 
-        public static Byte[] ConvertIntArrayToByte(Int32 nb)
+        public static Byte[] ConvertIntToByteArray(Int32 nb)
         {
             byte[] res = BitConverter.GetBytes(nb);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(res);
 
             return res;
+        }
+
+        public static Byte[] ConvertIntToByteArray16bits(Int32 nb)
+        {
+            byte[] res = BitConverter.GetBytes(nb);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(res);
+
+            return new byte[] { res[2], res[3] }; ;
+        }
+
+        public static byte[] ConvertStringToByteArray(string text)
+        {
+            return Encoding.UTF8.GetBytes(text);
         }
 
         public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched,int nbOccurence=0)
