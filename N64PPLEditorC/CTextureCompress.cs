@@ -24,11 +24,10 @@ namespace N64PPLEditorC
                 case int n when (n == 6 || n == 7) : nib1 = 0xE; break;
                 case int n when (n == 8 || n == 9) : nib1 = 0xF; break;
             }
+             byte nib2 = (byte)(qtRepeated - 2);
 
-            byte nib2 = (byte)(qtRepeated - 2);
-
-            if (qtReaded % 2 == 0 && nib1 != 8)
-                nib2 +=8;
+            if (qtReaded % 2 == 1 && nib1 != 0x8)
+                nib2 += 8;
 
             return CGeneric.NibbleToByte(nib1,nib2);
         }
@@ -43,8 +42,8 @@ namespace N64PPLEditorC
             int globalIndex = 0;
 
             //core of algorithm, try to find the biggest quantity..
-            int biggerQuantityReaded = 0;
-            int biggerQuantityRepeated = 0;
+            int biggestQuantityReaded = 0;
+            int biggestQuantityRepeated = 0;
 
             //when no repetition is found, it's a lonely pixel
             byte lonelyPixelCount = 0;
@@ -55,80 +54,74 @@ namespace N64PPLEditorC
             do
             {
                 //search best combinaison for compressing...
-                for (int readedByte = 1; readedByte <= 9; readedByte++)
+                for(int readedByte = 1; readedByte <= 9; readedByte++)
                 {
-                    //check for avoiding buffer overflow (when reach end of array)
                     if (globalIndex + readedByte > uncompressedArray.Length)
                         break;
 
-                    //set the first bound
                     boundIndex1 = globalIndex;
                     boundSize = readedByte;
 
                     for (int repeatedByte = 2; repeatedByte <= 9; repeatedByte++)
                     {
                         //check for avoiding buffer overflow (when reach end of array)
-                        if (readedByte * (repeatedByte - 1) + globalIndex + readedByte > uncompressedArray.Length)
+                        if (globalIndex + readedByte * repeatedByte + readedByte > uncompressedArray.Length)
                             break;
-                        
+
                         //set the 2nd bound
-                        boundIndex2 = readedByte * (repeatedByte - 1) + globalIndex;
+                        boundIndex2 = globalIndex + readedByte * repeatedByte;
 
                         //and compare with the first bound
                         if (CheckIfSameArray(uncompressedArray, boundIndex1, boundIndex2, boundSize))
                         {
                             //if the same, check if the compression is more interesting...
-                            if ((biggerQuantityReaded * biggerQuantityRepeated) < (readedByte * repeatedByte))
+                            if ((biggestQuantityReaded * biggestQuantityRepeated) < (readedByte * repeatedByte))
                             {
-                                biggerQuantityReaded = readedByte;
-                                biggerQuantityRepeated = repeatedByte;
+                                biggestQuantityReaded = readedByte;
+                                biggestQuantityRepeated = repeatedByte;
                             }
                         }
                         else
-                            break; //function to try for optimise, if 5 didn't pass.. no need to test 6,7,8,9
-                    }
-                }
+                            break;
+                    } //end for repeated byte
+                } // end for readed byte
 
                 //if no combinaison were found...
-                if (biggerQuantityRepeated == 0 && biggerQuantityReaded == 0)
+                if (biggestQuantityRepeated == 0 && biggestQuantityReaded == 0)
                 {
                     lonelyPixelCount += 1;
                     globalIndex += 1;
                 }
-                //with the best combinaison, start writing data to memory array..
                 else
                 {
                     //empty the buffer of lonelypixel (if exist)
-                    if(lonelyPixelCount > 0)
+                    if (lonelyPixelCount > 0)
                     {
-                        //write bytes to memory stream
+                        //write previous lonelypixels bytes to memory stream
                         compressedArray.WriteByte((byte)(lonelyPixelCount-1));
-                        compressedArray.Write(uncompressedArray,globalIndex-lonelyPixelCount,lonelyPixelCount);
-
+                        compressedArray.Write(uncompressedArray, globalIndex - lonelyPixelCount, lonelyPixelCount);
                         lonelyPixelCount = 0;
                     }
                     //write bytes to memory stream
-
-                    compressedArray.WriteByte(GetByteForCompression(biggerQuantityReaded,biggerQuantityRepeated));
-                    compressedArray.Write(uncompressedArray, globalIndex, lonelyPixelCount);
-                    globalIndex += biggerQuantityReaded * biggerQuantityRepeated;
+                    compressedArray.WriteByte(GetByteForCompression(biggestQuantityReaded, biggestQuantityRepeated));
+                    compressedArray.Write(uncompressedArray, globalIndex, biggestQuantityReaded);
+                    globalIndex += biggestQuantityReaded * biggestQuantityRepeated;
                 }
 
                 //check for maximal value for compression of lonely pixel (128) and force writing.
                 if (lonelyPixelCount == 128)
                 {
-                    //write bytes to memory stream
+                    //write previous lonelypixels bytes to memory stream
                     compressedArray.WriteByte((byte)(lonelyPixelCount - 1));
                     compressedArray.Write(uncompressedArray, globalIndex - lonelyPixelCount, lonelyPixelCount);
                     lonelyPixelCount = 0;
                 }
 
                 //reinitialize default values
-                biggerQuantityReaded = 0;
-                biggerQuantityRepeated = 0;
-            }
-            while (globalIndex < uncompressedArray.Length);
+                biggestQuantityReaded = 0;
+                biggestQuantityRepeated = 0;
 
+            } while (globalIndex < uncompressedArray.Length);
             return compressedArray.ToArray();
         }
 
