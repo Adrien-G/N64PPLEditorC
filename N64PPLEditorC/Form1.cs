@@ -259,9 +259,9 @@ namespace N64PPLEditorC
                 openTexture.RestoreDirectory = true;
                 if (openTexture.ShowDialog() == DialogResult.OK)
                 {
-                    //try
-                    //{
-                        Image img = System.Drawing.Image.FromFile(openTexture.FileName);
+                    try
+                    {
+                        Image img = Image.FromFile(openTexture.FileName);
                         if (img.Width <= 320 && img.Height <= 240)
                         {
                             //load texture
@@ -273,7 +273,7 @@ namespace N64PPLEditorC
                             var compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
 
                             //convert texture to byte array for future treatment 
-                            byte[] rawData = CTextureManager.ConvertTextureToByteArray((Bitmap)pictureBoxTexture.Image);
+                            byte[] rawData = CTextureManager.ConvertRGBABitmapToByteArray((Bitmap)pictureBoxTexture.Image);
 
                             //make it at good format
                             byte[] palette;
@@ -304,11 +304,11 @@ namespace N64PPLEditorC
                         }
                         else
                             MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //}
-                    /*catch (Exception ex)
-                    {*/
-                      //  MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //}
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }

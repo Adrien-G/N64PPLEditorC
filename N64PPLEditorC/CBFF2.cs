@@ -224,14 +224,14 @@ namespace N64PPLEditorC
                 decompressedTex = compressedTex;
 
             //convert all textures to 32 bit RGBA for display to user.
-            decompressedTex = CTextureDecompress.ConvertByteArrayToRGBA(decompressedTex,(CGeneric.Compression)headerBFF2.textureType,headerBFF2.palette);
+            decompressedTex = CTextureManager.ConvertByteArrayToRGBA(decompressedTex,(CGeneric.Compression)headerBFF2.textureType,headerBFF2.palette);
 
             headerBFF2.dataUncompressed = decompressedTex;
 
         }
 
         public Bitmap GetBmpTexture(){
-            return CTextureManager.ConvertByteArrayToBitmap(headerBFF2.dataUncompressed, headerBFF2.sizeX, headerBFF2.sizeY);
+            return CTextureManager.ConvertRGBAByteArrayToBitmap(headerBFF2.dataUncompressed, headerBFF2.sizeX, headerBFF2.sizeY);
         }
       
         public string GetName()
