@@ -172,6 +172,7 @@ namespace N64PPLEditorC
             if (level == 0)
             {
                 labelIsTextureContainer.Show();
+                pictureBoxTexture.SizeMode = PictureBoxSizeMode.AutoSize;
                 pictureBoxTexture.Hide();
             }
         }
@@ -250,15 +251,7 @@ namespace N64PPLEditorC
             ressourceList.WriteAllData(textBoxPPLLocation.Text);
             buttonModifyRom.BackColor = Color.LimeGreen;
         }
-
-        //part helping on the form..
-        private void buttonLoadRom_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "load PPL rom for editing content"; }
-        private void buttonGetRomFolder_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "open PPL rom, can only take .z64 file."; }
-
-        private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
-        private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
-
-        private void buttonInsertNewTexture_Click(object sender, EventArgs e)
+        private void addNewTextureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openTexture = new OpenFileDialog())
             {
@@ -266,8 +259,8 @@ namespace N64PPLEditorC
                 openTexture.RestoreDirectory = true;
                 if (openTexture.ShowDialog() == DialogResult.OK)
                 {
-                    try
-                    {
+                    //try
+                    //{
                         Image img = System.Drawing.Image.FromFile(openTexture.FileName);
                         if (img.Width <= 320 && img.Height <= 240)
                         {
@@ -278,28 +271,59 @@ namespace N64PPLEditorC
 
                             //test the best compression available
                             var compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
-                            
+
                             //convert texture to byte array for future treatment 
-                            byte[] dataBFF2 = CTextureManager.ConvertTextureToByteArray((Bitmap)pictureBoxTexture.Image);
+                            byte[] rawData = CTextureManager.ConvertTextureToByteArray((Bitmap)pictureBoxTexture.Image);
 
                             //make it at good format
-                            dataBFF2 = CTextureManager.ConvertPixelsToCompressedFormat(dataBFF2, compressionMethod);
+                            byte[] palette;
+                            (palette, rawData) = CTextureManager.ConvertPixelsToCompressedFormat(rawData, compressionMethod);
 
-                            //create BFF2 structure and add it to the program.
-                            byte[] BFF2packet = CBFF2.GenerateBFF2Packet(compressionMethod,dataBFF2);
+                            //compress data
+                            byte[] compressedData = CTextureCompress.MakeCompression(rawData);
 
-                            //write it to the treeview
-                            //TODO
+                            //add header and generate the bff2
+                            string safeFileName = Path.GetFileNameWithoutExtension(openTexture.SafeFileName);
+                            //check if the name has same naming convention than the extract (remove index before coma)
+                            if (safeFileName.Split(',').Count() == 2)
+                                safeFileName = safeFileName.Split(',')[1].Trim();
+
+                            byte[] finalBFF2 = CBFF2.GenerateBFF2(palette, compressedData, compressionMethod, img.Width, img.Height, safeFileName);
+
+                            //add texture to the bff2 files and update treeview
+                            if (treeViewTextures.SelectedNode.Level == 0)
+                            {
+                                ressourceList.AddBFF2(treeViewTextures.SelectedNode.Index, finalBFF2);
+                                treeViewTextures.SelectedNode.Nodes.Add((treeViewTextures.SelectedNode.Nodes.Count+1) + ", " + safeFileName);
+                            }
+                            else
+                            {
+                                ressourceList.AddBFF2(treeViewTextures.SelectedNode.Parent.Index, finalBFF2);
+                                treeViewTextures.SelectedNode.Parent.Nodes.Add((treeViewTextures.SelectedNode.Nodes.Count + 1) + ", " + safeFileName);
+                            }
                         }
                         else
                             MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch(Exception ex)
-                    {
-                        MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    //}
+                    /*catch (Exception ex)
+                    {*/
+                      //  MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //}
                 }
             }
+        }
+
+        //part helping on the form..
+        private void buttonLoadRom_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "load PPL rom for editing content"; }
+        private void buttonGetRomFolder_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "open PPL rom, can only take .z64 file."; }
+        private void treeViewTextures_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "Texture management, right click for options (add, remove texture, etc...)"; }
+        private void buttonLoadRom_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
+        private void buttonGetRomFolder_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
+        private void treeViewTextures_MouseLeave(object sender, EventArgs e) { helpStatus.Text = ""; }
+
+        private void removeThisTextureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
