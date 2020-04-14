@@ -143,6 +143,12 @@ namespace N64PPLEditorC
             return total;
         }
 
+        public void AddBFF2(int index, Byte[] bff2Data)
+        {
+            fibList[index].AddBFF2Child(bff2Data);
+        }
+
+
         //hvqm public methods...
         public int GetHVQMCount()
         {
@@ -169,7 +175,7 @@ namespace N64PPLEditorC
             fs.Position = indexRessourcesStart;
 
             // write the number of elements
-            fs.Write(CGeneric.ConvertIntArrayToByte(GetFIBCount() + GetHVQMCount() + GetSBFCount()+GetRTFCount()), 0, 4);
+            fs.Write(CGeneric.ConvertIntToByteArray(GetFIBCount() + GetHVQMCount() + GetSBFCount()+GetRTFCount()), 0, 4);
 
             // index of data (for writing header)
             int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount() + GetRTFCount()) * 24 + 4;
@@ -207,10 +213,10 @@ namespace N64PPLEditorC
             for (int index = 0; index < listOfressource.Count(); index++)
             {
                 //write size
-                fs.Write(CGeneric.ConvertIntArrayToByte(listOfressource[index].GetSize()), 0, 4);
+                fs.Write(CGeneric.ConvertIntToByteArray(listOfressource[index].GetSize()), 0, 4);
 
                 // write index start
-                fs.Write(CGeneric.ConvertIntArrayToByte(indexData), 0, 4);
+                fs.Write(CGeneric.ConvertIntToByteArray(indexData), 0, 4);
 
                 //write name of FIB (BIF Name)
                 byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(listOfressource[index].GetRessourceName());
