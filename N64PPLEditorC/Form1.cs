@@ -277,7 +277,7 @@ namespace N64PPLEditorC
 
                             //make it at good format
                             byte[] palette;
-                            (palette, rawData) = CTextureManager.ConvertPixelsToCompressedFormat(rawData, compressionMethod);
+                            (palette, rawData) = CTextureManager.ConvertPixelsToGoodFormat(rawData, compressionMethod);
 
                             //compress data
                             byte[] compressedData = CTextureCompress.MakeCompression(rawData);

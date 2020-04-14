@@ -9,7 +9,7 @@ namespace N64PPLEditorC
 {
     static class CTextureManager
     {
-        public static (byte[] palette,byte[] data) ConvertPixelsToCompressedFormat(byte[] texture, CGeneric.Compression textureType)
+        public static (byte[] palette,byte[] data) ConvertPixelsToGoodFormat(byte[] texture, CGeneric.Compression textureType)
         {
 
             byte[] finalArray = texture;
@@ -20,14 +20,14 @@ namespace N64PPLEditorC
             {
                 //greyscale with alpha
                 case CGeneric.Compression.greyscale:
-                    finalArray = ConvertFormatGreyscale(texture);
+                    finalArray = ConvertRGBAtoGreyscale(texture);
                     break;
 
                 case CGeneric.Compression.max16Colors:
                     break;
 
                 case CGeneric.Compression.max256Colors:
-                    (palette, finalArray) = ConvertFormatMax256Colors(texture);
+                    (palette, finalArray) = ConvertRGBAtoMax256Colors(texture);
                     break;
 
                 case CGeneric.Compression.trueColor16Bits :
@@ -66,7 +66,7 @@ namespace N64PPLEditorC
             return finalValue;
         }
 
-        private static byte[] ConvertFormatGreyscale(byte[] texture)
+        private static byte[] ConvertRGBAtoGreyscale(byte[] texture)
         {
             byte[] finalArray = new byte[texture.Length / 2];
             int index = 0;
@@ -80,7 +80,7 @@ namespace N64PPLEditorC
             }
             return finalArray;
         }
-        private static (byte[] palette,byte[] data) ConvertFormatMax256Colors(byte[] texture)
+        private static (byte[] palette,byte[] data) ConvertRGBAtoMax256Colors(byte[] texture)
         {
             //construct palette and use it.
             List<Color> colors = ExtractPaletteFromByteArray(texture);
@@ -229,39 +229,21 @@ namespace N64PPLEditorC
             }
             return textureArray;
         }
-        public static Bitmap ConvertByteArrayToBitmap(Byte[] array, int sizeX, int sizeY, CGeneric.Compression compressionMode)
+
+
+
+        public static Bitmap ConvertByteArrayToBitmap(Byte[] array, int sizeX, int sizeY)
         {
             Bitmap bmp = new Bitmap(sizeX, sizeY);
             int index = 0;
 
-            switch (compressionMode)
+            for (int y = 0; y < bmp.Height; y++)
             {
-                case CGeneric.Compression.greyscale:
-                    for (int y = 0; y < bmp.Height; y++)
-                    {
-                        for (int x = 0; x < bmp.Width; x++)
-                        {
-                            bmp.SetPixel(x, y, Color.FromArgb(array[index + 1], array[index], array[index], array[index]));
-                            index += 2;
-                        }
-                    }
-                    break;
-                case CGeneric.Compression.max16Colors:
-                    break;
-                case CGeneric.Compression.max256Colors:
-                    break;
-                case CGeneric.Compression.trueColor16Bits:
-                    break;
-                case CGeneric.Compression.trueColor32Bits:
-                    for (int y = 0; y < bmp.Height; y++)
-                    {
-                        for (int x = 0; x < bmp.Width; x++)
-                        {
-                            bmp.SetPixel(x, y, Color.FromArgb(array[index + 3], array[index], array[index + 1], array[index + 2]));
-                            index += 4;
-                        }
-                    }
-                    break;
+                for (int x = 0; x < bmp.Width; x++)
+                {
+                    bmp.SetPixel(x, y, Color.FromArgb(array[index + 3], array[index], array[index + 1], array[index + 2]));
+                    index += 4;
+                }
             }
             return bmp;
         }

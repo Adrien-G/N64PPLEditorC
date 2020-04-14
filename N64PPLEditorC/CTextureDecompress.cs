@@ -82,7 +82,6 @@ namespace N64PPLEditorC
             //update cursors..
             cursorCompressed += multiplicatorAndQuantity.quantity;
         }
-
         private static void PerformSimpleReading(ref byte[] compressedTexture,ref int cursorCompressed,ref byte[] decompressedTexture,ref int cursorDecompressed)
         {
             int dataLength = compressedTexture[cursorCompressed]+1;
@@ -96,109 +95,126 @@ namespace N64PPLEditorC
             cursorDecompressed += dataLength;
         }
 
-        public static byte[] ConvertIndexedToRGB(CBFF2.BFFHeader headerBFF2,Byte[] decompressedTex)
+        public static byte[] ConvertByteArrayToRGBA(byte[] texture, CGeneric.Compression compressionType,byte[] palette = null)
         {
-            Byte[] newData;
-  
-            // check the size of the palette (if < to 15 then pixel is stored in half a byte).
+            byte[] arrayRGBA = new byte[0];
 
-            if(BitConverter.ToInt32(headerBFF2.paletteSize, 0) < 15 && (headerBFF2.textureType == 0x22 || headerBFF2.textureType == 0x32))
+            switch (compressionType)
             {
-                newData = new byte[decompressedTex.Length * 8];
-                byte tmpB1;
-                byte tmpB2;
-                for (int i = 0; i < decompressedTex.Length - 1; i++)
-                {
-                    tmpB1 = decompressedTex[i];
-                    tmpB1 >>= 4;
-
-                    tmpB2 = decompressedTex[i];
-                    tmpB2 <<= 4;
-                    tmpB2 >>= 4;
-                    Array.Copy(headerBFF2.palette, tmpB1*4, newData, 8 * i, 4);
-                    Array.Copy(headerBFF2.palette, tmpB2*4, newData, 8 * i + 4, 4);
-                }
+                case CGeneric.Compression.unknow22:
+                    arrayRGBA = texture; //unknow
+                    break;
+                case CGeneric.Compression.unknow23:
+                    arrayRGBA = texture; //unknow
+                    break;
+                case CGeneric.Compression.greyscale:
+                    arrayRGBA = ConvertGreyscaleToRGBA(texture);
+                    break;
+                case CGeneric.Compression.max16Colors:
+                    arrayRGBA = ConvertMax16ColorsToRGBA(texture, palette);
+                    break;
+                case CGeneric.Compression.max256Colors:
+                    arrayRGBA = ConvertMax256ColorsToRGBA(texture,palette);
+                    break;
+                case CGeneric.Compression.trueColor16Bits:
+                    arrayRGBA = ConvertTrueColor16BitsToRGBA(texture);
+                    break;
+                case CGeneric.Compression.trueColor32Bits:
+                    arrayRGBA = texture;
+                    break;
             }
-            else
-            {
-               newData = new byte[decompressedTex.Length * headerBFF2.bytePerPixel];
-                for (int i = 0; i<decompressedTex.Length; i++)
-                    Array.Copy(headerBFF2.palette, decompressedTex[i] * headerBFF2.bytePerPixel, newData, headerBFF2.bytePerPixel* i, headerBFF2.bytePerPixel);
-            }   
-            return newData;
+            return arrayRGBA;
         }
 
-        public static byte[] ConvertByteArrayToRGBA(CBFF2.BFFHeader headerBFF2, byte[] arrayTexture)
+        private static byte[] ConvertGreyscaleToRGBA(byte[] texture)
         {
-
-            if (arrayTexture.Length == headerBFF2.sizeX * headerBFF2.sizeY * 4)
-                return arrayTexture;
-
-            Byte[] arrayTextureRGBA = new Byte[headerBFF2.sizeX * headerBFF2.sizeY * 4];
-
-            switch (headerBFF2.textureType)
+            byte[] rgbaArray = new byte[texture.Length*2];
+            for (int i = 0; i < texture.Length - 1; i += 2)
             {
-                case (byte)CGeneric.Compression.unknow23:
-                    //actually unknown color repartition scheme..
-                    arrayTextureRGBA = arrayTexture;
-                    break;
-                case (byte)CGeneric.Compression.greyscale:
-                    for (int i = 0; i < arrayTexture.Length-1; i+=2)
-                    {
-                        arrayTextureRGBA[i * 2] = arrayTexture[i];
-                        arrayTextureRGBA[i * 2 + 1] = arrayTexture[i];
-                        arrayTextureRGBA[i * 2 + 2] = arrayTexture[i];
-                        arrayTextureRGBA[i * 2 + 3] = arrayTexture[i + 1];
-                    }
-                    break;
-                case (byte)CGeneric.Compression.trueColor16Bits:
-                    byte red, green,green2, blue, alpha;
-                    int R, G, B, A;
+                rgbaArray[i * 2] = texture[i];
+                rgbaArray[i * 2 + 1] = texture[i];
+                rgbaArray[i * 2 + 2] = texture[i];
+                rgbaArray[i * 2 + 3] = texture[i + 1];
+            }
+            return rgbaArray;
+        }
 
-                    for (int i = 0; i < arrayTexture.Length-1; i+=2)
-                    {
-                        //red (5 bits)
-                        red = arrayTexture[i];
-                        red >>= 3;
+        private static byte[] ConvertMax256ColorsToRGBA(byte[] texture, byte[] palette)
+        {
+            byte[] rgbaArray = new byte[texture.Length *4];
+            for (int i = 0; i < texture.Length; i++)
+                Array.Copy(palette, texture[i] * 4, rgbaArray, 4 * i, 4);
 
-                        //green (5 bits)
-                        green = arrayTexture[i];
-                        green <<= 5;
-                        green >>= 3;
-                        green2 = arrayTexture[i+1];
-                        green2 >>= 6;
-                        green += green2;
-                        
-                        //blue (5 bits)
-                        blue = arrayTexture[i+ 1];
-                        blue <<= 2;
-                        blue >>= 3;
-                        
-                        //alpha 1 bit
-                        alpha = arrayTexture[i + 1];
-                        alpha <<= 7;
-                        alpha >>= 7;
+            return rgbaArray;
+        }
 
-                        
-                        R = red;
-                        G = green;
-                        B = blue;
-                        A = alpha;
-                        R *= 8;
-                        G *= 8;
-                        B *= 8;
-                        A *= 255;
+        private static byte[] ConvertMax16ColorsToRGBA(byte[] texture, byte[] palette)
+        {
+            byte[] rgbaArray = new byte[texture.Length * 8];
+            byte tmpB1;
+            byte tmpB2;
 
-                        arrayTextureRGBA[i * 2] = (byte)R;
-                        arrayTextureRGBA[i * 2 + 1] = (byte)G;
-                        arrayTextureRGBA[i * 2 + 2] = (byte)B;
-                        arrayTextureRGBA[i * 2 + 3] = (byte)A;
+            for (int i = 0; i < texture.Length - 1; i++)
+            {
+                tmpB1 = texture[i];
+                tmpB1 >>= 4;
 
-                    }
-                    break;
+                tmpB2 = texture[i];
+                tmpB2 <<= 4;
+                tmpB2 >>= 4;
+                Array.Copy(palette, tmpB1 * 4, rgbaArray, 8 * i, 4);
+                Array.Copy(palette, tmpB2 * 4, rgbaArray, 8 * i + 4, 4);
+            }
+            return rgbaArray;
+        }
+
+        private static byte[] ConvertTrueColor16BitsToRGBA(byte[] texture)
+        {
+            byte[] rgbaArray = new byte[texture.Length * 2];
+
+            byte red, green, green2, blue, alpha;
+            int R, G, B, A;
+
+            for (int i = 0; i < texture.Length - 1; i += 2)
+            {
+                //red (5 bits)
+                red = texture[i];
+                red >>= 3;
+
+                //green (5 bits -> 3bits for nibble 1, 2 bits for nibble 2)
+                green = texture[i];
+                green <<= 5;
+                green >>= 3;
+                green2 = texture[i + 1];
+                green2 >>= 6;
+                green += green2;
+
+                //blue (5 bits)
+                blue = texture[i + 1];
+                blue <<= 2;
+                blue >>= 3;
+
+                //alpha 1 bit
+                alpha = texture[i + 1];
+                alpha <<= 7;
+                alpha >>= 7;
+
+                R = red;
+                G = green;
+                B = blue;
+                A = alpha;
+                R *= 8;
+                G *= 8;
+                B *= 8;
+                A *= 255;
+
+                rgbaArray[i * 2] = (byte)R;
+                rgbaArray[i * 2 + 1] = (byte)G;
+                rgbaArray[i * 2 + 2] = (byte)B;
+                rgbaArray[i * 2 + 3] = (byte)A;
             }
 
-            return arrayTextureRGBA;
+            return rgbaArray;
         }
     }
 }
