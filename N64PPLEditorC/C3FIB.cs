@@ -78,6 +78,12 @@ namespace N64PPLEditorC
             }
         }
 
+        public void AddBFF2Child(byte[] bff2Child)
+        {
+            bff2Childs.Add(new CBFF2(bff2Child));
+            bff2Childs[bff2Childs.Count - 1].Init();
+        }
+
         public string GetBFFName(int index)
         {
             return bff2Childs[index].GetName();
