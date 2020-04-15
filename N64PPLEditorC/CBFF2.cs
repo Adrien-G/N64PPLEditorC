@@ -119,13 +119,18 @@ namespace N64PPLEditorC
             byte[] sizeXB = CGeneric.ConvertIntToByteArray16bits(sizeX);
             byte[] sizeYB = CGeneric.ConvertIntToByteArray16bits(sizeY);
             byte[] name = CGeneric.ConvertStringToByteArray(bffName);
-            byte[] nbColors = CGeneric.ConvertIntToByteArray(palette.Length / CTextureManager.GetBytePerPixel(compressionMethod));
+            byte[] nbColors = new byte[0];
+            if (palette.Length > 0)
+                nbColors = CGeneric.ConvertIntToByteArray(palette.Length / CTextureManager.GetBytePerPixel(compressionMethod));
+
             byte[] bff2header = SetHeader(compressionMethod,greenAlphaIndex, 10, sizeXB, sizeXB,sizeYB,name,nbColors);
 
             //concatenate header, palette and compressed data
             byte[] finalData = new byte[bff2header.Length + palette.Length + data.Length];
             Array.Copy(bff2header, 0, finalData, 0, bff2header.Length);
-            Array.Copy(palette, 0, finalData, bff2header.Length, palette.Length);
+            if (palette.Length > 0)
+                Array.Copy(palette, 0, finalData, bff2header.Length, palette.Length);
+
             Array.Copy(data, 0, finalData, bff2header.Length + palette.Length, data.Length);
 
             return finalData;
@@ -135,7 +140,7 @@ namespace N64PPLEditorC
         private static byte[] SetHeader(CGeneric.Compression textureType, byte greenAlphaIndex,byte compressedValue, byte[] displayedWidth, byte[] pixelWidth, byte[] displayHeight, byte[] bffName, byte[] colorCount)
         {
             //fixedsize = 36 + bffName + 1 if bffName size is not pair + 4 for palette color count
-            byte[] headerBFF2 = new Byte[36 + bffName.Length + bffName.Length % 2 + 4];
+            byte[] headerBFF2 = new Byte[36 + bffName.Length + bffName.Length % 2 + colorCount.Length];
 
             headerBFF2[8] = 0x1;
 
@@ -199,7 +204,6 @@ namespace N64PPLEditorC
             return headerBFF2;
         }
 
-
         public int GetSize()
         {
             return rawData.Length;
@@ -227,13 +231,12 @@ namespace N64PPLEditorC
             decompressedTex = CTextureManager.ConvertByteArrayToRGBA(decompressedTex,(CGeneric.Compression)headerBFF2.textureType,headerBFF2.palette);
 
             headerBFF2.dataUncompressed = decompressedTex;
-
         }
 
         public Bitmap GetBmpTexture(){
             return CTextureManager.ConvertRGBAByteArrayToBitmap(headerBFF2.dataUncompressed, headerBFF2.sizeX, headerBFF2.sizeY);
         }
-      
+        
         public string GetName()
         {
             return System.Text.Encoding.UTF8.GetString(headerBFF2.name);
