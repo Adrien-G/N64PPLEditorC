@@ -10,34 +10,79 @@ namespace N64PPLEditorC
     static class CTextureManager
     {
 
-        #region Specific usage -> Compress texture part
+        #region Specific usage -> Make texture to good format ("compress" texture to good format)
         public static (byte[] palette,byte[] data) ConvertPixelsToGoodFormat(byte[] texture, CGeneric.Compression textureType)
         {
 
             byte[] finalArray = texture;
             byte[] palette = new byte[0];
 
-            //compress result
             switch (textureType)
             {
-                //greyscale with alpha
                 case CGeneric.Compression.greyscale:
                     finalArray = ConvertRGBAtoGreyscale(texture);
                     break;
-
                 case CGeneric.Compression.max16Colors:
-
+                    throw new NotImplementedException();
                     break;
-
                 case CGeneric.Compression.max256Colors:
                     (palette, finalArray) = ConvertRGBAtoMax256Colors(texture);
                     break;
-
                 case CGeneric.Compression.trueColor16Bits :
-                    //TODO
+                    finalArray = ConvertRGBAtoTrueColor16Bits(texture);
                     break;
             }
             return (palette,finalArray);
+        }
+
+        private static byte[] ConvertRGBAtoTrueColor16Bits(byte[] texture)
+        {
+            byte[] finalArray = new byte[texture.Length / 2];
+
+            byte R, G1,G2, B, A;
+            byte byte1=0, byte2=0;
+            int index = 0;
+
+            for (int i = 0; i < texture.Length; i += 4)
+            {
+
+                //add red color
+                byte1 = (byte)Math.Floor((double)(texture[i] / 8));
+                byte1 <<= 3;
+
+                //add green component to the first byte
+                G1 = (byte)Math.Floor((double)(texture[i + 1] / 8));
+                G1 <<= 3;
+                G1 >>= 5;
+                byte1 += G1;
+
+                //add green component to the second byte
+                G2 = (byte)Math.Floor((double)(texture[i + 1] / 8));
+                G2 <<= 6;
+                byte2 = G2;
+
+                //add the blue component
+                B = (byte)Math.Floor((double)(texture[i + 2] / 8));
+                B <<= 1;
+                byte2 += B;
+
+                //add alpha component
+                A = (byte)Math.Ceiling((double)(texture[i + 3] / 255));
+                byte2 += A;
+
+                //TODO to remove, tests only.
+                if(A == 0)
+                {
+                    throw new Exception();
+                }
+
+                finalArray[index] = byte1;
+                finalArray[index + 1] = byte2;
+
+                index += 2;
+            }
+
+            return finalArray;
         }
 
         private static byte[] ConvertRGBAtoGreyscale(byte[] texture)
@@ -283,7 +328,7 @@ namespace N64PPLEditorC
                 for (int x = 0; x < bmp.Width; x++)
                 {
                     Color color = bmp.GetPixel(x, y);
-                    if (color.A != 0 || color.A != 255)
+                    if (color.A != 0xFF)
                         return true;
                 }
             }
@@ -343,7 +388,7 @@ namespace N64PPLEditorC
             
             return index;
         }
-        public static byte[] ConvertRGBABitmapToByteArray(Bitmap bmp)
+        public static byte[] ConvertRGBABitmapToByteArrayRGBA(Bitmap bmp)
         {
             byte[] textureArray = new Byte[bmp.Width * bmp.Height * 4];
             Color tmpColor = new Color();
