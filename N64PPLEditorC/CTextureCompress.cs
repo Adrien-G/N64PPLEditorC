@@ -69,7 +69,7 @@ namespace N64PPLEditorC
                             break;
 
                         //set the 2nd bound
-                        boundIndex2 = globalIndex + readedByte * repeatedByte;
+                        boundIndex2 = globalIndex + readedByte * (repeatedByte-1);
 
                         //and compare with the first bound
                         if (CheckIfSameArray(uncompressedArray, boundIndex1, boundIndex2, boundSize))
@@ -91,6 +91,15 @@ namespace N64PPLEditorC
                 {
                     lonelyPixelCount += 1;
                     globalIndex += 1;
+
+                    //maximal value of lonelyPixel -> force writing content
+                    if (lonelyPixelCount == 128)
+                    {
+                        //write previous lonelypixels bytes to memory stream
+                        compressedArray.WriteByte((byte)(lonelyPixelCount - 1));
+                        compressedArray.Write(uncompressedArray, globalIndex - lonelyPixelCount, lonelyPixelCount);
+                        lonelyPixelCount = 0;
+                    }
                 }
                 else
                 {
@@ -107,21 +116,21 @@ namespace N64PPLEditorC
                     compressedArray.Write(uncompressedArray, globalIndex, biggestQuantityReaded);
                     globalIndex += biggestQuantityReaded * biggestQuantityRepeated;
                 }
-
-                //check for maximal value for compression of lonely pixel (128) and force writing.
-                if (lonelyPixelCount == 128)
-                {
-                    //write previous lonelypixels bytes to memory stream
-                    compressedArray.WriteByte((byte)(lonelyPixelCount - 1));
-                    compressedArray.Write(uncompressedArray, globalIndex - lonelyPixelCount, lonelyPixelCount);
-                    lonelyPixelCount = 0;
-                }
-
                 //reinitialize default values
                 biggestQuantityReaded = 0;
                 biggestQuantityRepeated = 0;
 
             } while (globalIndex < uncompressedArray.Length);
+
+            //if some stay at the end...
+            if (lonelyPixelCount > 0)
+            {
+                //write previous lonelypixels bytes to memory stream
+                compressedArray.WriteByte((byte)(lonelyPixelCount - 1));
+                compressedArray.Write(uncompressedArray, globalIndex - lonelyPixelCount, lonelyPixelCount);
+            }
+
+
             return compressedArray.ToArray();
         }
 
