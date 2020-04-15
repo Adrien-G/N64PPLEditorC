@@ -39,8 +39,8 @@ namespace N64PPLEditorC
         {
             byte[] finalArray = new byte[texture.Length / 2];
 
-            byte R, G1,G2, B, A;
-            byte byte1=0, byte2=0;
+            byte G1,G2, B, A;
+            byte byte1, byte2;
             int index = 0;
 
             for (int i = 0; i < texture.Length; i += 4)
@@ -391,7 +391,7 @@ namespace N64PPLEditorC
         public static byte[] ConvertRGBABitmapToByteArrayRGBA(Bitmap bmp)
         {
             byte[] textureArray = new Byte[bmp.Width * bmp.Height * 4];
-            Color tmpColor = new Color();
+            Color tmpColor;
             int index = 0;
 
             for (int y = 0; y < bmp.Height; y++)
