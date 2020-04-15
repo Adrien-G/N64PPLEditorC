@@ -273,7 +273,7 @@ namespace N64PPLEditorC
                             var compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
 
                             //convert texture to byte array for future treatment 
-                            byte[] rawData = CTextureManager.ConvertRGBABitmapToByteArray((Bitmap)pictureBoxTexture.Image);
+                            byte[] rawData = CTextureManager.ConvertRGBABitmapToByteArrayRGBA((Bitmap)pictureBoxTexture.Image);
 
                             //make it at good format
                             byte[] palette;
