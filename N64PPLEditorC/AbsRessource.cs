@@ -32,9 +32,5 @@ namespace N64PPLEditorC
         {
             return rawData;
         }
-
-
-
-
     }
 }

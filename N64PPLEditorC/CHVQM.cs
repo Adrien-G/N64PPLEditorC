@@ -11,6 +11,7 @@ namespace N64PPLEditorC
 
         public CHVQM(Byte[] rawData, Byte[] ressourceName) : base(rawData,ressourceName)
         {
+
         }
 
     }

@@ -142,7 +142,6 @@ namespace N64PPLEditorC
             }
             return total;
         }
-
         public void AddBFF2(int index, Byte[] bff2Data)
         {
             fibList[index].AddBFF2Child(bff2Data);
@@ -168,7 +167,6 @@ namespace N64PPLEditorC
         {
             return sbfList[index].GetRessourceName();
         }
-
         public void WriteAllData(string path)
         {
             FileStream fs = new FileStream(path,FileMode.Open,FileAccess.Write);

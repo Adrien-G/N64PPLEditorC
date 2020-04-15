@@ -43,6 +43,7 @@ namespace N64PPLEditorC
             trueColor16Bits = 0x54, // 5 bits for R, G and B, one bit for Alpha
             trueColor32Bits = 0x55  // 8 bits for each R,G,B,A
         }
+
         public static List<byte> ByteToNibble(byte byteToDecompose)
         {
             List<byte> byteList = new List<byte>();
