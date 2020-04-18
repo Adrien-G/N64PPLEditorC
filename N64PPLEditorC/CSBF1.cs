@@ -11,6 +11,7 @@ namespace N64PPLEditorC
 
         public CSBF1(Byte[] rawData, Byte[] ressourceName) : base(rawData,ressourceName)
         {
+
         }
 
     }

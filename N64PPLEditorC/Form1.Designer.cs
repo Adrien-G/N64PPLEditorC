@@ -37,50 +37,49 @@
             this.contextMenuStripForTreeview = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addNewTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeThisTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textureDisplayTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.containerTypetoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fixedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.animatedBadgesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textureScrollbluePokeballBackgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collpseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControlTexMovSce = new System.Windows.Forms.TabControl();
             this.tabPageTextures = new System.Windows.Forms.TabPage();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
             this.treeViewHVQM = new System.Windows.Forms.TreeView();
             this.tabPageScenes = new System.Windows.Forms.TabPage();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
-            this.groupBoxTextureContainer = new System.Windows.Forms.GroupBox();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.buttonShowTexture = new System.Windows.Forms.Button();
             this.groupBoxTextures = new System.Windows.Forms.GroupBox();
-            this.buttonReplaceTexture = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.numericUpDownTextureDisplayTime = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.labelIsTextureContainer = new System.Windows.Forms.Label();
             this.pictureBoxTexture = new System.Windows.Forms.PictureBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.numericUpDownTextureDisplayTime = new System.Windows.Forms.NumericUpDown();
             this.buttonExtractAllTextures = new System.Windows.Forms.Button();
-            this.checkBoxAlwaysShowTexture = new System.Windows.Forms.CheckBox();
             this.buttonModifyRom = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerExtract = new System.Windows.Forms.Timer(this.components);
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
+            this.groupBoxScenes = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripForTreeview.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.tabControlTexMovSce.SuspendLayout();
             this.tabPageTextures.SuspendLayout();
             this.tabPageMovies.SuspendLayout();
             this.tabPageScenes.SuspendLayout();
-            this.groupBoxTextureContainer.SuspendLayout();
             this.groupBoxTextures.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTexture)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.groupBoxScenes.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -146,6 +145,8 @@
             this.treeViewTextures.Size = new System.Drawing.Size(257, 629);
             this.treeViewTextures.TabIndex = 1;
             this.treeViewTextures.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewTextures_AfterSelect);
+            this.treeViewTextures.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewTextures_NodeMouseClick);
+            this.treeViewTextures.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeViewTextures_KeyDown);
             this.treeViewTextures.MouseEnter += new System.EventHandler(this.treeViewTextures_MouseEnter);
             this.treeViewTextures.MouseLeave += new System.EventHandler(this.treeViewTextures_MouseLeave);
             // 
@@ -154,18 +155,22 @@
             this.contextMenuStripForTreeview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNewTextureToolStripMenuItem,
             this.removeThisTextureToolStripMenuItem,
+            this.textureDisplayTimeToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.containerTypetoolStripMenuItem,
             this.toolStripSeparator1,
             this.expandAllToolStripMenuItem,
             this.collpseAllToolStripMenuItem});
             this.contextMenuStripForTreeview.Name = "contextMenuStrip1";
-            this.contextMenuStripForTreeview.Size = new System.Drawing.Size(180, 98);
+            this.contextMenuStripForTreeview.Size = new System.Drawing.Size(180, 148);
+            this.contextMenuStripForTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripForTreeview_Opening);
             // 
             // addNewTextureToolStripMenuItem
             // 
             this.addNewTextureToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.AddImage_16x;
             this.addNewTextureToolStripMenuItem.Name = "addNewTextureToolStripMenuItem";
             this.addNewTextureToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.addNewTextureToolStripMenuItem.Text = "Add New texture";
+            this.addNewTextureToolStripMenuItem.Text = "Add New texture(s)";
             this.addNewTextureToolStripMenuItem.Click += new System.EventHandler(this.addNewTextureToolStripMenuItem_Click);
             // 
             // removeThisTextureToolStripMenuItem
@@ -176,6 +181,45 @@
             this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.removeThisTextureToolStripMenuItem.Text = "Remove this texture";
             this.removeThisTextureToolStripMenuItem.Click += new System.EventHandler(this.removeThisTextureToolStripMenuItem_Click);
+            // 
+            // textureDisplayTimeToolStripMenuItem
+            // 
+            this.textureDisplayTimeToolStripMenuItem.Name = "textureDisplayTimeToolStripMenuItem";
+            this.textureDisplayTimeToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.textureDisplayTimeToolStripMenuItem.Text = "Texture displayTime";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
+            // 
+            // containerTypetoolStripMenuItem
+            // 
+            this.containerTypetoolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fixedToolStripMenuItem,
+            this.animatedBadgesToolStripMenuItem,
+            this.textureScrollbluePokeballBackgroundToolStripMenuItem});
+            this.containerTypetoolStripMenuItem.Name = "containerTypetoolStripMenuItem";
+            this.containerTypetoolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.containerTypetoolStripMenuItem.Text = "Container Type";
+            // 
+            // fixedToolStripMenuItem
+            // 
+            this.fixedToolStripMenuItem.Name = "fixedToolStripMenuItem";
+            this.fixedToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.fixedToolStripMenuItem.Text = "Fixed";
+            // 
+            // animatedBadgesToolStripMenuItem
+            // 
+            this.animatedBadgesToolStripMenuItem.Name = "animatedBadgesToolStripMenuItem";
+            this.animatedBadgesToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.animatedBadgesToolStripMenuItem.Text = "Animated (Badges)";
+            // 
+            // textureScrollbluePokeballBackgroundToolStripMenuItem
+            // 
+            this.textureScrollbluePokeballBackgroundToolStripMenuItem.Name = "textureScrollbluePokeballBackgroundToolStripMenuItem";
+            this.textureScrollbluePokeballBackgroundToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.textureScrollbluePokeballBackgroundToolStripMenuItem.Text = "Texture scroll (blue pokeball background)";
             // 
             // toolStripSeparator1
             // 
@@ -198,16 +242,17 @@
             this.collpseAllToolStripMenuItem.Text = "Collapse all";
             this.collpseAllToolStripMenuItem.Click += new System.EventHandler(this.collpseAllToolStripMenuItem_Click);
             // 
-            // tabControl1
+            // tabControlTexMovSce
             // 
-            this.tabControl1.Controls.Add(this.tabPageTextures);
-            this.tabControl1.Controls.Add(this.tabPageMovies);
-            this.tabControl1.Controls.Add(this.tabPageScenes);
-            this.tabControl1.Location = new System.Drawing.Point(12, 69);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(265, 655);
-            this.tabControl1.TabIndex = 4;
+            this.tabControlTexMovSce.Controls.Add(this.tabPageTextures);
+            this.tabControlTexMovSce.Controls.Add(this.tabPageMovies);
+            this.tabControlTexMovSce.Controls.Add(this.tabPageScenes);
+            this.tabControlTexMovSce.Enabled = false;
+            this.tabControlTexMovSce.Location = new System.Drawing.Point(12, 69);
+            this.tabControlTexMovSce.Name = "tabControlTexMovSce";
+            this.tabControlTexMovSce.SelectedIndex = 0;
+            this.tabControlTexMovSce.Size = new System.Drawing.Size(265, 655);
+            this.tabControlTexMovSce.TabIndex = 4;
             // 
             // tabPageTextures
             // 
@@ -238,7 +283,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewHVQM.Location = new System.Drawing.Point(0, 0);
             this.treeViewHVQM.Name = "treeViewHVQM";
-            this.treeViewHVQM.Size = new System.Drawing.Size(347, 729);
+            this.treeViewHVQM.Size = new System.Drawing.Size(257, 729);
             this.treeViewHVQM.TabIndex = 2;
             // 
             // tabPageScenes
@@ -258,117 +303,61 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewSBF.Location = new System.Drawing.Point(0, 0);
             this.treeViewSBF.Name = "treeViewSBF";
-            this.treeViewSBF.Size = new System.Drawing.Size(347, 729);
+            this.treeViewSBF.Size = new System.Drawing.Size(254, 729);
             this.treeViewSBF.TabIndex = 3;
-            // 
-            // groupBoxTextureContainer
-            // 
-            this.groupBoxTextureContainer.Controls.Add(this.radioButton3);
-            this.groupBoxTextureContainer.Controls.Add(this.radioButton2);
-            this.groupBoxTextureContainer.Controls.Add(this.radioButton1);
-            this.groupBoxTextureContainer.Controls.Add(this.label3);
-            this.groupBoxTextureContainer.Controls.Add(this.button1);
-            this.groupBoxTextureContainer.Location = new System.Drawing.Point(6, 186);
-            this.groupBoxTextureContainer.Name = "groupBoxTextureContainer";
-            this.groupBoxTextureContainer.Size = new System.Drawing.Size(253, 137);
-            this.groupBoxTextureContainer.TabIndex = 5;
-            this.groupBoxTextureContainer.TabStop = false;
-            this.groupBoxTextureContainer.Text = "Manage Container";
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(12, 113);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(234, 17);
-            this.radioButton3.TabIndex = 5;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "image scroll ( like blue pokeball background)";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(12, 90);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(134, 17);
-            this.radioButton2.TabIndex = 4;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "animated ( like badges)";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(12, 67);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(50, 17);
-            this.radioButton1.TabIndex = 3;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Fixed";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 51);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Image type :";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(6, 19);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(125, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Remove this container";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // buttonShowTexture
-            // 
-            this.buttonShowTexture.Enabled = false;
-            this.buttonShowTexture.Location = new System.Drawing.Point(6, 19);
-            this.buttonShowTexture.Name = "buttonShowTexture";
-            this.buttonShowTexture.Size = new System.Drawing.Size(116, 23);
-            this.buttonShowTexture.TabIndex = 1;
-            this.buttonShowTexture.Text = "preview texture";
-            this.buttonShowTexture.UseVisualStyleBackColor = true;
-            this.buttonShowTexture.Click += new System.EventHandler(this.buttonShowTexture_Click);
+            this.treeViewSBF.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewSBF_AfterSelect);
             // 
             // groupBoxTextures
             // 
-            this.groupBoxTextures.Controls.Add(this.buttonReplaceTexture);
-            this.groupBoxTextures.Controls.Add(this.groupBox2);
             this.groupBoxTextures.Controls.Add(this.groupBox4);
-            this.groupBoxTextures.Controls.Add(this.groupBoxTextureContainer);
+            this.groupBoxTextures.Controls.Add(this.groupBox2);
             this.groupBoxTextures.Controls.Add(this.buttonExtractAllTextures);
-            this.groupBoxTextures.Controls.Add(this.checkBoxAlwaysShowTexture);
-            this.groupBoxTextures.Controls.Add(this.buttonShowTexture);
+            this.groupBoxTextures.Enabled = false;
             this.groupBoxTextures.Location = new System.Drawing.Point(283, 69);
             this.groupBoxTextures.Name = "groupBoxTextures";
-            this.groupBoxTextures.Size = new System.Drawing.Size(352, 606);
+            this.groupBoxTextures.Size = new System.Drawing.Size(352, 345);
             this.groupBoxTextures.TabIndex = 6;
             this.groupBoxTextures.TabStop = false;
-            this.groupBoxTextures.Text = "Rom Management";
+            this.groupBoxTextures.Text = "Textures Management";
             // 
-            // buttonReplaceTexture
+            // groupBox4
             // 
-            this.buttonReplaceTexture.Location = new System.Drawing.Point(6, 77);
-            this.buttonReplaceTexture.Name = "buttonReplaceTexture";
-            this.buttonReplaceTexture.Size = new System.Drawing.Size(116, 23);
-            this.buttonReplaceTexture.TabIndex = 9;
-            this.buttonReplaceTexture.Text = "Replace texture";
-            this.buttonReplaceTexture.UseVisualStyleBackColor = true;
+            this.groupBox4.Controls.Add(this.labelIsTextureContainer);
+            this.groupBox4.Controls.Add(this.pictureBoxTexture);
+            this.groupBox4.Location = new System.Drawing.Point(6, 19);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(335, 267);
+            this.groupBox4.TabIndex = 7;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Render";
+            // 
+            // labelIsTextureContainer
+            // 
+            this.labelIsTextureContainer.AutoSize = true;
+            this.labelIsTextureContainer.Location = new System.Drawing.Point(57, 129);
+            this.labelIsTextureContainer.Name = "labelIsTextureContainer";
+            this.labelIsTextureContainer.Size = new System.Drawing.Size(212, 26);
+            this.labelIsTextureContainer.TabIndex = 1;
+            this.labelIsTextureContainer.Text = "Please select a texture inside the container.\r\n    (Right click on the list for m" +
+    "ore options)";
+            this.labelIsTextureContainer.Visible = false;
+            // 
+            // pictureBoxTexture
+            // 
+            this.pictureBoxTexture.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBoxTexture.Location = new System.Drawing.Point(6, 19);
+            this.pictureBoxTexture.Name = "pictureBoxTexture";
+            this.pictureBoxTexture.Size = new System.Drawing.Size(320, 240);
+            this.pictureBoxTexture.TabIndex = 0;
+            this.pictureBoxTexture.TabStop = false;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.numericUpDownTextureDisplayTime);
-            this.groupBox2.Location = new System.Drawing.Point(6, 135);
+            this.groupBox2.Location = new System.Drawing.Point(136, 292);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(175, 45);
+            this.groupBox2.Size = new System.Drawing.Size(205, 46);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Texture option";
@@ -384,7 +373,7 @@
             // 
             // numericUpDownTextureDisplayTime
             // 
-            this.numericUpDownTextureDisplayTime.Location = new System.Drawing.Point(118, 14);
+            this.numericUpDownTextureDisplayTime.Location = new System.Drawing.Point(130, 19);
             this.numericUpDownTextureDisplayTime.Maximum = new decimal(new int[] {
             255,
             0,
@@ -403,62 +392,21 @@
             0,
             0,
             0});
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.labelIsTextureContainer);
-            this.groupBox4.Controls.Add(this.pictureBoxTexture);
-            this.groupBox4.Location = new System.Drawing.Point(6, 329);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(335, 267);
-            this.groupBox4.TabIndex = 7;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Texture";
-            // 
-            // labelIsTextureContainer
-            // 
-            this.labelIsTextureContainer.AutoSize = true;
-            this.labelIsTextureContainer.Location = new System.Drawing.Point(57, 129);
-            this.labelIsTextureContainer.Name = "labelIsTextureContainer";
-            this.labelIsTextureContainer.Size = new System.Drawing.Size(212, 26);
-            this.labelIsTextureContainer.TabIndex = 1;
-            this.labelIsTextureContainer.Text = "Please select a texture inside the container.\r\n    (Right click on the list for m" +
-    "ore options)";
-            this.labelIsTextureContainer.Visible = false;
-            // 
-            // pictureBoxTexture
-            // 
-            this.pictureBoxTexture.Location = new System.Drawing.Point(6, 19);
-            this.pictureBoxTexture.Name = "pictureBoxTexture";
-            this.pictureBoxTexture.Size = new System.Drawing.Size(320, 240);
-            this.pictureBoxTexture.TabIndex = 0;
-            this.pictureBoxTexture.TabStop = false;
+            this.numericUpDownTextureDisplayTime.ValueChanged += new System.EventHandler(this.numericUpDownTextureDisplayTime_ValueChanged);
             // 
             // buttonExtractAllTextures
             // 
-            this.buttonExtractAllTextures.Location = new System.Drawing.Point(6, 48);
+            this.buttonExtractAllTextures.Location = new System.Drawing.Point(6, 292);
             this.buttonExtractAllTextures.Name = "buttonExtractAllTextures";
-            this.buttonExtractAllTextures.Size = new System.Drawing.Size(116, 23);
+            this.buttonExtractAllTextures.Size = new System.Drawing.Size(124, 47);
             this.buttonExtractAllTextures.TabIndex = 7;
             this.buttonExtractAllTextures.Text = "Extract all textures";
             this.buttonExtractAllTextures.UseVisualStyleBackColor = true;
             this.buttonExtractAllTextures.Click += new System.EventHandler(this.buttonExtractAllTextures_Click);
             // 
-            // checkBoxAlwaysShowTexture
-            // 
-            this.checkBoxAlwaysShowTexture.AutoSize = true;
-            this.checkBoxAlwaysShowTexture.Checked = true;
-            this.checkBoxAlwaysShowTexture.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAlwaysShowTexture.Location = new System.Drawing.Point(128, 23);
-            this.checkBoxAlwaysShowTexture.Name = "checkBoxAlwaysShowTexture";
-            this.checkBoxAlwaysShowTexture.Size = new System.Drawing.Size(110, 17);
-            this.checkBoxAlwaysShowTexture.TabIndex = 10;
-            this.checkBoxAlwaysShowTexture.Text = "Preview on select";
-            this.checkBoxAlwaysShowTexture.UseVisualStyleBackColor = true;
-            this.checkBoxAlwaysShowTexture.CheckedChanged += new System.EventHandler(this.checkBoxAlwaysShowTexture_CheckedChanged);
-            // 
             // buttonModifyRom
             // 
+            this.buttonModifyRom.Enabled = false;
             this.buttonModifyRom.Location = new System.Drawing.Point(551, 681);
             this.buttonModifyRom.Name = "buttonModifyRom";
             this.buttonModifyRom.Size = new System.Drawing.Size(82, 40);
@@ -497,15 +445,35 @@
             this.bWDecompress.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bWDecompress_ProgressChanged);
             this.bWDecompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bWDecompress_RunWorkerCompleted);
             // 
+            // groupBoxScenes
+            // 
+            this.groupBoxScenes.Controls.Add(this.textBox1);
+            this.groupBoxScenes.Location = new System.Drawing.Point(283, 420);
+            this.groupBoxScenes.Name = "groupBoxScenes";
+            this.groupBoxScenes.Size = new System.Drawing.Size(354, 255);
+            this.groupBoxScenes.TabIndex = 13;
+            this.groupBoxScenes.TabStop = false;
+            this.groupBoxScenes.Text = "Scenes Management";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 19);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(342, 230);
+            this.textBox1.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(645, 744);
+            this.Controls.Add(this.groupBoxScenes);
             this.Controls.Add(this.buttonModifyRom);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBoxTextures);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControlTexMovSce);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
             this.Text = "PPL - Rom Management";
@@ -514,22 +482,21 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.contextMenuStripForTreeview.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
+            this.tabControlTexMovSce.ResumeLayout(false);
             this.tabPageTextures.ResumeLayout(false);
             this.tabPageMovies.ResumeLayout(false);
             this.tabPageScenes.ResumeLayout(false);
-            this.groupBoxTextureContainer.ResumeLayout(false);
-            this.groupBoxTextureContainer.PerformLayout();
             this.groupBoxTextures.ResumeLayout(false);
-            this.groupBoxTextures.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTexture)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBoxScenes.ResumeLayout(false);
+            this.groupBoxScenes.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -542,25 +509,16 @@
         private System.Windows.Forms.TextBox textBoxPPLLocation;
         private System.Windows.Forms.Button buttonLoadRom;
         private System.Windows.Forms.TreeView treeViewTextures;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControlTexMovSce;
         private System.Windows.Forms.TabPage tabPageTextures;
         private System.Windows.Forms.TabPage tabPageMovies;
         private System.Windows.Forms.TabPage tabPageScenes;
         private System.Windows.Forms.TreeView treeViewHVQM;
         private System.Windows.Forms.TreeView treeViewSBF;
-        private System.Windows.Forms.GroupBox groupBoxTextureContainer;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button buttonShowTexture;
         private System.Windows.Forms.GroupBox groupBoxTextures;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button buttonExtractAllTextures;
         private System.Windows.Forms.PictureBox pictureBoxTexture;
-        private System.Windows.Forms.Button buttonReplaceTexture;
-        private System.Windows.Forms.CheckBox checkBoxAlwaysShowTexture;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.NumericUpDown numericUpDownTextureDisplayTime;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.StatusStrip statusStrip1;
@@ -576,6 +534,14 @@
         private System.Windows.Forms.ToolStripMenuItem addNewTextureToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem removeThisTextureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem containerTypetoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fixedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem animatedBadgesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem textureScrollbluePokeballBackgroundToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem textureDisplayTimeToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBoxScenes;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

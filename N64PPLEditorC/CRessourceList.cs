@@ -42,6 +42,11 @@ namespace N64PPLEditorC
 
         }
 
+        public CSBF1 GetSBF1(int index)
+        {
+            return sbfList[index];
+        }
+
         private ListFormat[] LoadRessourcesList(int nbElements,Byte[] ressourcesList)
         {
             ListFormat[] lst1 = new ListFormat[nbElements];
@@ -147,6 +152,20 @@ namespace N64PPLEditorC
             fibList[index].AddBFF2Child(bff2Data);
         }
 
+        public void RemoveBFF2(int index,int indexBFF2)
+        {
+            fibList[index].RemoveBFF2Child(indexBFF2);
+        }
+
+        public int GetTextureDisplayTime(int index, int indexBFF2)
+        {
+            return fibList[index].GetTextureDisplayTime(indexBFF2);
+        }
+
+        public void SetTextureDisplayTime(int index, int indexBFF2,byte displayTime)
+        {
+            fibList[index].SetTextureDisplayTime(indexBFF2, displayTime);
+        }
 
         //hvqm public methods...
         public int GetHVQMCount()

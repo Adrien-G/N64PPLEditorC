@@ -84,6 +84,11 @@ namespace N64PPLEditorC
             bff2Childs[bff2Childs.Count - 1].Init();
         }
 
+        public void RemoveBFF2Child(int index)
+        {
+            bff2Childs.RemoveAt(index);
+        }
+
         public string GetBFFName(int index)
         {
             return bff2Childs[index].GetName();
@@ -127,7 +132,7 @@ namespace N64PPLEditorC
         public override byte[] GetRawData()
         {
             Byte[] res = new byte[this.GetSize()];
-
+            header3FIB[12] = (byte)bff2Childs.Count();
             
             Buffer.BlockCopy(header3FIB, 0, res, 0,header3FIB.Length);
             int indexDst = header3FIB.Length;
@@ -138,6 +143,16 @@ namespace N64PPLEditorC
                 indexDst += bff2Childs[i].GetSize();
             }
             return res;
+        }
+
+        public int GetTextureDisplayTime(int indexBFF2)
+        {
+            return bff2Childs[indexBFF2].GetTextureDisplayTime();
+        }
+
+        public void SetTextureDisplayTime(int index, byte displayTime)
+        {
+            bff2Childs[index].SetTextureDisplayTime(displayTime);
         }
     }
 }
