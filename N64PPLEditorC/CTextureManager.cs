@@ -23,7 +23,7 @@ namespace N64PPLEditorC
                     finalArray = ConvertRGBAtoGreyscale(texture);
                     break;
                 case CGeneric.Compression.max16Colors:
-                    throw new NotImplementedException();
+                    (palette, finalArray) = ConvertRGBAtoMax16Colors(texture);
                     break;
                 case CGeneric.Compression.max256Colors:
                     (palette, finalArray) = ConvertRGBAtoMax256Colors(texture);
@@ -35,6 +35,69 @@ namespace N64PPLEditorC
             return (palette,finalArray);
         }
 
+        private static (byte[] palette, byte[] data) ConvertRGBAtoMax16Colors(byte[] texture)
+        {
+            //construct palette and use it.
+            List<Color> colors = ExtractPaletteFromByteArray(texture);
+
+            //first array for palette color
+            byte[] palette = new byte[colors.Count * 4];
+
+            //second array for palette data
+            byte[] finalArray = new byte[texture.Length / 8];
+
+            // write palette 
+            for (int i = 0; i < colors.Count(); i++)
+            {
+                palette[i * 4] = colors[i].R;
+                palette[i * 4 + 1] = colors[i].G;
+                palette[i * 4 + 2] = colors[i].B;
+                palette[i * 4 + 3] = colors[i].A;
+            }
+
+            int index = 0;
+            byte nibble1;
+            byte nibble2;
+
+            // write data with palette information
+            for (int i = 0; i < texture.Length; i += 8)
+            {
+                nibble1 = GetIndexFromPalette(colors, Color.FromArgb(texture[i + 3], texture[i], texture[i + 1], texture[i + 2]));
+                nibble2 = GetIndexFromPalette(colors, Color.FromArgb(texture[i + 7], texture[i + 4], texture[i + 5], texture[i + 6]));
+                finalArray[index] = CGeneric.NibbleToByte(nibble1, nibble2);
+                index++;
+            }
+            return (palette, finalArray);
+        }
+        private static (byte[] palette, byte[] data) ConvertRGBAtoMax256Colors(byte[] texture)
+        {
+            //construct palette and use it.
+            List<Color> colors = ExtractPaletteFromByteArray(texture);
+
+            //first array for palette color
+            byte[] palette = new byte[colors.Count * 4];
+
+            //second array for palette data
+            byte[] finalArray = new byte[texture.Length / 4];
+
+            // write palette 
+            for (int i = 0; i < colors.Count(); i++)
+            {
+                palette[i * 4] = colors[i].R;
+                palette[i * 4 + 1] = colors[i].G;
+                palette[i * 4 + 2] = colors[i].B;
+                palette[i * 4 + 3] = colors[i].A;
+            }
+
+            int index = 0;
+            // write data with palette information
+            for (int i = 0; i < texture.Length; i += 4)
+            {
+                finalArray[index] = GetIndexFromPalette(colors, Color.FromArgb(texture[i + 3], texture[i], texture[i + 1], texture[i + 2]));
+                index++;
+            }
+            return (palette, finalArray);
+        }
         private static byte[] ConvertRGBAtoTrueColor16Bits(byte[] texture)
         {
             byte[] finalArray = new byte[texture.Length / 2];
@@ -98,37 +161,6 @@ namespace N64PPLEditorC
             }
             return finalArray;
         }
-
-        private static (byte[] palette, byte[] data) ConvertRGBAtoMax256Colors(byte[] texture)
-        {
-            //construct palette and use it.
-            List<Color> colors = ExtractPaletteFromByteArray(texture);
-
-            //first array for palette color
-            byte[] palette = new byte[colors.Count * 4];
-
-            //second array for palette data
-            byte[] finalArray = new byte[texture.Length / 4];
-
-            // write palette 
-            for (int i = 0; i < colors.Count(); i++)
-            {
-                palette[i * 4] = colors[i].R;
-                palette[i * 4 + 1] = colors[i].G;
-                palette[i * 4 + 2] = colors[i].B;
-                palette[i * 4 + 3] = colors[i].A;
-            }
-
-            int index = 0;
-            // write data with palette information
-            for (int i = 0; i < texture.Length; i += 4)
-            {
-                finalArray[index] = GetIndexFromPalette(colors, Color.FromArgb(texture[i + 3], texture[i], texture[i + 1], texture[i + 2]));
-                index++;
-            }
-            return (palette, finalArray);
-        }
-
         private static List<Color> ExtractPaletteFromByteArray(byte[] texture)
         {
             HashSet<Color> colors = new HashSet<Color>();
@@ -308,6 +340,10 @@ namespace N64PPLEditorC
         }
         private static bool IsMoreColorThanExpected(Bitmap bmp, int maxColor)
         {
+            //deny alpha variation for indexed color (not well interpreted by the rom)
+            if (IsAlphaVariation(bmp))
+                return true;
+
             HashSet<Color> colors = new HashSet<Color>();
 
             for (int y = 0; y < bmp.Height; y++)
@@ -370,20 +406,14 @@ namespace N64PPLEditorC
             Color greenAlpha = Color.FromArgb(255, 0, 255, 0);
             Color tmpColor;
             byte index = 0;
-            if(compressionMethod == CGeneric.Compression.max16Colors)
+
+            for (int i = 0; i < palette.Length; i += 4)
             {
-                throw new NotImplementedException();
-            }
-            else 
-            {
-                for (int i = 0; i < palette.Length; i += 4)
-                {
-                    tmpColor = Color.FromArgb(palette[i+3], palette[i], palette[i+1], palette[i+2]);
-                    if (tmpColor == greenAlpha)
-                        return index;
-                    else
-                        index++;
-                }
+                tmpColor = Color.FromArgb(palette[i+3], palette[i], palette[i+1], palette[i+2]);
+                if (tmpColor == greenAlpha)
+                    return index;
+                else
+                    index++;
             }
             
             return index;
