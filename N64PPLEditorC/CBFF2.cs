@@ -19,6 +19,7 @@ namespace N64PPLEditorC
             public int sizeX, sizeY;
             public byte bytePerPixel;
             public byte textureType;
+            public byte displayLength;
             public byte transparencyPixelIndex;
             public byte nameLength;
             public byte[] name;
@@ -51,6 +52,7 @@ namespace N64PPLEditorC
             b1 += b2;
             headerBFF2.transparencyPixelIndex = b1;
 
+            headerBFF2.displayLength = rawData[8];
             // check if the data is compressed and if data had indexed color
             headerBFF2.isCompressedTexture = (rawData[18] % 16 > 7) ? true : false;
 
@@ -82,7 +84,7 @@ namespace N64PPLEditorC
             //extract palette
             int startingData = 0x24 + headerBFF2.nameLength;
 
-            if (headerBFF2.isIndexedColor) { 
+            if (headerBFF2.isIndexedColor) {
                 ExtractPalette(startingData);
                 startingData +=  headerBFF2.palette.Length + headerBFF2.paletteSize.Length;
             }
@@ -115,7 +117,6 @@ namespace N64PPLEditorC
             }
             //make almost random compressed value.. (10)(because not enought information about it)
             //set displayedWidth equal pixel width (because not enought information about it)
-            //
             byte[] sizeXB = CGeneric.ConvertIntToByteArray16bits(sizeX);
             byte[] sizeYB = CGeneric.ConvertIntToByteArray16bits(sizeY);
             byte[] name = CGeneric.ConvertStringToByteArray(bffName);
@@ -142,7 +143,7 @@ namespace N64PPLEditorC
             //fixedsize = 36 + bffName + 1 if bffName size is not pair + 4 for palette color count
             byte[] headerBFF2 = new Byte[36 + bffName.Length + bffName.Length % 2 + colorCount.Length];
 
-            headerBFF2[8] = 0x1;
+            headerBFF2[8] = 0x8;
 
             //write "BFF2"
             for (int i = 0; i < CGeneric.patternBFF2.Length; i++)
@@ -240,6 +241,17 @@ namespace N64PPLEditorC
         public string GetName()
         {
             return System.Text.Encoding.UTF8.GetString(headerBFF2.name);
+        }
+
+        public int GetTextureDisplayTime()
+        {
+            return headerBFF2.displayLength;
+        }
+
+        public void SetTextureDisplayTime(byte displayTime)
+        {
+            rawData[8] = displayTime;
+            headerBFF2.displayLength = displayTime;
         }
     }
 }
