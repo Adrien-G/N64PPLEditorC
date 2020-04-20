@@ -66,7 +66,6 @@
             this.timerExtract = new System.Windows.Forms.Timer(this.components);
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
             this.groupBoxScenes = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripForTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -79,7 +78,6 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            this.groupBoxScenes.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -303,7 +301,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewSBF.Location = new System.Drawing.Point(0, 0);
             this.treeViewSBF.Name = "treeViewSBF";
-            this.treeViewSBF.Size = new System.Drawing.Size(254, 729);
+            this.treeViewSBF.Size = new System.Drawing.Size(257, 630);
             this.treeViewSBF.TabIndex = 3;
             this.treeViewSBF.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewSBF_AfterSelect);
             // 
@@ -447,22 +445,12 @@
             // 
             // groupBoxScenes
             // 
-            this.groupBoxScenes.Controls.Add(this.textBox1);
             this.groupBoxScenes.Location = new System.Drawing.Point(283, 420);
             this.groupBoxScenes.Name = "groupBoxScenes";
             this.groupBoxScenes.Size = new System.Drawing.Size(354, 255);
             this.groupBoxScenes.TabIndex = 13;
             this.groupBoxScenes.TabStop = false;
             this.groupBoxScenes.Text = "Scenes Management";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(6, 19);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(342, 230);
-            this.textBox1.TabIndex = 0;
             // 
             // Form1
             // 
@@ -495,8 +483,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBoxScenes.ResumeLayout(false);
-            this.groupBoxScenes.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -541,7 +527,6 @@
         private System.Windows.Forms.ToolStripMenuItem textureScrollbluePokeballBackgroundToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textureDisplayTimeToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBoxScenes;
-        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

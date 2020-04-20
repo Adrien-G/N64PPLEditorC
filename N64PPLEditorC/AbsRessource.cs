@@ -20,17 +20,18 @@ namespace N64PPLEditorC
 
         public string GetRessourceName()
         {
-            return System.Text.Encoding.Default.GetString(ressourceName);
+            return Encoding.Default.GetString(ressourceName);
         }
 
-        public virtual Int32 GetSize() 
-        { 
-            return rawData.Length; 
+        public virtual Int32 GetSize()
+        {
+            return rawData.Length;
         }
 
         public virtual byte[] GetRawData()
         {
             return rawData;
         }
+
     }
 }

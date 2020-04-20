@@ -51,6 +51,10 @@
     <Compile Include="CGeneric.cs" />
     <Compile Include="CHVQM.cs" />
     <Compile Include="CRTF.cs" />
+    <Compile Include="CSBF1DynamicObject.cs" />
+    <Compile Include="CSBF1Scene.cs" />
+    <Compile Include="CSBF1TextObject.cs" />
+    <Compile Include="CSBF1TextureManagement.cs" />
     <Compile Include="CTextureCompress.cs" />
     <Compile Include="CRessourceList.cs" />
     <Compile Include="CSBF1.cs" />

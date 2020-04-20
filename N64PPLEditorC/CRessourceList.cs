@@ -47,6 +47,11 @@ namespace N64PPLEditorC
             return sbfList[index];
         }
 
+        public string GetSBF1Name(int indexSBF,int indexScene)
+        {
+            return sbfList[indexSBF].GetSceneName(indexScene);
+        }
+
         private ListFormat[] LoadRessourcesList(int nbElements,Byte[] ressourcesList)
         {
             ListFormat[] lst1 = new ListFormat[nbElements];
@@ -101,6 +106,11 @@ namespace N64PPLEditorC
                 if (sizeElement % 2 == 1)
                     generalIndex += 1;
             }
+        }
+
+        public int GetSceneCount(int indexSbf)
+        {
+            return sbfList[indexSbf].GetSceneCount();
         }
 
         public void ShowTexture(System.Windows.Forms.PictureBox pictureBox,int indexFIB,int indexBFF)
