@@ -170,7 +170,7 @@ namespace N64PPLEditorC
                 labelIsTextureContainer.Hide();
                  this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).GetTexture(pictureBoxTexture, treeViewTextures.SelectedNode.Index);
                 pictureBoxTexture.Show();
-                numericUpDownTextureDisplayTime.Value = this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).GetTextureDisplayTime(treeViewTextures.SelectedNode.Index);
+                numericUpDownTextureDisplayTime.Value = this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).GetBFF2(treeViewTextures.SelectedNode.Index).GetTextureDisplayTime();
             }
             if (level == 0)
             {
@@ -370,7 +370,7 @@ namespace N64PPLEditorC
 
         private void numericUpDownTextureDisplayTime_ValueChanged(object sender, EventArgs e)
         {
-            this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).SetTextureDisplayTime(treeViewTextures.SelectedNode.Index,(byte)numericUpDownTextureDisplayTime.Value);
+            this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).GetBFF2(treeViewTextures.SelectedNode.Index).SetTextureDisplayTime((byte)numericUpDownTextureDisplayTime.Value);
         }
 
         private void treeViewSBF_AfterSelect(object sender, TreeViewEventArgs e)

@@ -145,14 +145,9 @@ namespace N64PPLEditorC
             return res;
         }
 
-        public int GetTextureDisplayTime(int indexBFF2)
+        public CBFF2 GetBFF2(int index)
         {
-            return bff2Childs[indexBFF2].GetTextureDisplayTime();
-        }
-
-        public void SetTextureDisplayTime(int index, byte displayTime)
-        {
-            bff2Childs[index].SetTextureDisplayTime(displayTime);
+            return bff2Childs[index];
         }
     }
 }
