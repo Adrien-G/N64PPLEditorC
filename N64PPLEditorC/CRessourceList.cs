@@ -42,10 +42,7 @@ namespace N64PPLEditorC
 
         }
 
-        public CSBF1 GetSBF1(int index)
-        {
-            return sbfList[index];
-        }
+        
 
         private ListFormat[] LoadRessourcesList(int nbElements,Byte[] ressourcesList)
         {
@@ -66,7 +63,6 @@ namespace N64PPLEditorC
 
         private void ChunkDataToRessources(ListFormat[] ressourcesList,Byte[] ressourceData)
         {
-
             int generalIndex = 0;
             
             // check all the ressources list...
@@ -103,109 +99,60 @@ namespace N64PPLEditorC
             }
         }
 
-        public int GetSceneCount(int indexSbf)
+        //fib to simplify
+        public CSBF1 GetSBF1(int index)
         {
-            return sbfList[indexSbf].GetSceneCount();
+            return sbfList[index];
+        }
+        
+        public C3FIB Get3FIB(int indexFib)
+        {
+            return fibList[indexFib];
         }
 
-        public void ShowTexture(System.Windows.Forms.PictureBox pictureBox,int indexFIB,int indexBFF)
+        public CHVQM GetHVQM(int indexHVQM)
         {
-            fibList[indexFIB].GetTexture(pictureBox,indexBFF);
+            return hvqmList[indexHVQM];
         }
 
-        public void SaveTexture(int indexFIB, int indexBFF)
-        {
-            fibList[indexFIB].SaveTexture(indexBFF,indexFIB);
-        }
 
-        //fib public methods..
         public int GetFIBCount()
         {
             return fibList.Count();
+        }
+        public int GetSBFCount()
+        {
+            return sbfList.Count();
+        }
+        public int GetHVQMCount()
+        {
+            return hvqmList.Count();
         }
         public int GetRTFCount()
         {
             return rtfList.Count();
         }
-        public string GetFIBName(int index)
-        {
-            return fibList[index].GetRessourceName();
-        }
-        public string GetBIFName(int index)
-        {
-            return fibList[index].GetFIBName();
-        }
-        public string GetBFFName(int indexFIB, int indexBFF)
-        {
-            return fibList[indexFIB].GetBFFName(indexBFF);
-        }
-        public int GetBFFCount(int indexFIB)
-        {
-            return fibList[indexFIB].GetBFFCount();
-        }
+
         public int GetTotalBFFCount()
         {
             int total = 0;
             for (int i = 0; i < fibList.Count; i++)
             {
-                total += this.GetBFFCount(i);
+                total += this.fibList[i].GetBFFCount();
             }
             return total;
         }
-        public void AddBFF2(int index, Byte[] bff2Data)
-        {
-            fibList[index].AddBFF2Child(bff2Data);
-        }
 
-        public void RemoveBFF2(int index,int indexBFF2)
-        {
-            fibList[index].RemoveBFF2Child(indexBFF2);
-        }
-
-        public int GetTextureDisplayTime(int index, int indexBFF2)
-        {
-            return fibList[index].GetTextureDisplayTime(indexBFF2);
-        }
-
-        public void SetTextureDisplayTime(int index, int indexBFF2,byte displayTime)
-        {
-            fibList[index].SetTextureDisplayTime(indexBFF2, displayTime);
-        }
-
-        //hvqm public methods...
-        public int GetHVQMCount()
-        {
-            return hvqmList.Count();
-        }
-        public string GetHVQMName(int index)
-        {
-            return hvqmList[index].GetRessourceName();
-        }
-
-        //sbf1 public methods...
-        public int GetSBFCount()
-        {
-            return sbfList.Count();
-        }
-        public string GetSBFName(int index)
-        {
-            return sbfList[index].GetRessourceName();
-        }
-
-        public CSBF1 GetSBF1(int index,int index2)
-        {
-            return sbfList[index];
-        }
         public void WriteAllData(string path)
         {
             FileStream fs = new FileStream(path,FileMode.Open,FileAccess.Write);
             fs.Position = indexRessourcesStart;
 
             // write the number of elements
-            fs.Write(CGeneric.ConvertIntToByteArray(GetFIBCount() + GetHVQMCount() + GetSBFCount()+GetRTFCount()), 0, 4);
+            fs.Write(CGeneric.ConvertIntToByteArray(fibList.Count() + GetHVQMCount() + GetSBFCount()+GetRTFCount()), 0, 4);
 
             // index of data (for writing header)
-            int indexData = (GetFIBCount() + GetHVQMCount() + GetSBFCount() + GetRTFCount()) * 24 + 4;
+            int indexData = (fibList.Count() + GetHVQMCount() + GetSBFCount() + GetRTFCount()) * 24 + 4;
 
             //write list header (FIB,HVQM,SBF1)
             WriteListHeader(ref fs, ref indexData, fibList);

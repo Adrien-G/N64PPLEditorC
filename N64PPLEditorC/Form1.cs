@@ -95,19 +95,19 @@ namespace N64PPLEditorC
             treeViewSBF.BeginUpdate();
             for (int fib = 0; fib < this.ressourceList.GetFIBCount(); fib++)
             {
-                treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.GetBIFName(fib));
-                for (int bff = 0; bff < this.ressourceList.GetBFFCount(fib); bff++)
-                    treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 +", " + this.ressourceList.GetBFFName(fib,bff));
+                treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.Get3FIB(fib).GetFIBName());
+                for (int bff = 0; bff < this.ressourceList.Get3FIB(fib).GetBFFCount(); bff++)
+                    treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 +", " + this.ressourceList.Get3FIB(fib).GetBFFName(bff));
             }
 
             for (int i = 0; i < this.ressourceList.GetHVQMCount(); i++)
-                treeViewHVQM.Nodes.Add(i + 1 + ", " + ressourceList.GetHVQMName(i));
+                treeViewHVQM.Nodes.Add(i + 1 + ", " + ressourceList.GetHVQM(i).GetRessourceName());
 
             for (int sbf = 0; sbf < this.ressourceList.GetSBFCount(); sbf++) 
             {
-                treeViewSBF.Nodes.Add(sbf + 1 + ", " + ressourceList.GetSBFName(sbf));
+                treeViewSBF.Nodes.Add(sbf + 1 + ", " + ressourceList.GetSBF1(sbf).GetRessourceName());
 
-                for (int scene = 0; scene < this.ressourceList.GetSceneCount(sbf); scene++)
+                for (int scene = 0; scene < this.ressourceList.GetSBF1(sbf).GetSceneCount(); scene++)
                     treeViewSBF.Nodes[sbf].Nodes.Add(scene + 1 + ", " + this.ressourceList.GetSBF1(sbf).GetScene(scene).GetSceneName());
             }
 
@@ -168,9 +168,9 @@ namespace N64PPLEditorC
             if (level != 0)
             {
                 labelIsTextureContainer.Hide();
-                 this.ressourceList.ShowTexture(pictureBoxTexture, treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index);
+                 this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).GetTexture(pictureBoxTexture, treeViewTextures.SelectedNode.Index);
                 pictureBoxTexture.Show();
-                numericUpDownTextureDisplayTime.Value = this.ressourceList.GetTextureDisplayTime(treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index);
+                numericUpDownTextureDisplayTime.Value = this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).GetTextureDisplayTime(treeViewTextures.SelectedNode.Index);
             }
             if (level == 0)
             {
@@ -192,12 +192,12 @@ namespace N64PPLEditorC
             int index = 1;
             for (int i = 0; i < ressourceList.GetFIBCount(); i++)
             {
-                for (int j = 0; j < ressourceList.GetBFFCount(i); j++)
+                for (int j = 0; j < ressourceList.Get3FIB(i).GetBFFCount(); j++)
                 {
                     try
                     {
                         index++;
-                        this.ressourceList.SaveTexture(i, j);
+                        this.ressourceList.Get3FIB(i).SaveTexture(i, j);
                         bWDecompress.ReportProgress(index);
                         
                     }
@@ -291,13 +291,13 @@ namespace N64PPLEditorC
                                 //add texture to the bff2 files and update treeview
                                 if (treeViewTextures.SelectedNode.Level == 0)
                                 {
-                                    ressourceList.AddBFF2(treeViewTextures.SelectedNode.Index, finalBFF2);
+                                    ressourceList.Get3FIB(treeViewTextures.SelectedNode.Index).AddBFF2Child(finalBFF2);
                                     treeViewTextures.SelectedNode.Nodes.Add("[added] , " + safeFileName);
                                     treeViewTextures.SelectedNode = treeViewTextures.Nodes[treeViewTextures.SelectedNode.Index].LastNode;
                                 }
                                 else
                                 {
-                                    ressourceList.AddBFF2(treeViewTextures.SelectedNode.Parent.Index, finalBFF2);
+                                    ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).AddBFF2Child(finalBFF2);
                                     treeViewTextures.SelectedNode.Parent.Nodes.Add("[added] , " + safeFileName);
                                     treeViewTextures.SelectedNode = treeViewTextures.Nodes[treeViewTextures.SelectedNode.Parent.Index].LastNode;
                                 }
@@ -319,7 +319,7 @@ namespace N64PPLEditorC
         {
             if(treeViewTextures.SelectedNode.Level == 1)
             {
-                ressourceList.RemoveBFF2(treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index);
+                ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
                 treeViewTextures.SelectedNode.Remove();
             }
             
@@ -363,14 +363,14 @@ namespace N64PPLEditorC
             if (treeViewTextures.SelectedNode.Level == 1)
                 if (e.KeyCode == Keys.Delete && treeViewTextures.SelectedNode != null)
                 {
-                    ressourceList.RemoveBFF2(treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index);
+                    ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
                     treeViewTextures.SelectedNode.Remove();
                 }
         }
 
         private void numericUpDownTextureDisplayTime_ValueChanged(object sender, EventArgs e)
         {
-            this.ressourceList.SetTextureDisplayTime(treeViewTextures.SelectedNode.Parent.Index, treeViewTextures.SelectedNode.Index,(byte)numericUpDownTextureDisplayTime.Value);
+            this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).SetTextureDisplayTime(treeViewTextures.SelectedNode.Index,(byte)numericUpDownTextureDisplayTime.Value);
         }
 
         private void treeViewSBF_AfterSelect(object sender, TreeViewEventArgs e)

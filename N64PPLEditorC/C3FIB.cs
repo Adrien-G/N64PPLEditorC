@@ -99,7 +99,7 @@ namespace N64PPLEditorC
             return bff2Childs.Count();
         }
 
-        public void SaveTexture(int index, int indexFIB)
+        public void SaveTexture(int indexFIB,int index)
         {
             bff2Childs[index].DecompressTexture();
             Bitmap bmp = bff2Childs[index].GetBmpTexture();
