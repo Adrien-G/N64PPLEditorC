@@ -65,12 +65,10 @@ namespace N64PPLEditorC
                 
             }
         }
-
-        public string GetSceneName(int index)
+        public CSBF1Scene GetScene(int index)
         {
-            return sbfList[index].GetSceneName();
+            return sbfList[index];
         }
-
         public int GetSceneCount()
         {
             return sbfList.Count();

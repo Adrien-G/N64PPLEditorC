@@ -72,7 +72,7 @@ namespace N64PPLEditorC
             return res;
         }
 
-        public static Int32 ConvertByteArrayToInt(Byte[] byteArray)
+        public static int ConvertByteArrayToInt(Byte[] byteArray)
         {
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(byteArray);

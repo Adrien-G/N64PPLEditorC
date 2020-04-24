@@ -47,11 +47,6 @@ namespace N64PPLEditorC
             return sbfList[index];
         }
 
-        public string GetSBF1Name(int indexSBF,int indexScene)
-        {
-            return sbfList[indexSBF].GetSceneName(indexScene);
-        }
-
         private ListFormat[] LoadRessourcesList(int nbElements,Byte[] ressourcesList)
         {
             ListFormat[] lst1 = new ListFormat[nbElements];
@@ -195,6 +190,11 @@ namespace N64PPLEditorC
         public string GetSBFName(int index)
         {
             return sbfList[index].GetRessourceName();
+        }
+
+        public CSBF1 GetSBF1(int index,int index2)
+        {
+            return sbfList[index];
         }
         public void WriteAllData(string path)
         {

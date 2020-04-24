@@ -37,10 +37,7 @@ namespace N64PPLEditorC
 
         private void ChunkScene(byte[] data,int headerSize)
         {
-            //TODO debug
-            string NameOfSceneDebug = Encoding.Default.GetString(sceneName);
-
-            //separate 3 types of data -> dynamincObject, text and textureManagment
+            //separate 3 types of data -> dynamicObject, text and textureManagment
              int generalIndex = 0;
 
             //get the number of dynamic object
@@ -92,7 +89,7 @@ namespace N64PPLEditorC
             {
                 // get the length of the dynamic object
                 Array.Copy(data, indexDataStart, lengthData, 0, lengthData.Length);
-                lengthDataInt = CSBF1DynamicObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData),i);
+                lengthDataInt = CSBF1DynamicObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData));
 
                 //create the array to add the object
                 byte[] dataDynamicObject = new byte[lengthDataInt];
@@ -120,7 +117,7 @@ namespace N64PPLEditorC
             {
                 // get the length of the header text object
                 Array.Copy(data, indexDataStart, lengthHeader, 0, lengthHeader.Length);
-                lengthHeaderInt = CSBF1TextObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthHeader),i);
+                lengthHeaderInt = CSBF1TextObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthHeader));
 
                 //grab the size of the text (add 4 for the header (size text) and determine length of text (multiply per 2))
                 Array.Copy(data, indexDataStart + lengthHeaderInt, lengthText, 0, lengthText.Length);
@@ -129,7 +126,7 @@ namespace N64PPLEditorC
                 //store the new item
                 byte[] dataTextObject = new byte[lengthHeaderInt + lengthTextInt];
                 Array.Copy(data, indexDataStart, dataTextObject, 0, dataTextObject.Length);
-                textObjectList.Add(new CSBF1TextObject(dataTextObject));
+                textObjectList.Add(new CSBF1TextObject(dataTextObject,lengthHeaderInt,lengthTextInt));
 
                 //increment totalSize and indexStart
                 indexDataStart += lengthHeaderInt + lengthTextInt;
@@ -147,7 +144,7 @@ namespace N64PPLEditorC
             {
                 // get the length of the texture management object
                 Array.Copy(data, indexDataStart, lengthData, 0, lengthData.Length);
-                lengthDataInt = CSBF1TextureManagement.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData),i) ;
+                lengthDataInt = CSBF1TextureManagement.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData)) ;
 
 
                 //create the new texture management item
@@ -161,11 +158,6 @@ namespace N64PPLEditorC
             return totalSize;
         }
 
-
-
-
-
-
         public int GetSize()
         {
             return rawData.Length;
@@ -174,6 +166,26 @@ namespace N64PPLEditorC
         public string GetSceneName()
         {
             return Encoding.Default.GetString(this.sceneName);
+        }
+
+        public CSBF1TextObject GetTextObject(int index)
+        {
+            return textObjectList[index];
+        }
+
+        public int GetDynamicObjectCount()
+        {
+            return dynamicObjectList.Count();
+        }
+
+        public int GetTextObjectCount()
+        {
+            return textObjectList.Count();
+        }
+
+        public int GetTextureManagementCount()
+        {
+            return textureManagementObjectList.Count();
         }
     }
 }
