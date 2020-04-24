@@ -66,6 +66,11 @@
             this.timerExtract = new System.Windows.Forms.Timer(this.components);
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
             this.groupBoxScenes = new System.Windows.Forms.GroupBox();
+            this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.textBoxSceneText = new System.Windows.Forms.TextBox();
+            this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripForTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -78,6 +83,9 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.groupBoxScenes.SuspendLayout();
+            this.groupBoxSceneText.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -445,12 +453,61 @@
             // 
             // groupBoxScenes
             // 
+            this.groupBoxScenes.Controls.Add(this.groupBox5);
+            this.groupBoxScenes.Controls.Add(this.groupBoxSceneText);
             this.groupBoxScenes.Location = new System.Drawing.Point(283, 420);
             this.groupBoxScenes.Name = "groupBoxScenes";
             this.groupBoxScenes.Size = new System.Drawing.Size(354, 255);
             this.groupBoxScenes.TabIndex = 13;
             this.groupBoxScenes.TabStop = false;
             this.groupBoxScenes.Text = "Scenes Management";
+            // 
+            // groupBoxSceneText
+            // 
+            this.groupBoxSceneText.Controls.Add(this.label1);
+            this.groupBoxSceneText.Controls.Add(this.numericUpDownSceneText);
+            this.groupBoxSceneText.Controls.Add(this.textBoxSceneText);
+            this.groupBoxSceneText.Location = new System.Drawing.Point(6, 19);
+            this.groupBoxSceneText.Name = "groupBoxSceneText";
+            this.groupBoxSceneText.Size = new System.Drawing.Size(342, 92);
+            this.groupBoxSceneText.TabIndex = 0;
+            this.groupBoxSceneText.TabStop = false;
+            this.groupBoxSceneText.Text = "Text";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Location = new System.Drawing.Point(6, 117);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(342, 132);
+            this.groupBox5.TabIndex = 1;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Texture";
+            // 
+            // textBoxSceneText
+            // 
+            this.textBoxSceneText.Location = new System.Drawing.Point(149, 12);
+            this.textBoxSceneText.Multiline = true;
+            this.textBoxSceneText.Name = "textBoxSceneText";
+            this.textBoxSceneText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxSceneText.Size = new System.Drawing.Size(187, 74);
+            this.textBoxSceneText.TabIndex = 0;
+            // 
+            // numericUpDownSceneText
+            // 
+            this.numericUpDownSceneText.Location = new System.Drawing.Point(94, 34);
+            this.numericUpDownSceneText.Name = "numericUpDownSceneText";
+            this.numericUpDownSceneText.Size = new System.Drawing.Size(49, 20);
+            this.numericUpDownSceneText.TabIndex = 1;
+            this.numericUpDownSceneText.ValueChanged += new System.EventHandler(this.numericUpDownSceneText_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 37);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(82, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Text Selected : ";
             // 
             // Form1
             // 
@@ -483,6 +540,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBoxScenes.ResumeLayout(false);
+            this.groupBoxSceneText.ResumeLayout(false);
+            this.groupBoxSceneText.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -527,6 +588,11 @@
         private System.Windows.Forms.ToolStripMenuItem textureScrollbluePokeballBackgroundToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textureDisplayTimeToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBoxScenes;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox groupBoxSceneText;
+        private System.Windows.Forms.TextBox textBoxSceneText;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown numericUpDownSceneText;
     }
 }
 

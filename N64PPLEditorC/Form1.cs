@@ -108,8 +108,7 @@ namespace N64PPLEditorC
                 treeViewSBF.Nodes.Add(sbf + 1 + ", " + ressourceList.GetSBFName(sbf));
 
                 for (int scene = 0; scene < this.ressourceList.GetSceneCount(sbf); scene++)
-                    treeViewSBF.Nodes[sbf].Nodes.Add(scene + 1 + ", " + this.ressourceList.GetSBF1Name(sbf, scene));
-
+                    treeViewSBF.Nodes[sbf].Nodes.Add(scene + 1 + ", " + this.ressourceList.GetSBF1(sbf).GetScene(scene).GetSceneName());
             }
 
             if (treeViewTextures.Nodes.Count > 0)
@@ -376,52 +375,30 @@ namespace N64PPLEditorC
 
         private void treeViewSBF_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            numericUpDownSceneText.Value = 0;
+            textBoxSceneText.Text = "";
+            if (treeViewSBF.SelectedNode.Level == 1)
+            {
+                int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
+                groupBoxSceneText.Text = nbTextObject + " Text(s)";
+                numericUpDownSceneText.Maximum = nbTextObject;
+                if (nbTextObject > 0)
+                {
+                    textBoxSceneText.Text = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).GetText();
+                    numericUpDownSceneText.Maximum -= 1;
+                }
+            }
+        }
 
-
-            //textBox1.Clear();
-
-            //byte[] rawData = ressourceList.GetSBF1(treeViewSBF.SelectedNode.Index).GetRawData();
-
-            //bool headerPart = false;
-            //int counter = 0;
-
-            //for(int i = 0; i < rawData.Length-3; i++)
-            //{
-
-            //    if ((rawData[i] == 0x20 || rawData[i] == 0x21 || rawData[i] == 0x22 || rawData[i] == 0x33 || rawData[i] == 0x62) &&
-            //                (rawData[i + 1] == 0x0 || rawData[i + 1] == 0x8 || rawData[i + 1] == 0x80 || rawData[i + 1] == 0x88 || rawData[i + 1] == 0x10) &&
-            //                (rawData[i + 2] == 0x0 || rawData[i + 2] == 0x4 || rawData[i + 2] == 0xC4 || rawData[i + 2] == 0xD4 || rawData[i + 2] == 0xC0 || rawData[i + 2] == 0xC || rawData[i + 2] == 0x4C || rawData[i + 2] == 0x14 || rawData[i + 2] == 0x40 || rawData[i + 2] == 0x44) &&
-            //                (rawData[i + 3] == 0x3 || rawData[i + 3] == 0x6 || rawData[i + 3] == 0x7 || rawData[i + 3] == 0x42 || rawData[i + 3] == 0x43))
-            //    {
-            //        if(rawData[i] == 0x21 && rawData[i+1] == 0x88 && rawData[i+2] == 0x40 && rawData[i+3] == 0x7)
-            //        {
-            //            MessageBox.Show("e");
-            //        }
-            //        headerPart = true;
-            //        textBox1.AppendText(Environment.NewLine);
-            //        textBox1.AppendText(string.Format("{0,2:X}", rawData[i]) + " ");
-            //        textBox1.AppendText(string.Format("{0,2:X}", rawData[i + 1]) + " ");
-            //        textBox1.AppendText(string.Format("{0,2:X}", rawData[i + 2]) + " ");
-            //        textBox1.AppendText(string.Format("{0,2:X}", rawData[i + 3]) + " ");
-            //        i += 3;
-            //    }
-
-            //    if (headerPart)
-            //        counter++;
-
-            //    if (counter >= 0x20 && (rawData[i] == 0x0 && rawData[i + 1] == 0x1 && rawData[i + 2] == 0x18) || ((rawData[i] == 0x10 || rawData[i] == 0x14 || rawData[i] == 0x18) && (rawData[i + 1] >= 0x0 && rawData[i + 1] <= 0x3A)))
-            //    {
-            //        if (headerPart)
-            //        {
-            //            textBox1.AppendText(" -> " + counter);
-            //            headerPart = false;
-            //            counter = 0;
-            //        }
-            //        i++;
-            //    }
-           
-            //}
-
+        private void numericUpDownSceneText_ValueChanged(object sender, EventArgs e)
+        {
+            textBoxSceneText.Text = "";
+            if (treeViewSBF.SelectedNode.Level == 1)
+            {
+                int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
+            if(nbTextObject > 0)
+                textBoxSceneText.Text = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).GetText();
+            }
         }
     }
 }
