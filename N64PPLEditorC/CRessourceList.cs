@@ -17,6 +17,8 @@ namespace N64PPLEditorC
             public Byte[] ressourceName;
         }
 
+        private List<ListFormat> ressourcesList;
+
         private List<C3FIB> fibList;
         private List<CHVQM> hvqmList;
         private List<CSBF1> sbfList;
@@ -37,36 +39,33 @@ namespace N64PPLEditorC
 
         public void Init(int nbElements, byte[] ressourcesList, byte[] ressourcesData)
         {
-            ListFormat[] lst1 = LoadRessourcesList(nbElements,ressourcesList);
-            ChunkDataToRessources(lst1, ressourcesData);
+            this.ressourcesList = new List<ListFormat>();
+            LoadRessourcesList(nbElements,ressourcesList);
+            ChunkDataToRessources(ressourcesData);
 
         }
 
-        
-
-        private ListFormat[] LoadRessourcesList(int nbElements,Byte[] ressourcesList)
+        private void LoadRessourcesList(int nbElements, Byte[] ressourcesList)
         {
-            ListFormat[] lst1 = new ListFormat[nbElements];
-            
-            //separate the ressources Index size and name
             for (int i = 0; i < nbElements; i++)
             {
-                lst1[i].ressourceIndex = new byte[4];
-                lst1[i].ressourceSize = new byte[4];
-                lst1[i].ressourceName = new byte[16];
-                Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable, lst1[i].ressourceSize, 0, 4);
-                Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable + 4, lst1[i].ressourceIndex, 0, 4);
-                Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable + 8, lst1[i].ressourceName, 0,16);
+                var element = new ListFormat();
+                element.ressourceIndex = new byte[4];
+                element.ressourceSize = new byte[4];
+                element.ressourceName = new byte[16];
+                Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable, element.ressourceSize, 0, 4);
+                Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable + 4, element.ressourceIndex, 0, 4);
+                Array.Copy(ressourcesList, i * CGeneric.sizeOfElementTable + 8, element.ressourceName, 0, 16);
+                this.ressourcesList.Add(element);
             }
-            return lst1;
         }
 
-        private void ChunkDataToRessources(ListFormat[] ressourcesList,Byte[] ressourceData)
+        private void ChunkDataToRessources(Byte[] ressourceData)
         {
             int generalIndex = 0;
             
             // check all the ressources list...
-            for( int i = 0; i < ressourcesList.Length; i++)
+            for( int i = 0; i < ressourcesList.Count(); i++)
             {
                 //grab only one item by one
                 int sizeElement = CGeneric.ConvertByteArrayToInt(ressourcesList[i].ressourceSize);
@@ -80,7 +79,7 @@ namespace N64PPLEditorC
                 switch (CGeneric.ConvertByteArrayToInt(dataPattern))
                 {
                     case (int)CGeneric.RessourceType.FIB:
-                        fibList.Add(new C3FIB(tmpContainerData,ressourcesList[i].ressourceName));
+                        fibList.Add(new C3FIB(tmpContainerData, ressourcesList[i].ressourceName));
                         fibList[fibList.Count - 1].Init();
                         break;
                     case (int)CGeneric.RessourceType.HVQM:
@@ -115,6 +114,15 @@ namespace N64PPLEditorC
             return hvqmList[indexHVQM];
         }
 
+        public List<string> GetRessourceList()
+        {
+            var outList = new List<string>();
+            foreach(ListFormat item in ressourcesList)
+            {
+                outList.Add(CGeneric.ConvertByteArrayToString(item.ressourceName));
+            }
+            return outList;
+        }
 
         public int GetFIBCount()
         {

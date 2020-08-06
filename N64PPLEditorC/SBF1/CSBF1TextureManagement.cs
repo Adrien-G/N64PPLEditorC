@@ -8,11 +8,45 @@ namespace N64PPLEditorC
 {
     class CSBF1TextureManagement
     {
+        private byte[] rawData;
+        private byte indexTexture;
+
         public CSBF1TextureManagement(byte[] rawData)
         {
-
+            this.rawData = rawData;
         }
 
+        public void decomposeHeader(int headerValue)
+        {
+            //Static (always the same length)
+            switch (GetHeaderLength(headerValue))//TODO en fonction de la valeur, déduire les différents champs...
+            {
+                case 28:
+                case 32:
+                    break;
+                case 36:
+                    break;
+            }
+        }
+
+        public int getTextureIndex()
+        {
+            return (int)rawData[27];
+        }
+
+        public int getXLocation()
+        {
+            byte[] sizeX = new byte[4];
+            Array.Copy(rawData, 4, sizeX, 0, sizeX.Length);
+            return CGeneric.ConvertByteArrayToInt(sizeX);
+        }
+
+        public int getYLocation()
+        {
+            byte[] sizeY = new byte[4];
+            Array.Copy(rawData, 16, sizeY, 0, sizeY.Length);
+            return CGeneric.ConvertByteArrayToInt(sizeY);
+        }
         public static int GetHeaderLength(int headerValue)
         {
             switch (headerValue)

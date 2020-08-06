@@ -326,7 +326,6 @@ namespace N64PPLEditorC
         }
 
         #region helping form
-        //part helping on the form..
         private void buttonLoadRom_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "load PPL rom for editing content"; }
         private void buttonGetRomFolder_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "open PPL rom, can only take .z64 file."; }
         private void treeViewTextures_MouseEnter(object sender, EventArgs e) { helpStatus.Text = "Texture management, right click for options (add, remove texture, etc...)"; }
@@ -400,5 +399,48 @@ namespace N64PPLEditorC
                 textBoxSceneText.Text = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).GetText();
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
+            var ListTextureName = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetBifList();
+            
+            int nbItem = scene.GetTextureManagementCount();
+            if (nbItem > 0)
+                nbItem -= 1;
+
+            PictureBox[] picbox = new PictureBox[nbItem+1];
+            for (int i = 0; i <=  nbItem; i++)
+            {
+                picbox[i] = new PictureBox();
+                groupBoxTextureSBF.Controls.Add(picbox[i]);
+                picbox[i].BorderStyle = BorderStyle.FixedSingle;
+               
+                var textureInsideSbfName = ListTextureName[scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
+                var textureInTheSbfList = this.ressourceList.GetRessourceList();
+                for (int j = 0; j < this.ressourceList.GetFIBCount();j++)//textureInTheSbfList.Count()-1; j++)
+                {
+                    if (textureInsideSbfName.ToUpper() == textureInTheSbfList[j])
+                    {
+                        picbox[i].Height = this.ressourceList.Get3FIB(j).GetBFF2(0).GetSizeY();
+                        picbox[i].Width = this.ressourceList.Get3FIB(j).GetBFF2(0).GetSizeX();
+                        picbox[i].Top = scene.GetTextureManagementObject(i).getYLocation() - picbox[i].Height;
+                        picbox[i].Left = scene.GetTextureManagementObject(i).getXLocation();
+                        this.ressourceList.Get3FIB(j).GetTexture(picbox[i], 0);
+                        var a = picbox[i].Size;
+                        
+                        break; //show texture
+                    }
+                        
+                        
+                }
+               
+                    
+                
+            }
+                
+        }
+
+   
     }
 }

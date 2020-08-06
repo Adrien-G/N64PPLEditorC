@@ -14,6 +14,7 @@ namespace N64PPLEditorC
         private byte[] headerData;
         private byte[] textData;
 
+
         public CSBF1TextObject(byte[] rawData,int headerSize,int dataSize)
         {
             this.rawData = rawData;
@@ -34,6 +35,22 @@ namespace N64PPLEditorC
                 sb.Append(ConvertCaracterToChar(character));
             }
             return sb.Replace("#",Environment.NewLine).ToString();
+        }
+
+        public void decomposeHeader(int headerValue)
+        {
+            switch(GetHeaderLength(headerValue))//TODO en fonction de la valeur, déduire les différents champs...
+            {
+                case 36:
+                    break;
+                case 44:
+
+                    break;
+                case 52:
+                    break;
+                case 60:
+                    break;
+            }
         }
 
         private byte[] ConvertCharToByteArray(char letter)

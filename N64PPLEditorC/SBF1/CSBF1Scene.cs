@@ -173,6 +173,11 @@ namespace N64PPLEditorC
             return textObjectList[index];
         }
 
+        public CSBF1TextureManagement GetTextureManagementObject(int index)
+        {
+            return textureManagementObjectList[index];
+        }
+
         public int GetDynamicObjectCount()
         {
             return dynamicObjectList.Count();

@@ -106,6 +106,11 @@ namespace N64PPLEditorC
             return Encoding.UTF8.GetBytes(text);
         }
 
+        public static string ConvertByteArrayToString(Byte[] text)
+        {
+            return Encoding.UTF8.GetString(text);
+        }
+
         public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched,int nbOccurence=0)
         {
             //allow to search the second, third (and so on) value of the occurence

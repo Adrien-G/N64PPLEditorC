@@ -16,8 +16,6 @@ namespace N64PPLEditorC
 
         }
 
-
-
         public static int GetHeaderLength(int headerValue)
         {
             switch (headerValue)

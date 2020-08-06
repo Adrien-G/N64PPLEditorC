@@ -210,6 +210,15 @@ namespace N64PPLEditorC
             return rawData.Length;
         }
 
+        public int GetSizeX()
+        {
+            return headerBFF2.sizeX;
+        }
+
+        public int GetSizeY()
+        {
+            return headerBFF2.sizeY;
+        }
         public Byte[] GetRawData()
         {
             return rawData;

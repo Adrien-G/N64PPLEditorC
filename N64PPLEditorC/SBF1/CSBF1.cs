@@ -30,9 +30,10 @@ namespace N64PPLEditorC
             //grab names of texture used (bif list)
             bifList = new List<byte[]>();
 
-            byte[] tmpArray = new byte[16];
+            
             for (int i = 0; i < this.nbTextureScenes; i++)
             {
+                byte[] tmpArray = new byte[16];
                 Array.Copy(rawData, 8 + i * 16, tmpArray, 0, tmpArray.Length);
                 bifList.Add(tmpArray);
             }
@@ -68,6 +69,16 @@ namespace N64PPLEditorC
         public CSBF1Scene GetScene(int index)
         {
             return sbfList[index];
+        }
+
+        public List<string> GetBifList()
+        {
+            var list = new List<String>();
+            foreach (byte[] element in bifList)
+            {
+                list.Add(CGeneric.ConvertByteArrayToString(element));
+            }
+            return list;
         }
         public int GetSceneCount()
         {
