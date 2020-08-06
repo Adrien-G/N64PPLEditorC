@@ -109,20 +109,38 @@ namespace N64PPLEditorC
             return fibList[indexFib];
         }
 
+        public int Get3FIBIndexWithFIBName(string name)
+        {
+            int increm = 0;
+            for (int i = 0; i < fibList.Count();i++)
+            {
+                //récupérer le fib name du C3FIB pour éviter les désynchros...
+                
+                var a = CGeneric.ConvertByteArrayToString(ressourcesList[i].ressourceName).Replace("\0","");
+                var b = name.ToUpper().Replace("\0", "");
+                
+                if (a == b)
+                    return increm;
+                if (a.EndsWith(".BIF"))
+                    increm++;
+            }
+            return -1;
+        }
+
         public CHVQM GetHVQM(int indexHVQM)
         {
             return hvqmList[indexHVQM];
         }
 
-        public List<string> GetRessourceList()
-        {
-            var outList = new List<string>();
-            foreach(ListFormat item in ressourcesList)
-            {
-                outList.Add(CGeneric.ConvertByteArrayToString(item.ressourceName));
-            }
-            return outList;
-        }
+        //public List<string> GetRessourceList()
+        //{
+        //    var outList = new List<string>();
+        //    foreach(ListFormat item in ressourcesList)
+        //    {
+        //        outList.Add(CGeneric.ConvertByteArrayToString(item.ressourceName));
+        //    }
+        //    return outList;
+        //}
 
         public int GetFIBCount()
         {

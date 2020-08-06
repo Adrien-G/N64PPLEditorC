@@ -44,7 +44,7 @@ namespace N64PPLEditorC
         public int getYLocation()
         {
             byte[] sizeY = new byte[4];
-            Array.Copy(rawData, 16, sizeY, 0, sizeY.Length);
+            Array.Copy(rawData, 8, sizeY, 0, sizeY.Length);
             return CGeneric.ConvertByteArrayToInt(sizeY);
         }
         public static int GetHeaderLength(int headerValue)
