@@ -133,12 +133,6 @@ namespace N64PPLEditorC
                 A = (byte)Math.Ceiling((double)(texture[i + 3] / 255));
                 byte2 += A;
 
-                //TODO to remove, tests only.
-                if(A == 0)
-                {
-                    throw new Exception();
-                }
-
                 finalArray[index] = byte1;
                 finalArray[index + 1] = byte2;
 
@@ -387,7 +381,7 @@ namespace N64PPLEditorC
                     finalValue = 2;
                     break;
                 case CGeneric.Compression.max16Colors:
-                    finalValue = 2; //TODO to recheck
+                    finalValue = 4;
                     break;
                 case CGeneric.Compression.max256Colors:
                     finalValue = 4;
