@@ -65,7 +65,6 @@
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerExtract = new System.Windows.Forms.Timer(this.components);
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
-            this.groupBoxScenes = new System.Windows.Forms.GroupBox();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
             this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -85,7 +84,6 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            this.groupBoxScenes.SuspendLayout();
             this.groupBoxSceneText.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).BeginInit();
             this.SuspendLayout();
@@ -453,31 +451,21 @@
             this.bWDecompress.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bWDecompress_ProgressChanged);
             this.bWDecompress.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bWDecompress_RunWorkerCompleted);
             // 
-            // groupBoxScenes
-            // 
-            this.groupBoxScenes.Controls.Add(this.groupBoxTextureSBF);
-            this.groupBoxScenes.Location = new System.Drawing.Point(641, 69);
-            this.groupBoxScenes.Name = "groupBoxScenes";
-            this.groupBoxScenes.Size = new System.Drawing.Size(363, 286);
-            this.groupBoxScenes.TabIndex = 13;
-            this.groupBoxScenes.TabStop = false;
-            this.groupBoxScenes.Text = "Scenes Management";
-            // 
             // groupBoxTextureSBF
             // 
-            this.groupBoxTextureSBF.Location = new System.Drawing.Point(12, 22);
+            this.groupBoxTextureSBF.Location = new System.Drawing.Point(641, 69);
             this.groupBoxTextureSBF.Name = "groupBoxTextureSBF";
             this.groupBoxTextureSBF.Size = new System.Drawing.Size(340, 252);
             this.groupBoxTextureSBF.TabIndex = 1;
             this.groupBoxTextureSBF.TabStop = false;
-            this.groupBoxTextureSBF.Text = "Texture";
+            this.groupBoxTextureSBF.Text = "Scene Management";
             // 
             // groupBoxSceneText
             // 
             this.groupBoxSceneText.Controls.Add(this.label1);
             this.groupBoxSceneText.Controls.Add(this.numericUpDownSceneText);
             this.groupBoxSceneText.Controls.Add(this.textBoxSceneText);
-            this.groupBoxSceneText.Location = new System.Drawing.Point(289, 457);
+            this.groupBoxSceneText.Location = new System.Drawing.Point(641, 327);
             this.groupBoxSceneText.Name = "groupBoxSceneText";
             this.groupBoxSceneText.Size = new System.Drawing.Size(342, 105);
             this.groupBoxSceneText.TabIndex = 0;
@@ -512,7 +500,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(929, 361);
+            this.button1.Location = new System.Drawing.Point(1287, 220);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -521,7 +509,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(720, 390);
+            this.textBox1.Location = new System.Drawing.Point(1112, 88);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(284, 110);
@@ -532,10 +520,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1408, 744);
+            this.Controls.Add(this.groupBoxTextureSBF);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.groupBoxSceneText);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.groupBoxScenes);
             this.Controls.Add(this.buttonModifyRom);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBoxTextures);
@@ -561,7 +549,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBoxScenes.ResumeLayout(false);
             this.groupBoxSceneText.ResumeLayout(false);
             this.groupBoxSceneText.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).EndInit();
@@ -608,7 +595,6 @@
         private System.Windows.Forms.ToolStripMenuItem animatedBadgesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textureScrollbluePokeballBackgroundToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textureDisplayTimeToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBoxScenes;
         private System.Windows.Forms.GroupBox groupBoxTextureSBF;
         private System.Windows.Forms.GroupBox groupBoxSceneText;
         private System.Windows.Forms.TextBox textBoxSceneText;

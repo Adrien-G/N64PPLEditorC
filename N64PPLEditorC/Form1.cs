@@ -385,14 +385,7 @@ namespace N64PPLEditorC
                 {
                     textBoxSceneText.Text = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).GetText();
                     numericUpDownSceneText.Maximum -= 1;
-                    try
-                    {
-                        launchSceneDisplay();
-                    }
-                    catch
-                    {
-
-                    }
+                    launchSceneDisplay();
                     
                 }
             }
@@ -435,15 +428,21 @@ namespace N64PPLEditorC
                     picbox[i].Height = this.ressourceList.Get3FIB(indexData).GetBFF2(0).GetSizeY();
                     picbox[i].Width = this.ressourceList.Get3FIB(indexData).GetBFF2(0).GetSizeX();
                     picbox[i].Top = scene.GetTextureManagementObject(i).getYLocation();
-                    picbox[i].Left = scene.GetTextureManagementObject(i).getXLocation();
-                    this.ressourceList.Get3FIB(indexData).GetTexture(picbox[i], 0);
+                    picbox[i].Left = 10+scene.GetTextureManagementObject(i).getXLocation();
+                    try
+                    {
+                        this.ressourceList.Get3FIB(indexData).GetTexture(picbox[i], 0);
+                    }
+                    catch { }
                 }
                 else
+                {
+                    picbox[i].Top = 20;
+                    picbox[i].Left = 20;
                     picbox[i].Image = picbox[i].ErrorImage;
+                }
             }
 
         }
-
-   
     }
 }

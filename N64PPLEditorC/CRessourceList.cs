@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace N64PPLEditorC
 {
@@ -112,15 +113,15 @@ namespace N64PPLEditorC
         public int Get3FIBIndexWithFIBName(string name)
         {
             int increm = 0;
-            for (int i = 0; i < fibList.Count();i++)
+            var b = name.ToUpper().Replace("\0", "");
+            for (int z = 0; z < ressourcesList.Count(); z++)
             {
-                //récupérer le fib name du C3FIB pour éviter les désynchros...
-                
-                var a = CGeneric.ConvertByteArrayToString(ressourcesList[i].ressourceName).Replace("\0","");
-                var b = name.ToUpper().Replace("\0", "");
-                
+                var a = CGeneric.ConvertByteArrayToString(ressourcesList[z].ressourceName).Replace("\0","");
                 if (a == b)
+                {
                     return increm;
+                }
+                    
                 if (a.EndsWith(".BIF"))
                     increm++;
             }
@@ -131,16 +132,6 @@ namespace N64PPLEditorC
         {
             return hvqmList[indexHVQM];
         }
-
-        //public List<string> GetRessourceList()
-        //{
-        //    var outList = new List<string>();
-        //    foreach(ListFormat item in ressourcesList)
-        //    {
-        //        outList.Add(CGeneric.ConvertByteArrayToString(item.ressourceName));
-        //    }
-        //    return outList;
-        //}
 
         public int GetFIBCount()
         {
