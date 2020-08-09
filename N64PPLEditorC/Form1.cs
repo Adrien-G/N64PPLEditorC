@@ -16,6 +16,8 @@ namespace N64PPLEditorC
     {
         CRessourceList ressourceList;
 
+        TextBox txtBox = new TextBox();
+
         public Form1()
         {
             InitializeComponent();
@@ -35,6 +37,8 @@ namespace N64PPLEditorC
                 buttonLoadRom.TabIndex = 0;
             }
             CGeneric.VerifyExistingPath();
+            txtBox.Multiline = true;
+            txtBox.BorderStyle = BorderStyle.None;
 
         }
 
@@ -73,6 +77,7 @@ namespace N64PPLEditorC
                     FileStream fstream = File.Open(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
                     fstream.Close();
                     buttonLoadRom.Enabled = false;
+                    buttonGetRomFolder.Enabled = false;
                     buttonLoadRom.Text = "ROM Loaded";
                     LoadRessourcesList();
                     LoadTreeView();
@@ -375,30 +380,39 @@ namespace N64PPLEditorC
         private void treeViewSBF_AfterSelect(object sender, TreeViewEventArgs e)
         {
             numericUpDownSceneText.Value = 0;
-            textBoxSceneText.Text = "";
+            groupBoxTextureSBF.Controls.Clear();
             if (treeViewSBF.SelectedNode.Level == 1)
             {
                 int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
-                groupBoxSceneText.Text = nbTextObject + " Text(s)";
-                numericUpDownSceneText.Maximum = nbTextObject;
-                if (nbTextObject > 0)
+                if(nbTextObject == 0)
                 {
-                    textBoxSceneText.Text = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).GetText();
-                    numericUpDownSceneText.Maximum -= 1;
-                    launchSceneDisplay();
-                    
+                    groupBoxSceneText.Text = "0 Text";
+                    numericUpDownSceneText.Maximum = 0;
                 }
+                else
+                {
+                    groupBoxSceneText.Text = nbTextObject + " Text(s)";
+                    numericUpDownSceneText.Maximum = nbTextObject-1;
+                }
+                launchSceneDisplay();
             }
         }
 
         private void numericUpDownSceneText_ValueChanged(object sender, EventArgs e)
         {
-            textBoxSceneText.Text = "";
             if (treeViewSBF.SelectedNode.Level == 1)
             {
                 int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
-            if(nbTextObject > 0)
-                textBoxSceneText.Text = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).GetText();
+                if(nbTextObject > 0) { 
+                    //text object
+                    var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
+                    txtBox.Text = textObj.GetText();
+                    txtBox.Top = 5+ textObj.GetPosY();
+                    txtBox.Left = 5+ textObj.GetPosX();
+                    Size size = TextRenderer.MeasureText(txtBox.Text, txtBox.Font);
+                    txtBox.ClientSize = new Size(size.Width, size.Height);
+                    txtBox.BringToFront();
+                }
             }
         }
 
@@ -408,13 +422,13 @@ namespace N64PPLEditorC
             var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
             var ListTextureName = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetBifList();
 
-            int nbItem = scene.GetTextureManagementCount();
-            if (nbItem > 0)
-                nbItem -= 1;
+            int nbItem = scene.GetTextureManagementCount()-1;
 
             PictureBox[] picbox = new PictureBox[nbItem + 1];
-            //i = 1 because 0 seem's always the background ... ?
-            for (int i = 1; i <= nbItem; i++)
+
+
+            //texture object
+            for (int i = 0; i <= nbItem; i++)
             {
                 picbox[i] = new PictureBox();
                 groupBoxTextureSBF.Controls.Add(picbox[i]);
@@ -428,12 +442,20 @@ namespace N64PPLEditorC
                     picbox[i].Height = this.ressourceList.Get3FIB(indexData).GetBFF2(0).GetSizeY();
                     picbox[i].Width = this.ressourceList.Get3FIB(indexData).GetBFF2(0).GetSizeX();
                     picbox[i].Top = scene.GetTextureManagementObject(i).getYLocation();
-                    picbox[i].Left = 10+scene.GetTextureManagementObject(i).getXLocation();
+                    picbox[i].Left = 10 + scene.GetTextureManagementObject(i).getXLocation();
+                    
                     try
                     {
                         this.ressourceList.Get3FIB(indexData).GetTexture(picbox[i], 0);
+                        var bmp = new Bitmap(picbox[i].Image);
+                        bmp.MakeTransparent(Color.FromArgb(0,255,0));
+                        picbox[i].Image = bmp;
                     }
                     catch { }
+
+
+                    picbox[i].BringToFront();
+
                 }
                 else
                 {
@@ -442,7 +464,19 @@ namespace N64PPLEditorC
                     picbox[i].Image = picbox[i].ErrorImage;
                 }
             }
-
+            //text object
+            int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
+            if (nbTextObject > 0)
+            {
+                var a = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject(0);
+                groupBoxTextureSBF.Controls.Add(txtBox);
+                txtBox.Text = a.GetText();
+                txtBox.Top = a.GetPosY();
+                txtBox.Left = a.GetPosX();
+                Size size = TextRenderer.MeasureText(txtBox.Text, txtBox.Font);
+                txtBox.ClientSize = new Size(size.Width, size.Height);
+                txtBox.BringToFront();
+            }
         }
     }
 }

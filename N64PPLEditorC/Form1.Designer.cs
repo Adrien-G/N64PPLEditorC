@@ -34,7 +34,7 @@
             this.textBoxPPLLocation = new System.Windows.Forms.TextBox();
             this.buttonLoadRom = new System.Windows.Forms.Button();
             this.treeViewTextures = new System.Windows.Forms.TreeView();
-            this.contextMenuStripForTreeview = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStripTextureTreeview = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addNewTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeThisTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textureDisplayTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,17 +63,15 @@
             this.buttonModifyRom = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.timerExtract = new System.Windows.Forms.Timer(this.components);
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
             this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
-            this.textBoxSceneText = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
-            this.contextMenuStripForTreeview.SuspendLayout();
+            this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
             this.tabPageTextures.SuspendLayout();
             this.tabPageMovies.SuspendLayout();
@@ -97,7 +95,7 @@
             this.groupBox1.Controls.Add(this.buttonLoadRom);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1388, 51);
+            this.groupBox1.Size = new System.Drawing.Size(916, 51);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "PPL location : ";
@@ -105,7 +103,7 @@
             // buttonGetRomFolder
             // 
             this.buttonGetRomFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGetRomFolder.Location = new System.Drawing.Point(1260, 17);
+            this.buttonGetRomFolder.Location = new System.Drawing.Point(788, 17);
             this.buttonGetRomFolder.Name = "buttonGetRomFolder";
             this.buttonGetRomFolder.Size = new System.Drawing.Size(34, 23);
             this.buttonGetRomFolder.TabIndex = 1;
@@ -123,14 +121,14 @@
             this.textBoxPPLLocation.Enabled = false;
             this.textBoxPPLLocation.Location = new System.Drawing.Point(6, 19);
             this.textBoxPPLLocation.Name = "textBoxPPLLocation";
-            this.textBoxPPLLocation.Size = new System.Drawing.Size(1248, 20);
+            this.textBoxPPLLocation.Size = new System.Drawing.Size(776, 20);
             this.textBoxPPLLocation.TabIndex = 1;
             this.textBoxPPLLocation.Text = global::N64PPLEditorC.Properties.Settings.Default.txtPPLLocation;
             // 
             // buttonLoadRom
             // 
             this.buttonLoadRom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLoadRom.Location = new System.Drawing.Point(1300, 17);
+            this.buttonLoadRom.Location = new System.Drawing.Point(828, 17);
             this.buttonLoadRom.Name = "buttonLoadRom";
             this.buttonLoadRom.Size = new System.Drawing.Size(82, 23);
             this.buttonLoadRom.TabIndex = 0;
@@ -145,7 +143,7 @@
             this.treeViewTextures.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeViewTextures.ContextMenuStrip = this.contextMenuStripForTreeview;
+            this.treeViewTextures.ContextMenuStrip = this.contextMenuStripTextureTreeview;
             this.treeViewTextures.Location = new System.Drawing.Point(0, 0);
             this.treeViewTextures.Name = "treeViewTextures";
             this.treeViewTextures.Size = new System.Drawing.Size(257, 629);
@@ -156,9 +154,9 @@
             this.treeViewTextures.MouseEnter += new System.EventHandler(this.treeViewTextures_MouseEnter);
             this.treeViewTextures.MouseLeave += new System.EventHandler(this.treeViewTextures_MouseLeave);
             // 
-            // contextMenuStripForTreeview
+            // contextMenuStripTextureTreeview
             // 
-            this.contextMenuStripForTreeview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStripTextureTreeview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNewTextureToolStripMenuItem,
             this.removeThisTextureToolStripMenuItem,
             this.textureDisplayTimeToolStripMenuItem,
@@ -167,15 +165,15 @@
             this.toolStripSeparator1,
             this.expandAllToolStripMenuItem,
             this.collpseAllToolStripMenuItem});
-            this.contextMenuStripForTreeview.Name = "contextMenuStrip1";
-            this.contextMenuStripForTreeview.Size = new System.Drawing.Size(180, 148);
-            this.contextMenuStripForTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripForTreeview_Opening);
+            this.contextMenuStripTextureTreeview.Name = "contextMenuStrip1";
+            this.contextMenuStripTextureTreeview.Size = new System.Drawing.Size(181, 170);
+            this.contextMenuStripTextureTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripForTreeview_Opening);
             // 
             // addNewTextureToolStripMenuItem
             // 
             this.addNewTextureToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.AddImage_16x;
             this.addNewTextureToolStripMenuItem.Name = "addNewTextureToolStripMenuItem";
-            this.addNewTextureToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.addNewTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addNewTextureToolStripMenuItem.Text = "Add New texture(s)";
             this.addNewTextureToolStripMenuItem.Click += new System.EventHandler(this.addNewTextureToolStripMenuItem_Click);
             // 
@@ -184,20 +182,20 @@
             this.removeThisTextureToolStripMenuItem.Enabled = false;
             this.removeThisTextureToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.RemoveGuide_16x;
             this.removeThisTextureToolStripMenuItem.Name = "removeThisTextureToolStripMenuItem";
-            this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.removeThisTextureToolStripMenuItem.Text = "Remove this texture";
             this.removeThisTextureToolStripMenuItem.Click += new System.EventHandler(this.removeThisTextureToolStripMenuItem_Click);
             // 
             // textureDisplayTimeToolStripMenuItem
             // 
             this.textureDisplayTimeToolStripMenuItem.Name = "textureDisplayTimeToolStripMenuItem";
-            this.textureDisplayTimeToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.textureDisplayTimeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.textureDisplayTimeToolStripMenuItem.Text = "Texture displayTime";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // containerTypetoolStripMenuItem
             // 
@@ -206,7 +204,7 @@
             this.animatedBadgesToolStripMenuItem,
             this.textureScrollbluePokeballBackgroundToolStripMenuItem});
             this.containerTypetoolStripMenuItem.Name = "containerTypetoolStripMenuItem";
-            this.containerTypetoolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.containerTypetoolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.containerTypetoolStripMenuItem.Text = "Container Type";
             // 
             // fixedToolStripMenuItem
@@ -230,13 +228,13 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // expandAllToolStripMenuItem
             // 
             this.expandAllToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.ExpandAll_16x;
             this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.expandAllToolStripMenuItem.Text = "Expand all";
             this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
             // 
@@ -244,7 +242,7 @@
             // 
             this.collpseAllToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.CollapseAll_16x;
             this.collpseAllToolStripMenuItem.Name = "collpseAllToolStripMenuItem";
-            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.collpseAllToolStripMenuItem.Text = "Collapse all";
             this.collpseAllToolStripMenuItem.Click += new System.EventHandler(this.collpseAllToolStripMenuItem_Click);
             // 
@@ -429,7 +427,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 722);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(1408, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(936, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
@@ -437,12 +435,8 @@
             // helpStatus
             // 
             this.helpStatus.Name = "helpStatus";
-            this.helpStatus.Size = new System.Drawing.Size(1393, 17);
+            this.helpStatus.Size = new System.Drawing.Size(921, 17);
             this.helpStatus.Spring = true;
-            // 
-            // timerExtract
-            // 
-            this.timerExtract.Interval = 1;
             // 
             // bWDecompress
             // 
@@ -453,21 +447,21 @@
             // 
             // groupBoxTextureSBF
             // 
-            this.groupBoxTextureSBF.Location = new System.Drawing.Point(641, 69);
+            this.groupBoxTextureSBF.BackColor = System.Drawing.Color.Transparent;
+            this.groupBoxTextureSBF.Location = new System.Drawing.Point(283, 420);
             this.groupBoxTextureSBF.Name = "groupBoxTextureSBF";
             this.groupBoxTextureSBF.Size = new System.Drawing.Size(340, 252);
             this.groupBoxTextureSBF.TabIndex = 1;
             this.groupBoxTextureSBF.TabStop = false;
-            this.groupBoxTextureSBF.Text = "Scene Management";
+            this.groupBoxTextureSBF.Text = "Scene Editor";
             // 
             // groupBoxSceneText
             // 
             this.groupBoxSceneText.Controls.Add(this.label1);
             this.groupBoxSceneText.Controls.Add(this.numericUpDownSceneText);
-            this.groupBoxSceneText.Controls.Add(this.textBoxSceneText);
-            this.groupBoxSceneText.Location = new System.Drawing.Point(641, 327);
+            this.groupBoxSceneText.Location = new System.Drawing.Point(283, 678);
             this.groupBoxSceneText.Name = "groupBoxSceneText";
-            this.groupBoxSceneText.Size = new System.Drawing.Size(342, 105);
+            this.groupBoxSceneText.Size = new System.Drawing.Size(154, 43);
             this.groupBoxSceneText.TabIndex = 0;
             this.groupBoxSceneText.TabStop = false;
             this.groupBoxSceneText.Text = "Text";
@@ -475,7 +469,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 36);
+            this.label1.Location = new System.Drawing.Point(6, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(82, 13);
             this.label1.TabIndex = 2;
@@ -483,24 +477,15 @@
             // 
             // numericUpDownSceneText
             // 
-            this.numericUpDownSceneText.Location = new System.Drawing.Point(94, 34);
+            this.numericUpDownSceneText.Location = new System.Drawing.Point(94, 14);
             this.numericUpDownSceneText.Name = "numericUpDownSceneText";
             this.numericUpDownSceneText.Size = new System.Drawing.Size(49, 20);
             this.numericUpDownSceneText.TabIndex = 1;
             this.numericUpDownSceneText.ValueChanged += new System.EventHandler(this.numericUpDownSceneText_ValueChanged);
             // 
-            // textBoxSceneText
-            // 
-            this.textBoxSceneText.Location = new System.Drawing.Point(149, 12);
-            this.textBoxSceneText.Multiline = true;
-            this.textBoxSceneText.Name = "textBoxSceneText";
-            this.textBoxSceneText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxSceneText.Size = new System.Drawing.Size(187, 87);
-            this.textBoxSceneText.TabIndex = 0;
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1287, 220);
+            this.button1.Location = new System.Drawing.Point(641, 185);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -509,7 +494,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(1112, 88);
+            this.textBox1.Location = new System.Drawing.Point(641, 69);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(284, 110);
@@ -519,7 +504,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1408, 744);
+            this.ClientSize = new System.Drawing.Size(936, 744);
             this.Controls.Add(this.groupBoxTextureSBF);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.groupBoxSceneText);
@@ -535,7 +520,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.contextMenuStripForTreeview.ResumeLayout(false);
+            this.contextMenuStripTextureTreeview.ResumeLayout(false);
             this.tabControlTexMovSce.ResumeLayout(false);
             this.tabPageTextures.ResumeLayout(false);
             this.tabPageMovies.ResumeLayout(false);
@@ -578,10 +563,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel helpStatus;
-        private System.Windows.Forms.Timer timerExtract;
         private System.ComponentModel.BackgroundWorker bWDecompress;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripForTreeview;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripTextureTreeview;
         private System.Windows.Forms.ToolStripMenuItem expandAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collpseAllToolStripMenuItem;
         private System.Windows.Forms.Label labelIsTextureContainer;
@@ -597,7 +581,6 @@
         private System.Windows.Forms.ToolStripMenuItem textureDisplayTimeToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBoxTextureSBF;
         private System.Windows.Forms.GroupBox groupBoxSceneText;
-        private System.Windows.Forms.TextBox textBoxSceneText;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDownSceneText;
         private System.Windows.Forms.Button button1;
