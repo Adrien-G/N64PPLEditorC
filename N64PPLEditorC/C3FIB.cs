@@ -114,6 +114,13 @@ namespace N64PPLEditorC
             pictureBox.Image = bmp;
         }
 
+        public Bitmap GetBmpTexture(int index)
+        {
+            bff2Childs[index].DecompressTexture();
+            return bff2Childs[index].GetBmpTexture();
+        }
+
+
         public override Int32 GetSize()
         {
             int totalSize = fibNameSize + 20;

@@ -380,7 +380,6 @@ namespace N64PPLEditorC
         private void treeViewSBF_AfterSelect(object sender, TreeViewEventArgs e)
         {
             numericUpDownSceneText.Value = 0;
-            groupBoxTextureSBF.Controls.Clear();
             if (treeViewSBF.SelectedNode.Level == 1)
             {
                 int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
@@ -407,8 +406,8 @@ namespace N64PPLEditorC
                     //text object
                     var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
                     txtBox.Text = textObj.GetText();
-                    txtBox.Top = 5+ textObj.GetPosY();
-                    txtBox.Left = 5+ textObj.GetPosX();
+                    txtBox.Top = textObj.GetPosY();
+                    txtBox.Left = textObj.GetPosX();
                     Size size = TextRenderer.MeasureText(txtBox.Text, txtBox.Font);
                     txtBox.ClientSize = new Size(size.Width, size.Height);
                     txtBox.BringToFront();
@@ -418,65 +417,47 @@ namespace N64PPLEditorC
 
         private void launchSceneDisplay()
         {
-            groupBoxTextureSBF.Controls.Clear();
             var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
             var ListTextureName = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetBifList();
 
-            int nbItem = scene.GetTextureManagementCount()-1;
+            int nbItem = scene.GetTextureManagementCount() - 1;
+            
 
-            PictureBox[] picbox = new PictureBox[nbItem + 1];
-
-
-            //texture object
+            drawScene1.Init();
             for (int i = 0; i <= nbItem; i++)
             {
-                picbox[i] = new PictureBox();
-                groupBoxTextureSBF.Controls.Add(picbox[i]);
-
-                //the texture that we want
-                var textureInsideSbfName = ListTextureName[scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
-
-                var indexData = this.ressourceList.Get3FIBIndexWithFIBName(textureInsideSbfName);
+                string textureInsideSbfName = ListTextureName[scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
+                int indexData = this.ressourceList.Get3FIBIndexWithFIBName(textureInsideSbfName);
                 if (indexData != -1)
                 {
-                    picbox[i].Height = this.ressourceList.Get3FIB(indexData).GetBFF2(0).GetSizeY();
-                    picbox[i].Width = this.ressourceList.Get3FIB(indexData).GetBFF2(0).GetSizeX();
-                    picbox[i].Top = scene.GetTextureManagementObject(i).getYLocation();
-                    picbox[i].Left = 10 + scene.GetTextureManagementObject(i).getXLocation();
-                    
                     try
                     {
-                        this.ressourceList.Get3FIB(indexData).GetTexture(picbox[i], 0);
-                        var bmp = new Bitmap(picbox[i].Image);
-                        bmp.MakeTransparent(Color.FromArgb(0,255,0));
-                        picbox[i].Image = bmp;
+                        var bmp = this.ressourceList.Get3FIB(indexData).GetBmpTexture(0);
+                        var posY = scene.GetTextureManagementObject(i).getYLocation();
+                        var posX = scene.GetTextureManagementObject(i).getXLocation();
+                        this.drawScene1.AddBmp(bmp, new Point(posX,posY));
+
                     }
                     catch { }
-
-
-                    picbox[i].BringToFront();
-
-                }
-                else
-                {
-                    picbox[i].Top = 20;
-                    picbox[i].Left = 20;
-                    picbox[i].Image = picbox[i].ErrorImage;
                 }
             }
+            this.drawScene1.Invalidate();
             //text object
             int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
             if (nbTextObject > 0)
             {
                 var a = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject(0);
-                groupBoxTextureSBF.Controls.Add(txtBox);
+                drawScene1.Controls.Add(txtBox);
                 txtBox.Text = a.GetText();
                 txtBox.Top = a.GetPosY();
                 txtBox.Left = a.GetPosX();
                 Size size = TextRenderer.MeasureText(txtBox.Text, txtBox.Font);
                 txtBox.ClientSize = new Size(size.Width, size.Height);
+                txtBox.Show();
                 txtBox.BringToFront();
             }
+            else
+                txtBox.Hide();
         }
     }
 }
