@@ -1,7 +1,12 @@
 # N64-PPL-Editor
 
-C# portage of N64 PPL Editor (for C# training and program optimization/fixing bug). 
+Allow modification on Pokemon Puzzle League N64 (textures and scenes)
 
-This tool allow modification on Pokemon Puzzle League N64 rom (textures and scenes)
+Currently supporting any version (but bug can appear on other language than french rom)
 
-The C# version is in starting developement phase, and is curently not usable.
+This program curently allow extracting all compressed textures from Pokemon Puzzle League (French, German, Europe and USA version)
+and reinject it with others textures. It can also view scene of the game (but currently not editing it)
+
+Still in work in progress for now, so no binary are furnished yet. 
+
+you can compile it with visual studio 2019.
