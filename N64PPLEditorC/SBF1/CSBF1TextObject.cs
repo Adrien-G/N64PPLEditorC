@@ -13,6 +13,8 @@ namespace N64PPLEditorC
         private byte[] rawData;
         private byte[] headerData;
         private byte[] textData;
+        private int posX;
+        private int posY;
 
 
         public CSBF1TextObject(byte[] rawData,int headerSize,int dataSize)
@@ -22,6 +24,7 @@ namespace N64PPLEditorC
             textData = new byte[dataSize];
             Array.Copy(rawData, 0, headerData, 0, headerSize);
             Array.Copy(rawData, headerSize, textData, 0, dataSize);
+            this.DecomposeHeader(headerSize);
         }
 
         public string GetText()
@@ -37,21 +40,50 @@ namespace N64PPLEditorC
             return sb.Replace("#",Environment.NewLine).ToString();
         }
 
-        public void decomposeHeader(int headerValue)
+        private void DecomposeHeader(int headerValue)
         {
-            switch(GetHeaderLength(headerValue))//TODO en fonction de la valeur, déduire les différents champs...
+            var posX = new byte[4];
+            var posY = new byte[4];
+            switch (headerValue)
             {
                 case 36:
+                    new NotImplementedException();
                     break;
                 case 44:
-
+                    Array.Copy(rawData, 4, posX, 0, posX.Length);
+                    Array.Copy(rawData, 8, posY, 0, posY.Length);
+                    this.posX = CGeneric.ConvertByteArrayToInt(posX);
                     break;
                 case 52:
+                    Array.Copy(rawData, 4, posX, 0, posX.Length);
+                    Array.Copy(rawData, 8, posY, 0, posY.Length);
+                    //int len = 160 - (textData.Length/2);
+                    this.posX = CGeneric.ConvertByteArrayToInt(posX);
+                    //this.posX = len + CGeneric.ConvertByteArrayToInt(posX);
                     break;
                 case 60:
+                    new NotImplementedException();
                     break;
+                
             }
+            
+            this.posY = CGeneric.ConvertByteArrayToInt(posY);
+
         }
+
+        public int GetPosX()
+        {
+            if (posX > 320 || posX < 0)
+                return 0;
+            return posX;
+        }
+        public int GetPosY()
+        {
+            if (posY > 232 || posY < 0)
+                return 0;
+            return posY;
+        }
+
 
         private byte[] ConvertCharToByteArray(char letter)
         {
@@ -238,7 +270,9 @@ namespace N64PPLEditorC
                 case 0x2200C443: return 52;
                 case 0x33804407: return 52;
                 case 0x62804403: return 60; //tested
-                default: throw new NotSupportedException();
+                case 0x60884003: return 60; //added for english and german version
+                case 0x22804043: return 52; //added for english version
+                default: throw new NotImplementedException();
             }
         }
 
