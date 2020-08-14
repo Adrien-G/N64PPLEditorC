@@ -29,14 +29,13 @@ namespace N64PPLEditorC.TransparentPanel
         protected override void OnDraw()
         {
             this.graphics.Clear(Color.Transparent);
-            try
+            if (bmpList != null)
             {
                 for (int i = 0; i < bmpList.Count; i++)
                 {
                     this.graphics.DrawImage(bmpList[i], posXY[i]);
                 }
             }
-            catch { }
             
             //// Gets the image from the global resources
             //Image broculoImage = global::N64PPLEditorC.Properties.Resources.AddImage_16x;
