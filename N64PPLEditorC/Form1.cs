@@ -25,6 +25,7 @@ namespace N64PPLEditorC
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            CGeneric.VerifyExistingPath();
             textBoxPPLLocation.Text = Properties.Settings.Default.txtPPLLocation;
             if(textBoxPPLLocation.Text == "")
             {
@@ -36,7 +37,7 @@ namespace N64PPLEditorC
                 buttonGetRomFolder.TabIndex = 1;
                 buttonLoadRom.TabIndex = 0;
             }
-            CGeneric.VerifyExistingPath();
+            
             txtBox.Multiline = true;
             txtBox.BorderStyle = BorderStyle.None;
 
@@ -68,7 +69,7 @@ namespace N64PPLEditorC
         {
             if(textBoxPPLLocation.Text == "")
             {
-                MessageBox.Show("Please select a file...", "N64 PPL Editor", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a file... (in z64 format only)", "N64 PPL Editor", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
@@ -84,11 +85,11 @@ namespace N64PPLEditorC
                     groupBoxTextures.Enabled = true;
                     tabControlTexMovSce.Enabled = true;
                     buttonModifyRom.Enabled = true;
-               // }
+                //}
                //catch (Exception ex)
-               // {
-               //     MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-               // }
+                //{
+                    //MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //}
             }
         }
 
@@ -458,6 +459,11 @@ namespace N64PPLEditorC
             }
             else
                 txtBox.Hide();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

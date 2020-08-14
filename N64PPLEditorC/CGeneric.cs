@@ -139,22 +139,10 @@ namespace N64PPLEditorC
 
         public static void VerifyExistingPath()
         {
-            if (!File.Exists(pathExtractedTexture))
-            {
                 Directory.CreateDirectory(pathExtractedTexture);
-            }
-            if (!File.Exists(pathOtherContent))
-            {
                 Directory.CreateDirectory(pathOtherContent);
-            }
-            if (!File.Exists(pathCompressedTexture))
-            {
                 Directory.CreateDirectory(pathCompressedTexture);
-            }
-            if (!File.Exists(pathReplacedTexture))
-            {
                 Directory.CreateDirectory(pathReplacedTexture);
-            }
         }
     }
 }

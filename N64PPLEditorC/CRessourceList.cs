@@ -43,7 +43,6 @@ namespace N64PPLEditorC
             this.ressourcesList = new List<ListFormat>();
             LoadRessourcesList(nbElements,ressourcesList);
             ChunkDataToRessources(ressourcesData);
-
         }
 
         private void LoadRessourcesList(int nbElements, Byte[] ressourcesList)

@@ -44,29 +44,26 @@ namespace N64PPLEditorC
         {
             var posX = new byte[4];
             var posY = new byte[4];
+            Array.Copy(rawData, 4, posX, 0, posX.Length);
+            Array.Copy(rawData, 8, posY, 0, posY.Length);
             switch (headerValue)
             {
                 case 36:
-                    new NotImplementedException();
                     break;
                 case 44:
-                    Array.Copy(rawData, 4, posX, 0, posX.Length);
-                    Array.Copy(rawData, 8, posY, 0, posY.Length);
-                    this.posX = CGeneric.ConvertByteArrayToInt(posX);
                     break;
                 case 52:
-                    Array.Copy(rawData, 4, posX, 0, posX.Length);
-                    Array.Copy(rawData, 8, posY, 0, posY.Length);
-                    //int len = 160 - (textData.Length/2);
-                    this.posX = CGeneric.ConvertByteArrayToInt(posX);
-                    //this.posX = len + CGeneric.ConvertByteArrayToInt(posX);
+                    //if flag is true, set the component at the middle of the screen (and retract the next value / 2)
+                    if (rawData[22] == 1)
+                    {
+                        posX = CGeneric.ConvertIntToByteArray(160 - rawData[23]);
+                    }
+                       
                     break;
                 case 60:
-                    new NotImplementedException();
                     break;
-                
             }
-            
+            this.posX = CGeneric.ConvertByteArrayToInt(posX);
             this.posY = CGeneric.ConvertByteArrayToInt(posY);
 
         }
