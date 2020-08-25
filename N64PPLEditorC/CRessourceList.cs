@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Runtime.Remoting.Messaging;
 
 namespace N64PPLEditorC
 {
@@ -23,7 +21,7 @@ namespace N64PPLEditorC
         private List<C3FIB> fibList;
         private List<CHVQM> hvqmList;
         private List<CSBF1> sbfList;
-        private List<CRTF> rtfList;
+        private List<CRDF> rdfList;
 
         private int indexRessourcesStart;
         private int indexRessourcesEnd;
@@ -33,7 +31,7 @@ namespace N64PPLEditorC
             fibList = new List<C3FIB>();
             hvqmList = new List<CHVQM>();
             sbfList = new List<CSBF1>();
-            rtfList = new List<CRTF>();
+            rdfList = new List<CRDF>();
             this.indexRessourcesStart = indexRessourcesStart;
             this.indexRessourcesEnd = indexRessourcesEnd;
         }
@@ -89,7 +87,7 @@ namespace N64PPLEditorC
                         sbfList.Add(new CSBF1(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                     default:
-                        rtfList.Add(new CRTF(tmpContainerData, ressourcesList[i].ressourceName));
+                        rdfList.Add(new CRDF(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                 }
                 generalIndex += sizeElement;
@@ -146,7 +144,7 @@ namespace N64PPLEditorC
         }
         public int GetRTFCount()
         {
-            return rtfList.Count();
+            return rdfList.Count();
         }
 
         public int GetTotalBFFCount()
@@ -174,13 +172,13 @@ namespace N64PPLEditorC
             WriteListHeader(ref fs, ref indexData, fibList);
             WriteListHeader(ref fs, ref indexData, hvqmList);
             WriteListHeader(ref fs, ref indexData, sbfList);
-            WriteListHeader(ref fs, ref indexData, rtfList);
+            WriteListHeader(ref fs, ref indexData, rdfList);
 
             //write data associated
             WriteRessourceData(ref fs, fibList);
             WriteRessourceData(ref fs, hvqmList);
             WriteRessourceData(ref fs, sbfList);
-            WriteRessourceData(ref fs, rtfList);
+            WriteRessourceData(ref fs, rdfList);
 
             fs.Close();
         }
@@ -222,6 +220,42 @@ namespace N64PPLEditorC
 
                 indexData += listOfressource[index].GetSize();
             }
+        }
+
+        public int GetFreeSpaceLeft()
+        {
+            //take only the size of the ressource list
+            int initialFreeSpaceLeft = this.indexRessourcesEnd - indexRessourcesStart;
+
+            //estimate the size of the ressource list
+            int realFreeSpaceLeft=0;
+            foreach(C3FIB c3fibdata in fibList)
+            {
+                var tmp = c3fibdata.GetSize();
+                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp+1;
+            }
+            foreach (CHVQM hvqmdata in hvqmList)
+            {
+                var tmp =  hvqmdata.GetSize();
+                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+            }
+            foreach (CSBF1 csbf1data in sbfList)
+            {
+                var tmp = csbf1data.GetSize();
+                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+            }
+            foreach (CRDF crdfdata in rdfList)
+            {
+                var tmp = crdfdata.GetSize();
+                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+            }
+
+            //add the ressource list (header of all data)
+            realFreeSpaceLeft += ressourcesList.Count() * 24;
+
+
+            //return the size of the full initial ressource list size minus the real size of the ressource list
+            return initialFreeSpaceLeft - realFreeSpaceLeft;
         }
     }
 }
