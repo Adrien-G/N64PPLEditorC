@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="N64PPLEditorC.CRessourceList">
+    <Position X="6.75" Y="2.75" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="N64PPLEditorC.CRessourceList.ListFormat" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>CRessourceList.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <AssociationLine Name="hvqmList" Type="N64PPLEditorC.CHVQM" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="3.009" />
+        <Point X="5.75" Y="3.009" />
+        <Point X="5.75" Y="2.191" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>iABAAsAAAAAAEAIAAAAAAlCAQCAAIAAIAAASACAJAAE=</HashCode>
+      <FileName>CRessourceList.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="fibList" />
+      <Field Name="hvqmList" />
+      <Field Name="sbfList" />
+      <Field Name="rtfList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="N64PPLEditorC.CRDF" Collapsed="true">
+    <Position X="6.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CRDF.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="N64PPLEditorC.CSBF1">
+    <Position X="9" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAEAAAAAAAIAAAAAAIgAAACAAAAQAAAAE=</HashCode>
+      <FileName>SBF1\CSBF1.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="sbfList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="N64PPLEditorC.CHVQM" Collapsed="true">
+    <Position X="5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CHVQM.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="N64PPLEditorC.C3FIB">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FAAEAAACAQCUAECAAAAAAAACIACAAAAABAACAAAAIAg=</HashCode>
+      <FileName>C3FIB.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="bff2Childs" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="N64PPLEditorC.CBFF2">
+    <Position X="11.5" Y="0.5" Width="2.25" />
+    <NestedTypes>
+      <Struct Name="N64PPLEditorC.CBFF2.BFFHeader" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>CBFF2.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAABUCAAAAABAAAAAQAAAAAEBiCBAAAJAA=</HashCode>
+      <FileName>CBFF2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="N64PPLEditorC.CSBF1Scene">
+    <Position X="11" Y="5.75" Width="2.25" />
+    <AssociationLine Name="textObjectList" Type="N64PPLEditorC.CSBF1TextObject" FixedFromPoint="true">
+      <Path>
+        <Point X="13.25" Y="9.562" />
+        <Point X="16.5" Y="9.562" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>BAAAIABARAACAGiAAAAAAAAQAAAAAIAgBAgAAgAAAAA=</HashCode>
+      <FileName>SBF1\CSBF1Scene.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="dynamicObjectList" />
+      <Field Name="textObjectList" />
+      <Field Name="textureManagementObjectList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="N64PPLEditorC.CSBF1DynamicObject" Collapsed="true">
+    <Position X="14.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SBF1\CSBF1DynamicObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="N64PPLEditorC.CSBF1TextObject">
+    <Position X="16.5" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAIQAAAAAgQAAABAAAAEAhAwAAAYAA=</HashCode>
+      <FileName>SBF1\CSBF1TextObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="N64PPLEditorC.CSBF1TextureManagement">
+    <Position X="14.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAACAAAAAAAAAQAAAAAAAAAAoAAAAAAgAAEAAAAA=</HashCode>
+      <FileName>SBF1\CSBF1TextureManagement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

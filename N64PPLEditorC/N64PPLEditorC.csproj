@@ -85,7 +85,7 @@
     <Compile Include="CBFF2.cs" />
     <Compile Include="CGeneric.cs" />
     <Compile Include="CHVQM.cs" />
-    <Compile Include="CRTF.cs" />
+    <Compile Include="CRDF.cs" />
     <Compile Include="SBF1\CSBF1DynamicObject.cs" />
     <Compile Include="SBF1\CSBF1Scene.cs" />
     <Compile Include="SBF1\CSBF1TextObject.cs" />
@@ -118,6 +118,7 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ZClassDiagramPPlN64Editor.cd" />
     <None Include="PPLSignature.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

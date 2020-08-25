@@ -37,7 +37,6 @@
             this.contextMenuStripTextureTreeview = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addNewTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeThisTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textureDisplayTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.containerTypetoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +51,7 @@
             this.treeViewHVQM = new System.Windows.Forms.TreeView();
             this.tabPageScenes = new System.Windows.Forms.TabPage();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
-            this.groupBoxTextures = new System.Windows.Forms.GroupBox();
+            this.tabPageScenesOrder = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.labelIsTextureContainer = new System.Windows.Forms.Label();
             this.pictureBoxTexture = new System.Windows.Forms.PictureBox();
@@ -65,22 +64,22 @@
             this.helpStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
             this.tabPageTextures.SuspendLayout();
             this.tabPageMovies.SuspendLayout();
             this.tabPageScenes.SuspendLayout();
-            this.groupBoxTextures.SuspendLayout();
+            this.tabPageScenesOrder.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTexture)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -101,7 +100,7 @@
             this.groupBox1.Controls.Add(this.buttonLoadRom);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(916, 51);
+            this.groupBox1.Size = new System.Drawing.Size(629, 51);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "PPL location : ";
@@ -109,7 +108,7 @@
             // buttonGetRomFolder
             // 
             this.buttonGetRomFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGetRomFolder.Location = new System.Drawing.Point(788, 17);
+            this.buttonGetRomFolder.Location = new System.Drawing.Point(501, 17);
             this.buttonGetRomFolder.Name = "buttonGetRomFolder";
             this.buttonGetRomFolder.Size = new System.Drawing.Size(34, 23);
             this.buttonGetRomFolder.TabIndex = 1;
@@ -127,14 +126,14 @@
             this.textBoxPPLLocation.Enabled = false;
             this.textBoxPPLLocation.Location = new System.Drawing.Point(6, 19);
             this.textBoxPPLLocation.Name = "textBoxPPLLocation";
-            this.textBoxPPLLocation.Size = new System.Drawing.Size(776, 20);
+            this.textBoxPPLLocation.Size = new System.Drawing.Size(489, 20);
             this.textBoxPPLLocation.TabIndex = 1;
             this.textBoxPPLLocation.Text = global::N64PPLEditorC.Properties.Settings.Default.txtPPLLocation;
             // 
             // buttonLoadRom
             // 
             this.buttonLoadRom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLoadRom.Location = new System.Drawing.Point(828, 17);
+            this.buttonLoadRom.Location = new System.Drawing.Point(541, 17);
             this.buttonLoadRom.Name = "buttonLoadRom";
             this.buttonLoadRom.Size = new System.Drawing.Size(82, 23);
             this.buttonLoadRom.TabIndex = 0;
@@ -146,13 +145,12 @@
             // 
             // treeViewTextures
             // 
-            this.treeViewTextures.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeViewTextures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.treeViewTextures.ContextMenuStrip = this.contextMenuStripTextureTreeview;
             this.treeViewTextures.Location = new System.Drawing.Point(0, 0);
             this.treeViewTextures.Name = "treeViewTextures";
-            this.treeViewTextures.Size = new System.Drawing.Size(257, 629);
+            this.treeViewTextures.Size = new System.Drawing.Size(266, 624);
             this.treeViewTextures.TabIndex = 1;
             this.treeViewTextures.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewTextures_AfterSelect);
             this.treeViewTextures.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewTextures_NodeMouseClick);
@@ -165,14 +163,13 @@
             this.contextMenuStripTextureTreeview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNewTextureToolStripMenuItem,
             this.removeThisTextureToolStripMenuItem,
-            this.textureDisplayTimeToolStripMenuItem,
             this.toolStripSeparator2,
             this.containerTypetoolStripMenuItem,
             this.toolStripSeparator1,
             this.expandAllToolStripMenuItem,
             this.collpseAllToolStripMenuItem});
             this.contextMenuStripTextureTreeview.Name = "contextMenuStrip1";
-            this.contextMenuStripTextureTreeview.Size = new System.Drawing.Size(180, 148);
+            this.contextMenuStripTextureTreeview.Size = new System.Drawing.Size(180, 126);
             this.contextMenuStripTextureTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripForTreeview_Opening);
             // 
             // addNewTextureToolStripMenuItem
@@ -191,12 +188,6 @@
             this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.removeThisTextureToolStripMenuItem.Text = "Remove this texture";
             this.removeThisTextureToolStripMenuItem.Click += new System.EventHandler(this.removeThisTextureToolStripMenuItem_Click);
-            // 
-            // textureDisplayTimeToolStripMenuItem
-            // 
-            this.textureDisplayTimeToolStripMenuItem.Name = "textureDisplayTimeToolStripMenuItem";
-            this.textureDisplayTimeToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.textureDisplayTimeToolStripMenuItem.Text = "Texture displayTime";
             // 
             // toolStripSeparator2
             // 
@@ -218,18 +209,21 @@
             this.fixedToolStripMenuItem.Name = "fixedToolStripMenuItem";
             this.fixedToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.fixedToolStripMenuItem.Text = "Fixed";
+            this.fixedToolStripMenuItem.Click += new System.EventHandler(this.fixedToolStripMenuItem_Click);
             // 
             // animatedBadgesToolStripMenuItem
             // 
             this.animatedBadgesToolStripMenuItem.Name = "animatedBadgesToolStripMenuItem";
             this.animatedBadgesToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.animatedBadgesToolStripMenuItem.Text = "Animated (Badges)";
+            this.animatedBadgesToolStripMenuItem.Click += new System.EventHandler(this.animatedBadgesToolStripMenuItem_Click);
             // 
             // textureScrollbluePokeballBackgroundToolStripMenuItem
             // 
             this.textureScrollbluePokeballBackgroundToolStripMenuItem.Name = "textureScrollbluePokeballBackgroundToolStripMenuItem";
             this.textureScrollbluePokeballBackgroundToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
             this.textureScrollbluePokeballBackgroundToolStripMenuItem.Text = "Texture scroll (blue pokeball background)";
+            this.textureScrollbluePokeballBackgroundToolStripMenuItem.Click += new System.EventHandler(this.textureScrollbluePokeballBackgroundToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -257,84 +251,86 @@
             this.tabControlTexMovSce.Controls.Add(this.tabPageTextures);
             this.tabControlTexMovSce.Controls.Add(this.tabPageMovies);
             this.tabControlTexMovSce.Controls.Add(this.tabPageScenes);
+            this.tabControlTexMovSce.Controls.Add(this.tabPageScenesOrder);
             this.tabControlTexMovSce.Enabled = false;
             this.tabControlTexMovSce.Location = new System.Drawing.Point(12, 69);
             this.tabControlTexMovSce.Name = "tabControlTexMovSce";
             this.tabControlTexMovSce.SelectedIndex = 0;
-            this.tabControlTexMovSce.Size = new System.Drawing.Size(265, 655);
+            this.tabControlTexMovSce.Size = new System.Drawing.Size(630, 650);
             this.tabControlTexMovSce.TabIndex = 4;
             // 
             // tabPageTextures
             // 
+            this.tabPageTextures.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageTextures.Controls.Add(this.groupBox4);
+            this.tabPageTextures.Controls.Add(this.groupBox2);
             this.tabPageTextures.Controls.Add(this.treeViewTextures);
+            this.tabPageTextures.Controls.Add(this.buttonExtractAllTextures);
             this.tabPageTextures.Location = new System.Drawing.Point(4, 22);
             this.tabPageTextures.Name = "tabPageTextures";
             this.tabPageTextures.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTextures.Size = new System.Drawing.Size(257, 629);
+            this.tabPageTextures.Size = new System.Drawing.Size(622, 624);
             this.tabPageTextures.TabIndex = 0;
             this.tabPageTextures.Text = "Textures";
-            this.tabPageTextures.UseVisualStyleBackColor = true;
             // 
             // tabPageMovies
             // 
+            this.tabPageMovies.BackColor = System.Drawing.SystemColors.Control;
             this.tabPageMovies.Controls.Add(this.treeViewHVQM);
             this.tabPageMovies.Location = new System.Drawing.Point(4, 22);
             this.tabPageMovies.Name = "tabPageMovies";
             this.tabPageMovies.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageMovies.Size = new System.Drawing.Size(257, 629);
+            this.tabPageMovies.Size = new System.Drawing.Size(622, 624);
             this.tabPageMovies.TabIndex = 1;
             this.tabPageMovies.Text = "Movies";
-            this.tabPageMovies.UseVisualStyleBackColor = true;
             // 
             // treeViewHVQM
             // 
-            this.treeViewHVQM.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeViewHVQM.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.treeViewHVQM.Location = new System.Drawing.Point(0, 0);
             this.treeViewHVQM.Name = "treeViewHVQM";
-            this.treeViewHVQM.Size = new System.Drawing.Size(257, 729);
+            this.treeViewHVQM.Size = new System.Drawing.Size(266, 624);
             this.treeViewHVQM.TabIndex = 2;
             // 
             // tabPageScenes
             // 
+            this.tabPageScenes.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageScenes.Controls.Add(this.groupBoxTextureSBF);
             this.tabPageScenes.Controls.Add(this.treeViewSBF);
+            this.tabPageScenes.Controls.Add(this.groupBoxSceneText);
             this.tabPageScenes.Location = new System.Drawing.Point(4, 22);
             this.tabPageScenes.Name = "tabPageScenes";
-            this.tabPageScenes.Size = new System.Drawing.Size(257, 629);
+            this.tabPageScenes.Size = new System.Drawing.Size(622, 624);
             this.tabPageScenes.TabIndex = 2;
             this.tabPageScenes.Text = "Scenes";
-            this.tabPageScenes.UseVisualStyleBackColor = true;
             // 
             // treeViewSBF
             // 
-            this.treeViewSBF.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeViewSBF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.treeViewSBF.Location = new System.Drawing.Point(0, 0);
             this.treeViewSBF.Name = "treeViewSBF";
-            this.treeViewSBF.Size = new System.Drawing.Size(257, 630);
+            this.treeViewSBF.Size = new System.Drawing.Size(266, 624);
             this.treeViewSBF.TabIndex = 3;
             this.treeViewSBF.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewSBF_AfterSelect);
             // 
-            // groupBoxTextures
+            // tabPageScenesOrder
             // 
-            this.groupBoxTextures.Controls.Add(this.groupBox4);
-            this.groupBoxTextures.Controls.Add(this.groupBox2);
-            this.groupBoxTextures.Controls.Add(this.buttonExtractAllTextures);
-            this.groupBoxTextures.Enabled = false;
-            this.groupBoxTextures.Location = new System.Drawing.Point(283, 69);
-            this.groupBoxTextures.Name = "groupBoxTextures";
-            this.groupBoxTextures.Size = new System.Drawing.Size(352, 345);
-            this.groupBoxTextures.TabIndex = 6;
-            this.groupBoxTextures.TabStop = false;
-            this.groupBoxTextures.Text = "Textures Management";
+            this.tabPageScenesOrder.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageScenesOrder.Controls.Add(this.groupBox3);
+            this.tabPageScenesOrder.Location = new System.Drawing.Point(4, 22);
+            this.tabPageScenesOrder.Name = "tabPageScenesOrder";
+            this.tabPageScenesOrder.Size = new System.Drawing.Size(622, 624);
+            this.tabPageScenesOrder.TabIndex = 3;
+            this.tabPageScenesOrder.Text = "Scenes Order";
             // 
             // groupBox4
             // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.labelIsTextureContainer);
             this.groupBox4.Controls.Add(this.pictureBoxTexture);
-            this.groupBox4.Location = new System.Drawing.Point(6, 19);
+            this.groupBox4.Location = new System.Drawing.Point(281, 6);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(335, 267);
             this.groupBox4.TabIndex = 7;
@@ -363,9 +359,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.numericUpDownTextureDisplayTime);
-            this.groupBox2.Location = new System.Drawing.Point(136, 292);
+            this.groupBox2.Location = new System.Drawing.Point(411, 279);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(205, 46);
             this.groupBox2.TabIndex = 11;
@@ -406,7 +403,8 @@
             // 
             // buttonExtractAllTextures
             // 
-            this.buttonExtractAllTextures.Location = new System.Drawing.Point(6, 292);
+            this.buttonExtractAllTextures.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExtractAllTextures.Location = new System.Drawing.Point(281, 279);
             this.buttonExtractAllTextures.Name = "buttonExtractAllTextures";
             this.buttonExtractAllTextures.Size = new System.Drawing.Size(124, 47);
             this.buttonExtractAllTextures.TabIndex = 7;
@@ -417,7 +415,7 @@
             // buttonModifyRom
             // 
             this.buttonModifyRom.Enabled = false;
-            this.buttonModifyRom.Location = new System.Drawing.Point(551, 681);
+            this.buttonModifyRom.Location = new System.Drawing.Point(550, 670);
             this.buttonModifyRom.Name = "buttonModifyRom";
             this.buttonModifyRom.Size = new System.Drawing.Size(82, 40);
             this.buttonModifyRom.TabIndex = 12;
@@ -433,7 +431,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 722);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(936, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(649, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
@@ -441,7 +439,7 @@
             // helpStatus
             // 
             this.helpStatus.Name = "helpStatus";
-            this.helpStatus.Size = new System.Drawing.Size(921, 17);
+            this.helpStatus.Size = new System.Drawing.Size(1143, 17);
             this.helpStatus.Spring = true;
             // 
             // bWDecompress
@@ -453,20 +451,28 @@
             // 
             // groupBoxTextureSBF
             // 
+            this.groupBoxTextureSBF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTextureSBF.BackColor = System.Drawing.Color.Transparent;
             this.groupBoxTextureSBF.Controls.Add(this.drawScene1);
-            this.groupBoxTextureSBF.Location = new System.Drawing.Point(283, 413);
+            this.groupBoxTextureSBF.Location = new System.Drawing.Point(269, 3);
             this.groupBoxTextureSBF.Name = "groupBoxTextureSBF";
             this.groupBoxTextureSBF.Size = new System.Drawing.Size(350, 262);
             this.groupBoxTextureSBF.TabIndex = 1;
             this.groupBoxTextureSBF.TabStop = false;
             this.groupBoxTextureSBF.Text = "Scene Editor";
             // 
+            // drawScene1
+            // 
+            this.drawScene1.Location = new System.Drawing.Point(12, 16);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(320, 240);
+            this.drawScene1.TabIndex = 0;
+            // 
             // groupBoxSceneText
             // 
             this.groupBoxSceneText.Controls.Add(this.label1);
             this.groupBoxSceneText.Controls.Add(this.numericUpDownSceneText);
-            this.groupBoxSceneText.Location = new System.Drawing.Point(283, 678);
+            this.groupBoxSceneText.Location = new System.Drawing.Point(269, 271);
             this.groupBoxSceneText.Name = "groupBoxSceneText";
             this.groupBoxSceneText.Size = new System.Drawing.Size(154, 43);
             this.groupBoxSceneText.TabIndex = 0;
@@ -511,52 +517,41 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Controls.Add(this.labelFreeSpaceLeft);
             this.groupBox3.Controls.Add(this.button1);
-            this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Location = new System.Drawing.Point(641, 69);
+            this.groupBox3.Location = new System.Drawing.Point(117, 74);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(287, 357);
+            this.groupBox3.Size = new System.Drawing.Size(287, 222);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Debug";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 162);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(143, 13);
-            this.label2.TabIndex = 16;
-            this.label2.Text = "Free space left in the ROM : ";
-            // 
             // labelFreeSpaceLeft
             // 
             this.labelFreeSpaceLeft.AutoSize = true;
-            this.labelFreeSpaceLeft.Location = new System.Drawing.Point(155, 162);
+            this.labelFreeSpaceLeft.Location = new System.Drawing.Point(425, 688);
             this.labelFreeSpaceLeft.Name = "labelFreeSpaceLeft";
             this.labelFreeSpaceLeft.Size = new System.Drawing.Size(13, 13);
             this.labelFreeSpaceLeft.TabIndex = 17;
             this.labelFreeSpaceLeft.Text = "0";
             // 
-            // drawScene1
+            // label2
             // 
-            this.drawScene1.Location = new System.Drawing.Point(12, 16);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(320, 240);
-            this.drawScene1.TabIndex = 0;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(290, 688);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(140, 13);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "Free space left in the ROM :";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(936, 744);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBoxTextureSBF);
-            this.Controls.Add(this.groupBoxSceneText);
+            this.ClientSize = new System.Drawing.Size(649, 744);
             this.Controls.Add(this.buttonModifyRom);
+            this.Controls.Add(this.labelFreeSpaceLeft);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.groupBoxTextures);
             this.Controls.Add(this.tabControlTexMovSce);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
@@ -570,7 +565,7 @@
             this.tabPageTextures.ResumeLayout(false);
             this.tabPageMovies.ResumeLayout(false);
             this.tabPageScenes.ResumeLayout(false);
-            this.groupBoxTextures.ResumeLayout(false);
+            this.tabPageScenesOrder.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTexture)).EndInit();
@@ -603,7 +598,6 @@
         private System.Windows.Forms.TabPage tabPageScenes;
         private System.Windows.Forms.TreeView treeViewHVQM;
         private System.Windows.Forms.TreeView treeViewSBF;
-        private System.Windows.Forms.GroupBox groupBoxTextures;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button buttonExtractAllTextures;
         private System.Windows.Forms.PictureBox pictureBoxTexture;
@@ -626,7 +620,6 @@
         private System.Windows.Forms.ToolStripMenuItem fixedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem animatedBadgesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textureScrollbluePokeballBackgroundToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem textureDisplayTimeToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBoxTextureSBF;
         private System.Windows.Forms.GroupBox groupBoxSceneText;
         private System.Windows.Forms.Label label1;
@@ -637,6 +630,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelFreeSpaceLeft;
+        private System.Windows.Forms.TabPage tabPageScenesOrder;
     }
 }
 

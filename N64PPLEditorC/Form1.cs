@@ -9,13 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using static N64PPLEditorC.CGeneric;
 
 namespace N64PPLEditorC
 {
     public partial class Form1 : Form
     {
         CRessourceList ressourceList;
-
         TextBox txtBox = new TextBox();
 
         public Form1()
@@ -82,7 +82,7 @@ namespace N64PPLEditorC
                     buttonLoadRom.Text = "ROM Loaded";
                     LoadRessourcesList();
                     LoadTreeView();
-                    groupBoxTextures.Enabled = true;
+                    labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
                     tabControlTexMovSce.Enabled = true;
                     buttonModifyRom.Enabled = true;
                 //}
@@ -286,6 +286,13 @@ namespace N64PPLEditorC
                                 //compress data
                                 byte[] compressedData = CTextureCompress.MakeCompression(rawData);
 
+                                //check if the size of the new data is not too much than the free space
+                                if (ressourceList.GetFreeSpaceLeft() < compressedData.Length)
+                                {
+                                    MessageBox.Show("There is not enought place...", "Free space in rom is needed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                break;
+                                }
+
                                 //add header and generate the bff2
                                 string safeFileName = Path.GetFileNameWithoutExtension(inputTexture);
                                 //check if the name has same naming convention than the extract (remove index before coma)
@@ -307,16 +314,17 @@ namespace N64PPLEditorC
                                     treeViewTextures.SelectedNode.Parent.Nodes.Add("[added] , " + safeFileName);
                                     treeViewTextures.SelectedNode = treeViewTextures.Nodes[treeViewTextures.SelectedNode.Parent.Index].LastNode;
                                 }
+
                             }
                             else
                                 MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                    
                     }
                     catch (Exception ex)
                     {
-                    MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
                 }
             }
         }
@@ -327,6 +335,7 @@ namespace N64PPLEditorC
             {
                 ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
                 treeViewTextures.SelectedNode.Remove();
+                labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
             }
             
         }
@@ -353,6 +362,18 @@ namespace N64PPLEditorC
             {
                 removeThisTextureToolStripMenuItem.Enabled = false;
                 containerTypetoolStripMenuItem.Enabled = true;
+
+                var textureDisplay = this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Index).GetTextureDisplayStyle();
+                
+                fixedToolStripMenuItem.Checked = false;
+                animatedBadgesToolStripMenuItem.Checked = false;
+                textureScrollbluePokeballBackgroundToolStripMenuItem.Checked = false;
+                switch (textureDisplay)
+                {
+                    case TextureDisplayStyle.Fixed: fixedToolStripMenuItem.Checked = true; break;
+                    case TextureDisplayStyle.Animated: animatedBadgesToolStripMenuItem.Checked = true; break;
+                    case TextureDisplayStyle.AnimatedScroll: textureScrollbluePokeballBackgroundToolStripMenuItem.Checked = true; break;
+                }
             }
                 
 
@@ -370,6 +391,7 @@ namespace N64PPLEditorC
                 {
                     ressourceList.Get3FIB(treeViewTextures.SelectedNode.Parent.Index).RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
                     treeViewTextures.SelectedNode.Remove();
+                    labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
                 }
         }
 
@@ -463,7 +485,20 @@ namespace N64PPLEditorC
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+            labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(),16).ToUpper();
+        }
+
+        private void fixedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Index).SetTextureDisplayStyle(TextureDisplayStyle.Fixed);
+        }
+        private void animatedBadgesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Index).SetTextureDisplayStyle(TextureDisplayStyle.Animated);
+        }
+        private void textureScrollbluePokeballBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Index).SetTextureDisplayStyle(TextureDisplayStyle.AnimatedScroll);
         }
     }
 }
