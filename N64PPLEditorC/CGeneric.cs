@@ -13,8 +13,6 @@ namespace N64PPLEditorC
         //different path used in the application
         public static readonly String pathExtractedTexture = Application.StartupPath + @"\extractedTexture\";
         public static readonly String pathOtherContent = Application.StartupPath + @"\OtherContent\";
-        public static readonly String pathCompressedTexture = Application.StartupPath + @"\compressedTexture\";
-        public static readonly String pathReplacedTexture = Application.StartupPath + @"\replacedTexture\";
 
         //size of the elements present in the table of ressources
         public static int sizeOfElementTable = 24;
@@ -42,6 +40,13 @@ namespace N64PPLEditorC
             max256Colors = 0x33,    // indexed color, palette reference a 32 bit color
             trueColor16Bits = 0x54, // 5 bits for R, G and B, one bit for Alpha
             trueColor32Bits = 0x55  // 8 bits for each R,G,B,A
+        }
+
+        public enum TextureDisplayStyle : byte
+        {
+            Fixed = 0x08,
+            Animated = 0x2E,
+            AnimatedScroll = 0x09
         }
 
         public static List<byte> ByteToNibble(byte byteToDecompose)
@@ -141,8 +146,6 @@ namespace N64PPLEditorC
         {
                 Directory.CreateDirectory(pathExtractedTexture);
                 Directory.CreateDirectory(pathOtherContent);
-                Directory.CreateDirectory(pathCompressedTexture);
-                Directory.CreateDirectory(pathReplacedTexture);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static N64PPLEditorC.CGeneric;
 
 namespace N64PPLEditorC
 {
@@ -13,7 +14,6 @@ namespace N64PPLEditorC
     {
         private List<CBFF2> bff2Childs;
         private Byte[] header3FIB;
-        private Byte textureType;
         private Byte[] fibName;
         private byte fibNameSize;
 
@@ -25,7 +25,6 @@ namespace N64PPLEditorC
         public void Init()
         {
             //get bff count and fibName size
-            textureType = rawData[4];
             Byte bffCount = rawData[12];
             fibNameSize = rawData[16];
 
@@ -155,6 +154,15 @@ namespace N64PPLEditorC
         public CBFF2 GetBFF2(int index)
         {
             return bff2Childs[index];
+        }
+
+        public TextureDisplayStyle GetTextureDisplayStyle()
+        {
+            return (TextureDisplayStyle)this.header3FIB[4];
+        } 
+        public void SetTextureDisplayStyle(TextureDisplayStyle style)
+        {
+            this.header3FIB[4] = (byte)style;
         }
     }
 }
