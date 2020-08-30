@@ -17,14 +17,13 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>iABAAsAAAAAAEAIAAAAAAlCAQCAAIAAIAAASACAJAAE=</HashCode>
+      <HashCode>iABAAkACAAAAEAIAAAAAAlCAQCAAIAAIAAASACAJAAE=</HashCode>
       <FileName>CRessourceList.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Field Name="fibList" />
       <Field Name="hvqmList" />
       <Field Name="sbfList" />
-      <Field Name="rtfList" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="N64PPLEditorC.CRDF" Collapsed="true">
@@ -54,7 +53,7 @@
   <Class Name="N64PPLEditorC.C3FIB">
     <Position X="9" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>FAAEAAACAQCUAECAAAAAAAACIACAAAAABAACAAAAIAg=</HashCode>
+      <HashCode>BAAEAAACAQCUAECAAAAAAAACIACAAAAAFAECAAAAIAg=</HashCode>
       <FileName>C3FIB.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -103,7 +102,7 @@
   <Class Name="N64PPLEditorC.CSBF1TextObject">
     <Position X="16.5" Y="5.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAEAAAAAAAIQAAAAAgQAAABAAAAEAhAwAAAYAA=</HashCode>
+      <HashCode>AAYAAAAEAAAAAAAIQIAAAAgQAAABAAAAEAhAwAAAYAA=</HashCode>
       <FileName>SBF1\CSBF1TextObject.cs</FileName>
     </TypeIdentifier>
   </Class>

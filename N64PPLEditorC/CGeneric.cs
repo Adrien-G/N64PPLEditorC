@@ -42,6 +42,17 @@ namespace N64PPLEditorC
             trueColor32Bits = 0x55  // 8 bits for each R,G,B,A
         }
 
+        public enum RomAddressFr : int
+        {
+            backgroundArenaStartingLeague = 0xB6104,
+            backgroundArenaPokemonTrainer = 0xB6158,
+            backgroundArenaPokemonSelector = 0xB6190,
+            backgroundInGameSPAMode = 0xB5E54,
+            backgroundTrainerInGame1PModeJ1 = 0xB51AC,
+            backgroundTrainerInGame1PModeJ2 = 0xB62A0,
+            backgroundTrainerOptionsSelectTrainer = 0xB5C90
+        }
+
         public enum TextureDisplayStyle : byte
         {
             Fixed = 0x08,

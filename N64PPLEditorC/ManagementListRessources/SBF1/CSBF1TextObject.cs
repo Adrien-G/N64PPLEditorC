@@ -40,6 +40,25 @@ namespace N64PPLEditorC
             return sb.Replace("#",Environment.NewLine).ToString();
         }
 
+        public void SetText(String text)
+        {
+            byte[] arrayByte = new byte[text.Length * 2+4];
+            //write size of the text
+            Array.Copy(CGeneric.ConvertIntToByteArray(arrayByte.Length), arrayByte, 4);
+
+            for(int i = 0; i < text.Length; i++)
+            {
+                Array.Copy(ConvertCharToByteArray(text[i]), 0, arrayByte, i * 2+4, 2);
+            }
+            textData = arrayByte;
+
+            //set new structure
+            //var newRawData = new byte[this.textData.Length + this.headerData.Length];
+            //Array.Copy(this.headerData, 0, newRawData, 0, this.headerData.Length);
+            //Array.Copy(this.textData, 0, newRawData, this.headerData.Length, this.textData.Length);
+            //this.rawData = newRawData;
+        }
+
         private void DecomposeHeader(int headerValue)
         {
             var posX = new byte[4];
@@ -79,6 +98,15 @@ namespace N64PPLEditorC
             if (posY > 232 || posY < 0)
                 return 0;
             return posY;
+        }
+
+        public void SetPosX(int posX)
+        {
+            this.posX = posX;
+        }
+        public void SetPosY(int posY)
+        {
+            this.posY = posY;
         }
 
 
@@ -123,8 +151,8 @@ namespace N64PPLEditorC
                 case '8': return new byte[] { 0x14, 0x08 };
                 case '9': return new byte[] { 0x14, 0x09 };
                 case '0': return new byte[] { 0x14, 0x0A };
-                case ' ': return new byte[] { 0x00, 0x00 };
-                case '#': return new byte[] { 0x00, 0x01 }; //Hack, hashtag had to be remplaced by crlf
+                case ' ': return new byte[] { 0x00, 0x01 };
+                case '#': return new byte[] { 0x00, 0x02 }; //Hack, hashtag had to be remplaced by crlf
                 case '!': return new byte[] { 0x10, 0x01 };
                 case '&': return new byte[] { 0x10, 0x02 };
                 case '(': return new byte[] { 0x10, 0x03 };
@@ -146,7 +174,7 @@ namespace N64PPLEditorC
                 case '<': return new byte[] { 0x10, 0x13 };
                 case 'é': return new byte[] { 0x10, 0x14 };
                 case '©': return new byte[] { 0x10, 0x15 };
-                default:  return new byte[] { 0x00, 0x00 };
+                default:  return new byte[] { 0x00, 0x01 };
             }
         }
 

@@ -80,7 +80,9 @@ namespace N64PPLEditorC
                     buttonLoadRom.Enabled = false;
                     buttonGetRomFolder.Enabled = false;
                     buttonLoadRom.Text = "ROM Loaded";
-                    LoadRessourcesList();
+                    Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
+                    LoadRessourcesList(buffRom);
+                    RomAddressFr.InitValues(buffRom);
                     LoadTreeView();
                     labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
                     tabControlTexMovSce.Enabled = true;
@@ -92,7 +94,6 @@ namespace N64PPLEditorC
                 //}
             }
         }
-
         private void LoadTreeView()
         {
             //add treeview items' (BIF,HVQM and SBF)
@@ -138,10 +139,9 @@ namespace N64PPLEditorC
 
         }
 
-        private void LoadRessourcesList()
+        private void LoadRessourcesList(byte[] buffRom)
         {
-            Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
-
+            
             // search for "ABRA.BIF" pattern (start of array ressources location)
             int indexRessourcesArrayStart = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternAbraBif) - 12;
 
@@ -417,6 +417,8 @@ namespace N64PPLEditorC
                     numericUpDownSceneText.Maximum = nbTextObject-1;
                 }
                 launchSceneDisplay();
+                numericUpDownScenePosX.Value = txtBox.Location.X;
+                numericUpDownScenePosY.Value = txtBox.Location.Y;
             }
         }
 
@@ -434,6 +436,8 @@ namespace N64PPLEditorC
                     Size size = TextRenderer.MeasureText(txtBox.Text, txtBox.Font);
                     txtBox.ClientSize = new Size(size.Width, size.Height);
                     txtBox.BringToFront();
+                    numericUpDownScenePosX.Value = textObj.GetPosX();
+                    numericUpDownScenePosY.Value = textObj.GetPosY();
                 }
             }
         }
@@ -485,7 +489,23 @@ namespace N64PPLEditorC
 
         private void button1_Click(object sender, EventArgs e)
         {
-            labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(),16).ToUpper();
+            Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
+            List<string> list = new List<string>();
+           
+            for(int i = 0; i < 10208296; i += 4)
+            {
+                int value = BitConverter.ToInt32(new[] { buffRom[i+3], buffRom[i+2], buffRom[i+1], buffRom[i]},0);
+                if(value  >= 0x171F5D0 && value <= 0x1F875D0)
+                {
+                    list.Add(Convert.ToString(i, 16));
+                }
+            }
+            foreach (string str in list)
+            {
+                textBox1.AppendText(str);
+                textBox1.AppendText(Environment.NewLine);
+            }
+
         }
 
         private void fixedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -499,6 +519,34 @@ namespace N64PPLEditorC
         private void textureScrollbluePokeballBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.ressourceList.Get3FIB(treeViewTextures.SelectedNode.Index).SetTextureDisplayStyle(TextureDisplayStyle.AnimatedScroll);
+        }
+
+        private void buttonHvqmPathOpen_Click(object sender, EventArgs e)
+        {
+            Process.Start(CGeneric.pathOtherContent);
+        }
+
+        private void numericUpDownScenePosX_ValueChanged(object sender, EventArgs e)
+        {
+            txtBox.Location = new Point((int)numericUpDownScenePosX.Value,txtBox.Location.Y);
+        }
+
+        private void numericUpDownScenePosY_ValueChanged(object sender, EventArgs e)
+        {
+            txtBox.Location = new Point(txtBox.Location.X, (int)numericUpDownScenePosY.Value);
+        }
+
+        private void buttonScenePositionXY_Click(object sender, EventArgs e)
+        {
+            var a = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
+            a.SetPosX((int)numericUpDownScenePosX.Value);
+            a.SetPosY((int)numericUpDownScenePosY.Value);
+        }
+
+        private void buttonSaveText_Click(object sender, EventArgs e)
+        {
+            var a = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
+            a.SetText(txtBox.Text);
         }
     }
 }

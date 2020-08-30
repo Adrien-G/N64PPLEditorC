@@ -140,12 +140,12 @@ namespace N64PPLEditorC
             Byte[] res = new byte[this.GetSize()];
             header3FIB[12] = (byte)bff2Childs.Count();
             
-            Buffer.BlockCopy(header3FIB, 0, res, 0,header3FIB.Length);
+            Array.Copy(header3FIB, 0, res, 0,header3FIB.Length);
             int indexDst = header3FIB.Length;
 
             for (int i = 0; i < bff2Childs.Count; i++)
             {
-                Buffer.BlockCopy(bff2Childs[i].GetRawData(),0,res, indexDst,bff2Childs[i].GetSize());
+                Array.Copy(bff2Childs[i].GetRawData(),0,res, indexDst,bff2Childs[i].GetSize());
                 indexDst += bff2Childs[i].GetSize();
             }
             return res;
