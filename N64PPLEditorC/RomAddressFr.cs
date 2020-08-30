@@ -14,8 +14,8 @@ namespace N64PPLEditorC
 
         public static void InitValues(byte[] byteData)
         {
-            for(int i = 0; i < nbBackgroundArenaStartingLeague; i++)
-                BackgroundPlayer1RomAddress.Add();
+            //for(int i = 0; i < nbBackgroundArenaStartingLeague; i++)
+            //    BackgroundPlayer1RomAddress.Add();
         }
     }
 }
