@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,16 +16,39 @@ namespace N64PPLEditorC
         private byte[] textData;
         private int posX;
         private int posY;
+        private byte[] id;
+        private int group;
 
 
         public CSBF1TextObject(byte[] rawData,int headerSize,int dataSize)
         {
             this.rawData = rawData;
-            headerData = new byte[headerSize];
-            textData = new byte[dataSize];
+            this.headerData = new byte[headerSize];
+            this.textData = new byte[dataSize];
+            this.id = new byte[4];
             Array.Copy(rawData, 0, headerData, 0, headerSize);
             Array.Copy(rawData, headerSize, textData, 0, dataSize);
             this.DecomposeHeader(headerSize);
+        }
+
+        public int GetGroup()
+        {
+            return group;
+        }
+
+        public void SetGroup(int id)
+        {
+            this.group = id;
+        }
+
+        public uint GetId()
+        {
+            return (uint)CGeneric.ConvertByteArrayToInt(id);
+        }
+
+        public void SetId(int id)
+        {
+            this.id = CGeneric.ConvertIntToByteArray(id);
         }
 
         public string GetText()
@@ -63,8 +87,10 @@ namespace N64PPLEditorC
         {
             var posX = new byte[4];
             var posY = new byte[4];
+
             Array.Copy(rawData, 4, posX, 0, posX.Length);
             Array.Copy(rawData, 8, posY, 0, posY.Length);
+            Array.Copy(rawData, 12, id , 0, id.Length);
             switch (headerValue)
             {
                 case 36:

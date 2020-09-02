@@ -55,6 +55,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDownTextureDisplayTime = new System.Windows.Forms.NumericUpDown();
             this.buttonExtractAllTextures = new System.Windows.Forms.Button();
+            this.tabPageTexturesUncompressed = new System.Windows.Forms.TabPage();
+            this.buttonUncompressedTextureReplace = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.pictureBoxUncompressedTexture = new System.Windows.Forms.PictureBox();
+            this.treeViewTexturesUncompressed = new System.Windows.Forms.TreeView();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -70,12 +76,15 @@
             this.treeViewHVQM = new System.Windows.Forms.TreeView();
             this.tabPageScenes = new System.Windows.Forms.TabPage();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.buttonSaveText = new System.Windows.Forms.Button();
+            this.buttonScenePositionXY = new System.Windows.Forms.Button();
+            this.numericUpDownScenePosY = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownScenePosX = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.button4 = new System.Windows.Forms.Button();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
@@ -91,10 +100,9 @@
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDownScenePosX = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownScenePosY = new System.Windows.Forms.NumericUpDown();
-            this.buttonScenePositionXY = new System.Windows.Forms.Button();
-            this.buttonSaveText = new System.Windows.Forms.Button();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
+            this.numericUpDownGropuText = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -103,6 +111,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTexture)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).BeginInit();
+            this.tabPageTexturesUncompressed.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).BeginInit();
             this.tabPageMovies.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -110,14 +121,16 @@
             this.groupBox6.SuspendLayout();
             this.tabPageScenes.SuspendLayout();
             this.groupBox9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).BeginInit();
             this.groupBoxTextureSBF.SuspendLayout();
             this.groupBoxSceneText.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).BeginInit();
             this.tabPageScenesOrder.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).BeginInit();
+            this.groupBox11.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGropuText)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -278,6 +291,7 @@
             // tabControlTexMovSce
             // 
             this.tabControlTexMovSce.Controls.Add(this.tabPageTextures);
+            this.tabControlTexMovSce.Controls.Add(this.tabPageTexturesUncompressed);
             this.tabControlTexMovSce.Controls.Add(this.tabPageMovies);
             this.tabControlTexMovSce.Controls.Add(this.tabPageScenes);
             this.tabControlTexMovSce.Controls.Add(this.tabPageScenesOrder);
@@ -388,6 +402,69 @@
             this.buttonExtractAllTextures.Text = "Extract all textures";
             this.buttonExtractAllTextures.UseVisualStyleBackColor = true;
             this.buttonExtractAllTextures.Click += new System.EventHandler(this.buttonExtractAllTextures_Click);
+            // 
+            // tabPageTexturesUncompressed
+            // 
+            this.tabPageTexturesUncompressed.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageTexturesUncompressed.Controls.Add(this.buttonUncompressedTextureReplace);
+            this.tabPageTexturesUncompressed.Controls.Add(this.button5);
+            this.tabPageTexturesUncompressed.Controls.Add(this.groupBox10);
+            this.tabPageTexturesUncompressed.Controls.Add(this.treeViewTexturesUncompressed);
+            this.tabPageTexturesUncompressed.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTexturesUncompressed.Name = "tabPageTexturesUncompressed";
+            this.tabPageTexturesUncompressed.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTexturesUncompressed.Size = new System.Drawing.Size(622, 624);
+            this.tabPageTexturesUncompressed.TabIndex = 4;
+            this.tabPageTexturesUncompressed.Text = "Textures (uncompressed)";
+            // 
+            // buttonUncompressedTextureReplace
+            // 
+            this.buttonUncompressedTextureReplace.Location = new System.Drawing.Point(353, 521);
+            this.buttonUncompressedTextureReplace.Name = "buttonUncompressedTextureReplace";
+            this.buttonUncompressedTextureReplace.Size = new System.Drawing.Size(98, 23);
+            this.buttonUncompressedTextureReplace.TabIndex = 10;
+            this.buttonUncompressedTextureReplace.Text = "Replace Texture";
+            this.buttonUncompressedTextureReplace.UseVisualStyleBackColor = true;
+            this.buttonUncompressedTextureReplace.Click += new System.EventHandler(this.buttonUncompressedTextureReplace_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(272, 521);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 9;
+            this.button5.Text = "Extract All";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox10.Controls.Add(this.pictureBoxUncompressedTexture);
+            this.groupBox10.Location = new System.Drawing.Point(272, 6);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(335, 509);
+            this.groupBox10.TabIndex = 8;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Render";
+            // 
+            // pictureBoxUncompressedTexture
+            // 
+            this.pictureBoxUncompressedTexture.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBoxUncompressedTexture.Location = new System.Drawing.Point(6, 19);
+            this.pictureBoxUncompressedTexture.Name = "pictureBoxUncompressedTexture";
+            this.pictureBoxUncompressedTexture.Size = new System.Drawing.Size(320, 482);
+            this.pictureBoxUncompressedTexture.TabIndex = 0;
+            this.pictureBoxUncompressedTexture.TabStop = false;
+            // 
+            // treeViewTexturesUncompressed
+            // 
+            this.treeViewTexturesUncompressed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.treeViewTexturesUncompressed.Location = new System.Drawing.Point(0, 0);
+            this.treeViewTexturesUncompressed.Name = "treeViewTexturesUncompressed";
+            this.treeViewTexturesUncompressed.Size = new System.Drawing.Size(266, 624);
+            this.treeViewTexturesUncompressed.TabIndex = 2;
+            this.treeViewTexturesUncompressed.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewTexturesUncompressed_AfterSelect);
             // 
             // tabPageMovies
             // 
@@ -531,6 +608,7 @@
             // tabPageScenes
             // 
             this.tabPageScenes.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageScenes.Controls.Add(this.groupBox11);
             this.tabPageScenes.Controls.Add(this.groupBox9);
             this.tabPageScenes.Controls.Add(this.groupBoxTextureSBF);
             this.tabPageScenes.Controls.Add(this.button4);
@@ -552,12 +630,58 @@
             this.groupBox9.Controls.Add(this.label8);
             this.groupBox9.Controls.Add(this.comboBox1);
             this.groupBox9.Controls.Add(this.label7);
-            this.groupBox9.Location = new System.Drawing.Point(272, 320);
+            this.groupBox9.Location = new System.Drawing.Point(272, 356);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(344, 108);
             this.groupBox9.TabIndex = 5;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Text properties";
+            // 
+            // buttonSaveText
+            // 
+            this.buttonSaveText.Location = new System.Drawing.Point(213, 55);
+            this.buttonSaveText.Name = "buttonSaveText";
+            this.buttonSaveText.Size = new System.Drawing.Size(73, 43);
+            this.buttonSaveText.TabIndex = 11;
+            this.buttonSaveText.Text = "Save the new Text";
+            this.buttonSaveText.UseVisualStyleBackColor = true;
+            this.buttonSaveText.Click += new System.EventHandler(this.buttonSaveText_Click);
+            // 
+            // buttonScenePositionXY
+            // 
+            this.buttonScenePositionXY.Location = new System.Drawing.Point(132, 55);
+            this.buttonScenePositionXY.Name = "buttonScenePositionXY";
+            this.buttonScenePositionXY.Size = new System.Drawing.Size(75, 43);
+            this.buttonScenePositionXY.TabIndex = 10;
+            this.buttonScenePositionXY.Text = "Save this new position";
+            this.buttonScenePositionXY.UseVisualStyleBackColor = true;
+            this.buttonScenePositionXY.Click += new System.EventHandler(this.buttonScenePositionXY_Click);
+            // 
+            // numericUpDownScenePosY
+            // 
+            this.numericUpDownScenePosY.Location = new System.Drawing.Point(74, 78);
+            this.numericUpDownScenePosY.Maximum = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+            this.numericUpDownScenePosY.Name = "numericUpDownScenePosY";
+            this.numericUpDownScenePosY.Size = new System.Drawing.Size(52, 20);
+            this.numericUpDownScenePosY.TabIndex = 9;
+            this.numericUpDownScenePosY.ValueChanged += new System.EventHandler(this.numericUpDownScenePosY_ValueChanged);
+            // 
+            // numericUpDownScenePosX
+            // 
+            this.numericUpDownScenePosX.Location = new System.Drawing.Point(74, 57);
+            this.numericUpDownScenePosX.Maximum = new decimal(new int[] {
+            320,
+            0,
+            0,
+            0});
+            this.numericUpDownScenePosX.Name = "numericUpDownScenePosX";
+            this.numericUpDownScenePosX.Size = new System.Drawing.Size(52, 20);
+            this.numericUpDownScenePosX.TabIndex = 8;
+            this.numericUpDownScenePosX.ValueChanged += new System.EventHandler(this.numericUpDownScenePosX_ValueChanged);
             // 
             // label9
             // 
@@ -607,16 +731,9 @@
             this.groupBoxTextureSBF.TabStop = false;
             this.groupBoxTextureSBF.Text = "Scene Editor";
             // 
-            // drawScene1
-            // 
-            this.drawScene1.Location = new System.Drawing.Point(12, 16);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(320, 240);
-            this.drawScene1.TabIndex = 0;
-            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(272, 434);
+            this.button4.Location = new System.Drawing.Point(323, 562);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(115, 23);
             this.button4.TabIndex = 4;
@@ -637,7 +754,7 @@
             // 
             this.groupBoxSceneText.Controls.Add(this.label1);
             this.groupBoxSceneText.Controls.Add(this.numericUpDownSceneText);
-            this.groupBoxSceneText.Location = new System.Drawing.Point(269, 271);
+            this.groupBoxSceneText.Location = new System.Drawing.Point(379, 495);
             this.groupBoxSceneText.Name = "groupBoxSceneText";
             this.groupBoxSceneText.Size = new System.Drawing.Size(154, 43);
             this.groupBoxSceneText.TabIndex = 0;
@@ -755,51 +872,29 @@
             this.label2.TabIndex = 16;
             this.label2.Text = "Free space left in the ROM :";
             // 
-            // numericUpDownScenePosX
+            // groupBox11
             // 
-            this.numericUpDownScenePosX.Location = new System.Drawing.Point(74, 57);
-            this.numericUpDownScenePosX.Maximum = new decimal(new int[] {
-            320,
-            0,
-            0,
-            0});
-            this.numericUpDownScenePosX.Name = "numericUpDownScenePosX";
-            this.numericUpDownScenePosX.Size = new System.Drawing.Size(52, 20);
-            this.numericUpDownScenePosX.TabIndex = 8;
-            this.numericUpDownScenePosX.ValueChanged += new System.EventHandler(this.numericUpDownScenePosX_ValueChanged);
+            this.groupBox11.Controls.Add(this.numericUpDownGropuText);
+            this.groupBox11.Location = new System.Drawing.Point(269, 271);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(350, 79);
+            this.groupBox11.TabIndex = 6;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "groupText";
             // 
-            // numericUpDownScenePosY
+            // drawScene1
             // 
-            this.numericUpDownScenePosY.Location = new System.Drawing.Point(74, 78);
-            this.numericUpDownScenePosY.Maximum = new decimal(new int[] {
-            240,
-            0,
-            0,
-            0});
-            this.numericUpDownScenePosY.Name = "numericUpDownScenePosY";
-            this.numericUpDownScenePosY.Size = new System.Drawing.Size(52, 20);
-            this.numericUpDownScenePosY.TabIndex = 9;
-            this.numericUpDownScenePosY.ValueChanged += new System.EventHandler(this.numericUpDownScenePosY_ValueChanged);
+            this.drawScene1.Location = new System.Drawing.Point(12, 16);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(320, 240);
+            this.drawScene1.TabIndex = 0;
             // 
-            // buttonScenePositionXY
+            // numericUpDownGropuText
             // 
-            this.buttonScenePositionXY.Location = new System.Drawing.Point(132, 55);
-            this.buttonScenePositionXY.Name = "buttonScenePositionXY";
-            this.buttonScenePositionXY.Size = new System.Drawing.Size(75, 43);
-            this.buttonScenePositionXY.TabIndex = 10;
-            this.buttonScenePositionXY.Text = "Save this new position";
-            this.buttonScenePositionXY.UseVisualStyleBackColor = true;
-            this.buttonScenePositionXY.Click += new System.EventHandler(this.buttonScenePositionXY_Click);
-            // 
-            // buttonSaveText
-            // 
-            this.buttonSaveText.Location = new System.Drawing.Point(213, 55);
-            this.buttonSaveText.Name = "buttonSaveText";
-            this.buttonSaveText.Size = new System.Drawing.Size(73, 43);
-            this.buttonSaveText.TabIndex = 11;
-            this.buttonSaveText.Text = "Save the new Text";
-            this.buttonSaveText.UseVisualStyleBackColor = true;
-            this.buttonSaveText.Click += new System.EventHandler(this.buttonSaveText_Click);
+            this.numericUpDownGropuText.Location = new System.Drawing.Point(110, 19);
+            this.numericUpDownGropuText.Name = "numericUpDownGropuText";
+            this.numericUpDownGropuText.Size = new System.Drawing.Size(49, 20);
+            this.numericUpDownGropuText.TabIndex = 3;
             // 
             // Form1
             // 
@@ -827,6 +922,9 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureDisplayTime)).EndInit();
+            this.tabPageTexturesUncompressed.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).EndInit();
             this.tabPageMovies.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
@@ -838,6 +936,8 @@
             this.tabPageScenes.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).EndInit();
             this.groupBoxTextureSBF.ResumeLayout(false);
             this.groupBoxSceneText.ResumeLayout(false);
             this.groupBoxSceneText.PerformLayout();
@@ -847,8 +947,8 @@
             this.groupBox3.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).EndInit();
+            this.groupBox11.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGropuText)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -921,6 +1021,14 @@
         private System.Windows.Forms.NumericUpDown numericUpDownScenePosX;
         private System.Windows.Forms.Button buttonScenePositionXY;
         private System.Windows.Forms.Button buttonSaveText;
+        private System.Windows.Forms.TabPage tabPageTexturesUncompressed;
+        private System.Windows.Forms.TreeView treeViewTexturesUncompressed;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.PictureBox pictureBoxUncompressedTexture;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button buttonUncompressedTextureReplace;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.NumericUpDown numericUpDownGropuText;
     }
 }
 

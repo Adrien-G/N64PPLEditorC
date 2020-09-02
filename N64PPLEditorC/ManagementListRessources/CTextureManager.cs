@@ -227,8 +227,9 @@ namespace N64PPLEditorC
         private static byte[] ConvertMax256ColorsToRGBA(byte[] texture, byte[] palette)
         {
             byte[] rgbaArray = new byte[texture.Length * 4];
-            for (int i = 0; i < texture.Length; i++)
-                Array.Copy(palette, texture[i] * 4, rgbaArray, 4 * i, 4);
+                for (int i = 0; i < texture.Length; i++)
+                    Array.Copy(palette, texture[i] * 4, rgbaArray, 4 * i, 4);
+           
 
             return rgbaArray;
         }

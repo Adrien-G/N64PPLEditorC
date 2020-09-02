@@ -16,6 +16,8 @@ namespace N64PPLEditorC
     public partial class Form1 : Form
     {
         CRessourceList ressourceList;
+        RomAddressFrList romList;
+
         TextBox txtBox = new TextBox();
 
         public Form1()
@@ -82,7 +84,9 @@ namespace N64PPLEditorC
                     buttonLoadRom.Text = "ROM Loaded";
                     Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
                     LoadRessourcesList(buffRom);
-                    RomAddressFr.InitValues(buffRom);
+                    //TODO check if it's the french version...
+                    this.romList = new RomAddressFrList(buffRom);
+                    //TODO done
                     LoadTreeView();
                     labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
                     tabControlTexMovSce.Enabled = true;
@@ -98,6 +102,7 @@ namespace N64PPLEditorC
         {
             //add treeview items' (BIF,HVQM and SBF)
             treeViewTextures.BeginUpdate();
+            treeViewTexturesUncompressed.BeginUpdate();
             treeViewHVQM.BeginUpdate();
             treeViewSBF.BeginUpdate();
             for (int fib = 0; fib < this.ressourceList.GetFIBCount(); fib++)
@@ -118,10 +123,20 @@ namespace N64PPLEditorC
                     treeViewSBF.Nodes[sbf].Nodes.Add(scene + 1 + ", " + this.ressourceList.GetSBF1(sbf).GetScene(scene).GetSceneName());
             }
 
+            for(int romGraphics = 0; romGraphics < this.romList.GetGraphicsCount(); romGraphics++)
+            {
+                treeViewTexturesUncompressed.Nodes.Add(this.romList.GetGraphicsName(romGraphics));
+            }
+
             if (treeViewTextures.Nodes.Count > 0)
                 treeViewTextures.SelectedNode = treeViewTextures.Nodes[0];
             else
                 treeViewTextures.Nodes.Add("No data were found :(");
+
+            if (treeViewTexturesUncompressed.Nodes.Count > 0)
+                treeViewTexturesUncompressed.SelectedNode = treeViewTexturesUncompressed.Nodes[0];
+            else
+                treeViewTexturesUncompressed.Nodes.Add("No data were found :(");
 
             if (treeViewHVQM.Nodes.Count > 0)
                 treeViewHVQM.SelectedNode = treeViewHVQM.Nodes[0];
@@ -134,6 +149,7 @@ namespace N64PPLEditorC
                 treeViewSBF.Nodes.Add("No data were found :(");
 
             treeViewTextures.EndUpdate();
+            treeViewTexturesUncompressed.EndUpdate();
             treeViewHVQM.EndUpdate();
             treeViewSBF.EndUpdate();
 
@@ -444,11 +460,17 @@ namespace N64PPLEditorC
 
         private void launchSceneDisplay()
         {
+            launchGraphicDisplayPart();
+            launchTextDisplayPart();
+        }
+
+        private void launchGraphicDisplayPart()
+        {
             var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
             var ListTextureName = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetBifList();
 
             int nbItem = scene.GetTextureManagementCount() - 1;
-            
+
 
             drawScene1.Init();
             for (int i = 0; i <= nbItem; i++)
@@ -462,17 +484,21 @@ namespace N64PPLEditorC
                         var bmp = this.ressourceList.Get3FIB(indexData).GetBmpTexture(0);
                         var posY = scene.GetTextureManagementObject(i).getYLocation();
                         var posX = scene.GetTextureManagementObject(i).getXLocation();
-                        this.drawScene1.AddBmp(bmp, new Point(posX,posY));
+                        this.drawScene1.AddBmp(bmp, new Point(posX, posY));
 
                     }
                     catch { }
                 }
             }
             this.drawScene1.Invalidate();
+        }
+        private void launchTextDisplayPart() { 
             //text object
             int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
+
             if (nbTextObject > 0)
             {
+                foreach()
                 var a = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject(0);
                 drawScene1.Controls.Add(txtBox);
                 txtBox.Text = a.GetText();
@@ -547,6 +573,49 @@ namespace N64PPLEditorC
         {
             var a = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
             a.SetText(txtBox.Text);
+        }
+
+        private void treeViewTexturesUncompressed_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            pictureBoxUncompressedTexture.Image = romList.GetTexture(treeViewTexturesUncompressed.SelectedNode.Index);
+        }
+
+        private void buttonUncompressedTextureReplace_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openTexture = new OpenFileDialog())
+            {
+                openTexture.RestoreDirectory = true;
+
+                if (openTexture.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        Image img = Image.FromFile(openTexture.FileNames.ToString());
+                        if (img.Width <= 320 && img.Height <= 240)
+                        {
+                            //load texture
+                            pictureBoxUncompressedTexture.Width = img.Width;
+                            pictureBoxUncompressedTexture.Height = img.Height;
+                            pictureBoxUncompressedTexture.Image = img;
+
+                            //convert texture to byte array for future treatment 
+                            byte[] rawData = CTextureManager.ConvertRGBABitmapToByteArrayRGBA((Bitmap)pictureBoxTexture.Image);
+
+                            //make it at good format
+                            byte[] palette;
+                            (palette, rawData) = CTextureManager.ConvertPixelsToGoodFormat(rawData, Compression.trueColor16Bits);
+
+                        romList.SetTexture(treeViewTexturesUncompressed.SelectedNode.Index,rawData);
+                        }
+                        else
+                            MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
     }
 }

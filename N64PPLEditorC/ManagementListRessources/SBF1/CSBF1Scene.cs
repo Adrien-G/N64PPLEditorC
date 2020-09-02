@@ -15,6 +15,8 @@ namespace N64PPLEditorC
         private List<CSBF1TextObject> textObjectList;
         private List<CSBF1TextureManagement> textureManagementObjectList;
 
+        public int nbTextGroupObject { get; private set; }
+
         public CSBF1Scene(byte[] rawData)
         {
             this.rawData = rawData;
@@ -33,6 +35,30 @@ namespace N64PPLEditorC
 
             //decompose data of scene
             ChunkScene(dataWithoutHeader,8+sceneLength);
+
+            //for text, decompose groups of text
+            GroupTextData();
+        }
+
+        private void GroupTextData()
+        {
+            if (textObjectList.Count == 0)
+                return;
+
+            //set the first to the first group
+            var id = textObjectList[0].GetId();
+            textObjectList[0].SetGroup(0);
+
+            var group = 0;
+            for(int i = 1; i < textObjectList.Count(); i++)
+            {
+                //si l'id est égal a 0xFFFFFFFF ou l'id précédent + 1 
+                if (textObjectList[i].GetId() != 0xFFFF_FFFF && textObjectList[i].GetId() != textObjectList[i - 1].GetId() + 1)
+                    group++;
+
+                textObjectList[0].SetGroup(group);
+            }
+            this.nbTextGroupObject = group;
         }
 
         private void ChunkScene(byte[] data,int headerSize)
@@ -171,6 +197,18 @@ namespace N64PPLEditorC
         public CSBF1TextObject GetTextObject(int index)
         {
             return textObjectList[index];
+        }
+
+        public List<CSBF1TextObject> GetTextObjectGroup(int group)
+        {
+            var endList = new List<CSBF1TextObject>();
+
+            foreach(CSBF1TextObject txtObj in textObjectList)
+            {
+                if (txtObj.GetGroup() == group)
+                    endList.Add(txtObj);
+            }
+            return endList;
         }
 
         public CSBF1TextureManagement GetTextureManagementObject(int index)

@@ -81,12 +81,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ManagementRomData\GraphicsRomAddress.cs" />
     <Compile Include="ManagementListRessources\C3FIB.cs" />
     <Compile Include="ManagementListRessources\CBFF2.cs" />
     <Compile Include="CGeneric.cs" />
     <Compile Include="ManagementListRessources\CHVQM.cs" />
     <Compile Include="ManagementListRessources\CRDF.cs" />
-    <Compile Include="RomAddressFr.cs" />
+    <Compile Include="ManagementRomData\RomAddressFrList.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1DynamicObject.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1Scene.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1TextObject.cs" />
@@ -163,8 +164,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ManagementListRomData\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
