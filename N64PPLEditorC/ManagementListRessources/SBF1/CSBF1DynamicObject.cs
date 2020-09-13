@@ -11,9 +11,10 @@ namespace N64PPLEditorC
 
     class CSBF1DynamicObject
     {
+        private byte[] rawData;
         public CSBF1DynamicObject(byte[] rawData)
         {
-
+            this.rawData = rawData;
         }
 
         public static int GetHeaderLength(int headerValue)
@@ -47,6 +48,16 @@ namespace N64PPLEditorC
                 case 0x030104E1: return 76; //tested
                 default: throw new NotSupportedException();
             }
+        }
+
+        public int GetSize()
+        {
+           return rawData.Length;
+        }
+
+        public byte[] GetRawData()
+        {
+            return rawData;
         }
     }
 }

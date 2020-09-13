@@ -96,6 +96,26 @@ namespace N64PPLEditorC
                 return BitConverter.ToInt32(byteArray, 0);
         }
 
+        public static uint ConvertByteArrayToUInt(Byte[] byteArray)
+        {
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(byteArray);
+
+            if (byteArray.Length == 2)
+                return BitConverter.ToUInt16(byteArray, 0);
+            else
+                return BitConverter.ToUInt32(byteArray, 0);
+        }
+
+        public static Byte[] ConvertUIntToByteArray(UInt32 nb)
+        {
+            byte[] res = BitConverter.GetBytes(nb);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(res);
+
+            return res;
+        }
+
         public static Byte[] ConvertIntToByteArray(Int32 nb)
         {
             byte[] res = BitConverter.GetBytes(nb);

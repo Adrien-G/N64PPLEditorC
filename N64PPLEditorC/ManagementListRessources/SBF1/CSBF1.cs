@@ -17,8 +17,9 @@ namespace N64PPLEditorC
         // scene count
         private int sceneCount;
 
+        private byte[] header;
 
-        private List<CSBF1Scene> sbfList;
+        public List<CSBF1Scene> scenesList;
 
         public CSBF1(Byte[] rawData, Byte[] ressourceName) : base(rawData,ressourceName)
         {
@@ -45,6 +46,7 @@ namespace N64PPLEditorC
             this.sceneCount = CGeneric.ConvertByteArrayToInt(sceneCount);
 
             //send the data without SBF header for chuncking data..
+            this.header = CGeneric.GiveMeArray(rawData, 0, indexSceneCount + sceneCount.Length);
             byte[] dataWithoutHeader = new byte[rawData.Length - (indexSceneCount + sceneCount.Length)];
             Array.Copy(rawData,indexSceneCount+sceneCount.Length,dataWithoutHeader,0,dataWithoutHeader.Length);
             SetChunk(dataWithoutHeader);
@@ -52,7 +54,7 @@ namespace N64PPLEditorC
 
         private void SetChunk(byte[] dataWithoutHeader)
         {
-            sbfList = new List<CSBF1Scene>();
+            scenesList = new List<CSBF1Scene>();
             int globalIndex = 0;
             
             for (int i = 0; i < this.sceneCount; i++)
@@ -61,14 +63,14 @@ namespace N64PPLEditorC
                 Array.Copy(dataWithoutHeader, globalIndex, tmpData, 0, dataWithoutHeader.Length - globalIndex);
 
                 CSBF1Scene item = new CSBF1Scene(tmpData);
-                globalIndex += item.GetSize();
-                sbfList.Add(item);
-                
+                globalIndex += item.GetChunckSize();
+                scenesList.Add(item);
             }
         }
+
         public CSBF1Scene GetScene(int index)
         {
-            return sbfList[index];
+            return scenesList[index];
         }
 
         public List<string> GetBifList()
@@ -82,7 +84,20 @@ namespace N64PPLEditorC
         }
         public int GetSceneCount()
         {
-            return sbfList.Count();
+            return scenesList.Count();
+        }
+
+        public override byte[] GetRawData()
+        {
+            //return rawData;
+            byte[] res = this.header;
+
+            //add each csbf1 scene
+            foreach (CSBF1Scene scene in scenesList)
+                res = res.Concat(scene.GetRawData()).ToArray();
+
+            this.rawData = res;
+            return res;
         }
     }
 }

@@ -75,5 +75,15 @@ namespace N64PPLEditorC
             }
             throw new NotImplementedException();
         }
+
+        public int GetSize()
+        {
+            return rawData.Length;
+        }
+
+        public byte[] GetRawData()
+        {
+            return this.rawData;
+        }
     }
 }

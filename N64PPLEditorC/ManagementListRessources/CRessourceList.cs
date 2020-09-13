@@ -18,10 +18,10 @@ namespace N64PPLEditorC
 
         private List<ListFormat> ressourcesList;
 
-        private List<C3FIB> fibList;
-        private List<CHVQM> hvqmList;
-        private List<CSBF1> sbfList;
-        private List<CRDF> rdfList;
+        public List<C3FIB> fibList;
+        public List<CHVQM> hvqmList;
+        public List<CSBF1> sbfList;
+        public List<CRDF> rdfList;
 
         private int indexRessourcesStart;
         private int indexRessourcesEnd;
@@ -102,10 +102,10 @@ namespace N64PPLEditorC
             return sbfList[index];
         }
         
-        public C3FIB Get3FIB(int indexFib)
-        {
-            return fibList[indexFib];
-        }
+        //public C3FIB Get3FIB(int indexFib)
+        //{
+        //    return fibList[indexFib];
+        //}
 
         public int Get3FIBIndexWithFIBName(string name)
         {
@@ -163,12 +163,12 @@ namespace N64PPLEditorC
             fs.Position = indexRessourcesStart;
 
             // write the number of elements
-            fs.Write(CGeneric.ConvertIntToByteArray(fibList.Count() + GetHVQMCount() + GetSBFCount()+GetRTFCount()), 0, 4);
+            fs.Write(CGeneric.ConvertIntToByteArray(fibList.Count() + GetHVQMCount() + GetSBFCount() + GetRTFCount()), 0, 4);
 
             // index of data (for writing header)
             int indexData = (fibList.Count() + GetHVQMCount() + GetSBFCount() + GetRTFCount()) * 24 + 4;
 
-            //write list header (FIB,HVQM,SBF1)
+            //write list header (FIB,HVQM,SBF1,RDF1)
             WriteListHeader(ref fs, ref indexData, fibList);
             WriteListHeader(ref fs, ref indexData, hvqmList);
             WriteListHeader(ref fs, ref indexData, sbfList);
@@ -187,10 +187,14 @@ namespace N64PPLEditorC
         {
             for (int index = 0; index < listOfressource.Count(); index++)
             {
-                fs.Write(listOfressource[index].GetRawData(), 0,listOfressource[index].GetSize());
+                var a = listOfressource[index].GetRawData();
+                var b = a.Length;
+                //var b = listOfressource[index].GetSize();
+
+                fs.Write(a, 0,b);
 
                 //check if the size is pair, if not add a byte. (don't know why..but required)
-                if(listOfressource[index].GetSize() % 2 == 1){
+                if(listOfressource[index].GetRawData().Length % 2 == 1){
                     fs.WriteByte(255);
                 }
             }
@@ -201,7 +205,7 @@ namespace N64PPLEditorC
             for (int index = 0; index < listOfressource.Count(); index++)
             {
                 //write size
-                fs.Write(CGeneric.ConvertIntToByteArray(listOfressource[index].GetSize()), 0, 4);
+                fs.Write(CGeneric.ConvertIntToByteArray(listOfressource[index].GetRawData().Length), 0, 4);
 
                 // write index start
                 fs.Write(CGeneric.ConvertIntToByteArray(indexData), 0, 4);
@@ -215,10 +219,10 @@ namespace N64PPLEditorC
                     fs.WriteByte(0);
 
                 //if data is not pair, add a FF for to be sure it's pair... (because !)
-                if (listOfressource[index].GetSize() % 2 == 1)
+                if (listOfressource[index].GetRawData().Length % 2 == 1)
                     indexData++;
 
-                indexData += listOfressource[index].GetSize();
+                indexData += listOfressource[index].GetRawData().Length;
             }
         }
 
@@ -228,34 +232,37 @@ namespace N64PPLEditorC
             int initialFreeSpaceLeft = this.indexRessourcesEnd - indexRessourcesStart;
 
             //estimate the size of the ressource list
-            int realFreeSpaceLeft=0;
-            foreach(C3FIB c3fibdata in fibList)
+            int realFreeSpaceLeft = 0;
+            foreach (C3FIB c3fibdata in fibList)
             {
-                var tmp = c3fibdata.GetSize();
-                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp+1;
+                var tmp = c3fibdata.GetRawData().Length;
+                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
             }
             foreach (CHVQM hvqmdata in hvqmList)
             {
-                var tmp =  hvqmdata.GetSize();
+                var tmp = hvqmdata.GetRawData().Length;
                 if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
             }
             foreach (CSBF1 csbf1data in sbfList)
             {
-                var tmp = csbf1data.GetSize();
+                var tmp = csbf1data.GetRawData().Length;
                 if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
             }
             foreach (CRDF crdfdata in rdfList)
             {
-                var tmp = crdfdata.GetSize();
+                var tmp = crdfdata.GetRawData().Length;
                 if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
             }
 
             //add the ressource list (header of all data)
             realFreeSpaceLeft += ressourcesList.Count() * 24;
 
+            //add 0x12 for unknown reason...
+            realFreeSpaceLeft += 0x12;
 
             //return the size of the full initial ressource list size minus the real size of the ressource list
             return initialFreeSpaceLeft - realFreeSpaceLeft;
+            //return 0;
         }
     }
 }

@@ -61,6 +61,25 @@
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.pictureBoxUncompressedTexture = new System.Windows.Forms.PictureBox();
             this.treeViewTexturesUncompressed = new System.Windows.Forms.TreeView();
+            this.tabPageScenes = new System.Windows.Forms.TabPage();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.buttonSceneBackColor = new System.Windows.Forms.Button();
+            this.buttonSceneForeColor = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.numericUpDownScenePosX = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDownScenePosY = new System.Windows.Forms.NumericUpDown();
+            this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
+            this.buttonScenesAddTextAtEnd = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
+            this.buttonScenesAddText = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
+            this.textBoxSceneText = new System.Windows.Forms.TextBox();
+            this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.numericUpDownGroupText = new System.Windows.Forms.NumericUpDown();
+            this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -74,23 +93,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.buttonHVQMReplace = new System.Windows.Forms.Button();
             this.treeViewHVQM = new System.Windows.Forms.TreeView();
-            this.tabPageScenes = new System.Windows.Forms.TabPage();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.buttonSaveText = new System.Windows.Forms.Button();
-            this.buttonScenePositionXY = new System.Windows.Forms.Button();
-            this.numericUpDownScenePosY = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownScenePosX = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
-            this.button4 = new System.Windows.Forms.Button();
-            this.treeViewSBF = new System.Windows.Forms.TreeView();
-            this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
             this.tabPageScenesOrder = new System.Windows.Forms.TabPage();
+            this.button4 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -100,9 +104,11 @@
             this.bWDecompress = new System.ComponentModel.BackgroundWorker();
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
-            this.numericUpDownGropuText = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -114,23 +120,23 @@
             this.tabPageTexturesUncompressed.SuspendLayout();
             this.groupBox10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).BeginInit();
+            this.tabPageScenes.SuspendLayout();
+            this.groupBox12.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).BeginInit();
+            this.groupBoxSceneText.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).BeginInit();
+            this.groupBoxTextureSBF.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGroupText)).BeginInit();
             this.tabPageMovies.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            this.tabPageScenes.SuspendLayout();
-            this.groupBox9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).BeginInit();
-            this.groupBoxTextureSBF.SuspendLayout();
-            this.groupBoxSceneText.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).BeginInit();
             this.tabPageScenesOrder.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.groupBox11.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGropuText)).BeginInit();
+            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -292,8 +298,8 @@
             // 
             this.tabControlTexMovSce.Controls.Add(this.tabPageTextures);
             this.tabControlTexMovSce.Controls.Add(this.tabPageTexturesUncompressed);
-            this.tabControlTexMovSce.Controls.Add(this.tabPageMovies);
             this.tabControlTexMovSce.Controls.Add(this.tabPageScenes);
+            this.tabControlTexMovSce.Controls.Add(this.tabPageMovies);
             this.tabControlTexMovSce.Controls.Add(this.tabPageScenesOrder);
             this.tabControlTexMovSce.Enabled = false;
             this.tabControlTexMovSce.Location = new System.Drawing.Point(12, 69);
@@ -466,6 +472,210 @@
             this.treeViewTexturesUncompressed.TabIndex = 2;
             this.treeViewTexturesUncompressed.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewTexturesUncompressed_AfterSelect);
             // 
+            // tabPageScenes
+            // 
+            this.tabPageScenes.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageScenes.Controls.Add(this.groupBox9);
+            this.tabPageScenes.Controls.Add(this.groupBox12);
+            this.tabPageScenes.Controls.Add(this.groupBoxSceneText);
+            this.tabPageScenes.Controls.Add(this.groupBoxTextureSBF);
+            this.tabPageScenes.Controls.Add(this.treeViewSBF);
+            this.tabPageScenes.Location = new System.Drawing.Point(4, 22);
+            this.tabPageScenes.Name = "tabPageScenes";
+            this.tabPageScenes.Size = new System.Drawing.Size(622, 624);
+            this.tabPageScenes.TabIndex = 2;
+            this.tabPageScenes.Text = "Scenes";
+            // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.label9);
+            this.groupBox12.Controls.Add(this.numericUpDownScenePosX);
+            this.groupBox12.Controls.Add(this.label8);
+            this.groupBox12.Controls.Add(this.numericUpDownScenePosY);
+            this.groupBox12.Location = new System.Drawing.Point(269, 454);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(145, 83);
+            this.groupBox12.TabIndex = 11;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "Text Position";
+            // 
+            // buttonSceneBackColor
+            // 
+            this.buttonSceneBackColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSceneBackColor.Location = new System.Drawing.Point(68, 47);
+            this.buttonSceneBackColor.Name = "buttonSceneBackColor";
+            this.buttonSceneBackColor.Size = new System.Drawing.Size(81, 26);
+            this.buttonSceneBackColor.TabIndex = 11;
+            this.buttonSceneBackColor.Text = "Set";
+            this.buttonSceneBackColor.UseVisualStyleBackColor = true;
+            this.buttonSceneBackColor.Click += new System.EventHandler(this.buttonSceneBackColor_Click);
+            // 
+            // buttonSceneForeColor
+            // 
+            this.buttonSceneForeColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSceneForeColor.Location = new System.Drawing.Point(70, 15);
+            this.buttonSceneForeColor.Name = "buttonSceneForeColor";
+            this.buttonSceneForeColor.Size = new System.Drawing.Size(79, 26);
+            this.buttonSceneForeColor.TabIndex = 10;
+            this.buttonSceneForeColor.Text = "Set";
+            this.buttonSceneForeColor.UseVisualStyleBackColor = true;
+            this.buttonSceneForeColor.Click += new System.EventHandler(this.buttonSceneForeColor_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(5, 44);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(62, 13);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "position Y : ";
+            // 
+            // numericUpDownScenePosX
+            // 
+            this.numericUpDownScenePosX.Location = new System.Drawing.Point(73, 21);
+            this.numericUpDownScenePosX.Maximum = new decimal(new int[] {
+            320,
+            0,
+            0,
+            0});
+            this.numericUpDownScenePosX.Name = "numericUpDownScenePosX";
+            this.numericUpDownScenePosX.Size = new System.Drawing.Size(52, 20);
+            this.numericUpDownScenePosX.TabIndex = 8;
+            this.numericUpDownScenePosX.ValueChanged += new System.EventHandler(this.numericUpDownScenePosX_ValueChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(5, 23);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(62, 13);
+            this.label8.TabIndex = 6;
+            this.label8.Text = "position X : ";
+            // 
+            // numericUpDownScenePosY
+            // 
+            this.numericUpDownScenePosY.Location = new System.Drawing.Point(73, 42);
+            this.numericUpDownScenePosY.Maximum = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+            this.numericUpDownScenePosY.Name = "numericUpDownScenePosY";
+            this.numericUpDownScenePosY.Size = new System.Drawing.Size(52, 20);
+            this.numericUpDownScenePosY.TabIndex = 9;
+            this.numericUpDownScenePosY.ValueChanged += new System.EventHandler(this.numericUpDownScenePosY_ValueChanged);
+            // 
+            // groupBoxSceneText
+            // 
+            this.groupBoxSceneText.Controls.Add(this.buttonScenesAddTextAtEnd);
+            this.groupBoxSceneText.Controls.Add(this.label11);
+            this.groupBoxSceneText.Controls.Add(this.buttonScenesAddText);
+            this.groupBoxSceneText.Controls.Add(this.label1);
+            this.groupBoxSceneText.Controls.Add(this.numericUpDownSceneText);
+            this.groupBoxSceneText.Controls.Add(this.textBoxSceneText);
+            this.groupBoxSceneText.Location = new System.Drawing.Point(269, 291);
+            this.groupBoxSceneText.Name = "groupBoxSceneText";
+            this.groupBoxSceneText.Size = new System.Drawing.Size(352, 157);
+            this.groupBoxSceneText.TabIndex = 5;
+            this.groupBoxSceneText.TabStop = false;
+            this.groupBoxSceneText.Text = "Text edit";
+            // 
+            // buttonScenesAddTextAtEnd
+            // 
+            this.buttonScenesAddTextAtEnd.Location = new System.Drawing.Point(6, 46);
+            this.buttonScenesAddTextAtEnd.Name = "buttonScenesAddTextAtEnd";
+            this.buttonScenesAddTextAtEnd.Size = new System.Drawing.Size(75, 36);
+            this.buttonScenesAddTextAtEnd.TabIndex = 5;
+            this.buttonScenesAddTextAtEnd.Text = "add text in new scene";
+            this.buttonScenesAddTextAtEnd.UseVisualStyleBackColor = true;
+            this.buttonScenesAddTextAtEnd.Click += new System.EventHandler(this.buttonScenesAddTextAtEnd_Click);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(9, 88);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(58, 13);
+            this.label11.TabIndex = 12;
+            this.label11.Text = "Text Edit : ";
+            // 
+            // buttonScenesAddText
+            // 
+            this.buttonScenesAddText.Location = new System.Drawing.Point(87, 46);
+            this.buttonScenesAddText.Name = "buttonScenesAddText";
+            this.buttonScenesAddText.Size = new System.Drawing.Size(75, 36);
+            this.buttonScenesAddText.TabIndex = 4;
+            this.buttonScenesAddText.Text = "Add text";
+            this.buttonScenesAddText.UseVisualStyleBackColor = true;
+            this.buttonScenesAddText.Click += new System.EventHandler(this.buttonScenesAddText_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(79, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Text Selected :";
+            // 
+            // numericUpDownSceneText
+            // 
+            this.numericUpDownSceneText.Location = new System.Drawing.Point(87, 20);
+            this.numericUpDownSceneText.Name = "numericUpDownSceneText";
+            this.numericUpDownSceneText.Size = new System.Drawing.Size(49, 20);
+            this.numericUpDownSceneText.TabIndex = 1;
+            this.numericUpDownSceneText.ValueChanged += new System.EventHandler(this.numericUpDownSceneText_ValueChanged);
+            // 
+            // textBoxSceneText
+            // 
+            this.textBoxSceneText.Location = new System.Drawing.Point(73, 88);
+            this.textBoxSceneText.Multiline = true;
+            this.textBoxSceneText.Name = "textBoxSceneText";
+            this.textBoxSceneText.Size = new System.Drawing.Size(137, 58);
+            this.textBoxSceneText.TabIndex = 3;
+            this.textBoxSceneText.TextChanged += new System.EventHandler(this.textBoxSceneText_TextChanged);
+            // 
+            // groupBoxTextureSBF
+            // 
+            this.groupBoxTextureSBF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTextureSBF.BackColor = System.Drawing.Color.Transparent;
+            this.groupBoxTextureSBF.Controls.Add(this.label10);
+            this.groupBoxTextureSBF.Controls.Add(this.numericUpDownGroupText);
+            this.groupBoxTextureSBF.Controls.Add(this.drawScene1);
+            this.groupBoxTextureSBF.Location = new System.Drawing.Point(269, 3);
+            this.groupBoxTextureSBF.Name = "groupBoxTextureSBF";
+            this.groupBoxTextureSBF.Size = new System.Drawing.Size(350, 282);
+            this.groupBoxTextureSBF.TabIndex = 1;
+            this.groupBoxTextureSBF.TabStop = false;
+            this.groupBoxTextureSBF.Text = "Scene Editor";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(9, 259);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(113, 13);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "Group Text displayed :";
+            // 
+            // numericUpDownGroupText
+            // 
+            this.numericUpDownGroupText.Location = new System.Drawing.Point(122, 257);
+            this.numericUpDownGroupText.Name = "numericUpDownGroupText";
+            this.numericUpDownGroupText.Size = new System.Drawing.Size(49, 20);
+            this.numericUpDownGroupText.TabIndex = 3;
+            this.numericUpDownGroupText.ValueChanged += new System.EventHandler(this.numericUpDownGropuText_ValueChanged);
+            // 
+            // treeViewSBF
+            // 
+            this.treeViewSBF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.treeViewSBF.Location = new System.Drawing.Point(0, 0);
+            this.treeViewSBF.Name = "treeViewSBF";
+            this.treeViewSBF.Size = new System.Drawing.Size(266, 624);
+            this.treeViewSBF.TabIndex = 3;
+            this.treeViewSBF.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewSBF_AfterSelect);
+            // 
             // tabPageMovies
             // 
             this.tabPageMovies.BackColor = System.Drawing.SystemColors.Control;
@@ -605,182 +815,10 @@
             this.treeViewHVQM.Size = new System.Drawing.Size(266, 624);
             this.treeViewHVQM.TabIndex = 2;
             // 
-            // tabPageScenes
-            // 
-            this.tabPageScenes.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPageScenes.Controls.Add(this.groupBox11);
-            this.tabPageScenes.Controls.Add(this.groupBox9);
-            this.tabPageScenes.Controls.Add(this.groupBoxTextureSBF);
-            this.tabPageScenes.Controls.Add(this.button4);
-            this.tabPageScenes.Controls.Add(this.treeViewSBF);
-            this.tabPageScenes.Controls.Add(this.groupBoxSceneText);
-            this.tabPageScenes.Location = new System.Drawing.Point(4, 22);
-            this.tabPageScenes.Name = "tabPageScenes";
-            this.tabPageScenes.Size = new System.Drawing.Size(622, 624);
-            this.tabPageScenes.TabIndex = 2;
-            this.tabPageScenes.Text = "Scenes";
-            // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.buttonSaveText);
-            this.groupBox9.Controls.Add(this.buttonScenePositionXY);
-            this.groupBox9.Controls.Add(this.numericUpDownScenePosY);
-            this.groupBox9.Controls.Add(this.numericUpDownScenePosX);
-            this.groupBox9.Controls.Add(this.label9);
-            this.groupBox9.Controls.Add(this.label8);
-            this.groupBox9.Controls.Add(this.comboBox1);
-            this.groupBox9.Controls.Add(this.label7);
-            this.groupBox9.Location = new System.Drawing.Point(272, 356);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(344, 108);
-            this.groupBox9.TabIndex = 5;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Text properties";
-            // 
-            // buttonSaveText
-            // 
-            this.buttonSaveText.Location = new System.Drawing.Point(213, 55);
-            this.buttonSaveText.Name = "buttonSaveText";
-            this.buttonSaveText.Size = new System.Drawing.Size(73, 43);
-            this.buttonSaveText.TabIndex = 11;
-            this.buttonSaveText.Text = "Save the new Text";
-            this.buttonSaveText.UseVisualStyleBackColor = true;
-            this.buttonSaveText.Click += new System.EventHandler(this.buttonSaveText_Click);
-            // 
-            // buttonScenePositionXY
-            // 
-            this.buttonScenePositionXY.Location = new System.Drawing.Point(132, 55);
-            this.buttonScenePositionXY.Name = "buttonScenePositionXY";
-            this.buttonScenePositionXY.Size = new System.Drawing.Size(75, 43);
-            this.buttonScenePositionXY.TabIndex = 10;
-            this.buttonScenePositionXY.Text = "Save this new position";
-            this.buttonScenePositionXY.UseVisualStyleBackColor = true;
-            this.buttonScenePositionXY.Click += new System.EventHandler(this.buttonScenePositionXY_Click);
-            // 
-            // numericUpDownScenePosY
-            // 
-            this.numericUpDownScenePosY.Location = new System.Drawing.Point(74, 78);
-            this.numericUpDownScenePosY.Maximum = new decimal(new int[] {
-            240,
-            0,
-            0,
-            0});
-            this.numericUpDownScenePosY.Name = "numericUpDownScenePosY";
-            this.numericUpDownScenePosY.Size = new System.Drawing.Size(52, 20);
-            this.numericUpDownScenePosY.TabIndex = 9;
-            this.numericUpDownScenePosY.ValueChanged += new System.EventHandler(this.numericUpDownScenePosY_ValueChanged);
-            // 
-            // numericUpDownScenePosX
-            // 
-            this.numericUpDownScenePosX.Location = new System.Drawing.Point(74, 57);
-            this.numericUpDownScenePosX.Maximum = new decimal(new int[] {
-            320,
-            0,
-            0,
-            0});
-            this.numericUpDownScenePosX.Name = "numericUpDownScenePosX";
-            this.numericUpDownScenePosX.Size = new System.Drawing.Size(52, 20);
-            this.numericUpDownScenePosX.TabIndex = 8;
-            this.numericUpDownScenePosX.ValueChanged += new System.EventHandler(this.numericUpDownScenePosX_ValueChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 80);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(62, 13);
-            this.label9.TabIndex = 7;
-            this.label9.Text = "position Y : ";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 59);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(62, 13);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "position X : ";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(51, 28);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 5;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 31);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(39, 13);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Style : ";
-            // 
-            // groupBoxTextureSBF
-            // 
-            this.groupBoxTextureSBF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxTextureSBF.BackColor = System.Drawing.Color.Transparent;
-            this.groupBoxTextureSBF.Controls.Add(this.drawScene1);
-            this.groupBoxTextureSBF.Location = new System.Drawing.Point(269, 3);
-            this.groupBoxTextureSBF.Name = "groupBoxTextureSBF";
-            this.groupBoxTextureSBF.Size = new System.Drawing.Size(350, 262);
-            this.groupBoxTextureSBF.TabIndex = 1;
-            this.groupBoxTextureSBF.TabStop = false;
-            this.groupBoxTextureSBF.Text = "Scene Editor";
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(323, 562);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(115, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "Add text at the end";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // treeViewSBF
-            // 
-            this.treeViewSBF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.treeViewSBF.Location = new System.Drawing.Point(0, 0);
-            this.treeViewSBF.Name = "treeViewSBF";
-            this.treeViewSBF.Size = new System.Drawing.Size(266, 624);
-            this.treeViewSBF.TabIndex = 3;
-            this.treeViewSBF.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewSBF_AfterSelect);
-            // 
-            // groupBoxSceneText
-            // 
-            this.groupBoxSceneText.Controls.Add(this.label1);
-            this.groupBoxSceneText.Controls.Add(this.numericUpDownSceneText);
-            this.groupBoxSceneText.Location = new System.Drawing.Point(379, 495);
-            this.groupBoxSceneText.Name = "groupBoxSceneText";
-            this.groupBoxSceneText.Size = new System.Drawing.Size(154, 43);
-            this.groupBoxSceneText.TabIndex = 0;
-            this.groupBoxSceneText.TabStop = false;
-            this.groupBoxSceneText.Text = "Text";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(82, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Text Selected : ";
-            // 
-            // numericUpDownSceneText
-            // 
-            this.numericUpDownSceneText.Location = new System.Drawing.Point(94, 14);
-            this.numericUpDownSceneText.Name = "numericUpDownSceneText";
-            this.numericUpDownSceneText.Size = new System.Drawing.Size(49, 20);
-            this.numericUpDownSceneText.TabIndex = 1;
-            this.numericUpDownSceneText.ValueChanged += new System.EventHandler(this.numericUpDownSceneText_ValueChanged);
-            // 
             // tabPageScenesOrder
             // 
             this.tabPageScenesOrder.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageScenesOrder.Controls.Add(this.button4);
             this.tabPageScenesOrder.Controls.Add(this.groupBox3);
             this.tabPageScenesOrder.Location = new System.Drawing.Point(4, 22);
             this.tabPageScenesOrder.Name = "tabPageScenesOrder";
@@ -788,11 +826,20 @@
             this.tabPageScenesOrder.TabIndex = 3;
             this.tabPageScenesOrder.Text = "Scenes Order";
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(412, 44);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 16;
+            this.button4.Text = "Hook mode";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.textBox1);
             this.groupBox3.Controls.Add(this.button1);
-            this.groupBox3.Location = new System.Drawing.Point(117, 74);
+            this.groupBox3.Location = new System.Drawing.Point(12, 25);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(287, 222);
             this.groupBox3.TabIndex = 15;
@@ -872,15 +919,41 @@
             this.label2.TabIndex = 16;
             this.label2.Text = "Free space left in the ROM :";
             // 
-            // groupBox11
+            // colorDialog1
             // 
-            this.groupBox11.Controls.Add(this.numericUpDownGropuText);
-            this.groupBox11.Location = new System.Drawing.Point(269, 271);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(350, 79);
-            this.groupBox11.TabIndex = 6;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "groupText";
+            this.colorDialog1.AnyColor = true;
+            this.colorDialog1.FullOpen = true;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.label12);
+            this.groupBox9.Controls.Add(this.label7);
+            this.groupBox9.Controls.Add(this.buttonSceneBackColor);
+            this.groupBox9.Controls.Add(this.buttonSceneForeColor);
+            this.groupBox9.Location = new System.Drawing.Point(420, 454);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(199, 83);
+            this.groupBox9.TabIndex = 12;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Text Color";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 23);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(58, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "ForeColor :";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 54);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(56, 13);
+            this.label12.TabIndex = 13;
+            this.label12.Text = "BackColor";
             // 
             // drawScene1
             // 
@@ -888,13 +961,6 @@
             this.drawScene1.Name = "drawScene1";
             this.drawScene1.Size = new System.Drawing.Size(320, 240);
             this.drawScene1.TabIndex = 0;
-            // 
-            // numericUpDownGropuText
-            // 
-            this.numericUpDownGropuText.Location = new System.Drawing.Point(110, 19);
-            this.numericUpDownGropuText.Name = "numericUpDownGropuText";
-            this.numericUpDownGropuText.Size = new System.Drawing.Size(49, 20);
-            this.numericUpDownGropuText.TabIndex = 3;
             // 
             // Form1
             // 
@@ -925,6 +991,17 @@
             this.tabPageTexturesUncompressed.ResumeLayout(false);
             this.groupBox10.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).EndInit();
+            this.tabPageScenes.ResumeLayout(false);
+            this.groupBox12.ResumeLayout(false);
+            this.groupBox12.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).EndInit();
+            this.groupBoxSceneText.ResumeLayout(false);
+            this.groupBoxSceneText.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).EndInit();
+            this.groupBoxTextureSBF.ResumeLayout(false);
+            this.groupBoxTextureSBF.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGroupText)).EndInit();
             this.tabPageMovies.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
@@ -933,22 +1010,13 @@
             this.groupBox7.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
-            this.tabPageScenes.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).EndInit();
-            this.groupBoxTextureSBF.ResumeLayout(false);
-            this.groupBoxSceneText.ResumeLayout(false);
-            this.groupBoxSceneText.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).EndInit();
             this.tabPageScenesOrder.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBox11.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGropuText)).EndInit();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -990,7 +1058,6 @@
         private System.Windows.Forms.ToolStripMenuItem animatedBadgesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textureScrollbluePokeballBackgroundToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBoxTextureSBF;
-        private System.Windows.Forms.GroupBox groupBoxSceneText;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDownSceneText;
         private System.Windows.Forms.Button button1;
@@ -1011,24 +1078,31 @@
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.GroupBox groupBoxSceneText;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown numericUpDownScenePosY;
         private System.Windows.Forms.NumericUpDown numericUpDownScenePosX;
-        private System.Windows.Forms.Button buttonScenePositionXY;
-        private System.Windows.Forms.Button buttonSaveText;
         private System.Windows.Forms.TabPage tabPageTexturesUncompressed;
         private System.Windows.Forms.TreeView treeViewTexturesUncompressed;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.PictureBox pictureBoxUncompressedTexture;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button buttonUncompressedTextureReplace;
-        private System.Windows.Forms.GroupBox groupBox11;
-        private System.Windows.Forms.NumericUpDown numericUpDownGropuText;
+        private System.Windows.Forms.NumericUpDown numericUpDownGroupText;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button buttonScenesAddTextAtEnd;
+        private System.Windows.Forms.Button buttonScenesAddText;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox textBoxSceneText;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.Button buttonSceneBackColor;
+        private System.Windows.Forms.Button buttonSceneForeColor;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label7;
     }
 }
 

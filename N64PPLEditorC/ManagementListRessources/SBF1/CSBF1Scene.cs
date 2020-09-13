@@ -12,7 +12,7 @@ namespace N64PPLEditorC
         private byte[] rawData;
 
         private List<CSBF1DynamicObject> dynamicObjectList;
-        private List<CSBF1TextObject> textObjectList;
+        public List<CSBF1TextObject> textObjectList;
         private List<CSBF1TextureManagement> textureManagementObjectList;
 
         public int nbTextGroupObject { get; private set; }
@@ -46,19 +46,33 @@ namespace N64PPLEditorC
                 return;
 
             //set the first to the first group
-            var id = textObjectList[0].GetId();
-            textObjectList[0].SetGroup(0);
+            var id = textObjectList[0].id;
+            textObjectList[0].group = 0;
 
             var group = 0;
             for(int i = 1; i < textObjectList.Count(); i++)
             {
                 //si l'id est égal a 0xFFFFFFFF ou l'id précédent + 1 
-                if (textObjectList[i].GetId() != 0xFFFF_FFFF && textObjectList[i].GetId() != textObjectList[i - 1].GetId() + 1)
-                    group++;
+                var tmpId = textObjectList[i].id;
+                var tmpIdM1 = textObjectList[i - 1].id+1;
+                //TODO if 44 -> set next group
 
-                textObjectList[0].SetGroup(group);
+                if (tmpIdM1 == 0xFFFFFFFF)
+                { }
+                else if (textObjectList[i].getHeaderLength() == 44)
+                    group++;
+                else if (textObjectList[i].getHeaderLength() == 52 && tmpId != tmpIdM1)
+                    group++;
+                else
+                { }
+                textObjectList[i].group = group;
             }
             this.nbTextGroupObject = group;
+        }
+
+        public int GetChunckSize()
+        {
+            return this.rawData.Length;
         }
 
         private void ChunkScene(byte[] data,int headerSize)
@@ -184,11 +198,6 @@ namespace N64PPLEditorC
             return totalSize;
         }
 
-        public int GetSize()
-        {
-            return rawData.Length;
-        }
-
         public string GetSceneName()
         {
             return Encoding.Default.GetString(this.sceneName);
@@ -205,7 +214,7 @@ namespace N64PPLEditorC
 
             foreach(CSBF1TextObject txtObj in textObjectList)
             {
-                if (txtObj.GetGroup() == group)
+                if (txtObj.group == group)
                     endList.Add(txtObj);
             }
             return endList;
@@ -214,6 +223,25 @@ namespace N64PPLEditorC
         public CSBF1TextureManagement GetTextureManagementObject(int index)
         {
             return textureManagementObjectList[index];
+        }
+        public void AddNewTextObject(bool FollowedText)
+        {
+            //get the last element
+            var LastText = textObjectList[textObjectList.Count - 1];
+
+            //add one to ID and take his group
+            uint textId = LastText.id + 1;
+            int groupText = LastText.group;
+
+            //if the text is independant
+            if (!FollowedText)
+            {
+                textId += 0x64;
+                groupText += 1;
+            }
+            
+            //create the new text object
+            textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertUIntToByteArray(textId), groupText));
         }
 
         public int GetDynamicObjectCount()
@@ -229,6 +257,64 @@ namespace N64PPLEditorC
         public int GetTextureManagementCount()
         {
             return textureManagementObjectList.Count();
+        }
+
+        public int GetSize()
+        {
+            // 24 = size of header and number of elements
+            int totalSize = 24 + sceneName.Length;
+
+            foreach (CSBF1DynamicObject dynObj in dynamicObjectList)
+                totalSize += dynObj.GetSize();
+            foreach (CSBF1TextObject TexObj in textObjectList)
+                totalSize += TexObj.GetSize();
+            foreach (CSBF1TextureManagement texObj in textureManagementObjectList)
+                totalSize += texObj.GetSize();
+            return totalSize;
+        }
+
+        public byte[] GetRawData()
+        {
+            //init
+            byte[] res = new byte[0];
+
+            //add the 4 unknown bytes...
+            res = res.Concat(CGeneric.GiveMeArray(rawData, 0, 4)).ToArray();
+
+            //title scene length
+            res = res.Concat(CGeneric.ConvertIntToByteArray(this.sceneName.Length)).ToArray();
+
+            //scene name
+            res = res.Concat(sceneName).ToArray();
+
+            //size dynamicObject
+            res = res.Concat(CGeneric.ConvertIntToByteArray(dynamicObjectList.Count)).ToArray();
+
+            //dynamic objectData
+            foreach (CSBF1DynamicObject dynObj in dynamicObjectList)
+                res = res.Concat(dynObj.GetRawData()).ToArray();
+
+            //size TextObject
+            res = res.Concat(CGeneric.ConvertIntToByteArray(textObjectList.Count)).ToArray();
+
+            //TextObject
+            foreach (CSBF1TextObject TexObj in textObjectList)
+                res = res.Concat(TexObj.GetRawData()).ToArray();
+
+            //Size textureManagement
+            res = res.Concat(CGeneric.ConvertIntToByteArray(textureManagementObjectList.Count)).ToArray();
+
+            //TextureManagement
+            foreach (CSBF1TextureManagement texManObj in textureManagementObjectList)
+                res = res.Concat(texManObj.GetRawData()).ToArray();
+
+            /* forgotten thing to understand ! */
+            byte[] test = new byte[] { 0x00,0x00,0x00,0x00 };
+            res = res.Concat(test).ToArray();
+            /*  ----------------------------  */
+
+            return res;
+            //return rawData;
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace N64PPLEditorC
 {
@@ -13,42 +15,47 @@ namespace N64PPLEditorC
         private int nbItems;
         private byte[] rawData;
         private byte[] headerData;
+        //length of text + text data
         private byte[] textData;
         private int posX;
         private int posY;
-        private byte[] id;
-        private int group;
+        public Color ForeColor { get; set; }
+        public Color BackColor { get; set; }
+        public UInt32 id { get; set; }
+        public int group { get; set; }
 
+        enum textType : byte
+        {
+            unknown36 = 0x36,
+            dialog = 0x44,
+            title = 0x52,
+            unknown60 = 0x60
+        }
 
-        public CSBF1TextObject(byte[] rawData,int headerSize,int dataSize)
+        public CSBF1TextObject(byte[] rawData,int headerSize,int textdataSize)
         {
             this.rawData = rawData;
             this.headerData = new byte[headerSize];
-            this.textData = new byte[dataSize];
-            this.id = new byte[4];
+            this.textData = new byte[textdataSize];
             Array.Copy(rawData, 0, headerData, 0, headerSize);
-            Array.Copy(rawData, headerSize, textData, 0, dataSize);
+            Array.Copy(rawData, headerSize, textData, 0, textdataSize);
             this.DecomposeHeader(headerSize);
         }
 
-        public int GetGroup()
+        //for creating new text objects from zero
+        public CSBF1TextObject(byte[] id,int group)
         {
-            return group;
+            var textHeader = new Byte[] { 0x22, 0x10, 0x14, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, id[0], id[1], id[2], id[3], 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x08, 0x12, 0x6D, 0xFF, 0x8D, 0xBE, 0xD9, 0xFF, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+            this.rawData = textHeader;
+            this.headerData = textHeader;
+            this.textData = new byte[0];
+            this.group = group;
+            this.DecomposeHeader(textHeader.Length);
         }
 
-        public void SetGroup(int id)
+        public int getHeaderLength()
         {
-            this.group = id;
-        }
-
-        public uint GetId()
-        {
-            return (uint)CGeneric.ConvertByteArrayToInt(id);
-        }
-
-        public void SetId(int id)
-        {
-            this.id = CGeneric.ConvertIntToByteArray(id);
+            return this.headerData.Length;
         }
 
         public string GetText()
@@ -66,50 +73,53 @@ namespace N64PPLEditorC
 
         public void SetText(String text)
         {
-            byte[] arrayByte = new byte[text.Length * 2+4];
+            text = text.Replace("\r\n", "#");
+            byte[] res = new byte[text.Length * 2+4];
             //write size of the text
-            Array.Copy(CGeneric.ConvertIntToByteArray(arrayByte.Length), arrayByte, 4);
+            Array.Copy(CGeneric.ConvertIntToByteArray(text.Length*2), res, 4);
 
             for(int i = 0; i < text.Length; i++)
             {
-                Array.Copy(ConvertCharToByteArray(text[i]), 0, arrayByte, i * 2+4, 2);
+                Array.Copy(ConvertCharToByteArray(text[i]), 0, res, i * 2+4, 2);
             }
-            textData = arrayByte;
-
-            //set new structure
-            //var newRawData = new byte[this.textData.Length + this.headerData.Length];
-            //Array.Copy(this.headerData, 0, newRawData, 0, this.headerData.Length);
-            //Array.Copy(this.textData, 0, newRawData, this.headerData.Length, this.textData.Length);
-            //this.rawData = newRawData;
+            this.textData = res;
         }
 
         private void DecomposeHeader(int headerValue)
         {
             var posX = new byte[4];
             var posY = new byte[4];
-
+            var id = new byte[4];
+            var foreColor = new byte[4];
+            var backColor = new byte[4];
             Array.Copy(rawData, 4, posX, 0, posX.Length);
             Array.Copy(rawData, 8, posY, 0, posY.Length);
-            Array.Copy(rawData, 12, id , 0, id.Length);
-            switch (headerValue)
-            {
-                case 36:
-                    break;
-                case 44:
-                    break;
-                case 52:
-                    //if flag is true, set the component at the middle of the screen (and retract the next value / 2)
-                    if (rawData[22] == 1)
-                    {
-                        posX = CGeneric.ConvertIntToByteArray(160 - rawData[23]);
-                    }
-                       
-                    break;
-                case 60:
-                    break;
-            }
+            Array.Copy(rawData, 12, id, 0, id.Length);
+            Array.Copy(rawData, headerData.Length - 16, foreColor, 0, foreColor.Length);
+            Array.Copy(rawData, headerData.Length - 20, backColor, 0, backColor.Length);
+
+            //switch (headerValue)
+            //{
+            //    case 36:
+            //        break;
+            //    case 44:
+            //        break;
+            //    case 52:
+            //        //if flag is true, set the component at the middle of the screen (and retract the next value / 2)
+            //        if (rawData[22] == 1)
+            //        {
+            //            posX = CGeneric.ConvertIntToByteArray(160 - rawData[23]);
+            //        }
+
+            //        break;
+            //    case 60:
+            //        break;
+            //}
+            this.id = CGeneric.ConvertByteArrayToUInt(id);
             this.posX = CGeneric.ConvertByteArrayToInt(posX);
             this.posY = CGeneric.ConvertByteArrayToInt(posY);
+            this.ForeColor = Color.FromArgb(foreColor[3], foreColor[0], foreColor[1], foreColor[2]);
+            this.BackColor = Color.FromArgb(backColor[3], backColor[0], backColor[1], backColor[2]);
 
         }
 
@@ -133,6 +143,37 @@ namespace N64PPLEditorC
         public void SetPosY(int posY)
         {
             this.posY = posY;
+        }
+
+        public byte[] GetRawData()
+        {
+            byte[] res = new byte[0/*headerData.Length + textData.Length*/];
+
+
+            //text header, update new informations about header
+            var sizeX = CGeneric.ConvertIntToByteArray(this.posX);
+            var sizeY = CGeneric.ConvertIntToByteArray(this.posY);
+            var id = CGeneric.ConvertUIntToByteArray(this.id);
+
+            var foreColor = new byte[] { this.ForeColor.R, this.ForeColor.G, this.ForeColor.B, this.ForeColor.A }; 
+            var backColor = new byte[] { this.BackColor.R, this.BackColor.G, this.BackColor.B, this.BackColor.A };
+
+            //update the position and the id in rawHeader
+            Array.Copy(sizeX, 0, headerData, 4, sizeX.Length);
+            Array.Copy(sizeY, 0, headerData, 8, sizeY.Length);
+            Array.Copy(id, 0, headerData, 12, id.Length);
+            Array.Copy(foreColor, 0, headerData, headerData.Length - 16, foreColor.Length);
+            Array.Copy(backColor, 0, headerData, headerData.Length - 20, backColor.Length);
+
+            //update the text size
+            var lenText = CGeneric.ConvertIntToByteArray((this.textData.Length - 4) / 2);
+            Array.Copy(lenText, 0, textData, 0, lenText.Length);
+
+            //merge the two arrays
+            res = res.Concat(headerData).ToArray();
+            res = res.Concat(textData).ToArray();
+
+            return res;
         }
 
 
@@ -280,6 +321,11 @@ namespace N64PPLEditorC
                 case 0x1015: return '©';
                 default: throw new NotImplementedException();
             }
+        }
+
+        public int GetSize()
+        {
+            return headerData.Length + textData.Length;
         }
 
         public static int GetHeaderLength(int headerValue)
