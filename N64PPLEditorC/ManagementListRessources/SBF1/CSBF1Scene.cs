@@ -273,6 +273,11 @@ namespace N64PPLEditorC
             return totalSize;
         }
 
+        public void RemoveText(int index)
+        {
+            this.textObjectList.RemoveAt(index);
+        }
+
         public byte[] GetRawData()
         {
             //init
@@ -308,13 +313,11 @@ namespace N64PPLEditorC
             foreach (CSBF1TextureManagement texManObj in textureManagementObjectList)
                 res = res.Concat(texManObj.GetRawData()).ToArray();
 
-            /* forgotten thing to understand ! */
+            //dont renember why.. but needed
             byte[] test = new byte[] { 0x00,0x00,0x00,0x00 };
             res = res.Concat(test).ToArray();
-            /*  ----------------------------  */
 
             return res;
-            //return rawData;
         }
     }
 }

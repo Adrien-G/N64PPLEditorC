@@ -9,24 +9,18 @@ namespace N64PPLEditorC
     class CSBF1TextureManagement
     {
         private byte[] rawData;
-        private byte indexTexture;
+        public bool isCompressedTexture;
 
         public CSBF1TextureManagement(byte[] rawData)
         {
             this.rawData = rawData;
+            decomposeHeader();
         }
 
-        public void decomposeHeader(int headerValue)
+        private void decomposeHeader()
         {
-            //Static (always the same length)
-            switch (GetHeaderLength(headerValue))//TODO en fonction de la valeur, déduire les différents champs...
-            {
-                case 28:
-                case 32:
-                    break;
-                case 36:
-                    break;
-            }
+            if(rawData[3] != 8)
+                isCompressedTexture = true;
         }
 
         public int getTextureIndex()

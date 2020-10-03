@@ -50,6 +50,7 @@ namespace N64PPLEditorC
 
             int tmpPositionBFF2;
             //search all bff2 present in the 3FIB and grab index
+            
             do
             {
                 tmpPositionBFF2 = CGeneric.SearchBytesInArray(bffsData, CGeneric.patternBFF2, indexBFF2.Count()) - 12;
@@ -64,7 +65,11 @@ namespace N64PPLEditorC
                 }
                 else
                     //calculate size of last BFF2
-                    sizeBFF2.Add(bffsData.Length - indexBFF2[indexBFF2.Count() - 1]);
+                    try
+                    {
+                        sizeBFF2.Add(bffsData.Length - indexBFF2[indexBFF2.Count() - 1]);
+                    } catch { } //can occur only when modified rom doesn't have any BFF2
+                    
             } while (tmpPositionBFF2 != -13);
 
             //add bff2 list in the bff2Childs

@@ -73,7 +73,7 @@ namespace N64PPLEditorC
 
         public void SetText(String text)
         {
-            text = text.Replace("\r\n", "#");
+            text = text.Replace("\r\n", "#").ToLower();
             byte[] res = new byte[text.Length * 2+4];
             //write size of the text
             Array.Copy(CGeneric.ConvertIntToByteArray(text.Length*2), res, 4);
@@ -175,7 +175,6 @@ namespace N64PPLEditorC
 
             return res;
         }
-
 
         private byte[] ConvertCharToByteArray(char letter)
         {
@@ -372,6 +371,5 @@ namespace N64PPLEditorC
                 default: throw new NotImplementedException();
             }
         }
-
     }
 }
