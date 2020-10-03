@@ -81,6 +81,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ManagementAudio\AudioList.cs" />
+    <Compile Include="ManagementAudio\SoundBank.cs" />
     <Compile Include="ManagementRomData\GraphicsRomAddress.cs" />
     <Compile Include="ManagementListRessources\C3FIB.cs" />
     <Compile Include="ManagementListRessources\CBFF2.cs" />

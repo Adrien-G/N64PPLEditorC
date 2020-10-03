@@ -62,14 +62,18 @@
             this.pictureBoxUncompressedTexture = new System.Windows.Forms.PictureBox();
             this.treeViewTexturesUncompressed = new System.Windows.Forms.TreeView();
             this.tabPageScenes = new System.Windows.Forms.TabPage();
-            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.buttonSceneBackColor = new System.Windows.Forms.Button();
             this.buttonSceneForeColor = new System.Windows.Forms.Button();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
             this.numericUpDownScenePosX = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.numericUpDownScenePosY = new System.Windows.Forms.NumericUpDown();
             this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
+            this.buttonSceneSuppressText = new System.Windows.Forms.Button();
             this.buttonScenesAddTextAtEnd = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.buttonScenesAddText = new System.Windows.Forms.Button();
@@ -81,6 +85,7 @@
             this.numericUpDownGroupText = new System.Windows.Forms.NumericUpDown();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
+            this.buttonHVQMRemove = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -90,12 +95,15 @@
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.buttonHvqmPathOpen = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.buttonHVQMExtract = new System.Windows.Forms.Button();
             this.buttonHVQMReplace = new System.Windows.Forms.Button();
             this.treeViewHVQM = new System.Windows.Forms.TreeView();
+            this.tabPageAudio = new System.Windows.Forms.TabPage();
             this.tabPageScenesOrder = new System.Windows.Forms.TabPage();
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonModifyRom = new System.Windows.Forms.Button();
@@ -105,10 +113,15 @@
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
+            this.treeViewAudio = new System.Windows.Forms.TreeView();
+            this.label13 = new System.Windows.Forms.Label();
+            this.contextMenuStripAudioTreeview = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemReplacePointerTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemReplaceWaveTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemReplaceSfxTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemReplaceAudioAllSoundBank = new System.Windows.Forms.ToolStripMenuItem();
             this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -121,6 +134,7 @@
             this.groupBox10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).BeginInit();
             this.tabPageScenes.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             this.groupBox12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).BeginInit();
@@ -133,10 +147,11 @@
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.tabPageAudio.SuspendLayout();
             this.tabPageScenesOrder.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.groupBox9.SuspendLayout();
+            this.contextMenuStripAudioTreeview.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -300,6 +315,7 @@
             this.tabControlTexMovSce.Controls.Add(this.tabPageTexturesUncompressed);
             this.tabControlTexMovSce.Controls.Add(this.tabPageScenes);
             this.tabControlTexMovSce.Controls.Add(this.tabPageMovies);
+            this.tabControlTexMovSce.Controls.Add(this.tabPageAudio);
             this.tabControlTexMovSce.Controls.Add(this.tabPageScenesOrder);
             this.tabControlTexMovSce.Enabled = false;
             this.tabControlTexMovSce.Location = new System.Drawing.Point(12, 69);
@@ -486,18 +502,36 @@
             this.tabPageScenes.TabIndex = 2;
             this.tabPageScenes.Text = "Scenes";
             // 
-            // groupBox12
+            // groupBox9
             // 
-            this.groupBox12.Controls.Add(this.label9);
-            this.groupBox12.Controls.Add(this.numericUpDownScenePosX);
-            this.groupBox12.Controls.Add(this.label8);
-            this.groupBox12.Controls.Add(this.numericUpDownScenePosY);
-            this.groupBox12.Location = new System.Drawing.Point(269, 454);
-            this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(145, 83);
-            this.groupBox12.TabIndex = 11;
-            this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "Text Position";
+            this.groupBox9.Controls.Add(this.label12);
+            this.groupBox9.Controls.Add(this.label7);
+            this.groupBox9.Controls.Add(this.buttonSceneBackColor);
+            this.groupBox9.Controls.Add(this.buttonSceneForeColor);
+            this.groupBox9.Location = new System.Drawing.Point(420, 454);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(199, 83);
+            this.groupBox9.TabIndex = 12;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Text Color";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 54);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(56, 13);
+            this.label12.TabIndex = 13;
+            this.label12.Text = "BackColor";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 23);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(58, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "ForeColor :";
             // 
             // buttonSceneBackColor
             // 
@@ -520,6 +554,19 @@
             this.buttonSceneForeColor.Text = "Set";
             this.buttonSceneForeColor.UseVisualStyleBackColor = true;
             this.buttonSceneForeColor.Click += new System.EventHandler(this.buttonSceneForeColor_Click);
+            // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.label9);
+            this.groupBox12.Controls.Add(this.numericUpDownScenePosX);
+            this.groupBox12.Controls.Add(this.label8);
+            this.groupBox12.Controls.Add(this.numericUpDownScenePosY);
+            this.groupBox12.Location = new System.Drawing.Point(269, 454);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(145, 83);
+            this.groupBox12.TabIndex = 11;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "Text Position";
             // 
             // label9
             // 
@@ -567,6 +614,7 @@
             // 
             // groupBoxSceneText
             // 
+            this.groupBoxSceneText.Controls.Add(this.buttonSceneSuppressText);
             this.groupBoxSceneText.Controls.Add(this.buttonScenesAddTextAtEnd);
             this.groupBoxSceneText.Controls.Add(this.label11);
             this.groupBoxSceneText.Controls.Add(this.buttonScenesAddText);
@@ -579,6 +627,16 @@
             this.groupBoxSceneText.TabIndex = 5;
             this.groupBoxSceneText.TabStop = false;
             this.groupBoxSceneText.Text = "Text edit";
+            // 
+            // buttonSceneSuppressText
+            // 
+            this.buttonSceneSuppressText.Location = new System.Drawing.Point(168, 46);
+            this.buttonSceneSuppressText.Name = "buttonSceneSuppressText";
+            this.buttonSceneSuppressText.Size = new System.Drawing.Size(85, 36);
+            this.buttonSceneSuppressText.TabIndex = 13;
+            this.buttonSceneSuppressText.Text = "Suppress text";
+            this.buttonSceneSuppressText.UseVisualStyleBackColor = true;
+            this.buttonSceneSuppressText.Click += new System.EventHandler(this.buttonSceneSuppressText_Click);
             // 
             // buttonScenesAddTextAtEnd
             // 
@@ -679,8 +737,9 @@
             // tabPageMovies
             // 
             this.tabPageMovies.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageMovies.Controls.Add(this.buttonHVQMRemove);
             this.tabPageMovies.Controls.Add(this.groupBox5);
-            this.tabPageMovies.Controls.Add(this.button2);
+            this.tabPageMovies.Controls.Add(this.buttonHVQMExtract);
             this.tabPageMovies.Controls.Add(this.buttonHVQMReplace);
             this.tabPageMovies.Controls.Add(this.treeViewHVQM);
             this.tabPageMovies.Location = new System.Drawing.Point(4, 22);
@@ -689,6 +748,16 @@
             this.tabPageMovies.Size = new System.Drawing.Size(622, 624);
             this.tabPageMovies.TabIndex = 1;
             this.tabPageMovies.Text = "Movies";
+            // 
+            // buttonHVQMRemove
+            // 
+            this.buttonHVQMRemove.Location = new System.Drawing.Point(434, 6);
+            this.buttonHVQMRemove.Name = "buttonHVQMRemove";
+            this.buttonHVQMRemove.Size = new System.Drawing.Size(75, 35);
+            this.buttonHVQMRemove.TabIndex = 12;
+            this.buttonHVQMRemove.Text = "remove HVQM";
+            this.buttonHVQMRemove.UseVisualStyleBackColor = true;
+            this.buttonHVQMRemove.Click += new System.EventHandler(this.buttonHVQMRemove_Click);
             // 
             // groupBox5
             // 
@@ -788,14 +857,15 @@
             this.label3.TabIndex = 4;
             this.label3.Text = resources.GetString("label3.Text");
             // 
-            // button2
+            // buttonHVQMExtract
             // 
-            this.button2.Location = new System.Drawing.Point(353, 6);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 35);
-            this.button2.TabIndex = 8;
-            this.button2.Text = "Extract HVQM";
-            this.button2.UseVisualStyleBackColor = true;
+            this.buttonHVQMExtract.Location = new System.Drawing.Point(353, 6);
+            this.buttonHVQMExtract.Name = "buttonHVQMExtract";
+            this.buttonHVQMExtract.Size = new System.Drawing.Size(75, 35);
+            this.buttonHVQMExtract.TabIndex = 8;
+            this.buttonHVQMExtract.Text = "Extract HVQM";
+            this.buttonHVQMExtract.UseVisualStyleBackColor = true;
+            this.buttonHVQMExtract.Click += new System.EventHandler(this.buttonHVQMExtract_Click);
             // 
             // buttonHVQMReplace
             // 
@@ -805,6 +875,7 @@
             this.buttonHVQMReplace.TabIndex = 3;
             this.buttonHVQMReplace.Text = "Replace HVQM";
             this.buttonHVQMReplace.UseVisualStyleBackColor = true;
+            this.buttonHVQMReplace.Click += new System.EventHandler(this.buttonHVQMReplace_Click);
             // 
             // treeViewHVQM
             // 
@@ -815,6 +886,18 @@
             this.treeViewHVQM.Size = new System.Drawing.Size(266, 624);
             this.treeViewHVQM.TabIndex = 2;
             // 
+            // tabPageAudio
+            // 
+            this.tabPageAudio.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageAudio.Controls.Add(this.label13);
+            this.tabPageAudio.Controls.Add(this.treeViewAudio);
+            this.tabPageAudio.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAudio.Name = "tabPageAudio";
+            this.tabPageAudio.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAudio.Size = new System.Drawing.Size(622, 624);
+            this.tabPageAudio.TabIndex = 5;
+            this.tabPageAudio.Text = "Audio";
+            // 
             // tabPageScenesOrder
             // 
             this.tabPageScenesOrder.BackColor = System.Drawing.SystemColors.Control;
@@ -824,7 +907,7 @@
             this.tabPageScenesOrder.Name = "tabPageScenesOrder";
             this.tabPageScenesOrder.Size = new System.Drawing.Size(622, 624);
             this.tabPageScenesOrder.TabIndex = 3;
-            this.tabPageScenesOrder.Text = "Scenes Order";
+            this.tabPageScenesOrder.Text = "Debug";
             // 
             // button4
             // 
@@ -834,17 +917,34 @@
             this.button4.TabIndex = 16;
             this.button4.Text = "Hook mode";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.textBox3);
+            this.groupBox3.Controls.Add(this.textBox2);
             this.groupBox3.Controls.Add(this.textBox1);
             this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Location = new System.Drawing.Point(12, 25);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(287, 222);
+            this.groupBox3.Size = new System.Drawing.Size(402, 222);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Debug";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(124, 159);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(100, 20);
+            this.textBox3.TabIndex = 16;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(124, 138);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.TabIndex = 15;
             // 
             // textBox1
             // 
@@ -924,36 +1024,63 @@
             this.colorDialog1.AnyColor = true;
             this.colorDialog1.FullOpen = true;
             // 
-            // groupBox9
+            // treeViewAudio
             // 
-            this.groupBox9.Controls.Add(this.label12);
-            this.groupBox9.Controls.Add(this.label7);
-            this.groupBox9.Controls.Add(this.buttonSceneBackColor);
-            this.groupBox9.Controls.Add(this.buttonSceneForeColor);
-            this.groupBox9.Location = new System.Drawing.Point(420, 454);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(199, 83);
-            this.groupBox9.TabIndex = 12;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Text Color";
+            this.treeViewAudio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.treeViewAudio.ContextMenuStrip = this.contextMenuStripAudioTreeview;
+            this.treeViewAudio.Location = new System.Drawing.Point(0, 0);
+            this.treeViewAudio.Name = "treeViewAudio";
+            this.treeViewAudio.Size = new System.Drawing.Size(266, 624);
+            this.treeViewAudio.TabIndex = 3;
             // 
-            // label7
+            // label13
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 23);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(58, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "ForeColor :";
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(341, 110);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(192, 13);
+            this.label13.TabIndex = 4;
+            this.label13.Text = "Right click directly in the list for options.";
             // 
-            // label12
+            // contextMenuStripAudioTreeview
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 54);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(56, 13);
-            this.label12.TabIndex = 13;
-            this.label12.Text = "BackColor";
+            this.contextMenuStripAudioTreeview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemReplaceAudioAllSoundBank,
+            this.toolStripSeparator3,
+            this.toolStripMenuItemReplacePointerTable,
+            this.toolStripMenuItemReplaceWaveTable,
+            this.toolStripMenuItemReplaceSfxTable});
+            this.contextMenuStripAudioTreeview.Name = "contextMenuStripAudioTreeview";
+            this.contextMenuStripAudioTreeview.Size = new System.Drawing.Size(196, 120);
+            // 
+            // toolStripMenuItemReplacePointerTable
+            // 
+            this.toolStripMenuItemReplacePointerTable.Name = "toolStripMenuItemReplacePointerTable";
+            this.toolStripMenuItemReplacePointerTable.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplacePointerTable.Text = "Replace Pointer Table";
+            this.toolStripMenuItemReplacePointerTable.Click += new System.EventHandler(this.toolStripMenuItemReplacePointerTable_Click);
+            // 
+            // toolStripMenuItemReplaceWaveTable
+            // 
+            this.toolStripMenuItemReplaceWaveTable.Name = "toolStripMenuItemReplaceWaveTable";
+            this.toolStripMenuItemReplaceWaveTable.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplaceWaveTable.Text = "Replace WaveTable";
+            this.toolStripMenuItemReplaceWaveTable.Click += new System.EventHandler(this.toolStripMenuItemReplaceWaveTable_Click);
+            // 
+            // toolStripMenuItemReplaceSfxTable
+            // 
+            this.toolStripMenuItemReplaceSfxTable.Name = "toolStripMenuItemReplaceSfxTable";
+            this.toolStripMenuItemReplaceSfxTable.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplaceSfxTable.Text = "Replace Sfx";
+            this.toolStripMenuItemReplaceSfxTable.Click += new System.EventHandler(this.toolStripMenuItemReplaceSfxTable_Click);
+            // 
+            // toolStripMenuItemReplaceAudioAllSoundBank
+            // 
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Name = "toolStripMenuItemReplaceAudioAllSoundBank";
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Text = "Replace All SoundBank";
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Click += new System.EventHandler(this.toolStripMenuItemReplaceAudioAllSoundBank_Click);
             // 
             // drawScene1
             // 
@@ -961,6 +1088,11 @@
             this.drawScene1.Name = "drawScene1";
             this.drawScene1.Size = new System.Drawing.Size(320, 240);
             this.drawScene1.TabIndex = 0;
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(192, 6);
             // 
             // Form1
             // 
@@ -992,6 +1124,8 @@
             this.groupBox10.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).EndInit();
             this.tabPageScenes.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
             this.groupBox12.ResumeLayout(false);
             this.groupBox12.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).EndInit();
@@ -1010,13 +1144,14 @@
             this.groupBox7.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            this.tabPageAudio.ResumeLayout(false);
+            this.tabPageAudio.PerformLayout();
             this.tabPageScenesOrder.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
+            this.contextMenuStripAudioTreeview.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1071,7 +1206,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button buttonHvqmPathOpen;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonHVQMExtract;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.GroupBox groupBox5;
@@ -1103,6 +1238,19 @@
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button buttonSceneSuppressText;
+        private System.Windows.Forms.Button buttonHVQMRemove;
+        private System.Windows.Forms.TabPage tabPageAudio;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TreeView treeViewAudio;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripAudioTreeview;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplacePointerTable;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceWaveTable;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceSfxTable;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceAudioAllSoundBank;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
 

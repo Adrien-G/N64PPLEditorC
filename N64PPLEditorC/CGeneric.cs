@@ -52,7 +52,7 @@ namespace N64PPLEditorC
 
         public static byte[] GiveMeArray(byte[] rawData, int startingData, int sizeData)
         {
-            var data = new Byte[sizeData];
+            var data = new byte[sizeData];
             Array.Copy(rawData, startingData, data, 0, data.Length);
             return data;
         }

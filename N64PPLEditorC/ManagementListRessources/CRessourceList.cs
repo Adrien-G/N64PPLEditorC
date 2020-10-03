@@ -157,9 +157,8 @@ namespace N64PPLEditorC
             return total;
         }
 
-        public void WriteAllData(string path)
+        public void WriteAllData(FileStream fs)
         {
-            FileStream fs = new FileStream(path,FileMode.Open,FileAccess.Write);
             fs.Position = indexRessourcesStart;
 
             // write the number of elements
@@ -180,7 +179,7 @@ namespace N64PPLEditorC
             WriteRessourceData(ref fs, sbfList);
             WriteRessourceData(ref fs, rdfList);
 
-            fs.Close();
+
         }
 
         private void WriteRessourceData<T>(ref FileStream fs, List<T> listOfressource) where T : AbsRessource

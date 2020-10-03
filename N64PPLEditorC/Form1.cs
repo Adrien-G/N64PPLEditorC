@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using static N64PPLEditorC.CGeneric;
+using N64PPLEditorC.ManagementAudio;
 
 namespace N64PPLEditorC
 {
@@ -18,6 +19,7 @@ namespace N64PPLEditorC
     {
         CRessourceList ressourceList;
         RomAddressFrList romList;
+        AudioList audioList;
         
         List<TextBox> txtBox = new List<TextBox>();
 
@@ -150,7 +152,7 @@ namespace N64PPLEditorC
                     {
                         MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
+                    labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
                 }
             }
         }
@@ -160,7 +162,7 @@ namespace N64PPLEditorC
             {
                 ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
                 treeViewTextures.SelectedNode.Remove();
-                labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
+                labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
             }
 
         }
@@ -259,7 +261,7 @@ namespace N64PPLEditorC
                 {
                     ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
                     treeViewTextures.SelectedNode.Remove();
-                    labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
+                    labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
                 }
         }
         #endregion
@@ -360,26 +362,39 @@ namespace N64PPLEditorC
             {
                 //try
                 //{
-                    FileStream fstream = File.Open(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
-                    fstream.Close();
+                    Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
+                
+                    //load graphics compressed / hvqm and sbf
+                    LoadRessourcesList(buffRom);
+
+                    //TODO check if it's the french version...
+                    //load the uncompressed texture
+                    this.romList = new RomAddressFrList(buffRom);
+
+                    //load the audio part
+                    LoadAudioList(buffRom);
+
+
+                    LoadTreeView();
+                    labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+                    tabControlTexMovSce.Enabled = true;
+                    buttonModifyRom.Enabled = true;
                     buttonLoadRom.Enabled = false;
                     buttonGetRomFolder.Enabled = false;
                     buttonLoadRom.Text = "ROM Loaded";
-                    Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
-                    LoadRessourcesList(buffRom);
-                    //TODO check if it's the french version...
-                    this.romList = new RomAddressFrList(buffRom);
-                    //TODO done
-                    LoadTreeView();
-                    labelFreeSpaceLeft.Text = Convert.ToString(ressourceList.GetFreeSpaceLeft(), 16).ToUpper();
-                    tabControlTexMovSce.Enabled = true;
-                    buttonModifyRom.Enabled = true;
                 //}
                 //catch (Exception ex)
                 //{
                 //MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 //}
             }
+        }
+
+        private void LoadAudioList(byte[] buffRom)
+        {
+            int indexAudioStart = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternN64WaveTable);
+            this.audioList = new AudioList(buffRom, indexAudioStart);
+
         }
         private void LoadTreeView()
         {
@@ -388,6 +403,7 @@ namespace N64PPLEditorC
             treeViewTexturesUncompressed.BeginUpdate();
             treeViewHVQM.BeginUpdate();
             treeViewSBF.BeginUpdate();
+            treeViewAudio.BeginUpdate();
             for (int fib = 0; fib < this.ressourceList.GetFIBCount(); fib++)
             {
                 treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.fibList[fib].GetFIBName());
@@ -409,6 +425,11 @@ namespace N64PPLEditorC
             for(int romGraphics = 0; romGraphics < this.romList.GetGraphicsCount(); romGraphics++)
             {
                 treeViewTexturesUncompressed.Nodes.Add(this.romList.GetGraphicsName(romGraphics));
+            }
+
+            for (int audioSoundbank = 0; audioSoundbank < this.audioList.soundBankList.Count(); audioSoundbank++)
+            {
+                treeViewAudio.Nodes.Add("Soundbank " + Convert.ToString(audioSoundbank,16).ToUpper());
             }
 
             if (treeViewTextures.Nodes.Count > 0)
@@ -435,12 +456,13 @@ namespace N64PPLEditorC
             treeViewTexturesUncompressed.EndUpdate();
             treeViewHVQM.EndUpdate();
             treeViewSBF.EndUpdate();
+            treeViewAudio.EndUpdate();
 
         }
 
         private void LoadRessourcesList(byte[] buffRom)
         {
-            
+
             // search for "ABRA.BIF" pattern (start of array ressources location)
             int indexRessourcesArrayStart = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternAbraBif) - 12;
 
@@ -503,8 +525,20 @@ namespace N64PPLEditorC
 
         private void buttonModifyRom_Click(object sender, EventArgs e)
         {
-            ressourceList.WriteAllData(textBoxPPLLocation.Text);
-            buttonModifyRom.BackColor = Color.LimeGreen;
+            if(ressourceList.GetFreeSpaceLeft() < 0)
+            {
+                MessageBox.Show("There is not enought space in the rom file..."  + Environment.NewLine + "Please supress some things and try again.", "Error saving rom...", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                buttonModifyRom.BackColor = Color.Orange;
+            }
+            else
+            {
+                FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.Write);
+                //TODO add uncompressed image management
+                ressourceList.WriteAllData(fs);
+                audioList.writeAllData(fs);
+                fs.Close();
+                buttonModifyRom.BackColor = Color.LimeGreen;
+            }
         }
 
 
@@ -527,7 +561,6 @@ namespace N64PPLEditorC
                     numericUpDownSceneText.Maximum = nbTextObject-1;
                 }
                 launchSceneDisplay();
-                launchTextDisplayText();
             }
         }
 
@@ -560,7 +593,7 @@ namespace N64PPLEditorC
             }
         }
 
-private void launchGraphicDisplayPart()
+        private void launchGraphicDisplayPart()
         {
             var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
             var ListTextureName = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetBifList();
@@ -573,7 +606,7 @@ private void launchGraphicDisplayPart()
             {
                 string textureInsideSbfName = ListTextureName[scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
                 int indexData = this.ressourceList.Get3FIBIndexWithFIBName(textureInsideSbfName);
-                if (indexData != -1)
+                if (indexData != -1 && scene.GetTextureManagementObject(i).isCompressedTexture)
                 {
                     try
                     {
@@ -626,15 +659,20 @@ private void launchGraphicDisplayPart()
 
         private void button1_Click(object sender, EventArgs e)
         {
+            textBox1.Clear();
             Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
             List<string> list = new List<string>();
-           
-            for(int i = 0; i < 10208296; i += 4)
+
+            int val1 = Convert.ToInt32(textBox2.Text, 16);
+            int val2 = Convert.ToInt32(textBox3.Text, 16);
+
+            for (int i = 0; i < 10208296; i += 4)
             {
                 int value = BitConverter.ToInt32(new[] { buffRom[i+3], buffRom[i+2], buffRom[i+1], buffRom[i]},0);
-                if(value  >= 0x171F5D0 && value <= 0x1F875D0)
+                if(value  >= val1 && value <= val2)
                 {
-                    list.Add(Convert.ToString(i, 16));
+                    if (value %4 == 0)
+                        list.Add(Convert.ToString(i, 16));
                 }
             }
             foreach (string str in list)
@@ -693,6 +731,161 @@ private void launchGraphicDisplayPart()
                 textObj.BackColor = colorDialog1.Color;
                 launchTextDisplayText();
             }
+        }
+
+        private void buttonSceneSuppressText_Click(object sender, EventArgs e)
+        {
+            if((int)numericUpDownSceneText.Maximum > 0)
+            {
+                this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).RemoveText((int)numericUpDownSceneText.Value);
+                numericUpDownSceneText.Maximum -= 1;
+            }
+                
+        }
+
+        private void buttonHVQMExtract_Click(object sender, EventArgs e)
+        {
+            foreach(CHVQM video in ressourceList.hvqmList)
+            {
+                var fileName = video.GetRessourceName().Replace("\0","");
+                FileStream file = new FileStream(CGeneric.pathOtherContent + fileName, FileMode.Create);
+                file.Write(video.GetRawData(),0,video.GetRawData().Length);
+                file.Close();
+            }
+            Process.Start(CGeneric.pathOtherContent);
+        }
+
+        private void buttonHVQMReplace_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openHvqm = new OpenFileDialog())
+            {
+                openHvqm.InitialDirectory = Application.StartupPath;
+                openHvqm.Filter = "hvqm file (*.hvqm)|*.hvqm";
+                openHvqm.FilterIndex = 1;
+                openHvqm.RestoreDirectory = true;
+
+                if (openHvqm.ShowDialog() == DialogResult.OK)
+                {
+                    Byte[] buffRom = File.ReadAllBytes(openHvqm.FileName);
+                    this.ressourceList.hvqmList[treeViewHVQM.SelectedNode.Index].SetRawData(buffRom);
+                    labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+                }
+            }
+        }
+
+        private void buttonHVQMRemove_Click(object sender, EventArgs e)
+        {
+            this.ressourceList.hvqmList.RemoveAt(treeViewHVQM.SelectedNode.Index);
+            treeViewHVQM.Nodes.RemoveAt(treeViewHVQM.SelectedNode.Index);
+            labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                SendKeys.Send("{ENTER}");
+                System.Threading.Thread.Sleep(8000);
+            }
+            
+        }
+
+        private void toolStripMenuItemReplaceAudioAllSoundBank_Click(object sender, EventArgs e)
+        {
+            byte[] PtrTable = ReadAudioPtrTable();
+            byte[] WaveTable = ReadAudioWaveTable();
+            byte[] SfxTable = ReadAudioSfxTable();
+
+            if (PtrTable != null && WaveTable != null && SfxTable != null)
+            {
+                audioList.replaceSoundBank(PtrTable, WaveTable, SfxTable, treeViewAudio.SelectedNode.Index) ;
+            }
+            else
+                MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager",MessageBoxButtons.OK ,MessageBoxIcon.Information);
+        }
+
+        private byte[] ReadAudioPtrTable()
+        {
+            byte[] PtrTable = null;
+            using (OpenFileDialog openPointerTable = new OpenFileDialog())
+            {
+                openPointerTable.InitialDirectory = Application.StartupPath;
+                openPointerTable.Filter = "ptr file (*.ptr)|*.ptr";
+                openPointerTable.FilterIndex = 1;
+                openPointerTable.RestoreDirectory = true;
+
+                if (openPointerTable.ShowDialog() == DialogResult.OK)
+                {
+                    PtrTable = File.ReadAllBytes(openPointerTable.FileName);
+                }
+            }
+            return PtrTable;
+        }
+
+        private byte[] ReadAudioWaveTable()
+        {
+            byte[] waveTable = null;
+            using (OpenFileDialog openWaveTable = new OpenFileDialog())
+            {
+                openWaveTable.InitialDirectory = Application.StartupPath;
+                openWaveTable.Filter = "wbk file (*.wbk)|*.wbk";
+                openWaveTable.FilterIndex = 1;
+                openWaveTable.RestoreDirectory = true;
+
+                if (openWaveTable.ShowDialog() == DialogResult.OK)
+                {
+                    waveTable = File.ReadAllBytes(openWaveTable.FileName);
+                }
+            }
+            return waveTable;
+        }
+
+        private byte[] ReadAudioSfxTable()
+        {
+            byte[] SfxTable = null;
+            using (OpenFileDialog openSfxTable = new OpenFileDialog())
+            {
+                openSfxTable.InitialDirectory = Application.StartupPath;
+                openSfxTable.Filter = "sfx file (*.bfx)|*.bfx";
+                openSfxTable.FilterIndex = 1;
+                openSfxTable.RestoreDirectory = true;
+
+                if (openSfxTable.ShowDialog() == DialogResult.OK)
+                {
+                    SfxTable = File.ReadAllBytes(openSfxTable.FileName);
+                }
+            }
+            return SfxTable;
+        }
+
+        private void toolStripMenuItemReplacePointerTable_Click(object sender, EventArgs e)
+        {
+            byte[] PtrTable = ReadAudioPtrTable();
+
+            if (PtrTable != null)
+                audioList.replacePointerTable(PtrTable, treeViewAudio.SelectedNode.Index);
+            else
+                MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void toolStripMenuItemReplaceWaveTable_Click(object sender, EventArgs e)
+        {
+            byte[] WaveTable = ReadAudioWaveTable();
+
+            if (WaveTable != null)
+                audioList.replaceWaveTable( WaveTable, treeViewAudio.SelectedNode.Index);
+            else
+                MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void toolStripMenuItemReplaceSfxTable_Click(object sender, EventArgs e)
+        {
+            byte[] SfxTable = ReadAudioSfxTable();
+
+            if (SfxTable != null)
+                audioList.replaceSfxTable(SfxTable, treeViewAudio.SelectedNode.Index);
+            else
+                MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
