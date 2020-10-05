@@ -392,7 +392,7 @@ namespace N64PPLEditorC
 
         private void LoadAudioList(byte[] buffRom)
         {
-            int indexAudioStart = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternN64WaveTable);
+            int indexAudioStart = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternN64PtrTableV2);
             this.audioList = new AudioList(buffRom, indexAudioStart);
 
         }
@@ -535,7 +535,7 @@ namespace N64PPLEditorC
                 FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.Write);
                 //TODO add uncompressed image management
                 ressourceList.WriteAllData(fs);
-                audioList.writeAllData(fs);
+                audioList.WriteAllData(fs);
                 fs.Close();
                 buttonModifyRom.BackColor = Color.LimeGreen;
             }
@@ -798,7 +798,7 @@ namespace N64PPLEditorC
 
             if (PtrTable != null && WaveTable != null && SfxTable != null)
             {
-                audioList.replaceSoundBank(PtrTable, WaveTable, SfxTable, treeViewAudio.SelectedNode.Index) ;
+                audioList.ReplaceSoundBank(PtrTable, WaveTable, SfxTable, treeViewAudio.SelectedNode.Index) ;
             }
             else
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager",MessageBoxButtons.OK ,MessageBoxIcon.Information);
@@ -863,7 +863,7 @@ namespace N64PPLEditorC
             byte[] PtrTable = ReadAudioPtrTable();
 
             if (PtrTable != null)
-                audioList.replacePointerTable(PtrTable, treeViewAudio.SelectedNode.Index);
+                audioList.ReplacePointerTable(PtrTable, treeViewAudio.SelectedNode.Index);
             else
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -873,7 +873,7 @@ namespace N64PPLEditorC
             byte[] WaveTable = ReadAudioWaveTable();
 
             if (WaveTable != null)
-                audioList.replaceWaveTable( WaveTable, treeViewAudio.SelectedNode.Index);
+                audioList.ReplaceWaveTable(WaveTable, treeViewAudio.SelectedNode.Index);
             else
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -883,9 +883,33 @@ namespace N64PPLEditorC
             byte[] SfxTable = ReadAudioSfxTable();
 
             if (SfxTable != null)
-                audioList.replaceSfxTable(SfxTable, treeViewAudio.SelectedNode.Index);
+                audioList.ReplaceSfxTable(SfxTable, treeViewAudio.SelectedNode.Index);
             else
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void contextMenuStripAudioTreeview_Opening(object sender, CancelEventArgs e)
+        {
+            if(treeViewAudio.SelectedNode.Index <= 3)
+            {
+                toolStripMenuItemReplaceAudioAllSoundBank.Enabled = false;
+                toolStripMenuItemReplacePointerTable.Enabled = false;
+                toolStripMenuItemReplaceSfxTable.Enabled = false;
+                toolStripMenuItemReplaceWaveTable.Enabled = false;
+            }
+            else
+            {
+                toolStripMenuItemReplaceAudioAllSoundBank.Enabled = true;
+                toolStripMenuItemReplacePointerTable.Enabled = true;
+                toolStripMenuItemReplaceSfxTable.Enabled = true;
+                toolStripMenuItemReplaceWaveTable.Enabled = true;
+            }
+        }
+
+        private void treeViewAudio_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            //small hack
+            treeViewAudio.SelectedNode = e.Node;
         }
     }
 }

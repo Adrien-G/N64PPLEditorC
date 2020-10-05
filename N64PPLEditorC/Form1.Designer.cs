@@ -99,6 +99,14 @@
             this.buttonHVQMReplace = new System.Windows.Forms.Button();
             this.treeViewHVQM = new System.Windows.Forms.TreeView();
             this.tabPageAudio = new System.Windows.Forms.TabPage();
+            this.label13 = new System.Windows.Forms.Label();
+            this.treeViewAudio = new System.Windows.Forms.TreeView();
+            this.contextMenuStripAudioTreeview = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemReplaceAudioAllSoundBank = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemReplacePointerTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemReplaceWaveTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemReplaceSfxTable = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageScenesOrder = new System.Windows.Forms.TabPage();
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -113,15 +121,8 @@
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.treeViewAudio = new System.Windows.Forms.TreeView();
-            this.label13 = new System.Windows.Forms.Label();
-            this.contextMenuStripAudioTreeview = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemReplacePointerTable = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemReplaceWaveTable = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemReplaceSfxTable = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemReplaceAudioAllSoundBank = new System.Windows.Forms.ToolStripMenuItem();
             this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.label14 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -148,10 +149,10 @@
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
+            this.contextMenuStripAudioTreeview.SuspendLayout();
             this.tabPageScenesOrder.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.contextMenuStripAudioTreeview.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -889,6 +890,7 @@
             // tabPageAudio
             // 
             this.tabPageAudio.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageAudio.Controls.Add(this.label14);
             this.tabPageAudio.Controls.Add(this.label13);
             this.tabPageAudio.Controls.Add(this.treeViewAudio);
             this.tabPageAudio.Location = new System.Drawing.Point(4, 22);
@@ -897,6 +899,71 @@
             this.tabPageAudio.Size = new System.Drawing.Size(622, 624);
             this.tabPageAudio.TabIndex = 5;
             this.tabPageAudio.Text = "Audio";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(341, 110);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(192, 13);
+            this.label13.TabIndex = 4;
+            this.label13.Text = "Right click directly in the list for options.";
+            // 
+            // treeViewAudio
+            // 
+            this.treeViewAudio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.treeViewAudio.ContextMenuStrip = this.contextMenuStripAudioTreeview;
+            this.treeViewAudio.Location = new System.Drawing.Point(0, 0);
+            this.treeViewAudio.Name = "treeViewAudio";
+            this.treeViewAudio.Size = new System.Drawing.Size(266, 624);
+            this.treeViewAudio.TabIndex = 3;
+            this.treeViewAudio.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewAudio_NodeMouseClick);
+            // 
+            // contextMenuStripAudioTreeview
+            // 
+            this.contextMenuStripAudioTreeview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemReplaceAudioAllSoundBank,
+            this.toolStripSeparator3,
+            this.toolStripMenuItemReplacePointerTable,
+            this.toolStripMenuItemReplaceWaveTable,
+            this.toolStripMenuItemReplaceSfxTable});
+            this.contextMenuStripAudioTreeview.Name = "contextMenuStripAudioTreeview";
+            this.contextMenuStripAudioTreeview.Size = new System.Drawing.Size(196, 98);
+            this.contextMenuStripAudioTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAudioTreeview_Opening);
+            // 
+            // toolStripMenuItemReplaceAudioAllSoundBank
+            // 
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Name = "toolStripMenuItemReplaceAudioAllSoundBank";
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Text = "Replace All SoundBank";
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Click += new System.EventHandler(this.toolStripMenuItemReplaceAudioAllSoundBank_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(192, 6);
+            // 
+            // toolStripMenuItemReplacePointerTable
+            // 
+            this.toolStripMenuItemReplacePointerTable.Name = "toolStripMenuItemReplacePointerTable";
+            this.toolStripMenuItemReplacePointerTable.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplacePointerTable.Text = "Replace Pointer Table";
+            this.toolStripMenuItemReplacePointerTable.Click += new System.EventHandler(this.toolStripMenuItemReplacePointerTable_Click);
+            // 
+            // toolStripMenuItemReplaceWaveTable
+            // 
+            this.toolStripMenuItemReplaceWaveTable.Name = "toolStripMenuItemReplaceWaveTable";
+            this.toolStripMenuItemReplaceWaveTable.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplaceWaveTable.Text = "Replace WaveTable";
+            this.toolStripMenuItemReplaceWaveTable.Click += new System.EventHandler(this.toolStripMenuItemReplaceWaveTable_Click);
+            // 
+            // toolStripMenuItemReplaceSfxTable
+            // 
+            this.toolStripMenuItemReplaceSfxTable.Name = "toolStripMenuItemReplaceSfxTable";
+            this.toolStripMenuItemReplaceSfxTable.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplaceSfxTable.Text = "Replace Sfx";
+            this.toolStripMenuItemReplaceSfxTable.Click += new System.EventHandler(this.toolStripMenuItemReplaceSfxTable_Click);
             // 
             // tabPageScenesOrder
             // 
@@ -1024,64 +1091,6 @@
             this.colorDialog1.AnyColor = true;
             this.colorDialog1.FullOpen = true;
             // 
-            // treeViewAudio
-            // 
-            this.treeViewAudio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.treeViewAudio.ContextMenuStrip = this.contextMenuStripAudioTreeview;
-            this.treeViewAudio.Location = new System.Drawing.Point(0, 0);
-            this.treeViewAudio.Name = "treeViewAudio";
-            this.treeViewAudio.Size = new System.Drawing.Size(266, 624);
-            this.treeViewAudio.TabIndex = 3;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(341, 110);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(192, 13);
-            this.label13.TabIndex = 4;
-            this.label13.Text = "Right click directly in the list for options.";
-            // 
-            // contextMenuStripAudioTreeview
-            // 
-            this.contextMenuStripAudioTreeview.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemReplaceAudioAllSoundBank,
-            this.toolStripSeparator3,
-            this.toolStripMenuItemReplacePointerTable,
-            this.toolStripMenuItemReplaceWaveTable,
-            this.toolStripMenuItemReplaceSfxTable});
-            this.contextMenuStripAudioTreeview.Name = "contextMenuStripAudioTreeview";
-            this.contextMenuStripAudioTreeview.Size = new System.Drawing.Size(196, 120);
-            // 
-            // toolStripMenuItemReplacePointerTable
-            // 
-            this.toolStripMenuItemReplacePointerTable.Name = "toolStripMenuItemReplacePointerTable";
-            this.toolStripMenuItemReplacePointerTable.Size = new System.Drawing.Size(195, 22);
-            this.toolStripMenuItemReplacePointerTable.Text = "Replace Pointer Table";
-            this.toolStripMenuItemReplacePointerTable.Click += new System.EventHandler(this.toolStripMenuItemReplacePointerTable_Click);
-            // 
-            // toolStripMenuItemReplaceWaveTable
-            // 
-            this.toolStripMenuItemReplaceWaveTable.Name = "toolStripMenuItemReplaceWaveTable";
-            this.toolStripMenuItemReplaceWaveTable.Size = new System.Drawing.Size(195, 22);
-            this.toolStripMenuItemReplaceWaveTable.Text = "Replace WaveTable";
-            this.toolStripMenuItemReplaceWaveTable.Click += new System.EventHandler(this.toolStripMenuItemReplaceWaveTable_Click);
-            // 
-            // toolStripMenuItemReplaceSfxTable
-            // 
-            this.toolStripMenuItemReplaceSfxTable.Name = "toolStripMenuItemReplaceSfxTable";
-            this.toolStripMenuItemReplaceSfxTable.Size = new System.Drawing.Size(195, 22);
-            this.toolStripMenuItemReplaceSfxTable.Text = "Replace Sfx";
-            this.toolStripMenuItemReplaceSfxTable.Click += new System.EventHandler(this.toolStripMenuItemReplaceSfxTable_Click);
-            // 
-            // toolStripMenuItemReplaceAudioAllSoundBank
-            // 
-            this.toolStripMenuItemReplaceAudioAllSoundBank.Name = "toolStripMenuItemReplaceAudioAllSoundBank";
-            this.toolStripMenuItemReplaceAudioAllSoundBank.Size = new System.Drawing.Size(195, 22);
-            this.toolStripMenuItemReplaceAudioAllSoundBank.Text = "Replace All SoundBank";
-            this.toolStripMenuItemReplaceAudioAllSoundBank.Click += new System.EventHandler(this.toolStripMenuItemReplaceAudioAllSoundBank_Click);
-            // 
             // drawScene1
             // 
             this.drawScene1.Location = new System.Drawing.Point(12, 16);
@@ -1089,10 +1098,14 @@
             this.drawScene1.Size = new System.Drawing.Size(320, 240);
             this.drawScene1.TabIndex = 0;
             // 
-            // toolStripSeparator3
+            // label14
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(192, 6);
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(272, 133);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(343, 13);
+            this.label14.TabIndex = 5;
+            this.label14.Text = "SoundBank lower than 3 contains critical data, so they are not editable.";
             // 
             // Form1
             // 
@@ -1146,12 +1159,12 @@
             this.groupBox6.PerformLayout();
             this.tabPageAudio.ResumeLayout(false);
             this.tabPageAudio.PerformLayout();
+            this.contextMenuStripAudioTreeview.ResumeLayout(false);
             this.tabPageScenesOrder.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.contextMenuStripAudioTreeview.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1251,6 +1264,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceSfxTable;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceAudioAllSoundBank;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.Label label14;
     }
 }
 

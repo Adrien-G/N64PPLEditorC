@@ -18,10 +18,12 @@ namespace N64PPLEditorC
         public static int sizeOfElementTable = 24;
 
         //some different pattern in the rom
-        public static readonly Byte[] patternN64WaveTable = { 78, 54, 52, 32, 80, 116, 114, 84, 97, 98, 108, 101, 115, 86, 50 };
+        public static readonly Byte[] patternN64WaveTable = { 0x4E, 0x36, 0x34, 0x20, 0x57, 0x61, 0x76, 0x65, 0x54, 0x61, 0x62, 0x6C, 0x65, 0x73, 0x20, 0x00 };
+        public static readonly Byte[] patternN64PtrTableV2= { 0x4E, 0x36, 0x34, 0x20, 0x50, 0x74, 0x72, 0x54, 0x61, 0x62, 0x6C, 0x65, 0x73, 0x56, 0x32, 0x00 };
         public static readonly Byte[] patternAbraBif = { 65, 66, 82, 65, 46, 66, 73, 70 };
         public static readonly Byte[] patternBFF2 = { 66, 70, 70, 50 };
-        
+        public static readonly Byte[] endOfRom = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+
         //check the decimal value of ressources type
         public enum RessourceType : int
         {
@@ -144,13 +146,13 @@ namespace N64PPLEditorC
             return Encoding.UTF8.GetString(text);
         }
 
-        public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched,int nbOccurence=0)
+        public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched,int nbOccurence=0,int startingAddress=0,int step=1)
         {
             //allow to search the second, third (and so on) value of the occurence
             int nbOcc = 0;
 
             // loop on the first array for find occurence
-            for (int i = 0; i < arraySource.Length - dataSearched.Length; i++)
+            for (int i = startingAddress; i < arraySource.Length - dataSearched.Length; i +=step)
             {
                 if (arraySource[i] == dataSearched[0])
                 {
