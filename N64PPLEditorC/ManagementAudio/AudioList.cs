@@ -117,241 +117,98 @@ namespace N64PPLEditorC.ManagementAudio
 
         public void WriteAllData(FileStream fs)
         {
-            //update address in the header (SoundBank 0)
+            //set 16bit alignment for first soundbank 
+            int alignment = 16 - ((int)fs.Position % 16);
+            for (int i = 0; i < alignment; i++)
+                fs.WriteByte(0);
 
-            //update address in the header (others soundBank)
+            //update address in the header (SoundBank 0)
+            //by making the difference between old position and new position
+            this.finalIndexAudioStart = (int)fs.Position;
+
+            byte[] addressHeaderSb0 = new byte[0x238];
+            Array.Copy(rawData, 0xB4B00, addressHeaderSb0, 0, addressHeaderSb0.Length);
+
+            //convert to int, add the difference, convert to byte, store the new value
+            for (int i = 0; i < addressHeaderSb0.Length; i += 4)
+            {
+                int tmpValue = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(addressHeaderSb0, i, 4));
+                if (finalIndexAudioStart > initialIndexAudioStart)
+                    tmpValue += finalIndexAudioStart - initialIndexAudioStart;
+                else
+                    tmpValue -= initialIndexAudioStart - finalIndexAudioStart;
+                byte[] tmpBytesNew = CGeneric.ConvertIntToByteArray(tmpValue);
+                for(int j = 0; j < tmpBytesNew.Length; j++)
+                    addressHeaderSb0[i + j] = tmpBytesNew[j];
+            }
+
+            //set the good position, and write to rom
+            fs.Position = 0xB4B00;
+            fs.Write(addressHeaderSb0, 0, addressHeaderSb0.Length);
 
             //write rawData soundBank
+            fs.Position = finalIndexAudioStart;
 
+            //write ptrData, waveTable and sfx
+            for (int i = 0; i <= 0x15; i++)
+            {
+                //write ptrData and update position
+                soundBankList[i].address.PtrTable = CGeneric.ConvertIntToByteArray((int)fs.Position);
+                fs.Write(soundBankList[i].ptrTable, 0, soundBankList[i].ptrTable.Length);
 
+                //write waveTable and update position
+                soundBankList[i].address.WaveTable = CGeneric.ConvertIntToByteArray((int)fs.Position);
+                fs.Write(soundBankList[i].waveTable, 0, soundBankList[i].waveTable.Length);
 
+                //write sfx and update position
+                soundBankList[i].address.Sfx = CGeneric.ConvertIntToByteArray((int)fs.Position);
+                fs.Write(soundBankList[i].sfx, 0, soundBankList[i].sfx.Length);
+
+                //write end position
+                soundBankList[i].address.end = CGeneric.ConvertIntToByteArray((int)fs.Position);
+            }
+
+            //update address in the header (first part)
+            for (int i = 0; i <= 0x15; i++)
+            {
+                fs.Position = soundBankPtrTableAddressFr[i];
+                fs.Write(soundBankList[i].address.PtrTable, 0, 4);
+
+                fs.Write(soundBankList[i].address.WaveTable, 0, 4);
+                if (i == 0 || i == 2)
+                {
+                    byte[] nullBytes = new byte[4];
+                        fs.Write(nullBytes, 0, 4);
+                        fs.Write(nullBytes, 0, 4);
+                }
+                else
+                {
+                    fs.Write(soundBankList[i].address.Sfx, 0, 4);
+
+                    //small hack.. weird part in the rom...
+                    if ( i != 1)
+                        fs.Write(soundBankList[i].address.end, 0, 4);
+                    else
+                    {
+                        int oldValue = CGeneric.ConvertByteArrayToInt(soundBankList[i].address.end);
+                        byte[] newValue = CGeneric.ConvertIntToByteArray(oldValue - 0x470); 
+                        fs.Write(newValue, 0, 4);
+                    }
+                }
+                fs.Write(soundBankList[i].address.WaveTable, 0, 4);
+            }
+
+            //update address in the header(second part)
+            for (int i = 4; i <= 0x14; i++)
+            {
+                fs.Position = soundBankPtrTableAddressFr[i] + 0x168;
+                fs.Write(soundBankList[i].address.PtrTable, 0, 4);
+                fs.Write(soundBankList[i].address.WaveTable, 0, 4);
+                fs.Write(soundBankList[i].address.Sfx, 0, 4);
+                fs.Write(soundBankList[i].address.end, 0, 4);
+                fs.Write(soundBankList[i].address.WaveTable, 0, 4);
+
+            }
         }
-
-        //private void ChunkAudio()
-        //{
-
-        //    //store new data address and store data associated (rawData)
-        //    foreach(int addressFr in soundBankPtrTableAddressFr)
-        //    {
-        //        SoundBank sbTmp = new SoundBank();
-
-        //        //store address
-        //        sbTmp.address.PtrTable  = CGeneric.GiveMeArray(rawData, addressFr, 4);
-        //        sbTmp.address.WaveTable = CGeneric.GiveMeArray(rawData, addressFr + 4, 4);
-        //        sbTmp.address.Sfx       = CGeneric.GiveMeArray(rawData, addressFr + 8, 4);
-        //        sbTmp.address.end       = CGeneric.GiveMeArray(rawData, addressFr + 12, 4);
-        //        sbTmp.address.WaveTable2= CGeneric.GiveMeArray(rawData, addressFr + 16, 4);
-
-        //        //store data associated to address
-        //        int addressPtrTableInt = CGeneric.ConvertByteArrayToInt(sbTmp.address.PtrTable);
-        //        int addressWaveTableInt = CGeneric.ConvertByteArrayToInt(sbTmp.address.WaveTable);
-        //        int addressSfxInt = CGeneric.ConvertByteArrayToInt(sbTmp.address.Sfx);
-        //        int addressEndInt = CGeneric.ConvertByteArrayToInt(sbTmp.address.end);
-
-        //        sbTmp.ptrTable = CGeneric.GiveMeArray(rawData, addressPtrTableInt, addressWaveTableInt - addressPtrTableInt);
-        //        sbTmp.waveTable = CGeneric.GiveMeArray(rawData, addressWaveTableInt, addressSfxInt - addressWaveTableInt);
-        //        sbTmp.sfx = CGeneric.GiveMeArray(rawData, addressSfxInt, addressEndInt - addressSfxInt);
-
-        //        soundBankList.Add(sbTmp);
-        //    }
-
-        //    //soundBankAddress = new List<SoundBankAddressStruct>();
-
-        //    ////store the address associated to each soundBank
-        //    //for (int i = 0; i < soundBankPtrTableAddressFr.Length; i++)
-        //    //{
-        //    //    var soundBanktmp = new SoundBankAddressStruct();
-
-        //    //    soundBanktmp.PtrTable   = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, soundBankPtrTableAddressFr[i], 4));
-        //    //    soundBanktmp.WaveTable  = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, soundBankPtrTableAddressFr[i] + 4, 4));
-        //    //    soundBanktmp.Sfx        = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, soundBankPtrTableAddressFr[i] + 8, 4));
-        //    //    soundBanktmp.end        = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, soundBankPtrTableAddressFr[i] + 12, 4));
-        //    //    soundBanktmp.WaveTable2 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, soundBankPtrTableAddressFr[i] + 16, 4));
-
-        //    //    //check the case, because for bfx (of soundbank 1)  it seem's that rom has an error or unused data still stored (of 0x470 length)
-        //    //    if (i == 1)
-        //    //    {
-        //    //        soundBanktmp.end += 0x470;
-        //    //    }
-
-        //    //    soundBankAddress.Add(soundBanktmp);
-
-        //    //}
-
-        //    //store rawData for each soundBank (with the address previously stored)
-        //    //for (int i = 0; i < soundBankAddress.Count(); i++)
-        //    //{
-        //      //  var sndBankTmp = new SoundBank();
-        //        //int addressPtrTable = soundBankAddress[i].PtrTable;
-        //        //int addressWaveTable = soundBankAddress[i].WaveTable;
-        //        //int addressSfx = soundBankAddress[i].Sfx;
-        //        //int addressEnd = soundBankAddress[i].end;
-
-        //        //sndBankTmp.ptrTableData = CGeneric.GiveMeArray(rawData, addressPtrTable, addressWaveTable - addressPtrTable);
-
-        //        //specific for soundbank 0 and soundbank2 (sfx is set to 0)
-        //        //if(addressSfx != 0)
-        //        //{
-        //        //    sndBankTmp.waveTableData = CGeneric.GiveMeArray(rawData, addressWaveTable, addressSfx - addressWaveTable);
-        //        //    sndBankTmp.bfxData = CGeneric.GiveMeArray(rawData, addressSfx,addressEnd - addressSfx);
-        //        //}
-        //        //else
-        //        //    sndBankTmp.waveTableData = CGeneric.GiveMeArray(rawData, addressWaveTable, soundBankAddress[i + 1].PtrTable -addressWaveTable);
-
-        //        //soundBankData.Add(sndBankTmp);
-        //    //}
-        //}
-
-        //public void WriteAllData(FileStream fs)
-        //{
-        //    //make an initial alignment for to be sure starting at good point
-        //    int alignment = (int)fs.Position % 16;
-        //    for (int i = 0; i < 16 - alignment; i++)
-        //    {
-        //        fs.WriteByte(0);
-        //    }
-        //    this.finalIndexAudioStart = (int)fs.Position;
-
-        //    //TODO fill the rest (rewriting)
-
-        //}
-
-        //public void writeAllData(FileStream fs)
-        //{
-        //    //write alignment
-        //    //int alignment = (int)fs.Position % 16;
-        //    //for (int i = 0; i < 16 - alignment; i++)
-        //    //{
-        //    //    fs.WriteByte(0);
-        //    //}
-        //    //this.finalIndexAudioStart = (int)fs.Position;
-
-        //    //write allData
-        //    foreach (SoundBank sndBank in soundBankData)
-        //    {
-        //        fs.Write(sndBank.ptrTableData, 0, sndBank.ptrTableData.Length);
-        //        fs.Write(sndBank.waveTableData, 0, sndBank.waveTableData.Length);
-        //        if (sndBank.bfxData != null)
-        //            fs.Write(sndBank.bfxData, 0, sndBank.bfxData.Length);
-        //    }
-
-        //    //update the two list at the start of the rom 
-        //    UpdateAudioAddress(fs);
-
-        //}
-
-        //private void UpdateAudioAddress(FileStream fs)
-        //{
-        //    //set manually address for all address
-
-        //    //grab the difference between initial audio start and now
-        //    int difference;
-        //    if (finalIndexAudioStart > initialIndexAudioStart)
-        //        difference = finalIndexAudioStart - initialIndexAudioStart;
-        //    else
-        //        difference = initialIndexAudioStart - finalIndexAudioStart;
-
-
-        //    //soundbank0, read initial values, make the difference and write values
-        //    byte[] addressHeaderSb0 = new byte[0x238];
-        //    Array.Copy(rawData,0xB4B00, addressHeaderSb0, 0, addressHeaderSb0.Length);
-
-
-        //    for (int i = 0; i < 0x238; i += 4)
-        //    {
-        //        int tmpValue = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(addressHeaderSb0, i, 4));
-        //        tmpValue += difference;
-        //        var tmpBytesNew = CGeneric.ConvertIntToByteArray(tmpValue);
-        //        addressHeaderSb0[i] = tmpBytesNew[0];
-        //        addressHeaderSb0[i+1] = tmpBytesNew[1];
-        //        addressHeaderSb0[i+2] = tmpBytesNew[2];
-        //        addressHeaderSb0[i+3] = tmpBytesNew[3];
-        //    }
-
-        //    fs.Position = 0xB4B00;
-        //    fs.Write(addressHeaderSb0,0,addressHeaderSb0.Length);
-
-        //    //update all address positions for the soundBank 
-        //    updateSoundBankAddressPosition();
-
-        //    //write from 0 to 0x15 soundBank address
-        //    writeSoundBankAddress(fs);
-        //}
-
-        //private void writeSoundBankAddress(FileStream fs)
-        //{
-        //    //set the 0x15 soundband address
-        //    for(int i = 0; i < 0x15; i++)
-        //    {
-        //        fs.Position = soundBankPtrTableAddressFr[i];
-        //        var dataToWrite = convertStructToByteArray(soundBankAddress[i],i);
-        //        fs.Write(dataToWrite, 0, dataToWrite.Length);
-        //    }
-
-        //    //TODO redefine special soundbank 2 & 3 address
-
-
-        //    //special hack for second address loop (add 0x168)
-        //    for (int i = 4; i < 0x14; i++)
-        //    {
-        //        fs.Position = soundBankPtrTableAddressFr[i] + 0x168;
-        //        var dataToWrite = convertStructToByteArray(soundBankAddress[i],i);
-        //        fs.Write(dataToWrite, 0, dataToWrite.Length);
-        //    }
-
-
-        //}
-
-        //private byte[] convertStructToByteArray(SoundBankAddressStruct addrStruct,int i)
-        //{
-        //    byte[] finalArray = new byte[20];
-
-        //    Array.Copy(CGeneric.ConvertIntToByteArray(addrStruct.PtrTable), 0,finalArray, 0,4);
-        //    Array.Copy(CGeneric.ConvertIntToByteArray(addrStruct.WaveTable), 0, finalArray, 4, 4);
-        //    Array.Copy(CGeneric.ConvertIntToByteArray(addrStruct.Sfx), 0, finalArray, 8, 4);
-        //    Array.Copy(CGeneric.ConvertIntToByteArray(addrStruct.end), 0, finalArray, 12, 4);
-        //    Array.Copy(CGeneric.ConvertIntToByteArray(addrStruct.WaveTable2), 0, finalArray, 16, 4);
-
-        //    return finalArray;
-        //}
-
-        //private void updateSoundBankAddressPosition()
-        //{
-
-        //    //set the first element to the good position
-        //    SoundBankAddressStruct addressStruct0 = new SoundBankAddressStruct();
-        //    addressStruct0.PtrTable   = finalIndexAudioStart;
-        //    addressStruct0.Sfx = 0;
-        //    addressStruct0.end = 0;
-        //    addressStruct0.WaveTable  = finalIndexAudioStart + soundBankData[0].ptrTableData.Length;
-        //    addressStruct0.WaveTable2 = finalIndexAudioStart + soundBankData[0].ptrTableData.Length;
-
-        //    soundBankAddress[0] = addressStruct0;
-
-        //    //the next element is based on the information of the previous element
-        //    for(int i = 1; i < soundBankAddress.Count; i++)
-        //    {
-        //        SoundBankAddressStruct addressStructLoopTmp = new SoundBankAddressStruct();
-
-        //        //previous location + sizeof previous soundbank
-        //        int previousLocation = soundBankAddress[i - 1].PtrTable;
-        //        int lengthDataPtr = soundBankData[i - 1].ptrTableData.Length;
-        //        int lengthWaveTable = soundBankData[i - 1].waveTableData.Length;
-        //        var lengthBfxM1 = 0;
-        //        if (soundBankData[i - 1].bfxData != null)
-        //            lengthBfxM1 = soundBankData[i - 1].bfxData.Length;
-
-        //        addressStructLoopTmp.PtrTable   = previousLocation + lengthDataPtr + lengthWaveTable + lengthBfxM1;
-        //        addressStructLoopTmp.WaveTable  = addressStructLoopTmp.PtrTable  + soundBankData[i].ptrTableData.Length;
-        //        if(soundBankAddress[i].Sfx != 0 && soundBankAddress[i].end != 0)
-        //        {
-        //            addressStructLoopTmp.Sfx = addressStructLoopTmp.WaveTable + soundBankData[i].waveTableData.Length;
-        //            addressStructLoopTmp.end = addressStructLoopTmp.Sfx + soundBankData[i].bfxData.Length;
-        //        }
-        //        addressStructLoopTmp.WaveTable2 = addressStructLoopTmp.WaveTable;
-
-        //        soundBankAddress[i] = addressStructLoopTmp;
-        //    }
-        //}
     }
 }

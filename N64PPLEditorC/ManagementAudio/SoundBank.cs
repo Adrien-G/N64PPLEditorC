@@ -17,6 +17,7 @@ namespace N64PPLEditorC.ManagementAudio
             public byte[] PtrTable;
             public byte[] WaveTable;
             public byte[] Sfx;
+            public byte[] end;
         }
 
         private byte[] rawData;
@@ -72,10 +73,10 @@ namespace N64PPLEditorC.ManagementAudio
                             tmpSfxEqualValue = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, i, 4));
                             tmpSfxEqualValue2 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, i + 4, 4));
                             tmpSfxEqualValue3 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, i + 8, 4));
-
-                            if (tmpSfxEqualValue == tmpSfxEqualValue2 && (tmpSfxEqualValue2 == tmpSfxEqualValue3 || tmpSfxEqualValue2 == tmpSfxEqualValue3 - 1))
+                            var tmpSfxEqualValue4 = tmpSfxEqualValue3++;
+                            if (tmpSfxEqualValue != 0 && tmpSfxEqualValue == tmpSfxEqualValue2 && (tmpSfxEqualValue2 == tmpSfxEqualValue4 || tmpSfxEqualValue2 == tmpSfxEqualValue3))
                             {
-                                sizeSfx = rawData.Length - ptrTable.Length - i;
+                                sizeSfx = rawData.Length - i;
                                 break;
                             }
                         }
@@ -84,14 +85,8 @@ namespace N64PPLEditorC.ManagementAudio
             }
 
             //store date with size found previously
-            waveTable = CGeneric.GiveMeArray(rawData,ptrTable.Length,rawData.Length - ptrTable.Length - sizeSfx);
+            waveTable = CGeneric.GiveMeArray(rawData,ptrTable.Length,rawData.Length - (ptrTable.Length + sizeSfx));
             sfx = CGeneric.GiveMeArray(rawData, ptrTable.Length + waveTable.Length, sizeSfx);
-        }
-
-        public byte[] WriteAllData()
-        {
-            //beware of the alignment of the data (by defaut 16bit i think)
-            return new byte[0];
         }
     }
 }

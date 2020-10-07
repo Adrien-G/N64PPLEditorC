@@ -83,6 +83,7 @@
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.numericUpDownGroupText = new System.Windows.Forms.NumericUpDown();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
             this.buttonHVQMRemove = new System.Windows.Forms.Button();
@@ -121,8 +122,6 @@
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
-            this.label14 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -725,6 +724,13 @@
             this.numericUpDownGroupText.TabIndex = 3;
             this.numericUpDownGroupText.ValueChanged += new System.EventHandler(this.numericUpDownGropuText_ValueChanged);
             // 
+            // drawScene1
+            // 
+            this.drawScene1.Location = new System.Drawing.Point(12, 16);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(320, 240);
+            this.drawScene1.TabIndex = 0;
+            // 
             // treeViewSBF
             // 
             this.treeViewSBF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -890,7 +896,6 @@
             // tabPageAudio
             // 
             this.tabPageAudio.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPageAudio.Controls.Add(this.label14);
             this.tabPageAudio.Controls.Add(this.label13);
             this.tabPageAudio.Controls.Add(this.treeViewAudio);
             this.tabPageAudio.Location = new System.Drawing.Point(4, 22);
@@ -929,7 +934,7 @@
             this.toolStripMenuItemReplaceWaveTable,
             this.toolStripMenuItemReplaceSfxTable});
             this.contextMenuStripAudioTreeview.Name = "contextMenuStripAudioTreeview";
-            this.contextMenuStripAudioTreeview.Size = new System.Drawing.Size(196, 98);
+            this.contextMenuStripAudioTreeview.Size = new System.Drawing.Size(196, 120);
             this.contextMenuStripAudioTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAudioTreeview_Opening);
             // 
             // toolStripMenuItemReplaceAudioAllSoundBank
@@ -1091,22 +1096,6 @@
             this.colorDialog1.AnyColor = true;
             this.colorDialog1.FullOpen = true;
             // 
-            // drawScene1
-            // 
-            this.drawScene1.Location = new System.Drawing.Point(12, 16);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(320, 240);
-            this.drawScene1.TabIndex = 0;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(272, 133);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(343, 13);
-            this.label14.TabIndex = 5;
-            this.label14.Text = "SoundBank lower than 3 contains critical data, so they are not editable.";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1264,7 +1253,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceSfxTable;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceAudioAllSoundBank;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.Label label14;
     }
 }
 
