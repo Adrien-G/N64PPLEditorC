@@ -890,7 +890,7 @@ namespace N64PPLEditorC
 
         private void contextMenuStripAudioTreeview_Opening(object sender, CancelEventArgs e)
         {
-            if(treeViewAudio.SelectedNode.Index <= 2)
+            if(treeViewAudio.SelectedNode.Index == 0)
             {
                 toolStripMenuItemReplaceAudioAllSoundBank.Enabled = false;
                 toolStripMenuItemReplacePointerTable.Enabled = false;

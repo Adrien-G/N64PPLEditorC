@@ -10,7 +10,9 @@ namespace N64PPLEditorC.ManagementAudio
     {
         public byte[] ptrTable;
         public byte[] waveTable;
+        public byte[] midi;
         public byte[] sfx;
+       
 
         public struct SoundBankAddressStruct
         {
@@ -44,20 +46,25 @@ namespace N64PPLEditorC.ManagementAudio
             ptrTable = CGeneric.GiveMeArray(rawData, 0, sizeOfPtrTable);
 
             int sizeSfx = 0;
+            int sizeMidi = 0;
 
-            //searching sfx
+            //searching midi and sfx
             switch (id)
             {
-                //0 or 2, there is no sfx
+                //there is only midi, no sfx.. (leave this soundbank, maybe managing later)
                 case 0:
-                case 2:
                     break;
-                // manually set sfx Size
+                //there is a midi song and sfx, so with a unknow wavetable length, we need to determine sfx and midi length..
                 case 1:
-                    sizeSfx = 0x1B40;
+                    var startMidi = CGeneric.SearchBytesInArray(rawData, CGeneric.patternMidiSoundBank1, 0, 0, 16);
+                    sizeMidi = 0x16D0;
+                    sizeSfx = rawData.Length - (startMidi + sizeMidi);
                     break;
-                
-                //standard computed sfx size (dirty check, but seems working pretty well).
+                //there is song but no sfx
+                case 2:
+                    sizeMidi = 0x2DB0;
+                    break;
+                //standard computed sfx size and no midi file (dirty check, but seems working pretty well).
                 default:
                     int tmpSfxEqualValue;
                     int tmpSfxEqualValue2;
@@ -85,8 +92,9 @@ namespace N64PPLEditorC.ManagementAudio
             }
 
             //store date with size found previously
-            waveTable = CGeneric.GiveMeArray(rawData,ptrTable.Length,rawData.Length - (ptrTable.Length + sizeSfx));
-            sfx = CGeneric.GiveMeArray(rawData, ptrTable.Length + waveTable.Length, sizeSfx);
+            waveTable = CGeneric.GiveMeArray(rawData,ptrTable.Length,rawData.Length - (ptrTable.Length + sizeMidi + sizeSfx));
+            midi = CGeneric.GiveMeArray(rawData, ptrTable.Length + waveTable.Length, sizeMidi);
+            sfx = CGeneric.GiveMeArray(rawData, ptrTable.Length + waveTable.Length + sizeMidi, sizeSfx);
         }
     }
 }

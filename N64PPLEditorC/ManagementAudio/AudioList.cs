@@ -122,12 +122,11 @@ namespace N64PPLEditorC.ManagementAudio
             for (int i = 0; i < alignment; i++)
                 fs.WriteByte(0);
 
-            //update address in the header (SoundBank 0)
-            //by making the difference between old position and new position
+            //update address of midi (SoundBank 0) by making the difference between old position and new position
             this.finalIndexAudioStart = (int)fs.Position;
 
             byte[] addressHeaderSb0 = new byte[0x238];
-            Array.Copy(rawData, 0xB4B00, addressHeaderSb0, 0, addressHeaderSb0.Length);
+            Array.Copy(rawData, CGeneric.AddressOfMidiSongFr, addressHeaderSb0, 0, addressHeaderSb0.Length);
 
             //convert to int, add the difference, convert to byte, store the new value
             for (int i = 0; i < addressHeaderSb0.Length; i += 4)
@@ -149,7 +148,7 @@ namespace N64PPLEditorC.ManagementAudio
             //write rawData soundBank
             fs.Position = finalIndexAudioStart;
 
-            //write ptrData, waveTable and sfx
+            //write ptrData, waveTable, midi and sfx
             for (int i = 0; i <= 0x15; i++)
             {
                 //write ptrData and update position
@@ -160,8 +159,11 @@ namespace N64PPLEditorC.ManagementAudio
                 soundBankList[i].address.WaveTable = CGeneric.ConvertIntToByteArray((int)fs.Position);
                 fs.Write(soundBankList[i].waveTable, 0, soundBankList[i].waveTable.Length);
 
-                //write sfx and update position
+                //write midi song and update sfx position ! (will only change the position of soundbank 1 and 2, the others doesn't have midi)
                 soundBankList[i].address.Sfx = CGeneric.ConvertIntToByteArray((int)fs.Position);
+                fs.Write(soundBankList[i].midi, 0, soundBankList[i].midi.Length);
+
+                //write sfx and update position
                 fs.Write(soundBankList[i].sfx, 0, soundBankList[i].sfx.Length);
 
                 //write end position
@@ -177,9 +179,16 @@ namespace N64PPLEditorC.ManagementAudio
                 fs.Write(soundBankList[i].address.WaveTable, 0, 4);
                 if (i == 0 || i == 2)
                 {
+                    if (i == 2)
+                    {
+                        fs.Position -= 0x38;
+                        fs.Write(soundBankList[i].address.Sfx, 0, 4); // in fact, it's the start of midi
+                        fs.Write(soundBankList[i].address.end, 0, 4); // and it's end here (and not the sfx)
+                        fs.Position += 0x30;
+                    }
                     byte[] nullBytes = new byte[4];
-                        fs.Write(nullBytes, 0, 4);
-                        fs.Write(nullBytes, 0, 4);
+                    fs.Write(nullBytes, 0, 4);
+                    fs.Write(nullBytes, 0, 4);
                 }
                 else
                 {

@@ -934,7 +934,7 @@
             this.toolStripMenuItemReplaceWaveTable,
             this.toolStripMenuItemReplaceSfxTable});
             this.contextMenuStripAudioTreeview.Name = "contextMenuStripAudioTreeview";
-            this.contextMenuStripAudioTreeview.Size = new System.Drawing.Size(196, 120);
+            this.contextMenuStripAudioTreeview.Size = new System.Drawing.Size(196, 98);
             this.contextMenuStripAudioTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAudioTreeview_Opening);
             // 
             // toolStripMenuItemReplaceAudioAllSoundBank
