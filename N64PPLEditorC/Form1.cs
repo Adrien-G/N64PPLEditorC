@@ -18,7 +18,7 @@ namespace N64PPLEditorC
     public partial class Form1 : Form
     {
         CRessourceList ressourceList;
-        RomAddressFrList romList;
+        UncompressedRomTexture romList;
         AudioList audioList;
         
         List<TextBox> txtBox = new List<TextBox>();
@@ -152,7 +152,7 @@ namespace N64PPLEditorC
                     {
                         MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+                    UpdateFreeSpaceLeft();
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace N64PPLEditorC
             {
                 ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
                 treeViewTextures.SelectedNode.Remove();
-                labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+                UpdateFreeSpaceLeft();
             }
 
         }
@@ -261,7 +261,7 @@ namespace N64PPLEditorC
                 {
                     ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
                     treeViewTextures.SelectedNode.Remove();
-                    labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+                    UpdateFreeSpaceLeft();
                 }
         }
         #endregion
@@ -320,7 +320,7 @@ namespace N64PPLEditorC
             numericUpDownSceneText.Value = numericUpDownSceneText.Maximum;
             groupBoxSceneText.Text = "Text Edit (" + Convert.ToInt32(numericUpDownSceneText.Value+1) + " Text(s))";
             textBoxSceneText.Text = "(set new text here)";
-            labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+            UpdateFreeSpaceLeft();
         }
 
         private void buttonScenesAddTextAtEnd_Click(object sender, EventArgs e)
@@ -330,12 +330,16 @@ namespace N64PPLEditorC
             numericUpDownSceneText.Value = numericUpDownSceneText.Maximum;
             groupBoxSceneText.Text = "Text Edit (" + Convert.ToInt32(numericUpDownSceneText.Value+1) + " Text(s))";
             textBoxSceneText.Text = "(set new text here)";
-            labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+            UpdateFreeSpaceLeft();
         }
         #endregion
 
 
-
+        private void UpdateFreeSpaceLeft()
+        {
+            //TODO to recalculate with sound data...
+            labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+        }
         private void buttonGetRomFolder_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openRomFile = new OpenFileDialog())
@@ -362,30 +366,47 @@ namespace N64PPLEditorC
             {
                 //try
                 //{
-                    Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
+                Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
+
+                //perform check verification (good game and good format) and register the lang
+                var arrayZ64Format = CGeneric.GiveMeArray(buffRom, 0x20, 0x11);
+                int isGoodFormat = CGeneric.SearchBytesInArray(arrayZ64Format, CGeneric.patternPuzzleLeagueN64);
+                if(isGoodFormat == -1)
+                        throw new Exception("The rom is not in the z64 format. Please convert it.");
+
+                //grab rom langage
+                RomLangAddress.romLang = (CGeneric.romLang)buffRom[0x3E];
+
+                //load graphics compressed / hvqm and sbf
+                LoadRessourcesList(buffRom);
+
                 
-                    //load graphics compressed / hvqm and sbf
-                    LoadRessourcesList(buffRom);
+                //load the uncompressed texture
+                this.romList = new UncompressedRomTexture(buffRom);
 
-                    //TODO check if it's the french version...
-                    //load the uncompressed texture
-                    this.romList = new RomAddressFrList(buffRom);
-
-                    //load the audio part
+                //load the audio part
+                try
+                {
                     LoadAudioList(buffRom);
 
-
-                    LoadTreeView();
-                    labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
-                    tabControlTexMovSce.Enabled = true;
-                    buttonModifyRom.Enabled = true;
-                    buttonLoadRom.Enabled = false;
-                    buttonGetRomFolder.Enabled = false;
-                    buttonLoadRom.Text = "ROM Loaded";
+                }
+                catch (Exception)
+                {
+                    //just because only french version is implemented yet..
+                }
+                
+                
+                LoadTreeView();
+                UpdateFreeSpaceLeft();
+                tabControlTexMovSce.Enabled = true;
+                buttonModifyRom.Enabled = true;
+                buttonLoadRom.Enabled = false;
+                buttonGetRomFolder.Enabled = false;
+                buttonLoadRom.Text = "ROM Loaded";
                 //}
                 //catch (Exception ex)
                 //{
-                //MessageBox.Show("Error opening rom..." + Environment.NewLine + "error details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //MessageBox.Show("Error opening rom..." + Environment.NewLine + "details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 //}
             }
         }
@@ -422,35 +443,17 @@ namespace N64PPLEditorC
                     treeViewSBF.Nodes[sbf].Nodes.Add(scene + 1 + ", " + this.ressourceList.GetSBF1(sbf).GetScene(scene).GetSceneName());
             }
 
-            for(int romGraphics = 0; romGraphics < this.romList.GetGraphicsCount(); romGraphics++)
-            {
+            for (int romGraphics = 0; romGraphics < this.romList.GetGraphicsCount(); romGraphics++)
                 treeViewTexturesUncompressed.Nodes.Add(this.romList.GetGraphicsName(romGraphics));
-            }
 
-            for (int audioSoundbank = 0; audioSoundbank < this.audioList.soundBankList.Count(); audioSoundbank++)
-            {
-                treeViewAudio.Nodes.Add("Soundbank " + Convert.ToString(audioSoundbank,16).ToUpper());
-            }
+            for (int audioSoundbank = 0; audioSoundbank < this.audioList?.soundBankList.Count(); audioSoundbank++)
+                treeViewAudio.Nodes.Add("Soundbank " + Convert.ToString(audioSoundbank, 16).ToUpper());
 
-            if (treeViewTextures.Nodes.Count > 0)
-                treeViewTextures.SelectedNode = treeViewTextures.Nodes[0];
-            else
-                treeViewTextures.Nodes.Add("No data were found :(");
-
-            if (treeViewTexturesUncompressed.Nodes.Count > 0)
-                treeViewTexturesUncompressed.SelectedNode = treeViewTexturesUncompressed.Nodes[0];
-            else
-                treeViewTexturesUncompressed.Nodes.Add("No data were found :(");
-
-            if (treeViewHVQM.Nodes.Count > 0)
-                treeViewHVQM.SelectedNode = treeViewHVQM.Nodes[0];
-            else
-                treeViewHVQM.Nodes.Add("No data were found :(");
-
-            if (treeViewSBF.Nodes.Count > 0)
-                treeViewSBF.SelectedNode = treeViewSBF.Nodes[0];
-            else
-                treeViewSBF.Nodes.Add("No data were found :(");
+            CheckIfTreeViewEmpty(treeViewTextures);
+            CheckIfTreeViewEmpty(treeViewTexturesUncompressed);
+            CheckIfTreeViewEmpty(treeViewHVQM);
+            CheckIfTreeViewEmpty(treeViewSBF);
+            CheckIfTreeViewEmpty(treeViewAudio);
 
             treeViewTextures.EndUpdate();
             treeViewTexturesUncompressed.EndUpdate();
@@ -458,6 +461,14 @@ namespace N64PPLEditorC
             treeViewSBF.EndUpdate();
             treeViewAudio.EndUpdate();
 
+        }
+
+        private void CheckIfTreeViewEmpty(TreeView tv)
+        {
+            if (tv.Nodes.Count > 0)
+                tv.SelectedNode = tv.Nodes[0];
+            else
+                tv.Nodes.Add("No data were found :(");
         }
 
         private void LoadRessourcesList(byte[] buffRom)
@@ -492,8 +503,6 @@ namespace N64PPLEditorC
 
 
         //decompress all texture task..
-
-
         private void bWDecompress_DoWork(object sender, DoWorkEventArgs e)
         {
             int index = 1;
@@ -506,7 +515,6 @@ namespace N64PPLEditorC
                         index++;
                         this.ressourceList.fibList[i].SaveTexture(i, j);
                         bWDecompress.ReportProgress(index);
-                        
                     }
                     catch { }
                 }
@@ -595,8 +603,9 @@ namespace N64PPLEditorC
 
         private void launchGraphicDisplayPart()
         {
-            var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var ListTextureName = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetBifList();
+            var sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
+            var scene = sbf.GetScene(treeViewSBF.SelectedNode.Index);
+            var ListTextureName = sbf.GetBifList();
 
             int nbItem = scene.GetTextureManagementCount() - 1;
 
@@ -768,7 +777,7 @@ namespace N64PPLEditorC
                 {
                     Byte[] buffRom = File.ReadAllBytes(openHvqm.FileName);
                     this.ressourceList.hvqmList[treeViewHVQM.SelectedNode.Index].SetRawData(buffRom);
-                    labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+                    UpdateFreeSpaceLeft();
                 }
             }
         }
@@ -777,7 +786,7 @@ namespace N64PPLEditorC
         {
             this.ressourceList.hvqmList.RemoveAt(treeViewHVQM.SelectedNode.Index);
             treeViewHVQM.Nodes.RemoveAt(treeViewHVQM.SelectedNode.Index);
-            labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+            UpdateFreeSpaceLeft();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -890,19 +899,22 @@ namespace N64PPLEditorC
 
         private void contextMenuStripAudioTreeview_Opening(object sender, CancelEventArgs e)
         {
-            if(treeViewAudio.SelectedNode.Index == 0)
+            toolStripMenuItemReplaceAudioAllSoundBank.Enabled = true;
+            toolStripMenuItemReplacePointerTable.Enabled = true;
+            toolStripMenuItemReplaceSfxTable.Enabled = true;
+            toolStripMenuItemReplaceWaveTable.Enabled = true;
+
+            switch (treeViewAudio.SelectedNode?.Index)
             {
-                toolStripMenuItemReplaceAudioAllSoundBank.Enabled = false;
-                toolStripMenuItemReplacePointerTable.Enabled = false;
-                toolStripMenuItemReplaceSfxTable.Enabled = false;
-                toolStripMenuItemReplaceWaveTable.Enabled = false;
-            }
-            else
-            {
-                toolStripMenuItemReplaceAudioAllSoundBank.Enabled = true;
-                toolStripMenuItemReplacePointerTable.Enabled = true;
-                toolStripMenuItemReplaceSfxTable.Enabled = true;
-                toolStripMenuItemReplaceWaveTable.Enabled = true;
+                case 0:
+                    toolStripMenuItemReplaceAudioAllSoundBank.Enabled = false;
+                    toolStripMenuItemReplacePointerTable.Enabled = false;
+                    toolStripMenuItemReplaceSfxTable.Enabled = false;
+                    toolStripMenuItemReplaceWaveTable.Enabled = false;
+                    break;
+                case 2:
+                    toolStripMenuItemReplaceSfxTable.Enabled = false;
+                    break;
             }
         }
 

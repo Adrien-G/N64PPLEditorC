@@ -18,6 +18,7 @@ namespace N64PPLEditorC
         public static int sizeOfElementTable = 24;
 
         //some different pattern in the rom
+        public static readonly Byte[] patternPuzzleLeagueN64 = { 0x50, 0x55, 0x5A, 0x5A, 0x4C, 0x45, 0x20, 0x4C, 0x45, 0x41, 0x47, 0x55, 0x45, 0x20, 0x4E, 0x36, 0x34 };
         public static readonly Byte[] patternN64WaveTable = { 0x4E, 0x36, 0x34, 0x20, 0x57, 0x61, 0x76, 0x65, 0x54, 0x61, 0x62, 0x6C, 0x65, 0x73, 0x20, 0x00 };
         public static readonly Byte[] patternN64PtrTableV2= { 0x4E, 0x36, 0x34, 0x20, 0x50, 0x74, 0x72, 0x54, 0x61, 0x62, 0x6C, 0x65, 0x73, 0x56, 0x32, 0x00 };
         public static readonly Byte[] patternMidiSoundBank1 = { 0x00, 0x00, 0x00, 0xCE, 0x00, 0x00, 0x00, 0xBA, 0x00, 0x00, 0x00, 0xA9, 0x00, 0x00, 0x00, 0x00 };
@@ -25,8 +26,6 @@ namespace N64PPLEditorC
         public static readonly Byte[] patternBFF2 = { 66, 70, 70, 50 };
         
         public static readonly Byte[] endOfRom = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-
-        public static int AddressOfMidiSongFr = 0xB4B00;
         
 
         //check the decimal value of ressources type
@@ -47,6 +46,14 @@ namespace N64PPLEditorC
             max256Colors = 0x33,    // indexed color, palette reference a 32 bit color
             trueColor16Bits = 0x54, // 5 bits for R, G and B, one bit for Alpha
             trueColor32Bits = 0x55  // 8 bits for each R,G,B,A
+        }
+
+        public enum romLang : byte
+        {
+            French = 0x46,
+            European = 0x50,
+            German = 0x44,
+            USA = 0x45
         }
 
 
@@ -156,8 +163,9 @@ namespace N64PPLEditorC
             //allow to search the second, third (and so on) value of the occurence
             int nbOcc = 0;
 
+
             // loop on the first array for find occurence
-            for (int i = startingAddress; i < arraySource.Length - dataSearched.Length; i +=step)
+            for (int i = startingAddress; i <= arraySource.Length - dataSearched.Length; i +=step)
             {
                 if (arraySource[i] == dataSearched[0])
                 {

@@ -66,7 +66,7 @@ namespace N64PPLEditorC
             {
                 Array.Copy(textData,i,charText,0,charText.Length);
                 Int16 character = (short)CGeneric.ConvertByteArrayToInt(charText);
-                sb.Append(ConvertCaracterToChar(character));
+                sb.Append(ConvertByteToChar(character));
             }
             return sb.Replace("#",Environment.NewLine).ToString();
         }
@@ -176,7 +176,17 @@ namespace N64PPLEditorC
             return res;
         }
 
+
         private byte[] ConvertCharToByteArray(char letter)
+        {
+            switch (RomLangAddress.romLang)
+            {
+                case CGeneric.romLang.French: return ConvertChToBaFr(letter);
+                default: throw new NotImplementedException();
+            }
+        }
+
+        private byte[] ConvertChToBaFr(char letter)
         {
             switch (letter)
             {
@@ -227,11 +237,11 @@ namespace N64PPLEditorC
                 case '-': return new byte[] { 0x10, 0x06 };
                 case '+': return new byte[] { 0x10, 0x07 };
                 case '=': return new byte[] { 0x10, 0x08 };
-                case '\\': return new byte[]{ 0x10, 0x09 };
+                case '\\': return new byte[] { 0x10, 0x09 };
                 case ';': return new byte[] { 0x10, 0x0A };
                 case ':': return new byte[] { 0x10, 0x0B };
                 case '"': return new byte[] { 0x10, 0x0C };
-                case '\'': return new byte[]{ 0x10, 0x0D };
+                case '\'': return new byte[] { 0x10, 0x0D };
                 case ',': return new byte[] { 0x10, 0x0E };
                 case '.': return new byte[] { 0x10, 0x0F };
                 case '?': return new byte[] { 0x10, 0x10 };
@@ -240,11 +250,22 @@ namespace N64PPLEditorC
                 case '<': return new byte[] { 0x10, 0x13 };
                 case 'é': return new byte[] { 0x10, 0x14 };
                 case '©': return new byte[] { 0x10, 0x15 };
-                default:  return new byte[] { 0x00, 0x01 };
+                default: return new byte[] { 0x00, 0x01 };
             }
         }
 
-        private char ConvertCaracterToChar(Int16 letter)
+
+        private char ConvertByteToChar(Int16 letter)
+        {
+            switch (RomLangAddress.romLang)
+            {
+                case CGeneric.romLang.French: return ConvertByteToCharFr(letter);
+                default: throw new NotImplementedException();
+            }
+        }
+
+
+        private char ConvertByteToCharFr(Int16 letter)
         {
             switch (letter)
             {

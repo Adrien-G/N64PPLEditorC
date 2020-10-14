@@ -81,15 +81,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RomLangAddress.cs" />
     <Compile Include="ManagementAudio\AudioList.cs" />
     <Compile Include="ManagementAudio\SoundBank.cs" />
-    <Compile Include="ManagementRomData\GraphicsRomAddress.cs" />
+    <Compile Include="ManagementRomData\UncompressedRomTextureData.cs" />
     <Compile Include="ManagementListRessources\C3FIB.cs" />
     <Compile Include="ManagementListRessources\CBFF2.cs" />
     <Compile Include="CGeneric.cs" />
     <Compile Include="ManagementListRessources\CHVQM.cs" />
     <Compile Include="ManagementListRessources\CRDF.cs" />
-    <Compile Include="ManagementRomData\RomAddressFrList.cs" />
+    <Compile Include="ManagementRomData\UncompressedRomTexture.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1DynamicObject.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1Scene.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1TextObject.cs" />

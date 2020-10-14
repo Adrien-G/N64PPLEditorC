@@ -15,31 +15,6 @@ namespace N64PPLEditorC.ManagementAudio
         //partie addresses
         //private List<> soundBankAddress;
 
-        private int[] soundBankPtrTableAddressFr = { 
-            0xB4D7C,
-            0xB4D40,
-            0xB4D68,
-            0xB4EE4, 
-            0xB4D90,
-            0xB4DA4,
-            0xB4DB8, 
-            0xB4DCC, 
-            0xB4DE0, 
-            0xB4DF4, 
-            0xB4E08, 
-            0xB4E1C, 
-            0xB4E30, 
-            0xB4E44, 
-            0xB4E58, 
-            0xB4E6C, 
-            0xB4E80, 
-            0xB4E94, 
-            0xB4EA8, 
-            0xB4EBC, 
-            0xB4ED0, 
-            0xB4D54 
-        };
-
         private byte[] rawData;
 
         
@@ -126,7 +101,7 @@ namespace N64PPLEditorC.ManagementAudio
             this.finalIndexAudioStart = (int)fs.Position;
 
             byte[] addressHeaderSb0 = new byte[0x238];
-            Array.Copy(rawData, CGeneric.AddressOfMidiSongFr, addressHeaderSb0, 0, addressHeaderSb0.Length);
+            Array.Copy(rawData, RomLangAddress.GetMidiSongSoundBank0(), addressHeaderSb0, 0, addressHeaderSb0.Length);
 
             //convert to int, add the difference, convert to byte, store the new value
             for (int i = 0; i < addressHeaderSb0.Length; i += 4)
@@ -142,7 +117,7 @@ namespace N64PPLEditorC.ManagementAudio
             }
 
             //set the good position, and write to rom
-            fs.Position = 0xB4B00;
+            fs.Position = RomLangAddress.GetMidiSongSoundBank0();
             fs.Write(addressHeaderSb0, 0, addressHeaderSb0.Length);
 
             //write rawData soundBank
@@ -173,7 +148,7 @@ namespace N64PPLEditorC.ManagementAudio
             //update address in the header (first part)
             for (int i = 0; i <= 0x15; i++)
             {
-                fs.Position = soundBankPtrTableAddressFr[i];
+                fs.Position = RomLangAddress.GetSoundBankPtrTable()[i];
                 fs.Write(soundBankList[i].address.PtrTable, 0, 4);
 
                 fs.Write(soundBankList[i].address.WaveTable, 0, 4);
@@ -210,7 +185,7 @@ namespace N64PPLEditorC.ManagementAudio
             //update address in the header(second part)
             for (int i = 4; i <= 0x14; i++)
             {
-                fs.Position = soundBankPtrTableAddressFr[i] + 0x168;
+                fs.Position = RomLangAddress.GetSoundBankPtrTable()[i] + 0x168;
                 fs.Write(soundBankList[i].address.PtrTable, 0, 4);
                 fs.Write(soundBankList[i].address.WaveTable, 0, 4);
                 fs.Write(soundBankList[i].address.Sfx, 0, 4);

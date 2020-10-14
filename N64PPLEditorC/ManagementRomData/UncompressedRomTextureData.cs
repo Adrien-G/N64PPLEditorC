@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace N64PPLEditorC
 {
-    public class GraphicsRomAddress 
+    public class UncompressedRomTextureData 
     {
         private byte[] dataRaw;
         private int location;
@@ -14,7 +14,7 @@ namespace N64PPLEditorC
         private byte[] palette;
 
 
-        public GraphicsRomAddress(byte[] dataRaw, int location, int sizeX, int sizeY, int bytePerPixel, string name,byte[] palette = null)
+        public UncompressedRomTextureData(byte[] dataRaw, int location, int sizeX, int sizeY, int bytePerPixel, string name,byte[] palette = null)
         {
             this.dataRaw = dataRaw;
             this.location = location;

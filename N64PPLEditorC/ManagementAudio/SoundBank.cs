@@ -57,12 +57,12 @@ namespace N64PPLEditorC.ManagementAudio
                 //there is a midi song and sfx, so with a unknow wavetable length, we need to determine sfx and midi length..
                 case 1:
                     var startMidi = CGeneric.SearchBytesInArray(rawData, CGeneric.patternMidiSoundBank1, 0, 0, 16);
-                    sizeMidi = 0x16D0;
+                    sizeMidi = RomLangAddress.GetSizeMidiSoundBank1();
                     sizeSfx = rawData.Length - (startMidi + sizeMidi);
                     break;
                 //there is song but no sfx
                 case 2:
-                    sizeMidi = 0x2DB0;
+                    sizeMidi = RomLangAddress.GetSizeMidiSoundBank2();
                     break;
                 //standard computed sfx size and no midi file (dirty check, but seems working pretty well).
                 default:
