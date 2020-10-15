@@ -20,7 +20,8 @@ namespace N64PPLEditorC
         CRessourceList ressourceList;
         UncompressedRomTexture romList;
         AudioList audioList;
-        
+        int freeSpaceLeft = 0;
+
         List<TextBox> txtBox = new List<TextBox>();
 
         #region form
@@ -115,7 +116,8 @@ namespace N64PPLEditorC
                                 byte[] compressedData = CTextureCompress.MakeCompression(rawData);
 
                                 //check if the size of the new data is not too much than the free space
-                                if (ressourceList.GetFreeSpaceLeft() < compressedData.Length)
+                                UpdateFreeSpaceLeft();
+                                if (freeSpaceLeft < compressedData.Length)
                                 {
                                     MessageBox.Show("There is not enought place...", "Free space in rom is needed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     break;
@@ -310,6 +312,10 @@ namespace N64PPLEditorC
             }
         }
 
+        private void buttonUncompressedTextureExtractAll_Click(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         #region scenes
@@ -337,8 +343,12 @@ namespace N64PPLEditorC
 
         private void UpdateFreeSpaceLeft()
         {
-            //TODO to recalculate with sound data...
-            labelFreeSpaceLeft.Text = ressourceList.GetFreeSpaceLeft().ToString();
+            freeSpaceLeft = CGeneric.romSize;
+            freeSpaceLeft -= ressourceList.indexRessourcesStart;
+            freeSpaceLeft -= ressourceList.GetSizeOfAllRessourceList();
+            freeSpaceLeft -= audioList.GetSizeOfAllAudio();
+
+            labelFreeSpaceLeft.Text = freeSpaceLeft.ToString("### ### ### ###") + " bytes";
         }
         private void buttonGetRomFolder_Click(object sender, EventArgs e)
         {
@@ -533,7 +543,8 @@ namespace N64PPLEditorC
 
         private void buttonModifyRom_Click(object sender, EventArgs e)
         {
-            if(ressourceList.GetFreeSpaceLeft() < 0)
+            UpdateFreeSpaceLeft();
+            if(freeSpaceLeft < 0)
             {
                 MessageBox.Show("There is not enought space in the rom file..."  + Environment.NewLine + "Please supress some things and try again.", "Error saving rom...", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 buttonModifyRom.BackColor = Color.Orange;
@@ -804,10 +815,19 @@ namespace N64PPLEditorC
             byte[] PtrTable = ReadAudioPtrTable();
             byte[] WaveTable = ReadAudioWaveTable();
             byte[] SfxTable = ReadAudioSfxTable();
+            int oldAllLength = 
+                audioList.soundBankList[treeViewAudio.SelectedNode.Index].ptrTable.Length +
+                audioList.soundBankList[treeViewAudio.SelectedNode.Index].waveTable.Length +
+                audioList.soundBankList[treeViewAudio.SelectedNode.Index].sfx.Length;
+            int newAllLength = PtrTable.Length + WaveTable.Length + SfxTable.Length;
 
             if (PtrTable != null && WaveTable != null && SfxTable != null)
             {
-                audioList.ReplaceSoundBank(PtrTable, WaveTable, SfxTable, treeViewAudio.SelectedNode.Index) ;
+                if( oldAllLength <= newAllLength || (newAllLength - oldAllLength) < freeSpaceLeft)
+                    audioList.ReplaceSoundBank(PtrTable, WaveTable, SfxTable, treeViewAudio.SelectedNode.Index) ;
+                else
+                    MessageBox.Show("Not enought space in the rom.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                UpdateFreeSpaceLeft();
             }
             else
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager",MessageBoxButtons.OK ,MessageBoxIcon.Information);
@@ -869,30 +889,58 @@ namespace N64PPLEditorC
 
         private void toolStripMenuItemReplacePointerTable_Click(object sender, EventArgs e)
         {
-            byte[] PtrTable = ReadAudioPtrTable();
+            byte[] newPtrTable = ReadAudioPtrTable();
+            int oldPtrTableLength = audioList.soundBankList[treeViewAudio.SelectedNode.Index].ptrTable.Length;
 
-            if (PtrTable != null)
-                audioList.ReplacePointerTable(PtrTable, treeViewAudio.SelectedNode.Index);
+            if (newPtrTable != null)
+            {
+                if(newPtrTable.Length <= oldPtrTableLength || (newPtrTable.Length - oldPtrTableLength) < freeSpaceLeft)
+                {
+                    audioList.ReplacePointerTable(newPtrTable, treeViewAudio.SelectedNode.Index);
+                    UpdateFreeSpaceLeft();
+                }
+                else
+                    MessageBox.Show("Not enought space in the rom.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            }
             else
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void toolStripMenuItemReplaceWaveTable_Click(object sender, EventArgs e)
         {
-            byte[] WaveTable = ReadAudioWaveTable();
+            byte[] newWaveTable = ReadAudioWaveTable();
+            int oldWaveTableLength = audioList.soundBankList[treeViewAudio.SelectedNode.Index].waveTable.Length;
 
-            if (WaveTable != null)
-                audioList.ReplaceWaveTable(WaveTable, treeViewAudio.SelectedNode.Index);
+            if (newWaveTable != null)
+            {
+                if (newWaveTable.Length <= oldWaveTableLength || (newWaveTable.Length - oldWaveTableLength) < freeSpaceLeft)
+                {
+                    audioList.ReplaceWaveTable(newWaveTable, treeViewAudio.SelectedNode.Index);
+                    UpdateFreeSpaceLeft();
+                }
+                else
+                    MessageBox.Show("Not enought space in the rom.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
             else
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void toolStripMenuItemReplaceSfxTable_Click(object sender, EventArgs e)
         {
-            byte[] SfxTable = ReadAudioSfxTable();
+            byte[] newSfxTable = ReadAudioSfxTable();
+            int oldSfxLength = audioList.soundBankList[treeViewAudio.SelectedNode.Index].sfx.Length;
 
-            if (SfxTable != null)
-                audioList.ReplaceSfxTable(SfxTable, treeViewAudio.SelectedNode.Index);
+            if (newSfxTable != null)
+            {
+                if (newSfxTable.Length <= oldSfxLength || (newSfxTable.Length - oldSfxLength) < freeSpaceLeft)
+                {
+                    audioList.ReplaceSfxTable(newSfxTable, treeViewAudio.SelectedNode.Index);
+                    UpdateFreeSpaceLeft();
+                }
+                else
+                    MessageBox.Show("Not enought space in the rom.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
             else
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -923,5 +971,7 @@ namespace N64PPLEditorC
             //small hack
             treeViewAudio.SelectedNode = e.Node;
         }
+
+       
     }
 }

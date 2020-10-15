@@ -17,7 +17,14 @@ namespace N64PPLEditorC.ManagementAudio
 
         private byte[] rawData;
 
-        
+        public int GetSizeOfAllAudio()
+        {
+            int totalSize = 0;
+            foreach(SoundBank soundb in soundBankList)
+                totalSize += soundb.ptrTable.Length + soundb.waveTable.Length + soundb.midi.Length + soundb.sfx.Length;
+
+            return totalSize;
+        }
 
         private int initialIndexAudioStart;
         private int finalIndexAudioStart;

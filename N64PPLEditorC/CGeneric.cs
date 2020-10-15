@@ -26,7 +26,7 @@ namespace N64PPLEditorC
         public static readonly Byte[] patternBFF2 = { 66, 70, 70, 50 };
         
         public static readonly Byte[] endOfRom = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-        
+        public static readonly int romSize = 0x2000000;
 
         //check the decimal value of ressources type
         public enum RessourceType : int

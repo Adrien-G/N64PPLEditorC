@@ -23,7 +23,7 @@ namespace N64PPLEditorC
         public List<CSBF1> sbfList;
         public List<CRDF> rdfList;
 
-        private int indexRessourcesStart;
+        public int indexRessourcesStart { get; private set; }
         private int indexRessourcesEnd;
 
         public CRessourceList(int indexRessourcesStart,int indexRessourcesEnd)
@@ -224,44 +224,76 @@ namespace N64PPLEditorC
                 indexData += listOfressource[index].GetRawData().Length;
             }
         }
-
-        public int GetFreeSpaceLeft()
+        public int GetSizeOfAllRessourceList()
         {
-            //take only the size of the ressource list
-            int initialFreeSpaceLeft = this.indexRessourcesEnd - indexRessourcesStart;
-
-            //estimate the size of the ressource list
-            int realFreeSpaceLeft = 0;
+            int size = 0;
             foreach (C3FIB c3fibdata in fibList)
             {
                 var tmp = c3fibdata.GetRawData().Length;
-                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+                if (tmp % 2 == 0) size += tmp; else size += tmp + 1;
             }
             foreach (CHVQM hvqmdata in hvqmList)
             {
                 var tmp = hvqmdata.GetRawData().Length;
-                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+                if (tmp % 2 == 0) size += tmp; else size += tmp + 1;
             }
             foreach (CSBF1 csbf1data in sbfList)
             {
                 var tmp = csbf1data.GetRawData().Length;
-                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+                if (tmp % 2 == 0) size += tmp; else size += tmp + 1;
             }
             foreach (CRDF crdfdata in rdfList)
             {
                 var tmp = crdfdata.GetRawData().Length;
-                if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+                if (tmp % 2 == 0) size += tmp; else size += tmp + 1;
             }
 
+            //add header before ressource list
+            size += 0x12;
+
             //add the ressource list (header of all data)
-            realFreeSpaceLeft += ressourcesList.Count() * 24;
+            size += ressourcesList.Count() * 24;
 
-            //add 0x12 for unknown reason...
-            realFreeSpaceLeft += 0x12;
-
-            //return the size of the full initial ressource list size minus the real size of the ressource list
-            return initialFreeSpaceLeft - realFreeSpaceLeft;
-            //return 0;
+            return size;
         }
+
+        //public int GetFreeSpaceLeft()
+        //{
+        //    //take only the size of the ressource list
+        //    int initialFreeSpaceLeft = this.indexRessourcesEnd - indexRessourcesStart;
+
+        //    //estimate the size of the ressource list
+        //    int realFreeSpaceLeft = 0;
+        //    foreach (C3FIB c3fibdata in fibList)
+        //    {
+        //        var tmp = c3fibdata.GetRawData().Length;
+        //        if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+        //    }
+        //    foreach (CHVQM hvqmdata in hvqmList)
+        //    {
+        //        var tmp = hvqmdata.GetRawData().Length;
+        //        if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+        //    }
+        //    foreach (CSBF1 csbf1data in sbfList)
+        //    {
+        //        var tmp = csbf1data.GetRawData().Length;
+        //        if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+        //    }
+        //    foreach (CRDF crdfdata in rdfList)
+        //    {
+        //        var tmp = crdfdata.GetRawData().Length;
+        //        if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
+        //    }
+
+        //    //add header before ressource list
+        //    realFreeSpaceLeft += 0x12;
+
+        //    //add the ressource list (header of all data)
+        //    realFreeSpaceLeft += ressourcesList.Count() * 24;
+
+        //    //return the size of the full initial ressource list size minus the real size of the ressource list
+        //    return initialFreeSpaceLeft - realFreeSpaceLeft;
+        //    //return 0;
+        //}
     }
 }

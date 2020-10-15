@@ -433,6 +433,7 @@ namespace N64PPLEditorC
             }
             return textureArray;
         }
+
         public static Bitmap ConvertRGBAByteArrayToBitmap(Byte[] array, int sizeX, int sizeY)
         {
             Bitmap bmp = new Bitmap(sizeX, sizeY);

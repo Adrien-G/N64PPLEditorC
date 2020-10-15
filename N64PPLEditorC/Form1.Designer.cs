@@ -57,7 +57,7 @@
             this.buttonExtractAllTextures = new System.Windows.Forms.Button();
             this.tabPageTexturesUncompressed = new System.Windows.Forms.TabPage();
             this.buttonUncompressedTextureReplace = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.buttonUncompressedTextureExtractAll = new System.Windows.Forms.Button();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.pictureBoxUncompressedTexture = new System.Windows.Forms.PictureBox();
             this.treeViewTexturesUncompressed = new System.Windows.Forms.TreeView();
@@ -83,7 +83,6 @@
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.numericUpDownGroupText = new System.Windows.Forms.NumericUpDown();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
             this.buttonHVQMRemove = new System.Windows.Forms.Button();
@@ -122,6 +121,7 @@
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -429,7 +429,7 @@
             // 
             this.tabPageTexturesUncompressed.BackColor = System.Drawing.SystemColors.Control;
             this.tabPageTexturesUncompressed.Controls.Add(this.buttonUncompressedTextureReplace);
-            this.tabPageTexturesUncompressed.Controls.Add(this.button5);
+            this.tabPageTexturesUncompressed.Controls.Add(this.buttonUncompressedTextureExtractAll);
             this.tabPageTexturesUncompressed.Controls.Add(this.groupBox10);
             this.tabPageTexturesUncompressed.Controls.Add(this.treeViewTexturesUncompressed);
             this.tabPageTexturesUncompressed.Location = new System.Drawing.Point(4, 22);
@@ -449,14 +449,16 @@
             this.buttonUncompressedTextureReplace.UseVisualStyleBackColor = true;
             this.buttonUncompressedTextureReplace.Click += new System.EventHandler(this.buttonUncompressedTextureReplace_Click);
             // 
-            // button5
+            // buttonUncompressedTextureExtractAll
             // 
-            this.button5.Location = new System.Drawing.Point(272, 521);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 9;
-            this.button5.Text = "Extract All";
-            this.button5.UseVisualStyleBackColor = true;
+            this.buttonUncompressedTextureExtractAll.Enabled = false;
+            this.buttonUncompressedTextureExtractAll.Location = new System.Drawing.Point(272, 521);
+            this.buttonUncompressedTextureExtractAll.Name = "buttonUncompressedTextureExtractAll";
+            this.buttonUncompressedTextureExtractAll.Size = new System.Drawing.Size(75, 23);
+            this.buttonUncompressedTextureExtractAll.TabIndex = 9;
+            this.buttonUncompressedTextureExtractAll.Text = "Extract All";
+            this.buttonUncompressedTextureExtractAll.UseVisualStyleBackColor = true;
+            this.buttonUncompressedTextureExtractAll.Click += new System.EventHandler(this.buttonUncompressedTextureExtractAll_Click);
             // 
             // groupBox10
             // 
@@ -724,13 +726,6 @@
             this.numericUpDownGroupText.TabIndex = 3;
             this.numericUpDownGroupText.ValueChanged += new System.EventHandler(this.numericUpDownGropuText_ValueChanged);
             // 
-            // drawScene1
-            // 
-            this.drawScene1.Location = new System.Drawing.Point(12, 16);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(320, 240);
-            this.drawScene1.TabIndex = 0;
-            // 
             // treeViewSBF
             // 
             this.treeViewSBF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -934,39 +929,39 @@
             this.toolStripMenuItemReplaceWaveTable,
             this.toolStripMenuItemReplaceSfxTable});
             this.contextMenuStripAudioTreeview.Name = "contextMenuStripAudioTreeview";
-            this.contextMenuStripAudioTreeview.Size = new System.Drawing.Size(196, 98);
+            this.contextMenuStripAudioTreeview.Size = new System.Drawing.Size(201, 98);
             this.contextMenuStripAudioTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAudioTreeview_Opening);
             // 
             // toolStripMenuItemReplaceAudioAllSoundBank
             // 
             this.toolStripMenuItemReplaceAudioAllSoundBank.Name = "toolStripMenuItemReplaceAudioAllSoundBank";
-            this.toolStripMenuItemReplaceAudioAllSoundBank.Size = new System.Drawing.Size(195, 22);
-            this.toolStripMenuItemReplaceAudioAllSoundBank.Text = "Replace All SoundBank";
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Size = new System.Drawing.Size(200, 22);
+            this.toolStripMenuItemReplaceAudioAllSoundBank.Text = "Replace this SoundBank";
             this.toolStripMenuItemReplaceAudioAllSoundBank.Click += new System.EventHandler(this.toolStripMenuItemReplaceAudioAllSoundBank_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(192, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(197, 6);
             // 
             // toolStripMenuItemReplacePointerTable
             // 
             this.toolStripMenuItemReplacePointerTable.Name = "toolStripMenuItemReplacePointerTable";
-            this.toolStripMenuItemReplacePointerTable.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplacePointerTable.Size = new System.Drawing.Size(200, 22);
             this.toolStripMenuItemReplacePointerTable.Text = "Replace Pointer Table";
             this.toolStripMenuItemReplacePointerTable.Click += new System.EventHandler(this.toolStripMenuItemReplacePointerTable_Click);
             // 
             // toolStripMenuItemReplaceWaveTable
             // 
             this.toolStripMenuItemReplaceWaveTable.Name = "toolStripMenuItemReplaceWaveTable";
-            this.toolStripMenuItemReplaceWaveTable.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplaceWaveTable.Size = new System.Drawing.Size(200, 22);
             this.toolStripMenuItemReplaceWaveTable.Text = "Replace WaveTable";
             this.toolStripMenuItemReplaceWaveTable.Click += new System.EventHandler(this.toolStripMenuItemReplaceWaveTable_Click);
             // 
             // toolStripMenuItemReplaceSfxTable
             // 
             this.toolStripMenuItemReplaceSfxTable.Name = "toolStripMenuItemReplaceSfxTable";
-            this.toolStripMenuItemReplaceSfxTable.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemReplaceSfxTable.Size = new System.Drawing.Size(200, 22);
             this.toolStripMenuItemReplaceSfxTable.Text = "Replace Sfx";
             this.toolStripMenuItemReplaceSfxTable.Click += new System.EventHandler(this.toolStripMenuItemReplaceSfxTable_Click);
             // 
@@ -1096,6 +1091,13 @@
             this.colorDialog1.AnyColor = true;
             this.colorDialog1.FullOpen = true;
             // 
+            // drawScene1
+            // 
+            this.drawScene1.Location = new System.Drawing.Point(12, 16);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(320, 240);
+            this.drawScene1.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1224,7 +1226,7 @@
         private System.Windows.Forms.TreeView treeViewTexturesUncompressed;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.PictureBox pictureBoxUncompressedTexture;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button buttonUncompressedTextureExtractAll;
         private System.Windows.Forms.Button buttonUncompressedTextureReplace;
         private System.Windows.Forms.NumericUpDown numericUpDownGroupText;
         private System.Windows.Forms.Label label10;
