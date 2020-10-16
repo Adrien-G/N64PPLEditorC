@@ -124,7 +124,7 @@ namespace N64PPLEditorC
             if (palette.Length > 0)
                 nbColors = CGeneric.ConvertIntToByteArray(palette.Length / CTextureManager.GetBytePerPixel(compressionMethod));
 
-            byte[] bff2header = SetHeader(compressionMethod,greenAlphaIndex, 10, sizeXB, sizeXB,sizeYB,name,nbColors);
+            byte[] bff2header = SetHeader(compressionMethod,greenAlphaIndex,0xE, sizeXB, sizeXB,sizeYB,name,nbColors);
 
             //concatenate header, palette and compressed data
             byte[] finalData = new byte[bff2header.Length + palette.Length + data.Length];

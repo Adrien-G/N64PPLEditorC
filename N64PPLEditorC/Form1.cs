@@ -364,6 +364,7 @@ namespace N64PPLEditorC
                     textBoxPPLLocation.Text = openRomFile.FileName;
                 }
             }
+
         }
 
         private void buttonLoadRom_Click(object sender, EventArgs e)
@@ -585,31 +586,13 @@ namespace N64PPLEditorC
 
         private void numericUpDownSceneText_ValueChanged(object sender, EventArgs e)
         {
-            launchTextDisplayText();
+            launchTextDisplayGroup();
         }
 
         private void launchSceneDisplay()
         {
             launchGraphicDisplayPart();
-            launchTextDisplayGroup(0);
-            launchTextDisplayText();
-        }
-
-        private void launchTextDisplayText() {
-            if (treeViewSBF.SelectedNode.Level == 1)
-            {
-                int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
-                if(nbTextObject > 0) 
-                {
-                    var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
-                    textBoxSceneText.Text = textObj.GetText();
-
-                    numericUpDownScenePosX.Value = textObj.GetPosX();
-                    numericUpDownScenePosY.Value = textObj.GetPosY();
-                    buttonSceneBackColor.BackColor = textObj.BackColor;
-                    buttonSceneForeColor.BackColor = textObj.ForeColor;
-                }
-            }
+            launchTextDisplayGroup();
         }
 
         private void launchGraphicDisplayPart()
@@ -641,37 +624,58 @@ namespace N64PPLEditorC
             }
             this.drawScene1.Invalidate();
         }
-        private void launchTextDisplayGroup(int groupIndex) { 
-            //text object
-            int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
-            var sceneTxt = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectGroup(groupIndex);
-            numericUpDownGroupText.Maximum = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).nbTextGroupObject;
-            
+        private void launchTextDisplayGroup()
+        {
             //clear all textbox
             foreach (TextBox txtObj in txtBox)
                 drawScene1.Controls.Remove(txtObj);
             txtBox.Clear();
-            
-            if (nbTextObject > 0)
+
+            if (treeViewSBF.SelectedNode.Level != 1)
+                return;                
+
+            //get scene
+            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
+
+            //get object count and verify > 0
+            int nbTextObject = scene.GetTextObjectCount();
+           
+            if ( nbTextObject > 0)
             {
+                var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
+
+                //print text for editing
+                textBoxSceneText.Text = textObject.GetText();
+
+                //add text options (posX,posY, backColor, forecolor)
+                numericUpDownScenePosX.Value = textObject.GetPosX();
+                numericUpDownScenePosY.Value = textObject.GetPosY();
+                buttonSceneBackColor.BackColor = textObject.BackColor;
+                buttonSceneForeColor.BackColor = textObject.ForeColor;
+
+                //text object
+                var sceneTxt = scene.GetTextObjectGroup(textObject.group);
+
                 int index = 0;
-                foreach(CSBF1TextObject txtObj in sceneTxt)
+                foreach (CSBF1TextObject txtObj in sceneTxt)
                 {
                     var txtBoxTmp = new TextBox();
                     txtBoxTmp.Multiline = true;
                     txtBoxTmp.ReadOnly = true;
                     txtBoxTmp.BorderStyle = BorderStyle.None;
                     txtBox.Add(txtBoxTmp);
-                    drawScene1.Controls.Add(txtBox[index]);
-                    
+
                     txtBox[index].Text = txtObj.GetText();
                     txtBox[index].Top = txtObj.GetPosY();
                     txtBox[index].Left = txtObj.GetPosX();
 
                     Size size = TextRenderer.MeasureText(txtBox[index].Text, txtBox[index].Font);
                     txtBox[index].ClientSize = new Size(size.Width, size.Height);
-                    txtBox[index].Show();
-                    txtBox[index].BringToFront();
+
+                    if (textBoxSceneText.Text == txtBox[index].Text && sceneTxt.Count > 1)
+                        txtBox[index].BackColor = Color.LightGreen;
+
+                    drawScene1.Controls.Add(txtBox[index]);
                     index++;
                 }
             }
@@ -713,23 +717,25 @@ namespace N64PPLEditorC
         {
             var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
             textObj.SetPosX(Convert.ToInt32(numericUpDownScenePosX.Value));
+            launchTextDisplayGroup();
         }
         private void numericUpDownScenePosY_ValueChanged(object sender, EventArgs e)
         {
             var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
             textObj.SetPosY(Convert.ToInt32(numericUpDownScenePosY.Value));
+            launchTextDisplayGroup();
         }
 
 
 
         private void numericUpDownGropuText_ValueChanged(object sender, EventArgs e)
         {
-            launchTextDisplayGroup((int)numericUpDownGroupText.Value);
+            //launchTextDisplayGroup((int)numericUpDownGroupText.Value);
         }
 
         private void textBoxSceneText_TextChanged(object sender, EventArgs e)
         {
-            this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).SetText(textBoxSceneText.Text); 
+            this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).SetText(textBoxSceneText.Text);
         }
 
         private void buttonSceneForeColor_Click(object sender, EventArgs e)
@@ -738,7 +744,8 @@ namespace N64PPLEditorC
             {
                 var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
                 textObj.ForeColor = colorDialog1.Color;
-                launchTextDisplayText();
+                buttonSceneForeColor.BackColor = textObj.ForeColor;
+                //launchTextDisplayText();
             }
 
         }
@@ -749,7 +756,8 @@ namespace N64PPLEditorC
             {
                 var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
                 textObj.BackColor = colorDialog1.Color;
-                launchTextDisplayText();
+                buttonSceneBackColor.BackColor = textObj.BackColor;
+                //launchTextDisplayText();
             }
         }
 
@@ -972,6 +980,14 @@ namespace N64PPLEditorC
             treeViewAudio.SelectedNode = e.Node;
         }
 
-       
+        private void textBoxSceneText_Leave(object sender, EventArgs e)
+        {
+            UpdateFreeSpaceLeft();
+        }
+
+        private void numericUpDownScenePosX_Leave(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -81,8 +81,6 @@
             this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
             this.textBoxSceneText = new System.Windows.Forms.TextBox();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.numericUpDownGroupText = new System.Windows.Forms.NumericUpDown();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
             this.buttonHVQMRemove = new System.Windows.Forms.Button();
@@ -141,7 +139,6 @@
             this.groupBoxSceneText.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).BeginInit();
             this.groupBoxTextureSBF.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGroupText)).BeginInit();
             this.tabPageMovies.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -163,7 +160,7 @@
             this.groupBox1.Controls.Add(this.buttonLoadRom);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(631, 51);
+            this.groupBox1.Size = new System.Drawing.Size(622, 51);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "PPL location : ";
@@ -171,7 +168,7 @@
             // buttonGetRomFolder
             // 
             this.buttonGetRomFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGetRomFolder.Location = new System.Drawing.Point(503, 17);
+            this.buttonGetRomFolder.Location = new System.Drawing.Point(494, 17);
             this.buttonGetRomFolder.Name = "buttonGetRomFolder";
             this.buttonGetRomFolder.Size = new System.Drawing.Size(34, 23);
             this.buttonGetRomFolder.TabIndex = 1;
@@ -189,14 +186,14 @@
             this.textBoxPPLLocation.Enabled = false;
             this.textBoxPPLLocation.Location = new System.Drawing.Point(6, 19);
             this.textBoxPPLLocation.Name = "textBoxPPLLocation";
-            this.textBoxPPLLocation.Size = new System.Drawing.Size(491, 20);
+            this.textBoxPPLLocation.Size = new System.Drawing.Size(482, 20);
             this.textBoxPPLLocation.TabIndex = 1;
             this.textBoxPPLLocation.Text = global::N64PPLEditorC.Properties.Settings.Default.txtPPLLocation;
             // 
             // buttonLoadRom
             // 
             this.buttonLoadRom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLoadRom.Location = new System.Drawing.Point(543, 17);
+            this.buttonLoadRom.Location = new System.Drawing.Point(534, 17);
             this.buttonLoadRom.Name = "buttonLoadRom";
             this.buttonLoadRom.Size = new System.Drawing.Size(82, 23);
             this.buttonLoadRom.TabIndex = 0;
@@ -510,7 +507,7 @@
             this.groupBox9.Controls.Add(this.label7);
             this.groupBox9.Controls.Add(this.buttonSceneBackColor);
             this.groupBox9.Controls.Add(this.buttonSceneForeColor);
-            this.groupBox9.Location = new System.Drawing.Point(420, 454);
+            this.groupBox9.Location = new System.Drawing.Point(420, 436);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(199, 83);
             this.groupBox9.TabIndex = 12;
@@ -563,7 +560,7 @@
             this.groupBox12.Controls.Add(this.numericUpDownScenePosX);
             this.groupBox12.Controls.Add(this.label8);
             this.groupBox12.Controls.Add(this.numericUpDownScenePosY);
-            this.groupBox12.Location = new System.Drawing.Point(269, 454);
+            this.groupBox12.Location = new System.Drawing.Point(272, 436);
             this.groupBox12.Name = "groupBox12";
             this.groupBox12.Size = new System.Drawing.Size(145, 83);
             this.groupBox12.TabIndex = 11;
@@ -591,6 +588,7 @@
             this.numericUpDownScenePosX.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownScenePosX.TabIndex = 8;
             this.numericUpDownScenePosX.ValueChanged += new System.EventHandler(this.numericUpDownScenePosX_ValueChanged);
+            this.numericUpDownScenePosX.Leave += new System.EventHandler(this.numericUpDownScenePosX_Leave);
             // 
             // label8
             // 
@@ -623,9 +621,9 @@
             this.groupBoxSceneText.Controls.Add(this.label1);
             this.groupBoxSceneText.Controls.Add(this.numericUpDownSceneText);
             this.groupBoxSceneText.Controls.Add(this.textBoxSceneText);
-            this.groupBoxSceneText.Location = new System.Drawing.Point(269, 291);
+            this.groupBoxSceneText.Location = new System.Drawing.Point(272, 273);
             this.groupBoxSceneText.Name = "groupBoxSceneText";
-            this.groupBoxSceneText.Size = new System.Drawing.Size(352, 157);
+            this.groupBoxSceneText.Size = new System.Drawing.Size(347, 157);
             this.groupBoxSceneText.TabIndex = 5;
             this.groupBoxSceneText.TabStop = false;
             this.groupBoxSceneText.Text = "Text edit";
@@ -665,7 +663,7 @@
             this.buttonScenesAddText.Name = "buttonScenesAddText";
             this.buttonScenesAddText.Size = new System.Drawing.Size(75, 36);
             this.buttonScenesAddText.TabIndex = 4;
-            this.buttonScenesAddText.Text = "Add text";
+            this.buttonScenesAddText.Text = "Add dialog\r\n(at end)";
             this.buttonScenesAddText.UseVisualStyleBackColor = true;
             this.buttonScenesAddText.Click += new System.EventHandler(this.buttonScenesAddText_Click);
             // 
@@ -691,40 +689,23 @@
             this.textBoxSceneText.Location = new System.Drawing.Point(73, 88);
             this.textBoxSceneText.Multiline = true;
             this.textBoxSceneText.Name = "textBoxSceneText";
-            this.textBoxSceneText.Size = new System.Drawing.Size(137, 58);
+            this.textBoxSceneText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxSceneText.Size = new System.Drawing.Size(179, 58);
             this.textBoxSceneText.TabIndex = 3;
             this.textBoxSceneText.TextChanged += new System.EventHandler(this.textBoxSceneText_TextChanged);
+            this.textBoxSceneText.Leave += new System.EventHandler(this.textBoxSceneText_Leave);
             // 
             // groupBoxTextureSBF
             // 
             this.groupBoxTextureSBF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTextureSBF.BackColor = System.Drawing.Color.Transparent;
-            this.groupBoxTextureSBF.Controls.Add(this.label10);
-            this.groupBoxTextureSBF.Controls.Add(this.numericUpDownGroupText);
             this.groupBoxTextureSBF.Controls.Add(this.drawScene1);
             this.groupBoxTextureSBF.Location = new System.Drawing.Point(269, 3);
             this.groupBoxTextureSBF.Name = "groupBoxTextureSBF";
-            this.groupBoxTextureSBF.Size = new System.Drawing.Size(350, 282);
+            this.groupBoxTextureSBF.Size = new System.Drawing.Size(350, 264);
             this.groupBoxTextureSBF.TabIndex = 1;
             this.groupBoxTextureSBF.TabStop = false;
             this.groupBoxTextureSBF.Text = "Scene Editor";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(9, 259);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(113, 13);
-            this.label10.TabIndex = 3;
-            this.label10.Text = "Group Text displayed :";
-            // 
-            // numericUpDownGroupText
-            // 
-            this.numericUpDownGroupText.Location = new System.Drawing.Point(122, 257);
-            this.numericUpDownGroupText.Name = "numericUpDownGroupText";
-            this.numericUpDownGroupText.Size = new System.Drawing.Size(49, 20);
-            this.numericUpDownGroupText.TabIndex = 3;
-            this.numericUpDownGroupText.ValueChanged += new System.EventHandler(this.numericUpDownGropuText_ValueChanged);
             // 
             // treeViewSBF
             // 
@@ -1050,7 +1031,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 722);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(651, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(642, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
@@ -1058,7 +1039,7 @@
             // helpStatus
             // 
             this.helpStatus.Name = "helpStatus";
-            this.helpStatus.Size = new System.Drawing.Size(636, 17);
+            this.helpStatus.Size = new System.Drawing.Size(627, 17);
             this.helpStatus.Spring = true;
             // 
             // bWDecompress
@@ -1102,7 +1083,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(651, 744);
+            this.ClientSize = new System.Drawing.Size(642, 744);
             this.Controls.Add(this.buttonModifyRom);
             this.Controls.Add(this.labelFreeSpaceLeft);
             this.Controls.Add(this.label2);
@@ -1138,8 +1119,6 @@
             this.groupBoxSceneText.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).EndInit();
             this.groupBoxTextureSBF.ResumeLayout(false);
-            this.groupBoxTextureSBF.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGroupText)).EndInit();
             this.tabPageMovies.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
@@ -1228,8 +1207,6 @@
         private System.Windows.Forms.PictureBox pictureBoxUncompressedTexture;
         private System.Windows.Forms.Button buttonUncompressedTextureExtractAll;
         private System.Windows.Forms.Button buttonUncompressedTextureReplace;
-        private System.Windows.Forms.NumericUpDown numericUpDownGroupText;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button buttonScenesAddTextAtEnd;
         private System.Windows.Forms.Button buttonScenesAddText;
         private System.Windows.Forms.Label label11;

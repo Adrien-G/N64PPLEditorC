@@ -28,6 +28,14 @@ namespace N64PPLEditorC
         public static readonly Byte[] endOfRom = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
         public static readonly int romSize = 0x2000000;
 
+        public enum TextType : int
+        {
+            Unused = 0x36, // unused, think only used by dev..
+            Dialog = 0x44, //dialog, show text caracter by caracter
+            Unknown52 = 0x52,
+            Unknown60 = 0x60,
+        }
+
         //check the decimal value of ressources type
         public enum RessourceType : int
         {
@@ -55,7 +63,6 @@ namespace N64PPLEditorC
             German = 0x44,
             USA = 0x45
         }
-
 
         public enum TextureDisplayStyle : byte
         {
