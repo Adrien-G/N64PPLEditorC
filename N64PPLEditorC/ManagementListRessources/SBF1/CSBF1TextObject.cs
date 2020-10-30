@@ -26,10 +26,10 @@ namespace N64PPLEditorC
 
         enum textType : byte
         {
-            unknown36 = 0x36,
-            dialog = 0x44,
-            title = 0x52,
-            unknown60 = 0x60
+            unknown36 = 36,
+            dialog = 44,
+            title = 52,
+            unknown60 = 60
         }
 
         public CSBF1TextObject(byte[] rawData,int headerSize,int textdataSize)
@@ -87,37 +87,44 @@ namespace N64PPLEditorC
 
         private void DecomposeHeader(int headerValue)
         {
-            var posX = new byte[4];
-            var posY = new byte[4];
+            //declare data grabbed
+            var screenPosX = new byte[4];
+            var screenPosY = new byte[4];
             var id = new byte[4];
             var foreColor = new byte[4];
             var backColor = new byte[4];
-            Array.Copy(rawData, 4, posX, 0, posX.Length);
-            Array.Copy(rawData, 8, posY, 0, posY.Length);
-            Array.Copy(rawData, 12, id, 0, id.Length);
-            Array.Copy(rawData, headerData.Length - 16, foreColor, 0, foreColor.Length);
-            Array.Copy(rawData, headerData.Length - 20, backColor, 0, backColor.Length);
 
-            //switch (headerValue)
-            //{
-            //    case 36:
-            //        break;
-            //    case 44:
-            //        break;
-            //    case 52:
-            //        //if flag is true, set the component at the middle of the screen (and retract the next value / 2)
-            //        if (rawData[22] == 1)
-            //        {
-            //            posX = CGeneric.ConvertIntToByteArray(160 - rawData[23]);
-            //        }
+            //declare position of data to grab (default for "44" header size) and addapt value if necessary in the switch.
+            var posX = 4;
+            var posY = 8;
+            var posId = 12;
+            var posForeColor = headerData.Length - 16;
+            var posBackColor = headerData.Length - 20;
 
-            //        break;
-            //    case 60:
-            //        break;
-            //}
+            Array.Copy(rawData, posX, screenPosX, 0, screenPosX.Length);
+            Array.Copy(rawData, posY, screenPosY, 0, screenPosY.Length);
+            Array.Copy(rawData, posId, id, 0, id.Length);
+            Array.Copy(rawData, posForeColor, foreColor, 0, foreColor.Length);
+            Array.Copy(rawData, posBackColor, backColor, 0, backColor.Length);
+
             this.id = CGeneric.ConvertByteArrayToUInt(id);
-            this.posX = CGeneric.ConvertByteArrayToInt(posX);
-            this.posY = CGeneric.ConvertByteArrayToInt(posY);
+            this.posX = CGeneric.ConvertByteArrayToInt(screenPosX);
+            //if ((textType)headerValue == textType.title) 
+            //{
+            //    var posX2 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 20, 4));
+            //    if (posX == 0)
+            //        this.posX = posX2 / 2;
+            //    else
+            //    {
+            //        this.posX = posX + ((posX + posX2) / 2);
+            //    }
+                
+
+                
+            //    //this.posX = posX - CGeneric.ConvertByteArrayToInt(posX2) / 2;
+            //}
+
+            this.posY = CGeneric.ConvertByteArrayToInt(screenPosY);
             this.ForeColor = Color.FromArgb(foreColor[3], foreColor[0], foreColor[1], foreColor[2]);
             this.BackColor = Color.FromArgb(backColor[3], backColor[0], backColor[1], backColor[2]);
 
@@ -182,8 +189,49 @@ namespace N64PPLEditorC
             switch (RomLangAddress.romLang)
             {
                 case CGeneric.romLang.French: return ConvertChToBaFr(letter);
-                default: throw new NotImplementedException();
+                case CGeneric.romLang.German: return ConvertChToBaGer(letter);
+                case CGeneric.romLang.European: return ConvertChToBaEur(letter);
+                case CGeneric.romLang.USA: return ConvertChToBaUsa(letter);
+                default: return new byte[0];
             }
+        }
+        private char ConvertByteToChar(Int16 letter)
+        {
+            switch (RomLangAddress.romLang)
+            {
+                case CGeneric.romLang.French: return ConvertByteToCharFr(letter);
+                case CGeneric.romLang.German: return ConvertByteToCharGer(letter);
+                case CGeneric.romLang.European: return ConvertByteToCharEur(letter);
+                case CGeneric.romLang.USA: return ConvertByteToCharUsa(letter);
+                default: return ' ';
+            }
+        }
+
+        private byte[] ConvertChToBaUsa(char letter)
+        {
+            #if DEBUG
+                throw new NotImplementedException();
+            #else
+                return new byte[2] { 0x00,0x00};
+            #endif
+        }
+
+        private byte[] ConvertChToBaEur(char letter)
+        {
+#if DEBUG
+            throw new NotImplementedException();
+#else
+            return new byte[2] { 0x00, 0x00 };
+#endif
+        }
+
+        private byte[] ConvertChToBaGer(char letter)
+        {
+#if DEBUG
+            throw new NotImplementedException();
+#else
+            return new byte[2] { 0x00, 0x00 };
+#endif
         }
 
         private byte[] ConvertChToBaFr(char letter)
@@ -255,15 +303,33 @@ namespace N64PPLEditorC
         }
 
 
-        private char ConvertByteToChar(Int16 letter)
+
+        private char ConvertByteToCharUsa(short letter)
         {
-            switch (RomLangAddress.romLang)
-            {
-                case CGeneric.romLang.French: return ConvertByteToCharFr(letter);
-                default: throw new NotImplementedException();
-            }
+#if DEBUG
+                throw new NotImplementedException();
+#else
+            return '?';
+#endif
         }
 
+        private char ConvertByteToCharEur(short letter)
+        {
+#if DEBUG
+            throw new NotImplementedException();
+#else
+            return '?';
+#endif
+        }
+
+        private char ConvertByteToCharGer(short letter)
+        {
+#if DEBUG
+            throw new NotImplementedException();
+#else
+            return '?';
+#endif
+        }
 
         private char ConvertByteToCharFr(Int16 letter)
         {

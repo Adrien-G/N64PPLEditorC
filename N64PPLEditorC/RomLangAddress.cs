@@ -19,11 +19,11 @@ namespace N64PPLEditorC
             switch (romLang)
             {
                 //others address are calculated by relative address.
-                case CGeneric.romLang.French: addr = 0xB4D7C;
-                    //return new int[] { 0xB4D7C,0xB4D40,0xB4D68,0xB4EE4,0xB4D90,0xB4DA4,0xB4DB8,0xB4DCC,0xB4DE0,0xB4DF4,0xB4E08,
-                    //                   0xB4E1C,0xB4E30,0xB4E44,0xB4E58,0xB4E6C,0xB4E80,0xB4E94,0xB4EA8,0xB4EBC,0xB4ED0,0xB4D54 };
-                    break;
-                case CGeneric.romLang.German: addr = 0xABFAC; break;
+                case CGeneric.romLang.French:   addr = 0xB4D7C; break;
+                case CGeneric.romLang.German:   addr = 0xABFAC; break;
+                case CGeneric.romLang.European: addr = 0xB66CC; break;
+                case CGeneric.romLang.USA:      addr = 0xB61AC; break;
+
                 default: throw new NotImplementedException();
             }
             //see if relavite address works..
@@ -38,6 +38,9 @@ namespace N64PPLEditorC
                 case CGeneric.romLang.French:
                 case CGeneric.romLang.German: 
                     return 0x16D0;
+                case CGeneric.romLang.European:
+                case CGeneric.romLang.USA:
+                    return 0x16B0;
                 default: throw new NotImplementedException();
             }
         }
@@ -49,6 +52,9 @@ namespace N64PPLEditorC
                 case CGeneric.romLang.French:
                 case CGeneric.romLang.German:
                     return 0x2DB0;
+                case CGeneric.romLang.European:
+                case CGeneric.romLang.USA:
+                    return 0x2730;
                 default: throw new NotImplementedException();
             }
         }
@@ -57,8 +63,10 @@ namespace N64PPLEditorC
         {
             switch (romLang)
             {
-                case CGeneric.romLang.French: return 0xB4B00;
-                case CGeneric.romLang.German: return 0xABD30;
+                case CGeneric.romLang.French:   return 0xB4B00;
+                case CGeneric.romLang.German:   return 0xABD30;
+                case CGeneric.romLang.European: return 0xB6450;
+                case CGeneric.romLang.USA:      return 0xB5F30;
                 default: throw new NotImplementedException();
             }
         }

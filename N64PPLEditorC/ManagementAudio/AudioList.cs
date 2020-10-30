@@ -152,6 +152,8 @@ namespace N64PPLEditorC.ManagementAudio
                 soundBankList[i].address.end = CGeneric.ConvertIntToByteArray((int)fs.Position);
             }
 
+            long savedFsPosition = fs.Position;
+
             //update address in the header (first part)
             for (int i = 0; i <= 0x15; i++)
             {
@@ -200,6 +202,8 @@ namespace N64PPLEditorC.ManagementAudio
                 fs.Write(soundBankList[i].address.WaveTable, 0, 4);
 
             }
+
+            fs.Position = savedFsPosition;
         }
     }
 }

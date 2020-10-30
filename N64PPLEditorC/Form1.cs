@@ -147,7 +147,7 @@ namespace N64PPLEditorC
 
                             }
                             else
-                                MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);*/
                         }
                     }
                     catch (Exception ex)
@@ -346,7 +346,8 @@ namespace N64PPLEditorC
             freeSpaceLeft = CGeneric.romSize;
             freeSpaceLeft -= ressourceList.indexRessourcesStart;
             freeSpaceLeft -= ressourceList.GetSizeOfAllRessourceList();
-            freeSpaceLeft -= audioList.GetSizeOfAllAudio();
+            if(audioList != null)//TODO To remove when ok
+                freeSpaceLeft -= audioList.GetSizeOfAllAudio();
 
             labelFreeSpaceLeft.Text = freeSpaceLeft.ToString("### ### ### ###") + " bytes";
         }
@@ -375,8 +376,10 @@ namespace N64PPLEditorC
             }
             else
             {
-                //try
-                //{
+#if !DEBUG
+                try
+                {
+#endif
                 Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
 
                 //perform check verification (good game and good format) and register the lang
@@ -391,22 +394,12 @@ namespace N64PPLEditorC
                 //load graphics compressed / hvqm and sbf
                 LoadRessourcesList(buffRom);
 
-                
                 //load the uncompressed texture
                 this.romList = new UncompressedRomTexture(buffRom);
 
                 //load the audio part
-                try
-                {
-                    LoadAudioList(buffRom);
+                LoadAudioList(buffRom);
 
-                }
-                catch (Exception)
-                {
-                    //just because only french version is implemented yet..
-                }
-                
-                
                 LoadTreeView();
                 UpdateFreeSpaceLeft();
                 tabControlTexMovSce.Enabled = true;
@@ -414,11 +407,13 @@ namespace N64PPLEditorC
                 buttonLoadRom.Enabled = false;
                 buttonGetRomFolder.Enabled = false;
                 buttonLoadRom.Text = "ROM Loaded";
-                //}
-                //catch (Exception ex)
-                //{
-                //MessageBox.Show("Error opening rom..." + Environment.NewLine + "details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //}
+#if !DEBUG
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error opening rom..." + Environment.NewLine + "details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+#endif
             }
         }
 
@@ -556,12 +551,23 @@ namespace N64PPLEditorC
                 //TODO add uncompressed image management
                 ressourceList.WriteAllData(fs);
                 audioList.WriteAllData(fs);
+                fillNullData(fs);
                 fs.Close();
                 buttonModifyRom.BackColor = Color.LimeGreen;
             }
         }
 
+        private void fillNullData(FileStream fs)
+        {
+            var fillArray = new Byte[CGeneric.romSize - fs.Position];
+            for(int i = 0; i < fillArray.Length; i++)
+            {
+                fillArray[i] = 0xFF;
+            }
 
+
+            fs.Write(fillArray,0,fillArray.Length);
+        }
 
 
         private void treeViewSBF_AfterSelect(object sender, TreeViewEventArgs e)
@@ -810,12 +816,27 @@ namespace N64PPLEditorC
 
         private void button4_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < 100; i++)
+#if DEBUG
+            int sbfIndex = 0;
+            foreach (CSBF1 sbf in ressourceList.sbfList)
             {
-                SendKeys.Send("{ENTER}");
-                System.Threading.Thread.Sleep(8000);
+
+                foreach (CSBF1Scene scene in sbf.scenesList)
+                {
+
+                    foreach (CSBF1TextObject txt in scene.textObjectList)
+                    {
+                        textBox1.AppendText(sbfIndex.ToString());
+                        textBox1.AppendText("[" + scene.GetSceneName() + "[");
+                        textBox1.AppendText(txt.GetText() + "[");
+                        //textBox1.AppendText(BitConverter.ToString(txt.headerData).Replace("-", ""));
+
+                        textBox1.AppendText(Environment.NewLine);
+                    }
+                }
+                sbfIndex++;
             }
-            
+#endif
         }
 
         private void toolStripMenuItemReplaceAudioAllSoundBank_Click(object sender, EventArgs e)
@@ -827,11 +848,12 @@ namespace N64PPLEditorC
                 audioList.soundBankList[treeViewAudio.SelectedNode.Index].ptrTable.Length +
                 audioList.soundBankList[treeViewAudio.SelectedNode.Index].waveTable.Length +
                 audioList.soundBankList[treeViewAudio.SelectedNode.Index].sfx.Length;
-            int newAllLength = PtrTable.Length + WaveTable.Length + SfxTable.Length;
+            
 
             if (PtrTable != null && WaveTable != null && SfxTable != null)
             {
-                if( oldAllLength <= newAllLength || (newAllLength - oldAllLength) < freeSpaceLeft)
+                int newAllLength = PtrTable.Length + WaveTable.Length + SfxTable.Length;
+                if ( oldAllLength <= newAllLength || (newAllLength - oldAllLength) < freeSpaceLeft)
                     audioList.ReplaceSoundBank(PtrTable, WaveTable, SfxTable, treeViewAudio.SelectedNode.Index) ;
                 else
                     MessageBox.Show("Not enought space in the rom.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

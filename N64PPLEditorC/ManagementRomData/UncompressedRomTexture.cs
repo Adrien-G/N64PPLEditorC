@@ -23,7 +23,6 @@ namespace N64PPLEditorC
 
         private void AddTexture(int location, int sizeX, int sizeY, int bpp, string text)
         {
-
             graphicsRom.Add(new UncompressedRomTextureData(CGeneric.GiveMeArray(rawData, location, sizeX * sizeY * (bpp / 8)), location, sizeX, sizeY, bpp, text));
         }
 
@@ -32,10 +31,49 @@ namespace N64PPLEditorC
             switch (RomLangAddress.romLang)
             {
                 case CGeneric.romLang.French: InitGraphicsFr(); break;
+                case CGeneric.romLang.German: InitGraphicsGer(); break;
+                case CGeneric.romLang.European: InitGraphicsEur(); break;
+                case CGeneric.romLang.USA: InitGraphicsUsa(); break;
             }
         }
 
-        private void InitGraphicsFr()
+        private void InitGraphicsEur()
+        {
+            //32bpp textures
+            AddTexture(0x972FB0, 104, 88, 32, "stage fini (cœur)");
+        }
+        private void InitGraphicsUsa()
+        {
+            //32bpp textures
+            AddTexture(0x972FB0, 104, 88, 32, "stage fini (cœur)");
+        }
+
+        private void InitGraphicsGer()
+        {
+            //32bpp textures
+            AddTexture(0x972FB0, 104, 88, 32, "stage fini (cœur)");
+            AddTexture(0x97BEB0, 104, 97, 32, "manche finie (etoile)");
+            AddTexture(0x985C50, 104, 96, 32, "game over (rond)");
+            AddTexture(0x98F9F0, 104, 79, 32, "temps écoulé");
+            AddTexture(0x9978B0, 104, 17, 32, "essayer encore");
+            AddTexture(0x999930, 104, 94, 32, "oui non multiples…");
+            AddTexture(0x9A3530, 104, 16, 32, "appuyez sur un bouton!");
+            AddTexture(0x92D4AC, 64 , 23, 32, "PAUSE");
+            AddTexture(0x9333B0, 104, 88, 32, "stage fini (cœur)");
+            AddTexture(0x93C2AC, 104, 97, 32, "manche finie (etoile)");
+            AddTexture(0x972FB0, 104, 88, 32, "stage fini (cœur)");
+            AddTexture(0x94604C, 104, 96, 32, "game over (rond)");
+            AddTexture(0x94FC48, 104, 79, 32, "temps écoulé!");
+            AddTexture(0x957CAC, 104, 16, 32, "essayer encore");
+            AddTexture(0x95984C, 104, 98, 32, "oui non multiples…");
+            AddTexture(0x9635F0, 104, 18, 32, "appuyez sur un bouton!");
+
+            //AddTexture(0x0F9D90, 64, 24, 32, "prêt J1 ? (bleu)");
+            //AddTexture(0x0FB590, 24, 72, 32, "1 2 3 (bleu)");
+            //AddTexture(0x0FD090, 64, 24, 32, "prêt J2 ? (rouge)");
+            //AddTexture(0x0FE890, 24, 72, 32, "1 2 3 (rouge)");
+        }
+            private void InitGraphicsFr()
         {
             //32bpp textures
             AddTexture(0x97C850, 104, 88, 32, "stage fini (cœur)");
@@ -63,7 +101,7 @@ namespace N64PPLEditorC
             AddTexture(0x0F8690, 64 , 23 , 16, "Curseur Gros");
             AddTexture(0x0F9290, 64 , 23 , 16, "Curseur Petit");
             AddTexture(0x100390, 320, 232, 16, "continue screen (try again ?)");
-            AddTexture(0x124790, 64 , 60 , 16, "continue screen (sacha head only)");
+            AddTexture(0x124790, 64 , 60 , 16, "continue screen (tête de sacha)");
             AddTexture(0x183900, 320, 232, 16, "stade 1");
             AddTexture(0x1A7D00, 320, 232, 16, "stade 2");
             AddTexture(0x1CC100, 320, 232, 16, "Team rocket bateau");

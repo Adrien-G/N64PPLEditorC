@@ -81,6 +81,7 @@
             this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
             this.textBoxSceneText = new System.Windows.Forms.TextBox();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
             this.buttonHVQMRemove = new System.Windows.Forms.Button();
@@ -106,8 +107,8 @@
             this.toolStripMenuItemReplaceWaveTable = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemReplaceSfxTable = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageScenesOrder = new System.Windows.Forms.TabPage();
-            this.button4 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -119,7 +120,6 @@
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -229,14 +229,14 @@
             this.expandAllToolStripMenuItem,
             this.collpseAllToolStripMenuItem});
             this.contextMenuStripTextureTreeview.Name = "contextMenuStrip1";
-            this.contextMenuStripTextureTreeview.Size = new System.Drawing.Size(180, 126);
+            this.contextMenuStripTextureTreeview.Size = new System.Drawing.Size(181, 148);
             this.contextMenuStripTextureTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripForTreeview_Opening);
             // 
             // addNewTextureToolStripMenuItem
             // 
             this.addNewTextureToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.AddImage_16x;
             this.addNewTextureToolStripMenuItem.Name = "addNewTextureToolStripMenuItem";
-            this.addNewTextureToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.addNewTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addNewTextureToolStripMenuItem.Text = "Add New texture(s)";
             this.addNewTextureToolStripMenuItem.Click += new System.EventHandler(this.addNewTextureToolStripMenuItem_Click);
             // 
@@ -245,14 +245,14 @@
             this.removeThisTextureToolStripMenuItem.Enabled = false;
             this.removeThisTextureToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.RemoveGuide_16x;
             this.removeThisTextureToolStripMenuItem.Name = "removeThisTextureToolStripMenuItem";
-            this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.removeThisTextureToolStripMenuItem.Text = "Remove this texture";
             this.removeThisTextureToolStripMenuItem.Click += new System.EventHandler(this.removeThisTextureToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // containerTypetoolStripMenuItem
             // 
@@ -261,7 +261,7 @@
             this.animatedBadgesToolStripMenuItem,
             this.textureScrollbluePokeballBackgroundToolStripMenuItem});
             this.containerTypetoolStripMenuItem.Name = "containerTypetoolStripMenuItem";
-            this.containerTypetoolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.containerTypetoolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.containerTypetoolStripMenuItem.Text = "Container Type";
             // 
             // fixedToolStripMenuItem
@@ -288,13 +288,13 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // expandAllToolStripMenuItem
             // 
             this.expandAllToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.ExpandAll_16x;
             this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.expandAllToolStripMenuItem.Text = "Expand all";
             this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
             // 
@@ -302,7 +302,7 @@
             // 
             this.collpseAllToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.CollapseAll_16x;
             this.collpseAllToolStripMenuItem.Name = "collpseAllToolStripMenuItem";
-            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.collpseAllToolStripMenuItem.Text = "Collapse all";
             this.collpseAllToolStripMenuItem.Click += new System.EventHandler(this.collpseAllToolStripMenuItem_Click);
             // 
@@ -707,6 +707,13 @@
             this.groupBoxTextureSBF.TabStop = false;
             this.groupBoxTextureSBF.Text = "Scene Editor";
             // 
+            // drawScene1
+            // 
+            this.drawScene1.Location = new System.Drawing.Point(12, 16);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(320, 240);
+            this.drawScene1.TabIndex = 0;
+            // 
             // treeViewSBF
             // 
             this.treeViewSBF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -949,7 +956,6 @@
             // tabPageScenesOrder
             // 
             this.tabPageScenesOrder.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPageScenesOrder.Controls.Add(this.button4);
             this.tabPageScenesOrder.Controls.Add(this.groupBox3);
             this.tabPageScenesOrder.Location = new System.Drawing.Point(4, 22);
             this.tabPageScenesOrder.Name = "tabPageScenesOrder";
@@ -957,18 +963,9 @@
             this.tabPageScenesOrder.TabIndex = 3;
             this.tabPageScenesOrder.Text = "Debug";
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(412, 44);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 16;
-            this.button4.Text = "Hook mode";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button4);
             this.groupBox3.Controls.Add(this.textBox3);
             this.groupBox3.Controls.Add(this.textBox2);
             this.groupBox3.Controls.Add(this.textBox1);
@@ -979,6 +976,16 @@
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Debug";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(280, 172);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 16;
+            this.button4.Text = "Hook mode";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // textBox3
             // 
@@ -1071,13 +1078,6 @@
             // 
             this.colorDialog1.AnyColor = true;
             this.colorDialog1.FullOpen = true;
-            // 
-            // drawScene1
-            // 
-            this.drawScene1.Location = new System.Drawing.Point(12, 16);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(320, 240);
-            this.drawScene1.TabIndex = 0;
             // 
             // Form1
             // 
