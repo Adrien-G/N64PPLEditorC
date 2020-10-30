@@ -15,18 +15,18 @@ namespace N64PPLEditorC
 
         public static int[] GetSoundBankPtrTable()
         {
-            int addr = 0;
+            int starting = 0;
             switch (romLang)
             {
                 //others address are calculated by relative address.
-                case CGeneric.romLang.French:   addr = 0xB4D7C; break;
-                case CGeneric.romLang.German:   addr = 0xABFAC; break;
-                case CGeneric.romLang.European: addr = 0xB66CC; break;
-                case CGeneric.romLang.USA:      addr = 0xB61AC; break;
+                case CGeneric.romLang.French:   starting = 0xB4D7C; break;
+                case CGeneric.romLang.German:   starting = 0xABFAC; break;
+                case CGeneric.romLang.European: starting = 0xB66CC; break;
+                case CGeneric.romLang.USA:      starting = 0xB61AC; break;
                 default: throw new NotImplementedException();
             }
-            //see if relavite address works..
-            return new int[] { addr, addr - 60, addr - 20, addr + 360, addr + 20, addr + 40, addr + 60, addr + 80, addr + 100, addr + 120, addr + 140, addr + 160, addr + 180, addr + 200, addr + 220, addr + 240, addr + 260, addr + 280, addr + 300, addr + 320, addr + 340, addr - 40 };
+            //relative address
+            return new int[] { starting, starting - 60, starting - 20, starting + 360, starting + 20, starting + 40, starting + 60, starting + 80, starting + 100, starting + 120, starting + 140, starting + 160, starting + 180, starting + 200, starting + 220, starting + 240, starting + 260, starting + 280, starting + 300, starting + 320, starting + 340, starting - 40 };
 
         }
 
