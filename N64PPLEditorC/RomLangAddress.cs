@@ -23,7 +23,6 @@ namespace N64PPLEditorC
                 case CGeneric.romLang.German:   addr = 0xABFAC; break;
                 case CGeneric.romLang.European: addr = 0xB66CC; break;
                 case CGeneric.romLang.USA:      addr = 0xB61AC; break;
-
                 default: throw new NotImplementedException();
             }
             //see if relavite address works..
@@ -36,8 +35,9 @@ namespace N64PPLEditorC
             switch (romLang)
             {
                 case CGeneric.romLang.French:
-                case CGeneric.romLang.German: 
                     return 0x16D0;
+                case CGeneric.romLang.German:
+                    return 0x16E0;
                 case CGeneric.romLang.European:
                 case CGeneric.romLang.USA:
                     return 0x16B0;
@@ -50,8 +50,9 @@ namespace N64PPLEditorC
             switch (romLang)
             {
                 case CGeneric.romLang.French:
-                case CGeneric.romLang.German:
                     return 0x2DB0;
+                case CGeneric.romLang.German:
+                    return 0x2760;
                 case CGeneric.romLang.European:
                 case CGeneric.romLang.USA:
                     return 0x2730;

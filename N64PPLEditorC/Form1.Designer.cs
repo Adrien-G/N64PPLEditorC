@@ -229,14 +229,14 @@
             this.expandAllToolStripMenuItem,
             this.collpseAllToolStripMenuItem});
             this.contextMenuStripTextureTreeview.Name = "contextMenuStrip1";
-            this.contextMenuStripTextureTreeview.Size = new System.Drawing.Size(181, 148);
+            this.contextMenuStripTextureTreeview.Size = new System.Drawing.Size(180, 126);
             this.contextMenuStripTextureTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripForTreeview_Opening);
             // 
             // addNewTextureToolStripMenuItem
             // 
             this.addNewTextureToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.AddImage_16x;
             this.addNewTextureToolStripMenuItem.Name = "addNewTextureToolStripMenuItem";
-            this.addNewTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addNewTextureToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.addNewTextureToolStripMenuItem.Text = "Add New texture(s)";
             this.addNewTextureToolStripMenuItem.Click += new System.EventHandler(this.addNewTextureToolStripMenuItem_Click);
             // 
@@ -245,14 +245,14 @@
             this.removeThisTextureToolStripMenuItem.Enabled = false;
             this.removeThisTextureToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.RemoveGuide_16x;
             this.removeThisTextureToolStripMenuItem.Name = "removeThisTextureToolStripMenuItem";
-            this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.removeThisTextureToolStripMenuItem.Text = "Remove this texture";
             this.removeThisTextureToolStripMenuItem.Click += new System.EventHandler(this.removeThisTextureToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
             // 
             // containerTypetoolStripMenuItem
             // 
@@ -261,7 +261,7 @@
             this.animatedBadgesToolStripMenuItem,
             this.textureScrollbluePokeballBackgroundToolStripMenuItem});
             this.containerTypetoolStripMenuItem.Name = "containerTypetoolStripMenuItem";
-            this.containerTypetoolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.containerTypetoolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.containerTypetoolStripMenuItem.Text = "Container Type";
             // 
             // fixedToolStripMenuItem
@@ -288,13 +288,13 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
             // 
             // expandAllToolStripMenuItem
             // 
             this.expandAllToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.ExpandAll_16x;
             this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.expandAllToolStripMenuItem.Text = "Expand all";
             this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
             // 
@@ -302,7 +302,7 @@
             // 
             this.collpseAllToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.CollapseAll_16x;
             this.collpseAllToolStripMenuItem.Name = "collpseAllToolStripMenuItem";
-            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.collpseAllToolStripMenuItem.Text = "Collapse all";
             this.collpseAllToolStripMenuItem.Click += new System.EventHandler(this.collpseAllToolStripMenuItem_Click);
             // 
@@ -983,7 +983,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 16;
-            this.button4.Text = "Hook mode";
+            this.button4.Text = "op";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
