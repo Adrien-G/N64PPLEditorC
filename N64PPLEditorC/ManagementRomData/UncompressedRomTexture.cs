@@ -40,18 +40,18 @@ namespace N64PPLEditorC
         private void InitGraphicsEur()
         {
             //32bpp textures
-            AddTexture(0x972FB0, 104, 88, 32, "stage fini (cœur)");
+            AddTexture(0x972FB0, 104, 88, 32, "ended stage (heart)");
         }
         private void InitGraphicsUsa()
         {
             //32bpp textures
-            AddTexture(0x972FB0, 104, 88, 32, "stage fini (cœur)");
+            AddTexture(0x972FB0, 104, 88, 32, "ended stage (heart)");
         }
 
         private void InitGraphicsGer()
         {
             //32bpp textures
-            AddTexture(0x972FB0, 104, 88, 32, "stage fini (cœur)");
+            AddTexture(0x972FB0, 104, 88, 32, "ended stage (heart)");
             AddTexture(0x97BEB0, 104, 97, 32, "manche finie (etoile)");
             AddTexture(0x985C50, 104, 96, 32, "game over (rond)");
             AddTexture(0x98F9F0, 104, 79, 32, "temps écoulé");
