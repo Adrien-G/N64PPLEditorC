@@ -59,9 +59,9 @@ namespace N64PPLEditorC
 
                 if (tmpIdM1 == 0xFFFFFFFF)
                 { }
-                else if (textObjectList[i].getHeaderLength() == 44)
+                else if (textObjectList[i].headerData.Length == 44)
                     group++;
-                else if (textObjectList[i].getHeaderLength() == 52 && tmpId != tmpIdM1)
+                else if (textObjectList[i].headerData.Length == 52 && tmpId != tmpIdM1)
                     group++;
                 else
                 { }

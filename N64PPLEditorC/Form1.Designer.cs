@@ -62,12 +62,12 @@
             this.pictureBoxUncompressedTexture = new System.Windows.Forms.PictureBox();
             this.treeViewTexturesUncompressed = new System.Windows.Forms.TreeView();
             this.tabPageScenes = new System.Windows.Forms.TabPage();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.groupBoxSceneFontColor = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.buttonSceneBackColor = new System.Windows.Forms.Button();
             this.buttonSceneForeColor = new System.Windows.Forms.Button();
-            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.groupBoxSceneTextPosition = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
             this.numericUpDownScenePosX = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
@@ -75,13 +75,11 @@
             this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
             this.buttonSceneSuppressText = new System.Windows.Forms.Button();
             this.buttonScenesAddTextAtEnd = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
             this.buttonScenesAddText = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
             this.textBoxSceneText = new System.Windows.Forms.TextBox();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
             this.buttonHVQMRemove = new System.Windows.Forms.Button();
@@ -120,6 +118,11 @@
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.checkBoxSceneTextScrolling = new System.Windows.Forms.CheckBox();
+            this.checkBoxSceneCentered = new System.Windows.Forms.CheckBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -132,8 +135,8 @@
             this.groupBox10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).BeginInit();
             this.tabPageScenes.SuspendLayout();
-            this.groupBox9.SuspendLayout();
-            this.groupBox12.SuspendLayout();
+            this.groupBoxSceneFontColor.SuspendLayout();
+            this.groupBoxSceneTextPosition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).BeginInit();
             this.groupBoxSceneText.SuspendLayout();
@@ -490,8 +493,8 @@
             // tabPageScenes
             // 
             this.tabPageScenes.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPageScenes.Controls.Add(this.groupBox9);
-            this.tabPageScenes.Controls.Add(this.groupBox12);
+            this.tabPageScenes.Controls.Add(this.groupBoxSceneFontColor);
+            this.tabPageScenes.Controls.Add(this.groupBoxSceneTextPosition);
             this.tabPageScenes.Controls.Add(this.groupBoxSceneText);
             this.tabPageScenes.Controls.Add(this.groupBoxTextureSBF);
             this.tabPageScenes.Controls.Add(this.treeViewSBF);
@@ -501,18 +504,20 @@
             this.tabPageScenes.TabIndex = 2;
             this.tabPageScenes.Text = "Scenes";
             // 
-            // groupBox9
+            // groupBoxSceneFontColor
             // 
-            this.groupBox9.Controls.Add(this.label12);
-            this.groupBox9.Controls.Add(this.label7);
-            this.groupBox9.Controls.Add(this.buttonSceneBackColor);
-            this.groupBox9.Controls.Add(this.buttonSceneForeColor);
-            this.groupBox9.Location = new System.Drawing.Point(420, 436);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(199, 83);
-            this.groupBox9.TabIndex = 12;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Text Color";
+            this.groupBoxSceneFontColor.Controls.Add(this.label10);
+            this.groupBoxSceneFontColor.Controls.Add(this.comboBox1);
+            this.groupBoxSceneFontColor.Controls.Add(this.label12);
+            this.groupBoxSceneFontColor.Controls.Add(this.label7);
+            this.groupBoxSceneFontColor.Controls.Add(this.buttonSceneBackColor);
+            this.groupBoxSceneFontColor.Controls.Add(this.buttonSceneForeColor);
+            this.groupBoxSceneFontColor.Location = new System.Drawing.Point(420, 390);
+            this.groupBoxSceneFontColor.Name = "groupBoxSceneFontColor";
+            this.groupBoxSceneFontColor.Size = new System.Drawing.Size(199, 113);
+            this.groupBoxSceneFontColor.TabIndex = 12;
+            this.groupBoxSceneFontColor.TabStop = false;
+            this.groupBoxSceneFontColor.Text = "Font Size and Color";
             // 
             // label12
             // 
@@ -554,18 +559,20 @@
             this.buttonSceneForeColor.UseVisualStyleBackColor = true;
             this.buttonSceneForeColor.Click += new System.EventHandler(this.buttonSceneForeColor_Click);
             // 
-            // groupBox12
+            // groupBoxSceneTextPosition
             // 
-            this.groupBox12.Controls.Add(this.label9);
-            this.groupBox12.Controls.Add(this.numericUpDownScenePosX);
-            this.groupBox12.Controls.Add(this.label8);
-            this.groupBox12.Controls.Add(this.numericUpDownScenePosY);
-            this.groupBox12.Location = new System.Drawing.Point(272, 436);
-            this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(145, 83);
-            this.groupBox12.TabIndex = 11;
-            this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "Text Position";
+            this.groupBoxSceneTextPosition.Controls.Add(this.checkBoxSceneCentered);
+            this.groupBoxSceneTextPosition.Controls.Add(this.label9);
+            this.groupBoxSceneTextPosition.Controls.Add(this.checkBoxSceneTextScrolling);
+            this.groupBoxSceneTextPosition.Controls.Add(this.numericUpDownScenePosX);
+            this.groupBoxSceneTextPosition.Controls.Add(this.label8);
+            this.groupBoxSceneTextPosition.Controls.Add(this.numericUpDownScenePosY);
+            this.groupBoxSceneTextPosition.Location = new System.Drawing.Point(272, 390);
+            this.groupBoxSceneTextPosition.Name = "groupBoxSceneTextPosition";
+            this.groupBoxSceneTextPosition.Size = new System.Drawing.Size(145, 113);
+            this.groupBoxSceneTextPosition.TabIndex = 11;
+            this.groupBoxSceneTextPosition.TabStop = false;
+            this.groupBoxSceneTextPosition.Text = "Text Position";
             // 
             // label9
             // 
@@ -616,31 +623,30 @@
             // 
             this.groupBoxSceneText.Controls.Add(this.buttonSceneSuppressText);
             this.groupBoxSceneText.Controls.Add(this.buttonScenesAddTextAtEnd);
-            this.groupBoxSceneText.Controls.Add(this.label11);
             this.groupBoxSceneText.Controls.Add(this.buttonScenesAddText);
             this.groupBoxSceneText.Controls.Add(this.label1);
             this.groupBoxSceneText.Controls.Add(this.numericUpDownSceneText);
             this.groupBoxSceneText.Controls.Add(this.textBoxSceneText);
             this.groupBoxSceneText.Location = new System.Drawing.Point(272, 273);
             this.groupBoxSceneText.Name = "groupBoxSceneText";
-            this.groupBoxSceneText.Size = new System.Drawing.Size(347, 157);
+            this.groupBoxSceneText.Size = new System.Drawing.Size(347, 111);
             this.groupBoxSceneText.TabIndex = 5;
             this.groupBoxSceneText.TabStop = false;
-            this.groupBoxSceneText.Text = "Text edit";
+            this.groupBoxSceneText.Text = "Text management";
             // 
             // buttonSceneSuppressText
             // 
-            this.buttonSceneSuppressText.Location = new System.Drawing.Point(168, 46);
+            this.buttonSceneSuppressText.Location = new System.Drawing.Point(256, 14);
             this.buttonSceneSuppressText.Name = "buttonSceneSuppressText";
-            this.buttonSceneSuppressText.Size = new System.Drawing.Size(85, 36);
+            this.buttonSceneSuppressText.Size = new System.Drawing.Size(85, 28);
             this.buttonSceneSuppressText.TabIndex = 13;
-            this.buttonSceneSuppressText.Text = "Suppress text";
+            this.buttonSceneSuppressText.Text = "Remove text";
             this.buttonSceneSuppressText.UseVisualStyleBackColor = true;
             this.buttonSceneSuppressText.Click += new System.EventHandler(this.buttonSceneSuppressText_Click);
             // 
             // buttonScenesAddTextAtEnd
             // 
-            this.buttonScenesAddTextAtEnd.Location = new System.Drawing.Point(6, 46);
+            this.buttonScenesAddTextAtEnd.Location = new System.Drawing.Point(271, 59);
             this.buttonScenesAddTextAtEnd.Name = "buttonScenesAddTextAtEnd";
             this.buttonScenesAddTextAtEnd.Size = new System.Drawing.Size(75, 36);
             this.buttonScenesAddTextAtEnd.TabIndex = 5;
@@ -648,18 +654,9 @@
             this.buttonScenesAddTextAtEnd.UseVisualStyleBackColor = true;
             this.buttonScenesAddTextAtEnd.Click += new System.EventHandler(this.buttonScenesAddTextAtEnd_Click);
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(9, 88);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(58, 13);
-            this.label11.TabIndex = 12;
-            this.label11.Text = "Text Edit : ";
-            // 
             // buttonScenesAddText
             // 
-            this.buttonScenesAddText.Location = new System.Drawing.Point(87, 46);
+            this.buttonScenesAddText.Location = new System.Drawing.Point(266, 81);
             this.buttonScenesAddText.Name = "buttonScenesAddText";
             this.buttonScenesAddText.Size = new System.Drawing.Size(75, 36);
             this.buttonScenesAddText.TabIndex = 4;
@@ -672,13 +669,13 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
+            this.label1.Size = new System.Drawing.Size(34, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Text Selected :";
+            this.label1.Text = "Text :";
             // 
             // numericUpDownSceneText
             // 
-            this.numericUpDownSceneText.Location = new System.Drawing.Point(87, 20);
+            this.numericUpDownSceneText.Location = new System.Drawing.Point(46, 20);
             this.numericUpDownSceneText.Name = "numericUpDownSceneText";
             this.numericUpDownSceneText.Size = new System.Drawing.Size(49, 20);
             this.numericUpDownSceneText.TabIndex = 1;
@@ -686,7 +683,7 @@
             // 
             // textBoxSceneText
             // 
-            this.textBoxSceneText.Location = new System.Drawing.Point(73, 88);
+            this.textBoxSceneText.Location = new System.Drawing.Point(6, 46);
             this.textBoxSceneText.Multiline = true;
             this.textBoxSceneText.Name = "textBoxSceneText";
             this.textBoxSceneText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -706,13 +703,6 @@
             this.groupBoxTextureSBF.TabIndex = 1;
             this.groupBoxTextureSBF.TabStop = false;
             this.groupBoxTextureSBF.Text = "Scene Editor";
-            // 
-            // drawScene1
-            // 
-            this.drawScene1.Location = new System.Drawing.Point(12, 16);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(320, 240);
-            this.drawScene1.TabIndex = 0;
             // 
             // treeViewSBF
             // 
@@ -1079,6 +1069,57 @@
             this.colorDialog1.AnyColor = true;
             this.colorDialog1.FullOpen = true;
             // 
+            // checkBoxSceneTextScrolling
+            // 
+            this.checkBoxSceneTextScrolling.AutoSize = true;
+            this.checkBoxSceneTextScrolling.Location = new System.Drawing.Point(7, 68);
+            this.checkBoxSceneTextScrolling.Name = "checkBoxSceneTextScrolling";
+            this.checkBoxSceneTextScrolling.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxSceneTextScrolling.TabIndex = 14;
+            this.checkBoxSceneTextScrolling.Text = "Scrolling";
+            this.checkBoxSceneTextScrolling.UseVisualStyleBackColor = true;
+            this.checkBoxSceneTextScrolling.CheckedChanged += new System.EventHandler(this.checkBoxSceneTextScrolling_CheckedChanged);
+            // 
+            // checkBoxSceneCentered
+            // 
+            this.checkBoxSceneCentered.AutoSize = true;
+            this.checkBoxSceneCentered.Location = new System.Drawing.Point(7, 89);
+            this.checkBoxSceneCentered.Name = "checkBoxSceneCentered";
+            this.checkBoxSceneCentered.Size = new System.Drawing.Size(69, 17);
+            this.checkBoxSceneCentered.TabIndex = 15;
+            this.checkBoxSceneCentered.Text = "Centered";
+            this.checkBoxSceneCentered.UseVisualStyleBackColor = true;
+            this.checkBoxSceneCentered.CheckedChanged += new System.EventHandler(this.checkBoxSceneCentered_CheckedChanged);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Small",
+            "Medium",
+            "Big"});
+            this.comboBox1.Location = new System.Drawing.Point(68, 82);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(81, 21);
+            this.comboBox1.TabIndex = 16;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 85);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(55, 13);
+            this.label10.TabIndex = 17;
+            this.label10.Text = "Font size :";
+            // 
+            // drawScene1
+            // 
+            this.drawScene1.Location = new System.Drawing.Point(12, 16);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(320, 240);
+            this.drawScene1.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1109,10 +1150,10 @@
             this.groupBox10.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).EndInit();
             this.tabPageScenes.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
-            this.groupBox12.ResumeLayout(false);
-            this.groupBox12.PerformLayout();
+            this.groupBoxSceneFontColor.ResumeLayout(false);
+            this.groupBoxSceneFontColor.PerformLayout();
+            this.groupBoxSceneTextPosition.ResumeLayout(false);
+            this.groupBoxSceneTextPosition.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).EndInit();
             this.groupBoxSceneText.ResumeLayout(false);
@@ -1209,14 +1250,13 @@
         private System.Windows.Forms.Button buttonUncompressedTextureReplace;
         private System.Windows.Forms.Button buttonScenesAddTextAtEnd;
         private System.Windows.Forms.Button buttonScenesAddText;
-        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBoxSceneText;
-        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.GroupBox groupBoxSceneTextPosition;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Button buttonSceneBackColor;
         private System.Windows.Forms.Button buttonSceneForeColor;
-        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.GroupBox groupBoxSceneFontColor;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button buttonSceneSuppressText;
@@ -1232,6 +1272,10 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceSfxTable;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceAudioAllSoundBank;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.CheckBox checkBoxSceneTextScrolling;
+        private System.Windows.Forms.CheckBox checkBoxSceneCentered;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label10;
     }
 }
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Collections;
 
 namespace N64PPLEditorC
 {
@@ -189,6 +190,12 @@ namespace N64PPLEditorC
                 }
             }
             return -1;
+        }
+
+        public static bool GetBitStateFromInt(int value, int position)
+        {
+            position = 32 - position;
+            return (((value >> position) & 1) == 1);
         }
 
         public static void VerifyExistingPath()

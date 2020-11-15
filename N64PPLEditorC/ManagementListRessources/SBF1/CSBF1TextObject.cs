@@ -12,149 +12,123 @@ namespace N64PPLEditorC
 
     class CSBF1TextObject
     {
-        private int nbItems;
         private byte[] rawData;
-        private byte[] headerData;
-        //length of text + text data
+        public byte[] headerData { get; private set; }
         private byte[] textData;
-        private int posX;
-        private int posY;
+        public int posX;
+        public int posY;
+
+        //flags
+        private bool centeredText;
+        private bool centeredText2;
+        private bool mediumFont;
+        public bool isTextScrolling;
+        private bool setManualSpace;
+        private bool isFontColor;
+        private bool bigBorder;
+        
+        //additional size for header (unknow Data)
+        private bool additionnalSize1;
+        private bool additionnalSize2;
+
         public Color ForeColor { get; set; }
         public Color BackColor { get; set; }
         public UInt32 id { get; set; }
         public int group { get; set; }
 
-        enum textType : byte
-        {
-            unknown36 = 36,
-            dialog = 44,
-            title = 52,
-            unknown60 = 60
-        }
-
-        public CSBF1TextObject(byte[] rawData,int headerSize,int textdataSize)
+        public CSBF1TextObject(byte[] rawData, int headerSize, int textdataSize)
         {
             this.rawData = rawData;
             this.headerData = new byte[headerSize];
             this.textData = new byte[textdataSize];
             Array.Copy(rawData, 0, headerData, 0, headerSize);
             Array.Copy(rawData, headerSize, textData, 0, textdataSize);
-            this.DecomposeHeader(headerSize);
+            this.DecomposeHeader();
         }
 
-        //for creating new text objects from zero
-        public CSBF1TextObject(byte[] id,int group)
+        public static int GetHeaderLength(int headerValue)
         {
-            var textHeader = new Byte[] { 0x22, 0x10, 0x14, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, id[0], id[1], id[2], id[3], 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x08, 0x12, 0x6D, 0xFF, 0x8D, 0xBE, 0xD9, 0xFF, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+            int finalValue = 36;
+            //to check the size, there is an initial of 36 bytes and a possible addition of 8 bytes at 4 different place
+            //first has unknown effect
+            if (CGeneric.GetBitStateFromInt(headerValue, 2))
+                finalValue += 8;
+
+            //second is for managing centering text
+            if (CGeneric.GetBitStateFromInt(headerValue, 18))
+                finalValue += 8;
+
+            //third is for manual space define (define the space in x and y)
+            if (CGeneric.GetBitStateFromInt(headerValue, 21))
+                finalValue += 8;
+
+            //fourth is the font color
+            if (CGeneric.GetBitStateFromInt(headerValue, 32))
+                finalValue += 8;
+
+            return finalValue;
+        }
+
+        public int GetSize()
+        {
+            return headerData.Length + textData.Length;
+        }
+
+        private void DecomposeHeader()
+        {
+            //data grabbed from 4 first bytes (converted to bits)
+            int dataInitial = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 0, 4));
+
+            this.centeredText = CGeneric.GetBitStateFromInt(dataInitial, 9);
+            this.centeredText2 = CGeneric.GetBitStateFromInt(dataInitial, 17);
+
+            if (CGeneric.GetBitStateFromInt(dataInitial, 7))
+                this.mediumFont = CGeneric.GetBitStateFromInt(dataInitial, 13);
+
+            this.isTextScrolling = CGeneric.GetBitStateFromInt(dataInitial, 20);
+            this.setManualSpace = CGeneric.GetBitStateFromInt(dataInitial, 21);
+            this.bigBorder = CGeneric.GetBitStateFromInt(dataInitial, 26);
+            this.isFontColor = CGeneric.GetBitStateFromInt(dataInitial, 32);
+
+            //unknown data
+            this.additionnalSize1 = CGeneric.GetBitStateFromInt(dataInitial, 2);
+            this.additionnalSize2 = CGeneric.GetBitStateFromInt(dataInitial, 18);
+
+            //data grabbed from the rest of the header
+            this.posX = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 4, 4));
+            this.posY = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 8, 4));
+            this.id   = CGeneric.ConvertByteArrayToUInt(CGeneric.GiveMeArray(rawData, 12, 4));
+
+            int index = 16;
+            if (additionnalSize1) index += 8;
+            if (additionnalSize2) index += 8;
+            if (setManualSpace)   index += 8;
+            if (isFontColor)
+            {
+                index += 8;
+                this.BackColor = Color.FromArgb(rawData[index+3], rawData[index], rawData[index + 1], rawData[index + 2]);
+                this.ForeColor = Color.FromArgb(rawData[index+7], rawData[index+4], rawData[index+5], rawData[index + 6]);
+            }
+        }
+
+
+
+        //TODO to rewrite / complete
+
+        //for creating new text objects from zero
+        public CSBF1TextObject(byte[] id, int group)
+        {
+            var textHeader = new Byte[] { 0x22, 0x10, 0x14, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, id[0], id[1], id[2], id[3], 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x08, 0x12, 0x6D, 0xFF, 0x8D, 0xBE, 0xD9, 0xFF, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             this.rawData = textHeader;
             this.headerData = textHeader;
             this.textData = new byte[0];
             this.group = group;
-            this.DecomposeHeader(textHeader.Length);
-        }
-
-        public int getHeaderLength()
-        {
-            return this.headerData.Length;
-        }
-
-        public string GetText()
-        {
-            byte[] charText = new byte[2];
-            StringBuilder sb = new StringBuilder();
-            for(int i = 4; i < textData.Length; i += 2)
-            {
-                Array.Copy(textData,i,charText,0,charText.Length);
-                Int16 character = (short)CGeneric.ConvertByteArrayToInt(charText);
-                sb.Append(ConvertByteToChar(character));
-            }
-            return sb.Replace("#",Environment.NewLine).ToString();
-        }
-
-        public void SetText(String text)
-        {
-            text = text.Replace("\r\n", "#").ToLower();
-            byte[] res = new byte[text.Length * 2+4];
-            //write size of the text
-            Array.Copy(CGeneric.ConvertIntToByteArray(text.Length*2), res, 4);
-
-            for(int i = 0; i < text.Length; i++)
-            {
-                Array.Copy(ConvertCharToByteArray(text[i]), 0, res, i * 2+4, 2);
-            }
-            this.textData = res;
-        }
-
-        private void DecomposeHeader(int headerValue)
-        {
-            //declare data grabbed
-            var screenPosX = new byte[4];
-            var screenPosY = new byte[4];
-            var id = new byte[4];
-            var foreColor = new byte[4];
-            var backColor = new byte[4];
-
-            //declare position of data to grab (default for "44" header size) and addapt value if necessary in the switch.
-            var posX = 4;
-            var posY = 8;
-            var posId = 12;
-            var posForeColor = headerData.Length - 16;
-            var posBackColor = headerData.Length - 20;
-
-            Array.Copy(rawData, posX, screenPosX, 0, screenPosX.Length);
-            Array.Copy(rawData, posY, screenPosY, 0, screenPosY.Length);
-            Array.Copy(rawData, posId, id, 0, id.Length);
-            Array.Copy(rawData, posForeColor, foreColor, 0, foreColor.Length);
-            Array.Copy(rawData, posBackColor, backColor, 0, backColor.Length);
-
-            this.id = CGeneric.ConvertByteArrayToUInt(id);
-            this.posX = CGeneric.ConvertByteArrayToInt(screenPosX);
-            //if ((textType)headerValue == textType.title) 
-            //{
-            //    var posX2 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 20, 4));
-            //    if (posX == 0)
-            //        this.posX = posX2 / 2;
-            //    else
-            //    {
-            //        this.posX = posX + ((posX + posX2) / 2);
-            //    }
-                
-
-                
-            //    //this.posX = posX - CGeneric.ConvertByteArrayToInt(posX2) / 2;
-            //}
-
-            this.posY = CGeneric.ConvertByteArrayToInt(screenPosY);
-            this.ForeColor = Color.FromArgb(foreColor[3], foreColor[0], foreColor[1], foreColor[2]);
-            this.BackColor = Color.FromArgb(backColor[3], backColor[0], backColor[1], backColor[2]);
-
-        }
-
-        public int GetPosX()
-        {
-            if (posX > 320 || posX < 0)
-                return 0;
-            return posX;
-        }
-        public int GetPosY()
-        {
-            if (posY > 232 || posY < 0)
-                return 0;
-            return posY;
-        }
-
-        public void SetPosX(int posX)
-        {
-            this.posX = posX;
-        }
-        public void SetPosY(int posY)
-        {
-            this.posY = posY;
+            this.DecomposeHeader();
         }
 
         public byte[] GetRawData()
         {
-            byte[] res = new byte[0/*headerData.Length + textData.Length*/];
+            byte[] res = new byte[0];
 
 
             //text header, update new informations about header
@@ -162,7 +136,7 @@ namespace N64PPLEditorC
             var sizeY = CGeneric.ConvertIntToByteArray(this.posY);
             var id = CGeneric.ConvertUIntToByteArray(this.id);
 
-            var foreColor = new byte[] { this.ForeColor.R, this.ForeColor.G, this.ForeColor.B, this.ForeColor.A }; 
+            var foreColor = new byte[] { this.ForeColor.R, this.ForeColor.G, this.ForeColor.B, this.ForeColor.A };
             var backColor = new byte[] { this.BackColor.R, this.BackColor.G, this.BackColor.B, this.BackColor.A };
 
             //update the position and the id in rawHeader
@@ -184,6 +158,37 @@ namespace N64PPLEditorC
         }
 
 
+
+
+
+
+        #region set text and show it
+        public string GetText()
+        {
+            byte[] charText = new byte[2];
+            StringBuilder sb = new StringBuilder();
+            for (int i = 4; i < textData.Length; i += 2)
+            {
+                Array.Copy(textData, i, charText, 0, charText.Length);
+                Int16 character = (short)CGeneric.ConvertByteArrayToInt(charText);
+                sb.Append(ConvertByteToChar(character));
+            }
+            return sb.Replace("#", Environment.NewLine).ToString();
+        }
+        public void SetText(String text)
+        {
+            text = text.Replace("\r\n", "#").ToLower();
+            byte[] res = new byte[text.Length * 2 + 4];
+            //write size of the text
+            Array.Copy(CGeneric.ConvertIntToByteArray(text.Length * 2), res, 4);
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                Array.Copy(ConvertCharToByteArray(text[i]), 0, res, i * 2 + 4, 2);
+            }
+            this.textData = res;
+        }
+
         private byte[] ConvertCharToByteArray(char letter)
         {
             switch (RomLangAddress.romLang)
@@ -191,9 +196,9 @@ namespace N64PPLEditorC
                 case CGeneric.romLang.French: return ConvertChToBaFr(letter);
                 case CGeneric.romLang.German: return ConvertChToBaGer(letter);
                 case CGeneric.romLang.European:
-                case CGeneric.romLang.USA: 
+                case CGeneric.romLang.USA:
                     return ConvertChToBaEuOrUsa(letter);
-                default: return new byte[0];
+                default: return new byte[2];
             }
         }
         private char ConvertByteToChar(Int16 letter)
@@ -203,9 +208,9 @@ namespace N64PPLEditorC
                 case CGeneric.romLang.French: return ConvertByteToCharFr(letter);
                 case CGeneric.romLang.German: return ConvertByteToCharGer(letter);
                 case CGeneric.romLang.European:
-                case CGeneric.romLang.USA: 
+                case CGeneric.romLang.USA:
                     return ConvertByteToCharEurOrUsa(letter);
-                default: return ' ';
+                default: return '?';
             }
         }
 
@@ -524,7 +529,7 @@ namespace N64PPLEditorC
                 case 0x1801: return 'a';
                 case 0x1802: return 'ä';
                 case 0x1803: return 'b';
-                case 0x1804: return 'c'; 
+                case 0x1804: return 'c';
                 case 0x1805: return 'd';
                 case 0x1806: return 'e';
                 case 0x1807: return 'f';
@@ -661,7 +666,7 @@ namespace N64PPLEditorC
                 case 0x1006: return '-';
                 case 0x1007: return '+';
                 case 0x1008: return '=';
-                case 0x1009: return '\\'; 
+                case 0x1009: return '\\';
                 case 0x100A: return ';';
                 case 0x100B: return ':';
                 case 0x100C: return '"';
@@ -678,54 +683,6 @@ namespace N64PPLEditorC
             }
         }
 
-        public int GetSize()
-        {
-            return headerData.Length + textData.Length;
-        }
-
-        public static int GetHeaderLength(int headerValue)
-        {
-            switch (headerValue)
-            {
-                case 0x0008C403: return 52; // tested
-                case 0x20080006: return 36;
-                case 0x20880442: return 36;
-                case 0x20000003: return 44;
-                case 0x22000003: return 44; //tested
-                case 0x20080003: return 44;
-                case 0x20880403: return 44;
-                case 0x20000403: return 44;
-                case 0x23000403: return 44;
-                case 0x20080403: return 44;
-                case 0x20080443: return 44;
-                case 0x2000C013: return 52; //tested
-                case 0x20080C03: return 52; //tested
-                case 0x20804003: return 52;
-                case 0x22804003: return 52;
-                case 0x20884003: return 52;
-                case 0x21884003: return 52;
-                case 0x20804403: return 52;
-                case 0x22804403: return 52;
-                case 0x20884403: return 52;
-                case 0x2000C003: return 52;
-                case 0x2008C003: return 52;
-                case 0x2000C403: return 52;
-                case 0x2008C403: return 52;
-                case 0x2008C443: return 52; //tested
-                case 0x20884043: return 52;
-                case 0x2000C443: return 52; //tested
-                case 0x20084C43: return 60;
-                case 0x21884007: return 52;
-                case 0x22101443: return 44;
-                case 0x2208D403: return 52;
-                case 0x22804443: return 52;
-                case 0x2200C443: return 52;
-                case 0x33804407: return 52;
-                case 0x62804403: return 60; //tested
-                case 0x60884003: return 60; //added for english and german version
-                case 0x22804043: return 52; //added for english version
-                default: throw new NotImplementedException();
-            }
-        }
+        #endregion
     }
 }
