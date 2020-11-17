@@ -224,24 +224,24 @@ namespace N64PPLEditorC
         {
             return textureManagementObjectList[index];
         }
-        public void AddNewTextObject(bool FollowedText)
+        public void AddNewTextObject(bool sameScene)
         {
             //get the last element
             var LastText = textObjectList[textObjectList.Count - 1];
 
             //add one to ID and take his group
-            uint textId = LastText.id + 1;
+            int textId = LastText.id + 1;
             int groupText = LastText.group;
 
             //if the text is independant
-            if (!FollowedText)
+            if (!sameScene)
             {
                 textId += 0x64;
                 groupText += 1;
             }
             
             //create the new text object
-            textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertUIntToByteArray(textId), groupText));
+            textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertIntToByteArray(textId), groupText));
         }
 
         public int GetDynamicObjectCount()

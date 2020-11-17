@@ -19,21 +19,22 @@ namespace N64PPLEditorC
         public int posY;
 
         //flags
-        private bool centeredText;
-        private bool centeredText2;
-        private bool mediumFont;
-        public bool isTextScrolling;
-        private bool setManualSpace;
+        public bool  isCenteredText;
+        private bool isCenteredTextFirstBit;
+        private bool isCenteredTextSecondBit;
+        private bool isFontBig;
+        private bool isFontMedium;
+        public bool  isTextScrolling;
+        private bool isManualSpace;
         private bool isFontColor;
-        private bool bigBorder;
+        private bool isBigBorder;
         
         //additional size for header (unknow Data)
         private bool additionnalSize1;
-        private bool additionnalSize2;
 
         public Color ForeColor { get; set; }
         public Color BackColor { get; set; }
-        public UInt32 id { get; set; }
+        public int id { get; set; }
         public int group { get; set; }
 
         public CSBF1TextObject(byte[] rawData, int headerSize, int textdataSize)
@@ -43,6 +44,18 @@ namespace N64PPLEditorC
             this.textData = new byte[textdataSize];
             Array.Copy(rawData, 0, headerData, 0, headerSize);
             Array.Copy(rawData, headerSize, textData, 0, textdataSize);
+            this.DecomposeHeader();
+        }
+
+        //create new object
+        public CSBF1TextObject(byte[] id, int group)
+        {
+            var textHeader = new Byte[44];
+            this.rawData = textHeader;
+            this.headerData = textHeader;
+            this.textData = new byte[0];
+            this.group = group;
+            this.id = CGeneric.ConvertByteArrayToInt(id);
             this.DecomposeHeader();
         }
 
@@ -79,31 +92,31 @@ namespace N64PPLEditorC
             //data grabbed from 4 first bytes (converted to bits)
             int dataInitial = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 0, 4));
 
-            this.centeredText = CGeneric.GetBitStateFromInt(dataInitial, 9);
-            this.centeredText2 = CGeneric.GetBitStateFromInt(dataInitial, 17);
-
-            if (CGeneric.GetBitStateFromInt(dataInitial, 7))
-                this.mediumFont = CGeneric.GetBitStateFromInt(dataInitial, 13);
-
-            this.isTextScrolling = CGeneric.GetBitStateFromInt(dataInitial, 20);
-            this.setManualSpace = CGeneric.GetBitStateFromInt(dataInitial, 21);
-            this.bigBorder = CGeneric.GetBitStateFromInt(dataInitial, 26);
-            this.isFontColor = CGeneric.GetBitStateFromInt(dataInitial, 32);
-
-            //unknown data
+            //unknown data for now
             this.additionnalSize1 = CGeneric.GetBitStateFromInt(dataInitial, 2);
-            this.additionnalSize2 = CGeneric.GetBitStateFromInt(dataInitial, 18);
+            
+
+            //flags discovered
+            this.isFontBig = CGeneric.GetBitStateFromInt(dataInitial, 7);
+            this.isCenteredTextFirstBit = CGeneric.GetBitStateFromInt(dataInitial, 9);
+            this.isFontMedium = CGeneric.GetBitStateFromInt(dataInitial, 13);
+            this.isCenteredTextSecondBit = CGeneric.GetBitStateFromInt(dataInitial, 17);
+            this.isCenteredText = CGeneric.GetBitStateFromInt(dataInitial, 18);
+            this.isTextScrolling = CGeneric.GetBitStateFromInt(dataInitial, 20);
+            this.isManualSpace = CGeneric.GetBitStateFromInt(dataInitial, 21);
+            this.isBigBorder = CGeneric.GetBitStateFromInt(dataInitial, 26);
+            this.isFontColor = CGeneric.GetBitStateFromInt(dataInitial, 32);
 
             //data grabbed from the rest of the header
             this.posX = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 4, 4));
             this.posY = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 8, 4));
-            this.id   = CGeneric.ConvertByteArrayToUInt(CGeneric.GiveMeArray(rawData, 12, 4));
+            this.id   = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 12, 4));
 
             int index = 16;
-            if (additionnalSize1) index += 8;
-            if (additionnalSize2) index += 8;
-            if (setManualSpace)   index += 8;
-            if (isFontColor)
+            if (this.additionnalSize1) index += 8;
+            if (this.isCenteredText) index += 8;
+            if (this.isManualSpace)   index += 8;
+            if (this.isFontColor)
             {
                 index += 8;
                 this.BackColor = Color.FromArgb(rawData[index+3], rawData[index], rawData[index + 1], rawData[index + 2]);
@@ -111,40 +124,49 @@ namespace N64PPLEditorC
             }
         }
 
-
-
-        //TODO to rewrite / complete
-
-        //for creating new text objects from zero
-        public CSBF1TextObject(byte[] id, int group)
-        {
-            var textHeader = new Byte[] { 0x22, 0x10, 0x14, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, id[0], id[1], id[2], id[3], 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x08, 0x12, 0x6D, 0xFF, 0x8D, 0xBE, 0xD9, 0xFF, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            this.rawData = textHeader;
-            this.headerData = textHeader;
-            this.textData = new byte[0];
-            this.group = group;
-            this.DecomposeHeader();
-        }
-
         public byte[] GetRawData()
         {
             byte[] res = new byte[0];
 
+            //set differents flags
+            isTextScrolling = true;
+            int flags = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(headerData, 0, 4));
+            CGeneric.SetBitInInt(ref flags, 7, isFontBig);
+            CGeneric.SetBitInInt(ref flags, 9, isCenteredTextFirstBit);
+            CGeneric.SetBitInInt(ref flags, 13, isFontMedium);
+            CGeneric.SetBitInInt(ref flags, 17, isCenteredTextSecondBit);
+            CGeneric.SetBitInInt(ref flags, 18, isCenteredText);
+            CGeneric.SetBitInInt(ref flags, 20, isTextScrolling);
+            CGeneric.SetBitInInt(ref flags, 21, isManualSpace);
+            CGeneric.SetBitInInt(ref flags, 26, isBigBorder);
+            CGeneric.SetBitInInt(ref flags, 32, isFontColor);
+            Array.Copy(CGeneric.ConvertIntToByteArray(flags), 0, headerData, 0,4);
 
-            //text header, update new informations about header
+            //update X / Y position
             var sizeX = CGeneric.ConvertIntToByteArray(this.posX);
             var sizeY = CGeneric.ConvertIntToByteArray(this.posY);
-            var id = CGeneric.ConvertUIntToByteArray(this.id);
-
-            var foreColor = new byte[] { this.ForeColor.R, this.ForeColor.G, this.ForeColor.B, this.ForeColor.A };
-            var backColor = new byte[] { this.BackColor.R, this.BackColor.G, this.BackColor.B, this.BackColor.A };
-
-            //update the position and the id in rawHeader
             Array.Copy(sizeX, 0, headerData, 4, sizeX.Length);
             Array.Copy(sizeY, 0, headerData, 8, sizeY.Length);
+
+            //update id
+            var id = CGeneric.ConvertIntToByteArray(this.id);
             Array.Copy(id, 0, headerData, 12, id.Length);
-            Array.Copy(foreColor, 0, headerData, headerData.Length - 16, foreColor.Length);
-            Array.Copy(backColor, 0, headerData, headerData.Length - 20, backColor.Length);
+
+            int index = 16;
+            if (this.additionnalSize1) index += 8;
+            if (this.isCenteredText) index += 8;
+            if (this.isManualSpace) index += 8;
+            if (this.isFontColor)
+            {
+                index += 8;
+                //update forecolor and backcolor
+                var foreColor = new byte[] { this.ForeColor.R, this.ForeColor.G, this.ForeColor.B, this.ForeColor.A };
+                var backColor = new byte[] { this.BackColor.R, this.BackColor.G, this.BackColor.B, this.BackColor.A };
+                Array.Copy(backColor, 0, headerData, index, foreColor.Length);
+                Array.Copy(foreColor, 0, headerData, index + 4, backColor.Length);
+            }
+
+            
 
             //update the text size
             var lenText = CGeneric.ConvertIntToByteArray((this.textData.Length - 4) / 2);
@@ -155,12 +177,9 @@ namespace N64PPLEditorC
             res = res.Concat(textData).ToArray();
 
             return res;
+
+
         }
-
-
-
-
-
 
         #region set text and show it
         public string GetText()

@@ -96,7 +96,6 @@ namespace N64PPLEditorC.ManagementAudio
             return finalArray;
         }
 
-
         public void WriteAllData(FileStream fs)
         {
             //set 16bit alignment for first soundbank 
