@@ -15,27 +15,43 @@ namespace N64PPLEditorC
         private byte[] rawData;
         public byte[] headerData { get; private set; }
         private byte[] textData;
-        public int posX;
-        public int posY;
+        private int extra1one;
+        private int extra1two;
+        private int centeredX;
+        private int centeredY;
+        private int manualSpaceX;
+        private int manualSpaceY;
+        private int nblines;
+        private int extra5one;
+        private int extra5two;
 
+        private int posX;
+        private int posY;
         //flags
         public bool  isCenteredText;
         private bool isCenteredTextFirstBit;
         private bool isCenteredTextSecondBit;
-        private bool isFontBig;
-        private bool isFontMedium;
+        public bool isFontSmall;
+        public bool isFontMedium;
         public bool  isTextScrolling;
-        private bool isManualSpace;
-        private bool isFontColor;
-        private bool isBigBorder;
-        
+        public bool isHidden;
+        public bool isManualSpace;
+        public bool isFontColor;
+        public bool isForegroundText;
+        private bool unknow3;
+        private bool unknow4;
+        private bool unknow8;
+        private bool unknow12;
+        private bool unknow28;
+        private bool unknow30;
         //additional size for header (unknow Data)
-        private bool additionnalSize1;
+        public bool isExtraSize1;
 
         public Color ForeColor { get; set; }
         public Color BackColor { get; set; }
         public int id { get; set; }
         public int group { get; set; }
+        public bool isWaitingInput { get; set; }
 
         public CSBF1TextObject(byte[] rawData, int headerSize, int textdataSize)
         {
@@ -57,6 +73,61 @@ namespace N64PPLEditorC
             this.group = group;
             this.id = CGeneric.ConvertByteArrayToInt(id);
             this.DecomposeHeader();
+        }
+
+        public int GetPosX()
+        {
+            if (!isCenteredText)
+                return posX;
+
+            if (isCenteredTextFirstBit)
+            {
+                if (posX > 5)
+                    return posX;
+                else
+                    return centeredX / 2 + posX;
+            }
+            else
+            {
+                return 0;
+            }
+                
+        }
+
+        public int GetPosY()
+        {
+            if (!isCenteredText)
+                return posY;
+
+            if (isCenteredTextFirstBit)
+            {
+                if (posY > 0)
+                    return posY;
+                else
+                    return centeredY /2;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public void SetPosX(int posX)
+        {
+            if (isCenteredText)
+            {
+            }
+            else
+                this.posX = posX;
+        }
+
+        public void SetPosY(int posY)
+        {
+            if (isCenteredText)
+            {
+            }
+            else
+                this.posY = posY;
         }
 
         public static int GetHeaderLength(int headerValue)
@@ -93,87 +164,159 @@ namespace N64PPLEditorC
             int dataInitial = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 0, 4));
 
             //unknown data for now
-            this.additionnalSize1 = CGeneric.GetBitStateFromInt(dataInitial, 2);
-            
+            this.isExtraSize1 = CGeneric.GetBitStateFromInt(dataInitial, 2);
+            this.unknow3 = CGeneric.GetBitStateFromInt(dataInitial, 3);
+            this.unknow4 = CGeneric.GetBitStateFromInt(dataInitial, 4);
+            this.unknow8 = CGeneric.GetBitStateFromInt(dataInitial, 8);
+            this.unknow12 = CGeneric.GetBitStateFromInt(dataInitial, 12);
+            this.unknow28 = CGeneric.GetBitStateFromInt(dataInitial, 28);
+            this.unknow30 = CGeneric.GetBitStateFromInt(dataInitial, 30);
 
             //flags discovered
-            this.isFontBig = CGeneric.GetBitStateFromInt(dataInitial, 7);
+            this.isFontSmall = CGeneric.GetBitStateFromInt(dataInitial, 7);
             this.isCenteredTextFirstBit = CGeneric.GetBitStateFromInt(dataInitial, 9);
             this.isFontMedium = CGeneric.GetBitStateFromInt(dataInitial, 13);
             this.isCenteredTextSecondBit = CGeneric.GetBitStateFromInt(dataInitial, 17);
             this.isCenteredText = CGeneric.GetBitStateFromInt(dataInitial, 18);
             this.isTextScrolling = CGeneric.GetBitStateFromInt(dataInitial, 20);
             this.isManualSpace = CGeneric.GetBitStateFromInt(dataInitial, 21);
-            this.isBigBorder = CGeneric.GetBitStateFromInt(dataInitial, 26);
+            this.isHidden = CGeneric.GetBitStateFromInt(dataInitial, 22);
+            this.isForegroundText = CGeneric.GetBitStateFromInt(dataInitial, 26);
             this.isFontColor = CGeneric.GetBitStateFromInt(dataInitial, 32);
 
             //data grabbed from the rest of the header
             this.posX = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 4, 4));
             this.posY = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 8, 4));
             this.id   = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 12, 4));
+            if (CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 16, 4)) == 0)
+                this.isWaitingInput = true;
 
-            int index = 16;
-            if (this.additionnalSize1) index += 8;
-            if (this.isCenteredText) index += 8;
-            if (this.isManualSpace)   index += 8;
+            int index = 20;
+            if (this.isExtraSize1)
+            {
+                this.extra1one = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
+                this.extra1two = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index + 4, 4));
+                index += 8;
+            }
+            if (this.isCenteredText)
+            {
+                this.centeredX = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
+                this.centeredY = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index+4, 4));
+                index += 8;
+            }
+            if (this.isManualSpace)
+            {
+                this.manualSpaceX = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
+                this.manualSpaceY = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index + 4, 4));
+                index += 8;
+            }
+            index += 4;//value always set to 1 .. skip.
             if (this.isFontColor)
             {
-                index += 8;
                 this.BackColor = Color.FromArgb(rawData[index+3], rawData[index], rawData[index + 1], rawData[index + 2]);
                 this.ForeColor = Color.FromArgb(rawData[index+7], rawData[index+4], rawData[index+5], rawData[index + 6]);
+                index += 8;
             }
+            this.nblines = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
+            this.extra5one = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index+4, 4));
+            this.extra5two = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index+8, 4));
         }
 
         public byte[] GetRawData()
         {
-            byte[] res = new byte[0];
+            int newHeaderDataSize = 36;
+            if (this.isExtraSize1) newHeaderDataSize += 8;
+            if (this.isCenteredText) newHeaderDataSize += 8;
+            if (this.isManualSpace) newHeaderDataSize += 8;
+            if (this.isFontColor) newHeaderDataSize += 8;
+
+            byte[] newHeaderData = new byte[newHeaderDataSize];
 
             //set differents flags
-            isTextScrolling = true;
-            int flags = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(headerData, 0, 4));
-            CGeneric.SetBitInInt(ref flags, 7, isFontBig);
-            CGeneric.SetBitInInt(ref flags, 9, isCenteredTextFirstBit);
-            CGeneric.SetBitInInt(ref flags, 13, isFontMedium);
-            CGeneric.SetBitInInt(ref flags, 17, isCenteredTextSecondBit);
-            CGeneric.SetBitInInt(ref flags, 18, isCenteredText);
-            CGeneric.SetBitInInt(ref flags, 20, isTextScrolling);
-            CGeneric.SetBitInInt(ref flags, 21, isManualSpace);
-            CGeneric.SetBitInInt(ref flags, 26, isBigBorder);
-            CGeneric.SetBitInInt(ref flags, 32, isFontColor);
-            Array.Copy(CGeneric.ConvertIntToByteArray(flags), 0, headerData, 0,4);
+            int flags = 0;
+            CGeneric.SetBitInInt(ref flags, 2, this.isExtraSize1);
+            CGeneric.SetBitInInt(ref flags, 7, this.isFontSmall);
+            CGeneric.SetBitInInt(ref flags, 9, this.isCenteredTextFirstBit);
+            CGeneric.SetBitInInt(ref flags, 13, this.isFontMedium);
+            CGeneric.SetBitInInt(ref flags, 17, this.isCenteredTextSecondBit);
+            CGeneric.SetBitInInt(ref flags, 18, this.isCenteredText);
+            CGeneric.SetBitInInt(ref flags, 20, this.isTextScrolling);
+            CGeneric.SetBitInInt(ref flags, 21, this.isManualSpace);
+            CGeneric.SetBitInInt(ref flags, 22, this.isHidden);
+            CGeneric.SetBitInInt(ref flags, 26, this.isForegroundText);
+            CGeneric.SetBitInInt(ref flags, 32, this.isFontColor);
+
+            //set unknown flags
+            CGeneric.SetBitInInt(ref flags, 3, this.unknow3);
+            CGeneric.SetBitInInt(ref flags, 4, this.unknow4);
+            CGeneric.SetBitInInt(ref flags, 8, this.unknow8);
+            CGeneric.SetBitInInt(ref flags, 12, this.unknow12);
+            CGeneric.SetBitInInt(ref flags, 28, this.unknow28);
+            CGeneric.SetBitInInt(ref flags, 30, this.unknow30);
+            CGeneric.SetBitInInt(ref flags, 31, true);
+
+            Array.Copy(CGeneric.ConvertIntToByteArray(flags), 0, newHeaderData, 0, 4);
 
             //update X / Y position
             var sizeX = CGeneric.ConvertIntToByteArray(this.posX);
             var sizeY = CGeneric.ConvertIntToByteArray(this.posY);
-            Array.Copy(sizeX, 0, headerData, 4, sizeX.Length);
-            Array.Copy(sizeY, 0, headerData, 8, sizeY.Length);
+            Array.Copy(sizeX, 0, newHeaderData, 4, sizeX.Length);
+            Array.Copy(sizeY, 0, newHeaderData, 8, sizeY.Length);
 
             //update id
             var id = CGeneric.ConvertIntToByteArray(this.id);
-            Array.Copy(id, 0, headerData, 12, id.Length);
+            Array.Copy(id, 0, newHeaderData, 12, id.Length);
 
-            int index = 16;
-            if (this.additionnalSize1) index += 8;
-            if (this.isCenteredText) index += 8;
-            if (this.isManualSpace) index += 8;
+            if (!this.isWaitingInput)
+                Array.Copy(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }, 0, newHeaderData, 16, 4);
+
+            int index = 20;
+            if (this.isExtraSize1)
+            {
+                Array.Copy(CGeneric.ConvertIntToByteArray(this.extra1one), 0, newHeaderData, index, 4);
+                Array.Copy(CGeneric.ConvertIntToByteArray(this.extra1two), 0, newHeaderData, index+4, 4);
+                index += 8;
+            }
+            if (this.isCenteredText) 
+            {
+                Array.Copy(CGeneric.ConvertIntToByteArray(this.centeredX), 0, newHeaderData, index, 4);
+                Array.Copy(CGeneric.ConvertIntToByteArray(this.centeredY), 0, newHeaderData, index+4, 4);
+                index += 8; 
+            }
+            if (this.isManualSpace)
+            {
+                Array.Copy(CGeneric.ConvertIntToByteArray(this.manualSpaceX), 0, newHeaderData, index, 4);
+                Array.Copy(CGeneric.ConvertIntToByteArray(this.manualSpaceY), 0, newHeaderData, index+4, 4);
+                index += 8; 
+            }
+
+            //special fix for header 36 (only used in debug by dev's i think)
+            if(newHeaderData.Length == 36)
+                Array.Copy(new byte[] { 0,0,0,1}, 0, newHeaderData, index+4, 4);
+            else
+                Array.Copy(new byte[] { 0, 0, 0, 1 }, 0, newHeaderData, index, 4);
+            index += 4;
+            
             if (this.isFontColor)
             {
-                index += 8;
                 //update forecolor and backcolor
                 var foreColor = new byte[] { this.ForeColor.R, this.ForeColor.G, this.ForeColor.B, this.ForeColor.A };
                 var backColor = new byte[] { this.BackColor.R, this.BackColor.G, this.BackColor.B, this.BackColor.A };
-                Array.Copy(backColor, 0, headerData, index, foreColor.Length);
-                Array.Copy(foreColor, 0, headerData, index + 4, backColor.Length);
+                Array.Copy(backColor, 0, newHeaderData, index, foreColor.Length);
+                Array.Copy(foreColor, 0, newHeaderData, index + 4, backColor.Length);
+                index += 8;
             }
-
-            
+            Array.Copy(CGeneric.ConvertIntToByteArray(this.nblines), 0, newHeaderData, index, 4);
+            Array.Copy(CGeneric.ConvertIntToByteArray(this.extra5one), 0, newHeaderData, index + 4, 4);
+            Array.Copy(CGeneric.ConvertIntToByteArray(this.extra5two), 0, newHeaderData, index + 8, 4);
 
             //update the text size
             var lenText = CGeneric.ConvertIntToByteArray((this.textData.Length - 4) / 2);
             Array.Copy(lenText, 0, textData, 0, lenText.Length);
 
             //merge the two arrays
-            res = res.Concat(headerData).ToArray();
+            byte[] res = new byte[0];
+            res = res.Concat(newHeaderData).ToArray();
             res = res.Concat(textData).ToArray();
 
             return res;

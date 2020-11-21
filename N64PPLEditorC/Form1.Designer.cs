@@ -62,25 +62,32 @@
             this.pictureBoxUncompressedTexture = new System.Windows.Forms.PictureBox();
             this.treeViewTexturesUncompressed = new System.Windows.Forms.TreeView();
             this.tabPageScenes = new System.Windows.Forms.TabPage();
-            this.buttonScenesAddText = new System.Windows.Forms.Button();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.checkBoxScenesExtra4 = new System.Windows.Forms.CheckBox();
+            this.checkBoxScenesExtra3 = new System.Windows.Forms.CheckBox();
+            this.checkBoxScenesExtra1 = new System.Windows.Forms.CheckBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.checkBoxScenesIsHidden = new System.Windows.Forms.CheckBox();
+            this.checkBoxScenesWaitInput = new System.Windows.Forms.CheckBox();
+            this.checkBoxScenesForegroundText = new System.Windows.Forms.CheckBox();
+            this.checkBoxSceneCentered = new System.Windows.Forms.CheckBox();
+            this.checkBoxSceneScrolling = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
-            this.buttonSceneSuppressText = new System.Windows.Forms.Button();
-            this.checkBoxSceneCentered = new System.Windows.Forms.CheckBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.checkBoxSceneScrolling = new System.Windows.Forms.CheckBox();
-            this.numericUpDownScenePosX = new System.Windows.Forms.NumericUpDown();
-            this.label8 = new System.Windows.Forms.Label();
-            this.numericUpDownScenePosY = new System.Windows.Forms.NumericUpDown();
             this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
+            this.buttonScenesAddText = new System.Windows.Forms.Button();
+            this.radioButtonSceneSameScene = new System.Windows.Forms.RadioButton();
+            this.buttonSceneSuppressText = new System.Windows.Forms.Button();
             this.textBoxSceneText = new System.Windows.Forms.TextBox();
+            this.radioButtonScenesNewScene = new System.Windows.Forms.RadioButton();
             this.groupBoxSceneFontColor = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.comboBoxSceneFontSize = new System.Windows.Forms.ComboBox();
+            this.numericUpDownScenePosX = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.numericUpDownScenePosY = new System.Windows.Forms.NumericUpDown();
             this.buttonSceneBackColor = new System.Windows.Forms.Button();
             this.buttonSceneForeColor = new System.Windows.Forms.Button();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
@@ -123,7 +130,6 @@
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
@@ -137,11 +143,12 @@
             this.groupBox10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).BeginInit();
             this.tabPageScenes.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).BeginInit();
             this.groupBoxSceneText.SuspendLayout();
             this.groupBoxSceneFontColor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).BeginInit();
             this.groupBoxTextureSBF.SuspendLayout();
             this.tabPageMovies.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -153,7 +160,6 @@
             this.tabPageScenesOrder.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -495,6 +501,9 @@
             // tabPageScenes
             // 
             this.tabPageScenes.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageScenes.Controls.Add(this.checkBoxScenesExtra4);
+            this.tabPageScenes.Controls.Add(this.checkBoxScenesExtra3);
+            this.tabPageScenes.Controls.Add(this.checkBoxScenesExtra1);
             this.tabPageScenes.Controls.Add(this.groupBox9);
             this.tabPageScenes.Controls.Add(this.label1);
             this.tabPageScenes.Controls.Add(this.numericUpDownSceneText);
@@ -508,37 +517,107 @@
             this.tabPageScenes.TabIndex = 2;
             this.tabPageScenes.Text = "Scenes";
             // 
-            // buttonScenesAddText
+            // checkBoxScenesExtra4
             // 
-            this.buttonScenesAddText.Location = new System.Drawing.Point(6, 80);
-            this.buttonScenesAddText.Name = "buttonScenesAddText";
-            this.buttonScenesAddText.Size = new System.Drawing.Size(85, 36);
-            this.buttonScenesAddText.TabIndex = 5;
-            this.buttonScenesAddText.Text = "add new text";
-            this.buttonScenesAddText.UseVisualStyleBackColor = true;
-            this.buttonScenesAddText.Click += new System.EventHandler(this.buttonScenesAddText_Click);
+            this.checkBoxScenesExtra4.AutoSize = true;
+            this.checkBoxScenesExtra4.Location = new System.Drawing.Point(412, 530);
+            this.checkBoxScenesExtra4.Name = "checkBoxScenesExtra4";
+            this.checkBoxScenesExtra4.Size = new System.Drawing.Size(144, 17);
+            this.checkBoxScenesExtra4.TabIndex = 19;
+            this.checkBoxScenesExtra4.Text = "Extra4 (has font color 32)";
+            this.checkBoxScenesExtra4.UseVisualStyleBackColor = true;
+            this.checkBoxScenesExtra4.CheckedChanged += new System.EventHandler(this.checkBoxScenesExtra4_CheckedChanged);
             // 
-            // radioButton1
+            // checkBoxScenesExtra3
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(97, 80);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(93, 17);
-            this.radioButton1.TabIndex = 14;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "in same scene";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.checkBoxScenesExtra3.AutoSize = true;
+            this.checkBoxScenesExtra3.Location = new System.Drawing.Point(412, 513);
+            this.checkBoxScenesExtra3.Name = "checkBoxScenesExtra3";
+            this.checkBoxScenesExtra3.Size = new System.Drawing.Size(171, 17);
+            this.checkBoxScenesExtra3.TabIndex = 18;
+            this.checkBoxScenesExtra3.Text = "Extra3 (personalized space 21)";
+            this.checkBoxScenesExtra3.UseVisualStyleBackColor = true;
+            this.checkBoxScenesExtra3.CheckedChanged += new System.EventHandler(this.checkBoxScenesExtra3_CheckedChanged);
             // 
-            // radioButton2
+            // checkBoxScenesExtra1
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(97, 97);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(88, 17);
-            this.radioButton2.TabIndex = 15;
-            this.radioButton2.Text = "in new scene";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.checkBoxScenesExtra1.AutoSize = true;
+            this.checkBoxScenesExtra1.Location = new System.Drawing.Point(412, 496);
+            this.checkBoxScenesExtra1.Name = "checkBoxScenesExtra1";
+            this.checkBoxScenesExtra1.Size = new System.Drawing.Size(112, 17);
+            this.checkBoxScenesExtra1.TabIndex = 17;
+            this.checkBoxScenesExtra1.Text = "Extra1 (unknow 2)";
+            this.checkBoxScenesExtra1.UseVisualStyleBackColor = true;
+            this.checkBoxScenesExtra1.CheckedChanged += new System.EventHandler(this.checkBoxScenesExtra1_CheckedChanged);
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.checkBoxScenesIsHidden);
+            this.groupBox9.Controls.Add(this.checkBoxScenesWaitInput);
+            this.groupBox9.Controls.Add(this.checkBoxScenesForegroundText);
+            this.groupBox9.Controls.Add(this.checkBoxSceneCentered);
+            this.groupBox9.Controls.Add(this.checkBoxSceneScrolling);
+            this.groupBox9.Location = new System.Drawing.Point(269, 477);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(94, 117);
+            this.groupBox9.TabIndex = 16;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Effects";
+            // 
+            // checkBoxScenesIsHidden
+            // 
+            this.checkBoxScenesIsHidden.AutoSize = true;
+            this.checkBoxScenesIsHidden.Location = new System.Drawing.Point(6, 87);
+            this.checkBoxScenesIsHidden.Name = "checkBoxScenesIsHidden";
+            this.checkBoxScenesIsHidden.Size = new System.Drawing.Size(60, 17);
+            this.checkBoxScenesIsHidden.TabIndex = 21;
+            this.checkBoxScenesIsHidden.Text = "Hidden";
+            this.checkBoxScenesIsHidden.UseVisualStyleBackColor = true;
+            this.checkBoxScenesIsHidden.CheckedChanged += new System.EventHandler(this.checkBoxScenesIsHidden_CheckedChanged);
+            // 
+            // checkBoxScenesWaitInput
+            // 
+            this.checkBoxScenesWaitInput.AutoSize = true;
+            this.checkBoxScenesWaitInput.Location = new System.Drawing.Point(6, 70);
+            this.checkBoxScenesWaitInput.Name = "checkBoxScenesWaitInput";
+            this.checkBoxScenesWaitInput.Size = new System.Drawing.Size(74, 17);
+            this.checkBoxScenesWaitInput.TabIndex = 20;
+            this.checkBoxScenesWaitInput.Text = "Wait input";
+            this.checkBoxScenesWaitInput.UseVisualStyleBackColor = true;
+            this.checkBoxScenesWaitInput.CheckedChanged += new System.EventHandler(this.checkBoxScenesWaitInput_CheckedChanged);
+            // 
+            // checkBoxScenesForegroundText
+            // 
+            this.checkBoxScenesForegroundText.AutoSize = true;
+            this.checkBoxScenesForegroundText.Location = new System.Drawing.Point(6, 53);
+            this.checkBoxScenesForegroundText.Name = "checkBoxScenesForegroundText";
+            this.checkBoxScenesForegroundText.Size = new System.Drawing.Size(91, 17);
+            this.checkBoxScenesForegroundText.TabIndex = 16;
+            this.checkBoxScenesForegroundText.Text = "always on top";
+            this.checkBoxScenesForegroundText.UseVisualStyleBackColor = true;
+            this.checkBoxScenesForegroundText.CheckedChanged += new System.EventHandler(this.checkBoxScenesForegroundText_CheckedChanged);
+            // 
+            // checkBoxSceneCentered
+            // 
+            this.checkBoxSceneCentered.AutoSize = true;
+            this.checkBoxSceneCentered.Location = new System.Drawing.Point(6, 36);
+            this.checkBoxSceneCentered.Name = "checkBoxSceneCentered";
+            this.checkBoxSceneCentered.Size = new System.Drawing.Size(69, 17);
+            this.checkBoxSceneCentered.TabIndex = 15;
+            this.checkBoxSceneCentered.Text = "Centered";
+            this.checkBoxSceneCentered.UseVisualStyleBackColor = true;
+            this.checkBoxSceneCentered.CheckedChanged += new System.EventHandler(this.checkBoxSceneCentered_CheckedChanged);
+            // 
+            // checkBoxSceneScrolling
+            // 
+            this.checkBoxSceneScrolling.AutoSize = true;
+            this.checkBoxSceneScrolling.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxSceneScrolling.Name = "checkBoxSceneScrolling";
+            this.checkBoxSceneScrolling.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxSceneScrolling.TabIndex = 14;
+            this.checkBoxSceneScrolling.Text = "Scrolling";
+            this.checkBoxSceneScrolling.UseVisualStyleBackColor = true;
+            this.checkBoxSceneScrolling.CheckedChanged += new System.EventHandler(this.checkBoxSceneTextScrolling_CheckedChanged);
             // 
             // label1
             // 
@@ -557,6 +636,42 @@
             this.numericUpDownSceneText.TabIndex = 1;
             this.numericUpDownSceneText.ValueChanged += new System.EventHandler(this.numericUpDownSceneText_ValueChanged);
             // 
+            // groupBoxSceneText
+            // 
+            this.groupBoxSceneText.Controls.Add(this.buttonScenesAddText);
+            this.groupBoxSceneText.Controls.Add(this.radioButtonSceneSameScene);
+            this.groupBoxSceneText.Controls.Add(this.buttonSceneSuppressText);
+            this.groupBoxSceneText.Controls.Add(this.textBoxSceneText);
+            this.groupBoxSceneText.Controls.Add(this.radioButtonScenesNewScene);
+            this.groupBoxSceneText.Location = new System.Drawing.Point(272, 298);
+            this.groupBoxSceneText.Name = "groupBoxSceneText";
+            this.groupBoxSceneText.Size = new System.Drawing.Size(192, 159);
+            this.groupBoxSceneText.TabIndex = 5;
+            this.groupBoxSceneText.TabStop = false;
+            this.groupBoxSceneText.Text = "Edit";
+            // 
+            // buttonScenesAddText
+            // 
+            this.buttonScenesAddText.Location = new System.Drawing.Point(6, 80);
+            this.buttonScenesAddText.Name = "buttonScenesAddText";
+            this.buttonScenesAddText.Size = new System.Drawing.Size(85, 36);
+            this.buttonScenesAddText.TabIndex = 5;
+            this.buttonScenesAddText.Text = "add new text";
+            this.buttonScenesAddText.UseVisualStyleBackColor = true;
+            this.buttonScenesAddText.Click += new System.EventHandler(this.buttonScenesAddText_Click);
+            // 
+            // radioButtonSceneSameScene
+            // 
+            this.radioButtonSceneSameScene.AutoSize = true;
+            this.radioButtonSceneSameScene.Checked = true;
+            this.radioButtonSceneSameScene.Location = new System.Drawing.Point(97, 80);
+            this.radioButtonSceneSameScene.Name = "radioButtonSceneSameScene";
+            this.radioButtonSceneSameScene.Size = new System.Drawing.Size(93, 17);
+            this.radioButtonSceneSameScene.TabIndex = 14;
+            this.radioButtonSceneSameScene.TabStop = true;
+            this.radioButtonSceneSameScene.Text = "in same scene";
+            this.radioButtonSceneSameScene.UseVisualStyleBackColor = true;
+            // 
             // buttonSceneSuppressText
             // 
             this.buttonSceneSuppressText.Location = new System.Drawing.Point(6, 122);
@@ -566,88 +681,6 @@
             this.buttonSceneSuppressText.Text = "Remove text";
             this.buttonSceneSuppressText.UseVisualStyleBackColor = true;
             this.buttonSceneSuppressText.Click += new System.EventHandler(this.buttonSceneSuppressText_Click);
-            // 
-            // checkBoxSceneCentered
-            // 
-            this.checkBoxSceneCentered.AutoSize = true;
-            this.checkBoxSceneCentered.Enabled = false;
-            this.checkBoxSceneCentered.Location = new System.Drawing.Point(6, 36);
-            this.checkBoxSceneCentered.Name = "checkBoxSceneCentered";
-            this.checkBoxSceneCentered.Size = new System.Drawing.Size(69, 17);
-            this.checkBoxSceneCentered.TabIndex = 15;
-            this.checkBoxSceneCentered.Text = "Centered";
-            this.checkBoxSceneCentered.UseVisualStyleBackColor = true;
-            this.checkBoxSceneCentered.CheckedChanged += new System.EventHandler(this.checkBoxSceneCentered_CheckedChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 134);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(63, 13);
-            this.label9.TabIndex = 7;
-            this.label9.Text = "Position Y : ";
-            // 
-            // checkBoxSceneScrolling
-            // 
-            this.checkBoxSceneScrolling.AutoSize = true;
-            this.checkBoxSceneScrolling.Location = new System.Drawing.Point(6, 19);
-            this.checkBoxSceneScrolling.Name = "checkBoxSceneScrolling";
-            this.checkBoxSceneScrolling.Size = new System.Drawing.Size(66, 17);
-            this.checkBoxSceneScrolling.TabIndex = 14;
-            this.checkBoxSceneScrolling.Text = "Scrolling";
-            this.checkBoxSceneScrolling.UseVisualStyleBackColor = true;
-            this.checkBoxSceneScrolling.CheckedChanged += new System.EventHandler(this.checkBoxSceneTextScrolling_CheckedChanged);
-            // 
-            // numericUpDownScenePosX
-            // 
-            this.numericUpDownScenePosX.Location = new System.Drawing.Point(75, 110);
-            this.numericUpDownScenePosX.Maximum = new decimal(new int[] {
-            320,
-            0,
-            0,
-            0});
-            this.numericUpDownScenePosX.Name = "numericUpDownScenePosX";
-            this.numericUpDownScenePosX.Size = new System.Drawing.Size(60, 20);
-            this.numericUpDownScenePosX.TabIndex = 8;
-            this.numericUpDownScenePosX.ValueChanged += new System.EventHandler(this.numericUpDownScenePosX_ValueChanged);
-            this.numericUpDownScenePosX.Leave += new System.EventHandler(this.numericUpDownScenePosX_Leave);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 112);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(63, 13);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "Position X : ";
-            // 
-            // numericUpDownScenePosY
-            // 
-            this.numericUpDownScenePosY.Location = new System.Drawing.Point(75, 132);
-            this.numericUpDownScenePosY.Maximum = new decimal(new int[] {
-            240,
-            0,
-            0,
-            0});
-            this.numericUpDownScenePosY.Name = "numericUpDownScenePosY";
-            this.numericUpDownScenePosY.Size = new System.Drawing.Size(60, 20);
-            this.numericUpDownScenePosY.TabIndex = 9;
-            this.numericUpDownScenePosY.ValueChanged += new System.EventHandler(this.numericUpDownScenePosY_ValueChanged);
-            // 
-            // groupBoxSceneText
-            // 
-            this.groupBoxSceneText.Controls.Add(this.buttonScenesAddText);
-            this.groupBoxSceneText.Controls.Add(this.radioButton1);
-            this.groupBoxSceneText.Controls.Add(this.buttonSceneSuppressText);
-            this.groupBoxSceneText.Controls.Add(this.textBoxSceneText);
-            this.groupBoxSceneText.Controls.Add(this.radioButton2);
-            this.groupBoxSceneText.Location = new System.Drawing.Point(272, 298);
-            this.groupBoxSceneText.Name = "groupBoxSceneText";
-            this.groupBoxSceneText.Size = new System.Drawing.Size(192, 159);
-            this.groupBoxSceneText.TabIndex = 5;
-            this.groupBoxSceneText.TabStop = false;
-            this.groupBoxSceneText.Text = "Edit";
             // 
             // textBoxSceneText
             // 
@@ -660,11 +693,21 @@
             this.textBoxSceneText.TextChanged += new System.EventHandler(this.textBoxSceneText_TextChanged);
             this.textBoxSceneText.Leave += new System.EventHandler(this.textBoxSceneText_Leave);
             // 
+            // radioButtonScenesNewScene
+            // 
+            this.radioButtonScenesNewScene.AutoSize = true;
+            this.radioButtonScenesNewScene.Location = new System.Drawing.Point(97, 97);
+            this.radioButtonScenesNewScene.Name = "radioButtonScenesNewScene";
+            this.radioButtonScenesNewScene.Size = new System.Drawing.Size(88, 17);
+            this.radioButtonScenesNewScene.TabIndex = 15;
+            this.radioButtonScenesNewScene.Text = "in new scene";
+            this.radioButtonScenesNewScene.UseVisualStyleBackColor = true;
+            // 
             // groupBoxSceneFontColor
             // 
             this.groupBoxSceneFontColor.Controls.Add(this.label10);
             this.groupBoxSceneFontColor.Controls.Add(this.label9);
-            this.groupBoxSceneFontColor.Controls.Add(this.comboBox1);
+            this.groupBoxSceneFontColor.Controls.Add(this.comboBoxSceneFontSize);
             this.groupBoxSceneFontColor.Controls.Add(this.numericUpDownScenePosX);
             this.groupBoxSceneFontColor.Controls.Add(this.label12);
             this.groupBoxSceneFontColor.Controls.Add(this.label8);
@@ -688,18 +731,42 @@
             this.label10.TabIndex = 17;
             this.label10.Text = "Size :";
             // 
-            // comboBox1
+            // label9
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 134);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(63, 13);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "Position Y : ";
+            // 
+            // comboBoxSceneFontSize
+            // 
+            this.comboBoxSceneFontSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSceneFontSize.FormattingEnabled = true;
+            this.comboBoxSceneFontSize.Items.AddRange(new object[] {
             "Small",
             "Medium",
             "Big"});
-            this.comboBox1.Location = new System.Drawing.Point(45, 82);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(104, 21);
-            this.comboBox1.TabIndex = 16;
+            this.comboBoxSceneFontSize.Location = new System.Drawing.Point(45, 82);
+            this.comboBoxSceneFontSize.Name = "comboBoxSceneFontSize";
+            this.comboBoxSceneFontSize.Size = new System.Drawing.Size(104, 21);
+            this.comboBoxSceneFontSize.TabIndex = 16;
+            this.comboBoxSceneFontSize.SelectedIndexChanged += new System.EventHandler(this.comboBoxSceneFontSize_SelectedIndexChanged);
+            // 
+            // numericUpDownScenePosX
+            // 
+            this.numericUpDownScenePosX.Location = new System.Drawing.Point(75, 110);
+            this.numericUpDownScenePosX.Maximum = new decimal(new int[] {
+            320,
+            0,
+            0,
+            0});
+            this.numericUpDownScenePosX.Name = "numericUpDownScenePosX";
+            this.numericUpDownScenePosX.Size = new System.Drawing.Size(60, 20);
+            this.numericUpDownScenePosX.TabIndex = 8;
+            this.numericUpDownScenePosX.ValueChanged += new System.EventHandler(this.numericUpDownScenePosX_ValueChanged);
+            this.numericUpDownScenePosX.Leave += new System.EventHandler(this.numericUpDownScenePosX_Leave);
             // 
             // label12
             // 
@@ -710,6 +777,15 @@
             this.label12.TabIndex = 13;
             this.label12.Text = "BackColor :";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 112);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(63, 13);
+            this.label8.TabIndex = 6;
+            this.label8.Text = "Position X : ";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -718,6 +794,19 @@
             this.label7.Size = new System.Drawing.Size(58, 13);
             this.label7.TabIndex = 12;
             this.label7.Text = "ForeColor :";
+            // 
+            // numericUpDownScenePosY
+            // 
+            this.numericUpDownScenePosY.Location = new System.Drawing.Point(75, 132);
+            this.numericUpDownScenePosY.Maximum = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+            this.numericUpDownScenePosY.Name = "numericUpDownScenePosY";
+            this.numericUpDownScenePosY.Size = new System.Drawing.Size(60, 20);
+            this.numericUpDownScenePosY.TabIndex = 9;
+            this.numericUpDownScenePosY.ValueChanged += new System.EventHandler(this.numericUpDownScenePosY_ValueChanged);
             // 
             // buttonSceneBackColor
             // 
@@ -1129,17 +1218,6 @@
             this.colorDialog1.AnyColor = true;
             this.colorDialog1.FullOpen = true;
             // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.checkBoxSceneCentered);
-            this.groupBox9.Controls.Add(this.checkBoxSceneScrolling);
-            this.groupBox9.Location = new System.Drawing.Point(269, 477);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(84, 100);
-            this.groupBox9.TabIndex = 16;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Effects";
-            // 
             // drawScene1
             // 
             this.drawScene1.Location = new System.Drawing.Point(12, 16);
@@ -1178,13 +1256,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUncompressedTexture)).EndInit();
             this.tabPageScenes.ResumeLayout(false);
             this.tabPageScenes.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).EndInit();
             this.groupBoxSceneText.ResumeLayout(false);
             this.groupBoxSceneText.PerformLayout();
             this.groupBoxSceneFontColor.ResumeLayout(false);
             this.groupBoxSceneFontColor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScenePosY)).EndInit();
             this.groupBoxTextureSBF.ResumeLayout(false);
             this.tabPageMovies.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
@@ -1202,8 +1282,6 @@
             this.groupBox3.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1300,12 +1378,18 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.CheckBox checkBoxSceneScrolling;
         private System.Windows.Forms.CheckBox checkBoxSceneCentered;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBoxSceneFontSize;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButtonSceneSameScene;
+        private System.Windows.Forms.RadioButton radioButtonScenesNewScene;
         private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.CheckBox checkBoxScenesForegroundText;
+        private System.Windows.Forms.CheckBox checkBoxScenesExtra1;
+        private System.Windows.Forms.CheckBox checkBoxScenesExtra3;
+        private System.Windows.Forms.CheckBox checkBoxScenesExtra4;
+        private System.Windows.Forms.CheckBox checkBoxScenesWaitInput;
+        private System.Windows.Forms.CheckBox checkBoxScenesIsHidden;
     }
 }
 

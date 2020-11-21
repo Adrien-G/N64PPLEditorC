@@ -12,7 +12,7 @@ namespace N64PPLEditorC
         private byte[] rawData;
 
         private List<CSBF1DynamicObject> dynamicObjectList;
-        public List<CSBF1TextObject> textObjectList;
+        private List<CSBF1TextObject> textObjectList;
         private List<CSBF1TextureManagement> textureManagementObjectList;
 
         public int nbTextGroupObject { get; private set; }
