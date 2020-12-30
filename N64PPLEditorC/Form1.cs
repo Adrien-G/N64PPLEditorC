@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using static N64PPLEditorC.CGeneric;
 using N64PPLEditorC.ManagementAudio;
+using N64PPLEditorC.ManagementRomData;
 
 namespace N64PPLEditorC
 {
@@ -20,6 +21,7 @@ namespace N64PPLEditorC
         CRessourceList ressourceList;
         UncompressedRomTexture romList;
         AudioList audioList;
+        AssemblyReversedAddress misc;
         int freeSpaceLeft = 0;
 
         List<TextBox> txtBox = new List<TextBox>();
@@ -34,7 +36,7 @@ namespace N64PPLEditorC
         {
             CGeneric.VerifyExistingPath();
             textBoxPPLLocation.Text = Properties.Settings.Default.txtPPLLocation;
-            if(textBoxPPLLocation.Text == "")
+            if (textBoxPPLLocation.Text == "")
             {
                 buttonGetRomFolder.TabIndex = 0;
                 buttonLoadRom.TabIndex = 1;
@@ -328,7 +330,7 @@ namespace N64PPLEditorC
             freeSpaceLeft = CGeneric.romSize;
             freeSpaceLeft -= ressourceList.indexRessourcesStart;
             freeSpaceLeft -= ressourceList.GetSizeOfAllRessourceList();
-            if(audioList != null)//TODO To remove when ok
+            if (audioList != null)//TODO To remove when ok
                 freeSpaceLeft -= audioList.GetSizeOfAllAudio();
 
             labelFreeSpaceLeft.Text = freeSpaceLeft.ToString("### ### ### ###") + " bytes";
@@ -352,7 +354,7 @@ namespace N64PPLEditorC
 
         private void buttonLoadRom_Click(object sender, EventArgs e)
         {
-            if(textBoxPPLLocation.Text == "")
+            if (textBoxPPLLocation.Text == "")
             {
                 MessageBox.Show("Please select a file... (in z64 format only)", "N64 PPL Editor", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -367,8 +369,8 @@ namespace N64PPLEditorC
                 //perform check verification (good game and good format) and register the lang
                 var arrayZ64Format = CGeneric.GiveMeArray(buffRom, 0x20, 0x11);
                 int isGoodFormat = CGeneric.SearchBytesInArray(arrayZ64Format, CGeneric.patternPuzzleLeagueN64);
-                if(isGoodFormat == -1)
-                        throw new Exception("The rom is not in the z64 format. Please convert it.");
+                if (isGoodFormat == -1)
+                    throw new Exception("The rom is not in the z64 format. Please convert it.");
 
                 //grab rom langage
                 RomLangAddress.romLang = (CGeneric.romLang)buffRom[0x3E];
@@ -381,6 +383,9 @@ namespace N64PPLEditorC
 
                 //load the audio part
                 LoadAudioList(buffRom);
+
+                //load misc part
+                LoadMisc(buffRom);
 
                 LoadTreeView();
                 UpdateFreeSpaceLeft();
@@ -398,6 +403,14 @@ namespace N64PPLEditorC
 #endif
             }
         }
+
+        private void LoadMisc(byte[] buffRom)
+        {
+            this.misc = new AssemblyReversedAddress(buffRom);
+            this.MiscTrackBarDifficultyLevel.Value = misc.GetDifficultyLevel();
+
+        }
+
 
         private void LoadAudioList(byte[] buffRom)
         {
@@ -417,13 +430,13 @@ namespace N64PPLEditorC
             {
                 treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.fibList[fib].GetFIBName());
                 for (int bff = 0; bff < this.ressourceList.fibList[fib].GetBFFCount(); bff++)
-                    treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 +", " + this.ressourceList.fibList[fib].GetBFFName(bff));
+                    treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 + ", " + this.ressourceList.fibList[fib].GetBFFName(bff));
             }
 
             for (int i = 0; i < this.ressourceList.GetHVQMCount(); i++)
                 treeViewHVQM.Nodes.Add(i + 1 + ", " + ressourceList.GetHVQM(i).GetRessourceName());
 
-            for (int sbf = 0; sbf < this.ressourceList.GetSBFCount(); sbf++) 
+            for (int sbf = 0; sbf < this.ressourceList.GetSBFCount(); sbf++)
             {
                 treeViewSBF.Nodes.Add(sbf + 1 + ", " + ressourceList.GetSBF1(sbf).GetRessourceName());
 
@@ -484,7 +497,7 @@ namespace N64PPLEditorC
 
 
             //init the ressources list and data associated
-            this.ressourceList = new CRessourceList(indexRessourcesArrayStart,indexRessourcesEnd);
+            this.ressourceList = new CRessourceList(indexRessourcesArrayStart, indexRessourcesEnd);
             this.ressourceList.Init(nbElementsInTable, dataTable, ressourcesData);
         }
 
@@ -522,33 +535,56 @@ namespace N64PPLEditorC
         private void buttonModifyRom_Click(object sender, EventArgs e)
         {
             UpdateFreeSpaceLeft();
-            if(freeSpaceLeft < 0)
+            if (freeSpaceLeft < 0)
             {
-                MessageBox.Show("There is not enought space in the rom file..."  + Environment.NewLine + "Please supress some things and try again.", "Error saving rom...", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("There is not enought space in the rom file..." + Environment.NewLine + "Please supress some things and try again.", "Error saving rom...", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 buttonModifyRom.BackColor = Color.Orange;
+
+                //if it's lower than 64Mb.
+                if (freeSpaceLeft > -CGeneric.romSize)
+                {
+                    var res = MessageBox.Show("Do you want to make extended rom file ? (32 to 64Mb)", "Extend PPL rom ?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (res == DialogResult.Yes)
+                    {
+                        FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
+                        //TODO add uncompressed image management
+                        misc.WriteToRom(fs);
+                        ressourceList.WriteAllData(fs);
+                        audioList.WriteAllData(fs);
+                        fillNullData(fs, true);
+                        fs.Close();
+                        buttonModifyRom.BackColor = Color.LimeGreen;
+                    }
+                }
+                
             }
             else
             {
-                FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.Write);
+                FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
                 //TODO add uncompressed image management
+                misc.WriteToRom(fs);
                 ressourceList.WriteAllData(fs);
                 audioList.WriteAllData(fs);
-                fillNullData(fs);
+                fillNullData(fs,false);
                 fs.Close();
                 buttonModifyRom.BackColor = Color.LimeGreen;
             }
         }
 
-        private void fillNullData(FileStream fs)
+        private void fillNullData(FileStream fs,bool extended)
         {
-            var fillArray = new Byte[CGeneric.romSize - fs.Position];
-            for(int i = 0; i < fillArray.Length; i++)
+            var romSize = CGeneric.romSize;
+            if (extended)
+                romSize *= 2;
+
+            var fillArray = new Byte[romSize - fs.Position];
+            for (int i = 0; i < fillArray.Length; i++)
             {
                 fillArray[i] = 0xFF;
             }
 
 
-            fs.Write(fillArray,0,fillArray.Length);
+            fs.Write(fillArray, 0, fillArray.Length);
         }
 
 
@@ -558,7 +594,7 @@ namespace N64PPLEditorC
             if (treeViewSBF.SelectedNode.Level == 1)
             {
                 int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
-                if(nbTextObject == 0)
+                if (nbTextObject == 0)
                 {
                     groupBoxSceneText.Text = "Text Edit (0 Text)";
                     numericUpDownSceneText.Maximum = 0;
@@ -567,7 +603,7 @@ namespace N64PPLEditorC
                 else
                 {
                     groupBoxSceneText.Text = "Text Edit (" + nbTextObject + " Text(s))";
-                    numericUpDownSceneText.Maximum = nbTextObject-1;
+                    numericUpDownSceneText.Maximum = nbTextObject - 1;
                 }
                 groupBoxSceneText.Enabled = true;
                 groupBoxSceneFontColor.Enabled = true;
@@ -629,15 +665,15 @@ namespace N64PPLEditorC
             txtBox.Clear();
 
             if (treeViewSBF.SelectedNode.Level != 1)
-                return;                
+                return;
 
             //get scene
             CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
 
             //get object count and verify > 0
             int nbTextObject = scene.GetTextObjectCount();
-           
-            if ( nbTextObject > 0)
+
+            if (nbTextObject > 0)
             {
                 var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
 
@@ -654,18 +690,18 @@ namespace N64PPLEditorC
                 checkBoxSceneCentered.Checked = textObject.isCenteredText;
                 checkBoxScenesExtra1.Checked = textObject.isExtraSize1;
                 checkBoxScenesExtra3.Checked = textObject.isManualSpace;
-                checkBoxScenesExtra4.Checked = textObject.isFontColor;
                 checkBoxScenesWaitInput.Checked = textObject.isWaitingInput;
                 checkBoxScenesIsHidden.Checked = textObject.isHidden;
+                checkBoxScenesExtra4.Checked = textObject.hasFontColor;
 
-                if (textObject.isFontMedium)
+                if (textObject.isFontSmall)
+                    comboBoxSceneFontSize.SelectedIndex = 0;
+                else
+                    if (textObject.isFontMedium)
                     comboBoxSceneFontSize.SelectedIndex = 1;
                 else
-                    if (textObject.isFontSmall)
-                        comboBoxSceneFontSize.SelectedIndex = 0;
-                    else
-                        comboBoxSceneFontSize.SelectedIndex = 2;
-               
+                    comboBoxSceneFontSize.SelectedIndex = 2;
+
                 //text object
                 var sceneTxt = scene.GetTextObjectGroup(textObject.group);
 
@@ -705,10 +741,10 @@ namespace N64PPLEditorC
 
             for (int i = 0; i < 10208296; i += 4)
             {
-                int value = BitConverter.ToInt32(new[] { buffRom[i+3], buffRom[i+2], buffRom[i+1], buffRom[i]},0);
-                if(value  >= val1 && value <= val2)
+                int value = BitConverter.ToInt32(new[] { buffRom[i + 3], buffRom[i + 2], buffRom[i + 1], buffRom[i] }, 0);
+                if (value >= val1 && value <= val2)
                 {
-                    if (value %4 == 0)
+                    if (value % 4 == 0)
                         list.Add(Convert.ToString(i, 16));
                 }
             }
@@ -728,15 +764,15 @@ namespace N64PPLEditorC
 
         private void numericUpDownScenePosX_ValueChanged(object sender, EventArgs e)
         {
-                var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
+            var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
             textObj.SetPosX(Convert.ToInt32(numericUpDownScenePosX.Value));
-                launchTextDisplayGroup();
+            launchTextDisplayGroup();
         }
         private void numericUpDownScenePosY_ValueChanged(object sender, EventArgs e)
         {
-                var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
+            var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
             textObj.SetPosY(Convert.ToInt32(numericUpDownScenePosY.Value));
-                launchTextDisplayGroup();
+            launchTextDisplayGroup();
         }
 
 
@@ -748,7 +784,7 @@ namespace N64PPLEditorC
 
         private void textBoxSceneText_TextChanged(object sender, EventArgs e)
         {
-            if(treeViewSBF.SelectedNode.Level == 1)
+            if (treeViewSBF.SelectedNode.Level == 1)
                 this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).SetText(textBoxSceneText.Text);
         }
 
@@ -756,11 +792,11 @@ namespace N64PPLEditorC
         {
             var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
             colorDialog1.Color = textObj.ForeColor;
-            colorDialog1.CustomColors = new int[] {0xb17941,0xffaf55,0xef9542,0xd9be8d,0x36cfff,0x4254ef,0xc955ff,0xef42bb,0xffce65,0xf7b982,0xf18379,0x66ff83,0x84dffc,0x8085f3,0xd176ff,0xc074b9,0x57ccd6 };
+            colorDialog1.CustomColors = new int[] { 0xb17941, 0xffaf55, 0xef9542, 0xd9be8d, 0x36cfff, 0x4254ef, 0xc955ff, 0xef42bb, 0xffce65, 0xf7b982, 0xf18379, 0x66ff83, 0x84dffc, 0x8085f3, 0xd176ff, 0xc074b9, 0x57ccd6 };
 
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
-                
+
                 textObj.ForeColor = colorDialog1.Color;
                 buttonSceneForeColor.BackColor = textObj.ForeColor;
                 //launchTextDisplayText();
@@ -772,7 +808,7 @@ namespace N64PPLEditorC
         {
             var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
             colorDialog1.Color = textObj.BackColor;
-            colorDialog1.CustomColors = new int[] { 0xe4b88d,0xe4b88d,0xbc5746,0x6d128,0xb42ff0,0x3362f,0x431c19,0 };
+            colorDialog1.CustomColors = new int[] { 0xe4b88d, 0xe4b88d, 0xbc5746, 0x6d128, 0xb42ff0, 0x3362f, 0x431c19, 0 };
 
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -785,10 +821,10 @@ namespace N64PPLEditorC
         private void buttonSceneSuppressText_Click(object sender, EventArgs e)
         {
             var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            if (scene.GetTextObjectCount() > 0) 
+            if (scene.GetTextObjectCount() > 0)
             {
                 scene.RemoveText((int)numericUpDownSceneText.Value);
-                if(numericUpDownSceneText.Value > 0)
+                if (numericUpDownSceneText.Value > 0)
                     numericUpDownSceneText.Maximum -= 1;
                 else
                     numericUpDownSceneText.Maximum = 0;
@@ -797,11 +833,11 @@ namespace N64PPLEditorC
 
         private void buttonHVQMExtract_Click(object sender, EventArgs e)
         {
-            foreach(CHVQM video in ressourceList.hvqmList)
+            foreach (CHVQM video in ressourceList.hvqmList)
             {
-                var fileName = video.GetRessourceName().Replace("\0","");
+                var fileName = video.GetRessourceName().Replace("\0", "");
                 FileStream file = new FileStream(CGeneric.pathOtherContent + fileName, FileMode.Create);
-                file.Write(video.GetRawData(),0,video.GetRawData().Length);
+                file.Write(video.GetRawData(), 0, video.GetRawData().Length);
                 file.Close();
             }
             Process.Start(CGeneric.pathOtherContent);
@@ -862,23 +898,23 @@ namespace N64PPLEditorC
             byte[] PtrTable = ReadAudioPtrTable();
             byte[] WaveTable = ReadAudioWaveTable();
             byte[] SfxTable = ReadAudioSfxTable();
-            int oldAllLength = 
+            int oldAllLength =
                 audioList.soundBankList[treeViewAudio.SelectedNode.Index].ptrTable.Length +
                 audioList.soundBankList[treeViewAudio.SelectedNode.Index].waveTable.Length +
                 audioList.soundBankList[treeViewAudio.SelectedNode.Index].sfx.Length;
-            
+
 
             if (PtrTable != null && WaveTable != null && SfxTable != null)
             {
                 int newAllLength = PtrTable.Length + WaveTable.Length + SfxTable.Length;
-                if ( oldAllLength <= newAllLength || (newAllLength - oldAllLength) < freeSpaceLeft)
-                    audioList.ReplaceSoundBank(PtrTable, WaveTable, SfxTable, treeViewAudio.SelectedNode.Index) ;
+                if (oldAllLength <= newAllLength || (newAllLength - oldAllLength) < freeSpaceLeft)
+                    audioList.ReplaceSoundBank(PtrTable, WaveTable, SfxTable, treeViewAudio.SelectedNode.Index);
                 else
                     MessageBox.Show("Not enought space in the rom.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 UpdateFreeSpaceLeft();
             }
             else
-                MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager",MessageBoxButtons.OK ,MessageBoxIcon.Information);
+                MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private byte[] ReadAudioPtrTable()
@@ -886,7 +922,7 @@ namespace N64PPLEditorC
             byte[] PtrTable = null;
             using (OpenFileDialog openPointerTable = new OpenFileDialog())
             {
-                openPointerTable.InitialDirectory = Application.StartupPath;
+                //openPointerTable.InitialDirectory = Application.StartupPath;
                 openPointerTable.Filter = "ptr file (*.ptr)|*.ptr";
                 openPointerTable.FilterIndex = 1;
                 openPointerTable.RestoreDirectory = true;
@@ -904,7 +940,7 @@ namespace N64PPLEditorC
             byte[] waveTable = null;
             using (OpenFileDialog openWaveTable = new OpenFileDialog())
             {
-                openWaveTable.InitialDirectory = Application.StartupPath;
+                //openWaveTable.InitialDirectory = Application.StartupPath;
                 openWaveTable.Filter = "wbk file (*.wbk)|*.wbk";
                 openWaveTable.FilterIndex = 1;
                 openWaveTable.RestoreDirectory = true;
@@ -922,7 +958,7 @@ namespace N64PPLEditorC
             byte[] SfxTable = null;
             using (OpenFileDialog openSfxTable = new OpenFileDialog())
             {
-                openSfxTable.InitialDirectory = Application.StartupPath;
+                //openSfxTable.InitialDirectory = Application.StartupPath;
                 openSfxTable.Filter = "sfx file (*.bfx)|*.bfx";
                 openSfxTable.FilterIndex = 1;
                 openSfxTable.RestoreDirectory = true;
@@ -942,7 +978,7 @@ namespace N64PPLEditorC
 
             if (newPtrTable != null)
             {
-                if(newPtrTable.Length <= oldPtrTableLength || (newPtrTable.Length - oldPtrTableLength) < freeSpaceLeft)
+                if (newPtrTable.Length <= oldPtrTableLength || (newPtrTable.Length - oldPtrTableLength) < freeSpaceLeft)
                 {
                     audioList.ReplacePointerTable(newPtrTable, treeViewAudio.SelectedNode.Index);
                     UpdateFreeSpaceLeft();
@@ -1082,10 +1118,9 @@ namespace N64PPLEditorC
             {
                 case 0: // small
                     textObject.isFontSmall = true;
-                    textObject.isFontMedium = false;
                     break;
                 case 1: // medium
-                    textObject.isFontSmall = true;
+                    textObject.isFontSmall = false;
                     textObject.isFontMedium = true;
                     break;
                 case 2: // big
@@ -1109,13 +1144,6 @@ namespace N64PPLEditorC
             textObject.isManualSpace = checkBoxScenesExtra3.Checked;
         }
 
-        private void checkBoxScenesExtra4_CheckedChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.isFontColor = checkBoxScenesExtra4.Checked;
-        }
-
         private void checkBoxScenesWaitInput_CheckedChanged(object sender, EventArgs e)
         {
             CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
@@ -1135,6 +1163,28 @@ namespace N64PPLEditorC
             CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
             var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
             textObject.isHidden = checkBoxScenesIsHidden.Checked;
+
+        }
+
+        private void MiscTrackBarDifficultyLevel_Scroll(object sender, EventArgs e)
+        {
+            this.MisclabelDifficultyLevel.Text = this.MiscTrackBarDifficultyLevel.Value.ToString();
+            if (this.MiscTrackBarDifficultyLevel.Value == 0)
+                this.MisclabelDifficultyLevel.ForeColor = Color.Black;
+            else if (this.MiscTrackBarDifficultyLevel.Value < 0)
+                this.MisclabelDifficultyLevel.ForeColor = Color.FromArgb(255, 0, Math.Abs(this.MiscTrackBarDifficultyLevel.Value) * 35, 0);
+            else
+                this.MisclabelDifficultyLevel.ForeColor = Color.FromArgb(255, this.MiscTrackBarDifficultyLevel.Value * 35, 0,0);
+
+            misc.SetDifficulty(-this.MiscTrackBarDifficultyLevel.Value);
+
+        }
+
+        private void checkBoxScenesExtra4_CheckedChanged(object sender, EventArgs e)
+        {
+            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
+            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
+            textObject.hasFontColor = checkBoxScenesExtra4.Checked;
         }
     }
 }

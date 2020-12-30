@@ -36,7 +36,7 @@ namespace N64PPLEditorC
         public bool  isTextScrolling;
         public bool isHidden;
         public bool isManualSpace;
-        public bool isFontColor;
+        public bool hasFontColor;
         public bool isForegroundText;
         private bool unknow3;
         private bool unknow4;
@@ -80,36 +80,22 @@ namespace N64PPLEditorC
             if (!isCenteredText)
                 return posX;
 
-            if (isCenteredTextFirstBit)
-            {
-                if (posX > 5)
-                    return posX;
-                else
-                    return centeredX / 2 + posX;
-            }
+            var a=0;
+            if (centeredX > 320 / 2)
+                a = 320 - centeredX / 2;
             else
-            {
-                return 0;
-            }
+                a = 320 - centeredX;
+            return a;
+            
                 
         }
 
         public int GetPosY()
         {
-            if (!isCenteredText)
+            if (!isCenteredText || posY > 0)
                 return posY;
 
-            if (isCenteredTextFirstBit)
-            {
-                if (posY > 0)
-                    return posY;
-                else
-                    return centeredY /2;
-            }
-            else
-            {
-                return 0;
-            }
+            return centeredY / 2;
         }
 
         public void SetPosX(int posX)
@@ -182,7 +168,7 @@ namespace N64PPLEditorC
             this.isManualSpace = CGeneric.GetBitStateFromInt(dataInitial, 21);
             this.isHidden = CGeneric.GetBitStateFromInt(dataInitial, 22);
             this.isForegroundText = CGeneric.GetBitStateFromInt(dataInitial, 26);
-            this.isFontColor = CGeneric.GetBitStateFromInt(dataInitial, 32);
+            this.hasFontColor = CGeneric.GetBitStateFromInt(dataInitial, 32);
 
             //data grabbed from the rest of the header
             this.posX = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 4, 4));
@@ -211,7 +197,7 @@ namespace N64PPLEditorC
                 index += 8;
             }
             index += 4;//value always set to 1 .. skip.
-            if (this.isFontColor)
+            if (this.hasFontColor)
             {
                 this.BackColor = Color.FromArgb(rawData[index+3], rawData[index], rawData[index + 1], rawData[index + 2]);
                 this.ForeColor = Color.FromArgb(rawData[index+7], rawData[index+4], rawData[index+5], rawData[index + 6]);
@@ -228,7 +214,7 @@ namespace N64PPLEditorC
             if (this.isExtraSize1) newHeaderDataSize += 8;
             if (this.isCenteredText) newHeaderDataSize += 8;
             if (this.isManualSpace) newHeaderDataSize += 8;
-            if (this.isFontColor) newHeaderDataSize += 8;
+            if (this.hasFontColor) newHeaderDataSize += 8;
 
             byte[] newHeaderData = new byte[newHeaderDataSize];
 
@@ -244,7 +230,7 @@ namespace N64PPLEditorC
             CGeneric.SetBitInInt(ref flags, 21, this.isManualSpace);
             CGeneric.SetBitInInt(ref flags, 22, this.isHidden);
             CGeneric.SetBitInInt(ref flags, 26, this.isForegroundText);
-            CGeneric.SetBitInInt(ref flags, 32, this.isFontColor);
+            CGeneric.SetBitInInt(ref flags, 32, this.hasFontColor);
 
             //set unknown flags
             CGeneric.SetBitInInt(ref flags, 3, this.unknow3);
@@ -297,7 +283,7 @@ namespace N64PPLEditorC
                 Array.Copy(new byte[] { 0, 0, 0, 1 }, 0, newHeaderData, index, 4);
             index += 4;
             
-            if (this.isFontColor)
+            if (this.hasFontColor)
             {
                 //update forecolor and backcolor
                 var foreColor = new byte[] { this.ForeColor.R, this.ForeColor.G, this.ForeColor.B, this.ForeColor.A };

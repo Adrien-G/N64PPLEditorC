@@ -205,7 +205,7 @@ namespace N64PPLEditorC
 
         public CSBF1TextObject GetTextObject(int index)
         {
-            return textObjectList[index];
+                return textObjectList[index];
         }
 
         public List<CSBF1TextObject> GetTextObjectGroup(int group)
@@ -227,21 +227,27 @@ namespace N64PPLEditorC
         public void AddNewTextObject(bool sameScene)
         {
             //get the last element
-            var LastText = textObjectList[textObjectList.Count - 1];
-
-            //add one to ID and take his group
-            int textId = LastText.id + 1;
-            int groupText = LastText.group;
-
-            //if the text is independant
-            if (!sameScene)
+            if(textObjectList.Count > 0)
             {
-                textId += 0x64;
-                groupText += 1;
+                var LastText = textObjectList[textObjectList.Count - 1];
+
+                //add one to ID and take his group
+                int textId = LastText.id + 1;
+                int groupText = LastText.group;
+
+                //if the text is independant
+                if (!sameScene)
+                {
+                    textId += 0x64;
+                    groupText += 1;
+                }
+                //create the new text object
+                textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertIntToByteArray(textId), groupText));
             }
-            
-            //create the new text object
-            textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertIntToByteArray(textId), groupText));
+            else
+                textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertIntToByteArray(0), 0));
+
+
         }
 
         public int GetDynamicObjectCount()

@@ -62,7 +62,6 @@
             this.pictureBoxUncompressedTexture = new System.Windows.Forms.PictureBox();
             this.treeViewTexturesUncompressed = new System.Windows.Forms.TreeView();
             this.tabPageScenes = new System.Windows.Forms.TabPage();
-            this.checkBoxScenesExtra4 = new System.Windows.Forms.CheckBox();
             this.checkBoxScenesExtra3 = new System.Windows.Forms.CheckBox();
             this.checkBoxScenesExtra1 = new System.Windows.Forms.CheckBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
@@ -115,7 +114,14 @@
             this.toolStripMenuItemReplacePointerTable = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemReplaceWaveTable = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemReplaceSfxTable = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPageScenesOrder = new System.Windows.Forms.TabPage();
+            this.TabPageMisc = new System.Windows.Forms.TabPage();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.MisclabelDifficultyLevel = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.MiscTrackBarDifficultyLevel = new System.Windows.Forms.TrackBar();
+            this.tabPageDebug = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -130,7 +136,9 @@
             this.labelFreeSpaceLeft = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.checkBoxScenesExtra4 = new System.Windows.Forms.CheckBox();
             this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -157,7 +165,10 @@
             this.groupBox6.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.contextMenuStripAudioTreeview.SuspendLayout();
-            this.tabPageScenesOrder.SuspendLayout();
+            this.TabPageMisc.SuspendLayout();
+            this.groupBox11.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MiscTrackBarDifficultyLevel)).BeginInit();
+            this.tabPageDebug.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -324,7 +335,8 @@
             this.tabControlTexMovSce.Controls.Add(this.tabPageScenes);
             this.tabControlTexMovSce.Controls.Add(this.tabPageMovies);
             this.tabControlTexMovSce.Controls.Add(this.tabPageAudio);
-            this.tabControlTexMovSce.Controls.Add(this.tabPageScenesOrder);
+            this.tabControlTexMovSce.Controls.Add(this.TabPageMisc);
+            this.tabControlTexMovSce.Controls.Add(this.tabPageDebug);
             this.tabControlTexMovSce.Enabled = false;
             this.tabControlTexMovSce.Location = new System.Drawing.Point(12, 69);
             this.tabControlTexMovSce.Name = "tabControlTexMovSce";
@@ -516,17 +528,6 @@
             this.tabPageScenes.Size = new System.Drawing.Size(622, 624);
             this.tabPageScenes.TabIndex = 2;
             this.tabPageScenes.Text = "Scenes";
-            // 
-            // checkBoxScenesExtra4
-            // 
-            this.checkBoxScenesExtra4.AutoSize = true;
-            this.checkBoxScenesExtra4.Location = new System.Drawing.Point(412, 530);
-            this.checkBoxScenesExtra4.Name = "checkBoxScenesExtra4";
-            this.checkBoxScenesExtra4.Size = new System.Drawing.Size(144, 17);
-            this.checkBoxScenesExtra4.TabIndex = 19;
-            this.checkBoxScenesExtra4.Text = "Extra4 (has font color 32)";
-            this.checkBoxScenesExtra4.UseVisualStyleBackColor = true;
-            this.checkBoxScenesExtra4.CheckedChanged += new System.EventHandler(this.checkBoxScenesExtra4_CheckedChanged);
             // 
             // checkBoxScenesExtra3
             // 
@@ -1081,15 +1082,92 @@
             this.toolStripMenuItemReplaceSfxTable.Text = "Replace Sfx";
             this.toolStripMenuItemReplaceSfxTable.Click += new System.EventHandler(this.toolStripMenuItemReplaceSfxTable_Click);
             // 
-            // tabPageScenesOrder
+            // TabPageMisc
             // 
-            this.tabPageScenesOrder.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPageScenesOrder.Controls.Add(this.groupBox3);
-            this.tabPageScenesOrder.Location = new System.Drawing.Point(4, 22);
-            this.tabPageScenesOrder.Name = "tabPageScenesOrder";
-            this.tabPageScenesOrder.Size = new System.Drawing.Size(622, 624);
-            this.tabPageScenesOrder.TabIndex = 3;
-            this.tabPageScenesOrder.Text = "Debug";
+            this.TabPageMisc.BackColor = System.Drawing.SystemColors.Control;
+            this.TabPageMisc.Controls.Add(this.checkBox1);
+            this.TabPageMisc.Controls.Add(this.groupBox11);
+            this.TabPageMisc.Location = new System.Drawing.Point(4, 22);
+            this.TabPageMisc.Name = "TabPageMisc";
+            this.TabPageMisc.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPageMisc.Size = new System.Drawing.Size(622, 624);
+            this.TabPageMisc.TabIndex = 6;
+            this.TabPageMisc.Text = "Misc. (FR only)";
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.MisclabelDifficultyLevel);
+            this.groupBox11.Controls.Add(this.label15);
+            this.groupBox11.Controls.Add(this.label14);
+            this.groupBox11.Controls.Add(this.label11);
+            this.groupBox11.Controls.Add(this.MiscTrackBarDifficultyLevel);
+            this.groupBox11.Location = new System.Drawing.Point(6, 6);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(240, 113);
+            this.groupBox11.TabIndex = 0;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "CPU Difficulty (all levels)";
+            // 
+            // MisclabelDifficultyLevel
+            // 
+            this.MisclabelDifficultyLevel.AutoSize = true;
+            this.MisclabelDifficultyLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MisclabelDifficultyLevel.Location = new System.Drawing.Point(201, 63);
+            this.MisclabelDifficultyLevel.Name = "MisclabelDifficultyLevel";
+            this.MisclabelDifficultyLevel.Size = new System.Drawing.Size(14, 13);
+            this.MisclabelDifficultyLevel.TabIndex = 4;
+            this.MisclabelDifficultyLevel.Text = "0";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.ForeColor = System.Drawing.Color.Red;
+            this.label15.Location = new System.Drawing.Point(159, 32);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(39, 13);
+            this.label15.TabIndex = 3;
+            this.label15.Text = "Harder";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(82, 32);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(44, 13);
+            this.label14.TabIndex = 2;
+            this.label14.Text = "Medium";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.ForeColor = System.Drawing.Color.LimeGreen;
+            this.label11.Location = new System.Drawing.Point(3, 32);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(36, 13);
+            this.label11.TabIndex = 1;
+            this.label11.Text = "Easier";
+            // 
+            // MiscTrackBarDifficultyLevel
+            // 
+            this.MiscTrackBarDifficultyLevel.Location = new System.Drawing.Point(6, 48);
+            this.MiscTrackBarDifficultyLevel.Maximum = 7;
+            this.MiscTrackBarDifficultyLevel.Minimum = -7;
+            this.MiscTrackBarDifficultyLevel.Name = "MiscTrackBarDifficultyLevel";
+            this.MiscTrackBarDifficultyLevel.Size = new System.Drawing.Size(189, 45);
+            this.MiscTrackBarDifficultyLevel.TabIndex = 0;
+            this.MiscTrackBarDifficultyLevel.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.MiscTrackBarDifficultyLevel.Value = -7;
+            this.MiscTrackBarDifficultyLevel.Scroll += new System.EventHandler(this.MiscTrackBarDifficultyLevel_Scroll);
+            // 
+            // tabPageDebug
+            // 
+            this.tabPageDebug.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageDebug.Controls.Add(this.groupBox3);
+            this.tabPageDebug.Location = new System.Drawing.Point(4, 22);
+            this.tabPageDebug.Name = "tabPageDebug";
+            this.tabPageDebug.Size = new System.Drawing.Size(622, 624);
+            this.tabPageDebug.TabIndex = 3;
+            this.tabPageDebug.Text = "Debug";
             // 
             // groupBox3
             // 
@@ -1218,12 +1296,33 @@
             this.colorDialog1.AnyColor = true;
             this.colorDialog1.FullOpen = true;
             // 
+            // checkBoxScenesExtra4
+            // 
+            this.checkBoxScenesExtra4.AutoSize = true;
+            this.checkBoxScenesExtra4.Location = new System.Drawing.Point(412, 530);
+            this.checkBoxScenesExtra4.Name = "checkBoxScenesExtra4";
+            this.checkBoxScenesExtra4.Size = new System.Drawing.Size(90, 17);
+            this.checkBoxScenesExtra4.TabIndex = 19;
+            this.checkBoxScenesExtra4.Text = "has font color";
+            this.checkBoxScenesExtra4.UseVisualStyleBackColor = true;
+            this.checkBoxScenesExtra4.CheckedChanged += new System.EventHandler(this.checkBoxScenesExtra4_CheckedChanged);
+            // 
             // drawScene1
             // 
             this.drawScene1.Location = new System.Drawing.Point(12, 16);
             this.drawScene1.Name = "drawScene1";
             this.drawScene1.Size = new System.Drawing.Size(320, 240);
             this.drawScene1.TabIndex = 0;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(140, 266);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(268, 17);
+            this.checkBox1.TabIndex = 1;
+            this.checkBox1.Text = "eyecatch passable (adresse : 0x7224 -> 24051000)";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -1277,7 +1376,12 @@
             this.tabPageAudio.ResumeLayout(false);
             this.tabPageAudio.PerformLayout();
             this.contextMenuStripAudioTreeview.ResumeLayout(false);
-            this.tabPageScenesOrder.ResumeLayout(false);
+            this.TabPageMisc.ResumeLayout(false);
+            this.TabPageMisc.PerformLayout();
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MiscTrackBarDifficultyLevel)).EndInit();
+            this.tabPageDebug.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -1331,7 +1435,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelFreeSpaceLeft;
-        private System.Windows.Forms.TabPage tabPageScenesOrder;
+        private System.Windows.Forms.TabPage tabPageDebug;
         private System.Windows.Forms.Button buttonHVQMReplace;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button buttonHvqmPathOpen;
@@ -1387,9 +1491,17 @@
         private System.Windows.Forms.CheckBox checkBoxScenesForegroundText;
         private System.Windows.Forms.CheckBox checkBoxScenesExtra1;
         private System.Windows.Forms.CheckBox checkBoxScenesExtra3;
-        private System.Windows.Forms.CheckBox checkBoxScenesExtra4;
         private System.Windows.Forms.CheckBox checkBoxScenesWaitInput;
         private System.Windows.Forms.CheckBox checkBoxScenesIsHidden;
+        private System.Windows.Forms.TabPage TabPageMisc;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.Label MisclabelDifficultyLevel;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TrackBar MiscTrackBarDifficultyLevel;
+        private System.Windows.Forms.CheckBox checkBoxScenesExtra4;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 
