@@ -23,6 +23,7 @@ namespace N64PPLEditorC
         AudioList audioList;
         AssemblyReversedAddress misc;
         int freeSpaceLeft = 0;
+        bool extendedRom = false;
 
         List<TextBox> txtBox = new List<TextBox>();
 
@@ -121,8 +122,20 @@ namespace N64PPLEditorC
                                 UpdateFreeSpaceLeft();
                                 if (freeSpaceLeft < compressedData.Length)
                                 {
-                                    MessageBox.Show("There is not enought place...", "Free space in rom is needed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    break;
+                                    MessageBox.Show("There is not enought space...", "Free space in rom is needed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                                    //if it's lower than 64Mb.
+                                    if (!extendedRom)
+                                    {
+                                        var res = MessageBox.Show("Do you want to make extended rom file ? (32 to 64Mb)", "Extend PPL rom ?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                        if (res == DialogResult.Yes)
+                                        {
+                                            extendedRom = true;
+                                            labelExtendedRom.Visible = true;
+                                        }
+                                    }
+                                    else
+                                        break;
                                 }
 
                                 //add header and generate the bff2
@@ -237,7 +250,9 @@ namespace N64PPLEditorC
         }
         private void numericUpDownTextureDisplayTime_ValueChanged(object sender, EventArgs e)
         {
-            this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].GetBFF2(treeViewTextures.SelectedNode.Index).SetTextureDisplayTime((byte)numericUpDownTextureDisplayTime.Value);
+            if(treeViewTextures.SelectedNode.Level == 1)
+                this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].GetBFF2(treeViewTextures.SelectedNode.Index).SetTextureDisplayTime((byte)numericUpDownTextureDisplayTime.Value);
+
         }
 
         private void treeViewTextures_AfterSelect(object sender, TreeViewEventArgs e)
@@ -327,7 +342,11 @@ namespace N64PPLEditorC
 
         private void UpdateFreeSpaceLeft()
         {
-            freeSpaceLeft = CGeneric.romSize;
+            if (extendedRom)
+                freeSpaceLeft = CGeneric.romSizeExtended;
+            else
+                freeSpaceLeft = CGeneric.romSize;
+
             freeSpaceLeft -= ressourceList.indexRessourcesStart;
             freeSpaceLeft -= ressourceList.GetSizeOfAllRessourceList();
             if (audioList != null)//TODO To remove when ok
@@ -339,7 +358,6 @@ namespace N64PPLEditorC
         {
             using (OpenFileDialog openRomFile = new OpenFileDialog())
             {
-                openRomFile.InitialDirectory = Application.StartupPath;
                 openRomFile.Filter = "rom file (*.z64)|*.z64";
                 openRomFile.FilterIndex = 1;
                 openRomFile.RestoreDirectory = true;
@@ -365,13 +383,20 @@ namespace N64PPLEditorC
                 {
 #endif
                 Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
+                if (buffRom.Length > CGeneric.romSize)
+                {
+                    extendedRom = true;
+                    labelExtendedRom.Visible = true;
+                }
+                    
 
                 //perform check verification (good game and good format) and register the lang
                 var arrayZ64Format = CGeneric.GiveMeArray(buffRom, 0x20, 0x11);
+#if !DEBUG
                 int isGoodFormat = CGeneric.SearchBytesInArray(arrayZ64Format, CGeneric.patternPuzzleLeagueN64);
                 if (isGoodFormat == -1)
                     throw new Exception("The rom is not in the z64 format. Please convert it.");
-
+#endif
                 //grab rom langage
                 RomLangAddress.romLang = (CGeneric.romLang)buffRom[0x3E];
 
@@ -497,8 +522,17 @@ namespace N64PPLEditorC
 
 
             //init the ressources list and data associated
-            this.ressourceList = new CRessourceList(indexRessourcesArrayStart, indexRessourcesEnd);
+            this.ressourceList = new CRessourceList(indexRessourcesArrayStart);
             this.ressourceList.Init(nbElementsInTable, dataTable, ressourcesData);
+
+
+            //list the texture (combobox) in the scene part (for adding textures)
+            int indexData = 0;
+            for (int i = 0; i < this.ressourceList.fibList.Count; i++)
+            {
+                indexData = this.ressourceList.Get3FIBIndexWithFIBName(this.ressourceList.fibList[i].GetRessourceName());
+                comboBoxSceneAddTexture.Items.Add(this.ressourceList.fibList[indexData].GetFIBName());
+            }
         }
 
 
@@ -547,13 +581,16 @@ namespace N64PPLEditorC
                     if (res == DialogResult.Yes)
                     {
                         FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
+                        extendedRom = true;
+                        labelExtendedRom.Visible = true;
                         //TODO add uncompressed image management
                         misc.WriteToRom(fs);
                         ressourceList.WriteAllData(fs);
                         audioList.WriteAllData(fs);
-                        fillNullData(fs, true);
+                        fillNullData(fs);
                         fs.Close();
                         buttonModifyRom.BackColor = Color.LimeGreen;
+                        
                     }
                 }
                 
@@ -565,17 +602,19 @@ namespace N64PPLEditorC
                 misc.WriteToRom(fs);
                 ressourceList.WriteAllData(fs);
                 audioList.WriteAllData(fs);
-                fillNullData(fs,false);
+                fillNullData(fs);
                 fs.Close();
                 buttonModifyRom.BackColor = Color.LimeGreen;
             }
         }
 
-        private void fillNullData(FileStream fs,bool extended)
+        private void fillNullData(FileStream fs)
         {
-            var romSize = CGeneric.romSize;
-            if (extended)
-                romSize *= 2;
+            int romSize;
+            if (extendedRom)
+                romSize = CGeneric.romSizeExtended;
+            else
+                romSize = CGeneric.romSize;
 
             var fillArray = new Byte[romSize - fs.Position];
             for (int i = 0; i < fillArray.Length; i++)
@@ -591,30 +630,40 @@ namespace N64PPLEditorC
         private void treeViewSBF_AfterSelect(object sender, TreeViewEventArgs e)
         {
             numericUpDownSceneText.Value = 0;
-            if (treeViewSBF.SelectedNode.Level == 1)
-            {
-                int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
-                if (nbTextObject == 0)
-                {
-                    groupBoxSceneText.Text = "Text Edit (0 Text)";
-                    numericUpDownSceneText.Maximum = 0;
+            numericUpDownSceneTexture.Value = -1;
 
-                }
-                else
-                {
-                    groupBoxSceneText.Text = "Text Edit (" + nbTextObject + " Text(s))";
-                    numericUpDownSceneText.Maximum = nbTextObject - 1;
-                }
-                groupBoxSceneText.Enabled = true;
-                groupBoxSceneFontColor.Enabled = true;
-
-                launchSceneDisplay();
-            }
-            else
+            if(treeViewSBF.SelectedNode.Level == 0)
             {
                 groupBoxSceneText.Enabled = false;
                 groupBoxSceneFontColor.Enabled = false;
+                groupBoxSceneTextureManagement.Enabled = true;
+                drawScene1.BackColor = Color.Gray;
+                return;
             }
+
+            int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
+            if (nbTextObject == 0)
+            {
+                groupBoxSceneText.Text = "Text Edit (0 Text)";
+                numericUpDownSceneText.Maximum = 0;
+            }
+            else
+            {
+                groupBoxSceneText.Text = "Text Edit (" + nbTextObject + " Text(s))";
+                numericUpDownSceneText.Maximum = nbTextObject - 1;
+            }
+
+            int nbTextureObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextureManagementCount();
+            if (nbTextureObject == 0)
+                numericUpDownSceneTexture.Maximum = 0;
+            else
+                numericUpDownSceneTexture.Maximum = nbTextureObject - 1;
+
+            groupBoxSceneText.Enabled = true;
+            groupBoxSceneFontColor.Enabled = true;
+            groupBoxSceneTextureManagement.Enabled = true;
+            launchSceneDisplay();
+
         }
 
         private void numericUpDownSceneText_ValueChanged(object sender, EventArgs e)
@@ -628,7 +677,7 @@ namespace N64PPLEditorC
             launchTextDisplayGroup();
         }
 
-        private void launchGraphicDisplayPart()
+        private void launchGraphicDisplayPart(int displaySpecificTexture = -1)
         {
             var sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
             var scene = sbf.GetScene(treeViewSBF.SelectedNode.Index);
@@ -636,23 +685,27 @@ namespace N64PPLEditorC
 
             int nbItem = scene.GetTextureManagementCount() - 1;
 
-
+            
             drawScene1.Init();
             for (int i = 0; i <= nbItem; i++)
             {
                 string textureInsideSbfName = ListTextureName[scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
                 int indexData = this.ressourceList.Get3FIBIndexWithFIBName(textureInsideSbfName);
-                if (indexData != -1 && scene.GetTextureManagementObject(i).isCompressedTexture)
+                if (indexData != -1 && scene.GetTextureManagementObject(i).isCompressedTexture && (displaySpecificTexture == -1 || displaySpecificTexture == i))
                 {
                     try
                     {
                         var bmp = this.ressourceList.fibList[indexData].GetBmpTexture(0);
-                        var posY = scene.GetTextureManagementObject(i).getYLocation();
-                        var posX = scene.GetTextureManagementObject(i).getXLocation();
+                        var posY = scene.GetTextureManagementObject(i).posY;
+                        var posX = scene.GetTextureManagementObject(i).posX;
                         this.drawScene1.AddBmp(bmp, new Point(posX, posY));
-
                     }
                     catch { }
+                }
+                if (displaySpecificTexture != -1)
+                {
+                    numericUpDownSceneTexturePosX.Value = scene.GetTextureManagementObject(displaySpecificTexture).posX;
+                    numericUpDownSceneTexturePosY.Value = scene.GetTextureManagementObject(displaySpecificTexture).posY;
                 }
             }
             this.drawScene1.Invalidate();
@@ -681,8 +734,8 @@ namespace N64PPLEditorC
                 textBoxSceneText.Text = textObject.GetText();
 
                 //add text options (posX,posY, backColor, forecolor)
-                numericUpDownScenePosX.Value = textObject.GetPosX();
-                numericUpDownScenePosY.Value = textObject.GetPosY();
+                numericUpDownSceneTextPosX.Value = textObject.GetPosX();
+                numericUpDownSceneTextPosY.Value = textObject.GetPosY();
                 buttonSceneBackColor.BackColor = textObject.BackColor;
                 buttonSceneForeColor.BackColor = textObject.ForeColor;
                 checkBoxSceneScrolling.Checked = textObject.isTextScrolling;
@@ -765,13 +818,13 @@ namespace N64PPLEditorC
         private void numericUpDownScenePosX_ValueChanged(object sender, EventArgs e)
         {
             var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
-            textObj.SetPosX(Convert.ToInt32(numericUpDownScenePosX.Value));
+            textObj.SetPosX(Convert.ToInt32(numericUpDownSceneTextPosX.Value));
             launchTextDisplayGroup();
         }
         private void numericUpDownScenePosY_ValueChanged(object sender, EventArgs e)
         {
             var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
-            textObj.SetPosY(Convert.ToInt32(numericUpDownScenePosY.Value));
+            textObj.SetPosY(Convert.ToInt32(numericUpDownSceneTextPosY.Value));
             launchTextDisplayGroup();
         }
 
@@ -922,7 +975,6 @@ namespace N64PPLEditorC
             byte[] PtrTable = null;
             using (OpenFileDialog openPointerTable = new OpenFileDialog())
             {
-                //openPointerTable.InitialDirectory = Application.StartupPath;
                 openPointerTable.Filter = "ptr file (*.ptr)|*.ptr";
                 openPointerTable.FilterIndex = 1;
                 openPointerTable.RestoreDirectory = true;
@@ -940,7 +992,6 @@ namespace N64PPLEditorC
             byte[] waveTable = null;
             using (OpenFileDialog openWaveTable = new OpenFileDialog())
             {
-                //openWaveTable.InitialDirectory = Application.StartupPath;
                 openWaveTable.Filter = "wbk file (*.wbk)|*.wbk";
                 openWaveTable.FilterIndex = 1;
                 openWaveTable.RestoreDirectory = true;
@@ -958,7 +1009,6 @@ namespace N64PPLEditorC
             byte[] SfxTable = null;
             using (OpenFileDialog openSfxTable = new OpenFileDialog())
             {
-                //openSfxTable.InitialDirectory = Application.StartupPath;
                 openSfxTable.Filter = "sfx file (*.bfx)|*.bfx";
                 openSfxTable.FilterIndex = 1;
                 openSfxTable.RestoreDirectory = true;
@@ -1186,5 +1236,48 @@ namespace N64PPLEditorC
             var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
             textObject.hasFontColor = checkBoxScenesExtra4.Checked;
         }
+
+        private void numericUpDownSceneTexture_ValueChanged(object sender, EventArgs e)
+        {
+            if (treeViewSBF.SelectedNode.Level == 0)
+                return;
+            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
+            if((int)numericUpDownSceneTexture.Value == -1)
+            {
+                numericUpDownSceneTexturePosX.Enabled = false;
+                numericUpDownSceneTexturePosY.Enabled = false;
+            }
+            else
+            {
+                numericUpDownSceneTexturePosX.Enabled = true;
+                numericUpDownSceneTexturePosY.Enabled = true;
+            }
+        }
+
+        private void buttonScenesTextureAdd_Click(object sender, EventArgs e)
+        {
+            string fibName = this.ressourceList.fibList[comboBoxSceneAddTexture.SelectedIndex].GetRessourceName();
+            this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).AddTexture(treeViewSBF.SelectedNode.Index,fibName);
+        }
+
+        private void numericUpDownSceneTexturePosX_ValueChanged(object sender, EventArgs e)
+        {
+            if (treeViewSBF.SelectedNode.Level == 0)
+                return;
+            var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
+            scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).posX = (int)numericUpDownSceneTexturePosX.Value;
+            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
+        }
+
+        private void numericUpDownSceneTexturePosY_ValueChanged(object sender, EventArgs e)
+        {
+            if (treeViewSBF.SelectedNode.Level == 0)
+                return;
+
+            var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
+            scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).posY = (int)numericUpDownSceneTexturePosY.Value;
+            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
+        }
+
     }
 }

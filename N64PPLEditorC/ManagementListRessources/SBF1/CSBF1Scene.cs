@@ -198,6 +198,11 @@ namespace N64PPLEditorC
             return totalSize;
         }
 
+        public void AddNewTextureObject(int index)
+        {
+            textureManagementObjectList.Add(new CSBF1TextureManagement(0xCA,index));
+        }
+
         public string GetSceneName()
         {
             return Encoding.Default.GetString(this.sceneName);

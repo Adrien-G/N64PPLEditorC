@@ -36,20 +36,6 @@ namespace N64PPLEditorC.TransparentPanel
                     this.graphics.DrawImage(bmpList[i], posXY[i]);
                 }
             }
-            
-            //// Gets the image from the global resources
-            //Image broculoImage = global::N64PPLEditorC.Properties.Resources.AddImage_16x;
-
-            //// Sets the images' sizes and positions
-            //int width = broculoImage.Size.Width;
-            //int height = broculoImage.Size.Height;
-            //Rectangle big = new Rectangle(0, 0, width, height);
-            //Rectangle small = new Rectangle(50, 50, (int)(0.75 * width),
-            //        (int)(0.75 * height));
-
-            //// Draws the two images
-            //this.graphics.DrawImage(broculoImage, big);
-            //this.graphics.DrawImage(broculoImage, small);
         }
     }
 }

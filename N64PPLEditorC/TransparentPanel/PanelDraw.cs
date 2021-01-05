@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 /// <summary>
 /// many thanks to codeProjects for Transparency solution : https://www.codeproject.com/Articles/25048/How-to-Use-Transparent-Images-and-Labels-in-Window
+/// PanelDraw and Draw scene are inspired by theses examples.
 /// </summary>
 namespace N64PPLEditorC.TransparentPanel
 {

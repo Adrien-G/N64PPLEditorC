@@ -10,6 +10,10 @@ namespace N64PPLEditorC
     {
         private byte[] rawData;
         public bool isCompressedTexture;
+        private byte textureIndex;
+        public int posX;
+        public int posY;
+
 
         public CSBF1TextureManagement(byte[] rawData)
         {
@@ -17,30 +21,43 @@ namespace N64PPLEditorC
             decomposeHeader();
         }
 
+        public CSBF1TextureManagement(int id, int index)
+        {
+            byte[] newTexture = new byte[28];
+            Array.Copy(CGeneric.ConvertIntToByteArray(id), 0, newTexture, 16,4);
+            Array.Copy(CGeneric.ConvertIntToByteArray(-1), 0, newTexture, 20, 4);
+            Array.Copy(CGeneric.ConvertIntToByteArray(index), 0, newTexture, 24, 4);
+            
+            rawData = newTexture;
+            decomposeHeader();
+        }
+
         private void decomposeHeader()
         {
             if(rawData[3] != 8)
-                isCompressedTexture = true;
+                this.isCompressedTexture = true;
+            this.textureIndex = rawData[27];
+            this.posX = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 4, 4));
+            this.posY = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 8, 4));
         }
 
         public int getTextureIndex()
         {
-            return (int)rawData[27];
+            return (int)textureIndex;
         }
 
-        public int getXLocation()
+        public int GetSize()
         {
-            byte[] sizeX = new byte[4];
-            Array.Copy(rawData, 4, sizeX, 0, sizeX.Length);
-            return CGeneric.ConvertByteArrayToInt(sizeX);
+            return rawData.Length;
         }
 
-        public int getYLocation()
+        public byte[] GetRawData()
         {
-            byte[] sizeY = new byte[4];
-            Array.Copy(rawData, 8, sizeY, 0, sizeY.Length);
-            return CGeneric.ConvertByteArrayToInt(sizeY);
+            Array.Copy(CGeneric.ConvertIntToByteArray(posX), 0, rawData, 4, 4);
+            Array.Copy(CGeneric.ConvertIntToByteArray(posY), 0, rawData, 8, 4);
+            return this.rawData;
         }
+
         public static int GetHeaderLength(int headerValue)
         {
             switch (headerValue)
@@ -68,16 +85,6 @@ namespace N64PPLEditorC
                 case 0x00002406: return 32; //tested
             }
             throw new NotImplementedException();
-        }
-
-        public int GetSize()
-        {
-            return rawData.Length;
-        }
-
-        public byte[] GetRawData()
-        {
-            return this.rawData;
         }
     }
 }

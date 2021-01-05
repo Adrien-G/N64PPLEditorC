@@ -25,8 +25,10 @@ namespace N64PPLEditorC
         public static readonly Byte[] patternMidiSoundBank1 = { 0x00, 0x00, 0x00, 0xCE, 0x00, 0x00, 0x00, 0xBA, 0x00, 0x00, 0x00, 0xA9, 0x00, 0x00, 0x00, 0x00 };
         public static readonly Byte[] patternAbraBif = { 65, 66, 82, 65, 46, 66, 73, 70 };
         public static readonly Byte[] patternBFF2 = { 66, 70, 70, 50 };
+        public static readonly Byte[] patternSBF1 = { 0x53, 0x42, 0x46, 0x31};
         public static readonly Byte[] endOfRom = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
         public static readonly int romSize = 0x2000000;
+        public static readonly int romSizeExtended = 0x4000000;
 
         public enum TextType : int
         {

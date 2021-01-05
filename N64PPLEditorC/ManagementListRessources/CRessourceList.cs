@@ -24,16 +24,14 @@ namespace N64PPLEditorC
         public List<CRDF> rdfList;
 
         public int indexRessourcesStart { get; private set; }
-        private int indexRessourcesEnd;
 
-        public CRessourceList(int indexRessourcesStart,int indexRessourcesEnd)
+        public CRessourceList(int indexRessourcesStart)
         {
             fibList = new List<C3FIB>();
             hvqmList = new List<CHVQM>();
             sbfList = new List<CSBF1>();
             rdfList = new List<CRDF>();
             this.indexRessourcesStart = indexRessourcesStart;
-            this.indexRessourcesEnd = indexRessourcesEnd;
         }
 
         public void Init(int nbElements, byte[] ressourcesList, byte[] ressourcesData)
@@ -96,16 +94,10 @@ namespace N64PPLEditorC
             }
         }
 
-        //fib to simplify
         public CSBF1 GetSBF1(int index)
         {
             return sbfList[index];
         }
-        
-        //public C3FIB Get3FIB(int indexFib)
-        //{
-        //    return fibList[indexFib];
-        //}
 
         public int Get3FIBIndexWithFIBName(string name)
         {
@@ -256,44 +248,5 @@ namespace N64PPLEditorC
 
             return size;
         }
-
-        //public int GetFreeSpaceLeft()
-        //{
-        //    //take only the size of the ressource list
-        //    int initialFreeSpaceLeft = this.indexRessourcesEnd - indexRessourcesStart;
-
-        //    //estimate the size of the ressource list
-        //    int realFreeSpaceLeft = 0;
-        //    foreach (C3FIB c3fibdata in fibList)
-        //    {
-        //        var tmp = c3fibdata.GetRawData().Length;
-        //        if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
-        //    }
-        //    foreach (CHVQM hvqmdata in hvqmList)
-        //    {
-        //        var tmp = hvqmdata.GetRawData().Length;
-        //        if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
-        //    }
-        //    foreach (CSBF1 csbf1data in sbfList)
-        //    {
-        //        var tmp = csbf1data.GetRawData().Length;
-        //        if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
-        //    }
-        //    foreach (CRDF crdfdata in rdfList)
-        //    {
-        //        var tmp = crdfdata.GetRawData().Length;
-        //        if (tmp % 2 == 0) realFreeSpaceLeft += tmp; else realFreeSpaceLeft += tmp + 1;
-        //    }
-
-        //    //add header before ressource list
-        //    realFreeSpaceLeft += 0x12;
-
-        //    //add the ressource list (header of all data)
-        //    realFreeSpaceLeft += ressourcesList.Count() * 24;
-
-        //    //return the size of the full initial ressource list size minus the real size of the ressource list
-        //    return initialFreeSpaceLeft - realFreeSpaceLeft;
-        //    //return 0;
-        //}
     }
 }
