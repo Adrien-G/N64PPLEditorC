@@ -180,7 +180,7 @@ namespace N64PPLEditorC
 
         #region Specific usage -> Decompress texture part
 
-        public static byte[] ConvertByteArrayToRGBA(byte[] texture, CGeneric.Compression compressionType, byte[] palette = null)
+        public static byte[] ConvertByteArrayToRGBA(byte[] texture, CGeneric.Compression compressionType, byte[] palette = null,bool isCompressedPalette=false)
         {
             byte[] arrayRGBA = new byte[0];
 
@@ -199,7 +199,7 @@ namespace N64PPLEditorC
                     arrayRGBA = ConvertMax16ColorsToRGBA(texture, palette);
                     break;
                 case CGeneric.Compression.max256Colors:
-                    arrayRGBA = ConvertMax256ColorsToRGBA(texture, palette);
+                    arrayRGBA = ConvertMax256ColorsToRGBA(texture, palette,isCompressedPalette);
                     break;
                 case CGeneric.Compression.trueColor16Bits:
                     arrayRGBA = ConvertTrueColor16BitsToRGBA(texture);
@@ -224,12 +224,71 @@ namespace N64PPLEditorC
             return rgbaArray;
         }
 
-        private static byte[] ConvertMax256ColorsToRGBA(byte[] texture, byte[] palette)
+        private static byte[] ConvertMax256ColorsToRGBA(byte[] texture, byte[] palette,bool isCompressedPalette)
         {
+            //safety check...
+            if (palette == null)
+                return new byte[0];
+
+            //return rgbaArray;
             byte[] rgbaArray = new byte[texture.Length * 4];
-                for (int i = 0; i < texture.Length; i++)
-                    Array.Copy(palette, texture[i] * 4, rgbaArray, 4 * i, 4);
-           
+            byte[] palette32bitColor;
+            if (isCompressedPalette)
+            {
+                //convert palette to 32bpp
+                palette32bitColor = new byte[palette.Length * 2];
+                byte tmpR, tmpG, tmpG2, tmpB, tmpA;
+                byte tmpG3;
+                int R, G, B, A;
+
+                for (int i = 0; i < palette.Length; i += 2)
+                {
+                    //red (5 bits)
+                    tmpR = palette[i];
+                    tmpR >>= 3;
+
+                    //green (5 bits -> 3bits for nibble 1, 2 bits for nibble 2)
+                    tmpG = palette[i];
+                    tmpG <<= 5;
+                    tmpG >>= 3;
+
+                    tmpG2 = palette[i + 1];
+                    tmpG2 >>= 6;
+
+                    tmpG += tmpG2;
+
+
+                    //blue (5 bits)
+                    tmpB = palette[i + 1];
+                    tmpB <<= 2;
+                    tmpB >>= 3;
+
+                    //alpha 1 bit
+                    tmpA = palette[i + 1];
+                    tmpA <<= 7;
+                    tmpA >>= 7;
+
+                    R = tmpR;
+                    G = tmpG;
+                    B = tmpB;
+                    A = tmpA;
+                    R *= 8;
+                    G *= 8;
+                    B *= 8;
+                    A *= 255;
+
+                    palette32bitColor[i * 2] = (byte)R;
+                    palette32bitColor[i * 2 + 1] = (byte)G;
+                    palette32bitColor[i * 2 + 2] = (byte)B;
+                    palette32bitColor[i * 2 + 3] = (byte)A;
+                }
+            }
+            else
+                palette32bitColor = palette;
+               
+            //with the god palette create the good texture
+            for (int i = 0; i < texture.Length - 1; i++)
+                Array.Copy(palette32bitColor, texture[i]*4, rgbaArray, i * 4, 4);
 
             return rgbaArray;
         }

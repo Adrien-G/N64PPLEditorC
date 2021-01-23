@@ -16,6 +16,7 @@ using N64PPLEditorC.ManagementRomData;
 namespace N64PPLEditorC
 {
 
+    
     public partial class Form1 : Form
     {
         CRessourceList ressourceList;
@@ -24,6 +25,8 @@ namespace N64PPLEditorC
         AssemblyReversedAddress misc;
         int freeSpaceLeft = 0;
         bool extendedRom = false;
+        bool N64Game = true;
+
 
         List<TextBox> txtBox = new List<TextBox>();
 
@@ -104,7 +107,7 @@ namespace N64PPLEditorC
                                 pictureBoxTexture.Width = img.Width;
                                 pictureBoxTexture.Height = img.Height;
                                 pictureBoxTexture.Image = img;
-
+                                
                                 //test the best compression available
                                 var compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
 
@@ -159,6 +162,7 @@ namespace N64PPLEditorC
                                     treeViewTextures.SelectedNode.Parent.Nodes.Add("[added] , " + safeFileName);
                                     treeViewTextures.SelectedNode = treeViewTextures.Nodes[treeViewTextures.SelectedNode.Parent.Index].LastNode;
                                 }
+                                img.Dispose();
 
                             }
                             else
@@ -288,7 +292,15 @@ namespace N64PPLEditorC
         #region textures uncompressed
         private void treeViewTexturesUncompressed_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            pictureBoxUncompressedTexture.Image = romList.GetTexture(treeViewTexturesUncompressed.SelectedNode.Index);
+
+            try
+            {
+                pictureBoxUncompressedTexture.Image = romList.GetTexture(treeViewTexturesUncompressed.SelectedNode.Index);
+            }
+            catch
+            {
+
+            }
         }
 
         private void buttonUncompressedTextureReplace_Click(object sender, EventArgs e)
@@ -299,40 +311,53 @@ namespace N64PPLEditorC
 
                 if (openTexture.ShowDialog() == DialogResult.OK)
                 {
+#if !DEBUG
                     try
                     {
-                        Image img = Image.FromFile(openTexture.FileNames.ToString());
-                        if (img.Width <= 320 && img.Height <= 240)
-                        {
-                            //load texture
-                            pictureBoxUncompressedTexture.Width = img.Width;
-                            pictureBoxUncompressedTexture.Height = img.Height;
-                            pictureBoxUncompressedTexture.Image = img;
+#endif
+                    Image img = Image.FromFile(openTexture.FileNames[0]);
+                        
+                    //load texture
+                    pictureBoxUncompressedTexture.Width = img.Width;
+                    pictureBoxUncompressedTexture.Height = img.Height;
+                    pictureBoxUncompressedTexture.Image = img;
 
-                            //convert texture to byte array for future treatment 
-                            byte[] rawData = CTextureManager.ConvertRGBABitmapToByteArrayRGBA((Bitmap)pictureBoxTexture.Image);
+                    //convert texture to byte array for future treatment 
+                    byte[] rawData = CTextureManager.ConvertRGBABitmapToByteArrayRGBA((Bitmap)pictureBoxUncompressedTexture.Image);
 
-                            //make it at good format
-                            byte[] palette;
-                            (palette, rawData) = CTextureManager.ConvertPixelsToGoodFormat(rawData, Compression.trueColor16Bits);
+                    //make it at good format
+                    byte[] palette;
+                    (palette, rawData) = CTextureManager.ConvertPixelsToGoodFormat(rawData, Compression.trueColor16Bits);
 
-                            romList.SetTexture(treeViewTexturesUncompressed.SelectedNode.Index, rawData);
-                        }
-                        else
-                            MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    romList.SetTexture(treeViewTexturesUncompressed.SelectedNode.Index, rawData);
+#if !DEBUG
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+#endif
                 }
             }
         }
 
         private void buttonUncompressedTextureExtractAll_Click(object sender, EventArgs e)
         {
+            for(int i = 0; i < romList.GetGraphicsCount(); i++)
+            {
+                try
+                {
+                    romList.GetTexture(i).Save(CGeneric.pathExtractedTexture2 + romList.GetGraphicsName(i) + ".png");
+                }
+                catch
+                {
 
+                }
+                
+            }
+            Process.Start(CGeneric.pathExtractedTexture2);
         }
+        
         #endregion
 
         #region scenes
@@ -358,7 +383,7 @@ namespace N64PPLEditorC
         {
             using (OpenFileDialog openRomFile = new OpenFileDialog())
             {
-                openRomFile.Filter = "rom file (*.z64)|*.z64";
+                openRomFile.Filter = "rom file (*.z64)|*.z64|iso file (*.iso)|*.iso";
                 openRomFile.FilterIndex = 1;
                 openRomFile.RestoreDirectory = true;
 
@@ -374,35 +399,49 @@ namespace N64PPLEditorC
         {
             if (textBoxPPLLocation.Text == "")
             {
-                MessageBox.Show("Please select a file... (in z64 format only)", "N64 PPL Editor", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a file... if ROM in .z64 format only! or an ISO file", "N64 PPL Editor", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
-            else
+#if !DEBUG
+            try
             {
-#if !DEBUG
-                try
-                {
 #endif
-                Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
-                if (buffRom.Length > CGeneric.romSize)
-                {
-                    extendedRom = true;
-                    labelExtendedRom.Visible = true;
-                }
-                    
+            Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
+            if (buffRom.Length > CGeneric.romSize)
+            {
+                extendedRom = true;
+                labelExtendedRom.Visible = true;
+            }
 
-                //perform check verification (good game and good format) and register the lang
-                var arrayZ64Format = CGeneric.GiveMeArray(buffRom, 0x20, 0x11);
+            if (textBoxPPLLocation.Text.EndsWith("iso"))
+            {
+                Form1.ActiveForm.Text = "Panepon GC viewer";
+                buttonModifyRom.Visible = false;
+                label2.Visible = false;
+                labelExtendedRom.Visible = false;
+                labelFreeSpaceLeft.Visible = false;
+                comboBoxRessourcesISO.Visible = true;
+                comboBoxRessourcesISO.Text = "Ressources 1";
+                N64Game = false;
+            }
+                
+
+            if (N64Game) {
+            //perform check verification (good game and good format) and register the lang
+            var arrayZ64Format = CGeneric.GiveMeArray(buffRom, 0x20, 0x11);
 #if !DEBUG
-                int isGoodFormat = CGeneric.SearchBytesInArray(arrayZ64Format, CGeneric.patternPuzzleLeagueN64);
-                if (isGoodFormat == -1)
-                    throw new Exception("The rom is not in the z64 format. Please convert it.");
+            int isGoodFormat = CGeneric.SearchBytesInArray(arrayZ64Format, CGeneric.patternPuzzleLeagueN64);
+            if (isGoodFormat == -1)
+                throw new Exception("The rom is not in the z64 format. Please convert it.");
 #endif
-                //grab rom langage
-                RomLangAddress.romLang = (CGeneric.romLang)buffRom[0x3E];
+            //grab rom langage
+            RomLangAddress.romLang = (CGeneric.romLang)buffRom[0x3E];
+            }
+            //load graphics compressed / hvqm and sbf
+            LoadRessourcesList(buffRom);
 
-                //load graphics compressed / hvqm and sbf
-                LoadRessourcesList(buffRom);
-
+            if (N64Game)
+            {
                 //load the uncompressed texture
                 this.romList = new UncompressedRomTexture(buffRom);
 
@@ -411,22 +450,21 @@ namespace N64PPLEditorC
 
                 //load misc part
                 LoadMisc(buffRom);
-
-                LoadTreeView();
-                UpdateFreeSpaceLeft();
-                tabControlTexMovSce.Enabled = true;
-                buttonModifyRom.Enabled = true;
-                buttonLoadRom.Enabled = false;
-                buttonGetRomFolder.Enabled = false;
-                buttonLoadRom.Text = "ROM Loaded";
-#if !DEBUG
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error opening rom..." + Environment.NewLine + "details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-#endif
             }
+            LoadTreeView();
+            UpdateFreeSpaceLeft();
+            tabControlTexMovSce.Enabled = true;
+            buttonModifyRom.Enabled = true;
+            buttonLoadRom.Enabled = false;
+            buttonGetRomFolder.Enabled = false;
+            buttonLoadRom.Text = "ROM Loaded";
+#if !DEBUG
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening rom..." + Environment.NewLine + "details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+#endif
         }
 
         private void LoadMisc(byte[] buffRom)
@@ -451,6 +489,14 @@ namespace N64PPLEditorC
             treeViewHVQM.BeginUpdate();
             treeViewSBF.BeginUpdate();
             treeViewAudio.BeginUpdate();
+            treeViewTextures.Nodes.Clear();
+            treeViewTexturesUncompressed.Nodes.Clear();
+            treeViewHVQM.Nodes.Clear();
+            treeViewSBF.Nodes.Clear();
+            treeViewAudio.Nodes.Clear();
+
+
+
             for (int fib = 0; fib < this.ressourceList.GetFIBCount(); fib++)
             {
                 treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.fibList[fib].GetFIBName());
@@ -469,12 +515,13 @@ namespace N64PPLEditorC
                     treeViewSBF.Nodes[sbf].Nodes.Add(scene + 1 + ", " + this.ressourceList.GetSBF1(sbf).GetScene(scene).GetSceneName());
             }
 
-            for (int romGraphics = 0; romGraphics < this.romList.GetGraphicsCount(); romGraphics++)
-                treeViewTexturesUncompressed.Nodes.Add(this.romList.GetGraphicsName(romGraphics));
+            if (N64Game) {
+                for (int romGraphics = 0; romGraphics < this.romList.GetGraphicsCount(); romGraphics++)
+                    treeViewTexturesUncompressed.Nodes.Add(this.romList.GetGraphicsName(romGraphics));
 
-            for (int audioSoundbank = 0; audioSoundbank < this.audioList?.soundBankList.Count(); audioSoundbank++)
-                treeViewAudio.Nodes.Add("Soundbank " + Convert.ToString(audioSoundbank, 16).ToUpper());
-
+                for (int audioSoundbank = 0; audioSoundbank < this.audioList?.soundBankList.Count(); audioSoundbank++)
+                    treeViewAudio.Nodes.Add("Soundbank " + Convert.ToString(audioSoundbank, 16).ToUpper());
+            }
             CheckIfTreeViewEmpty(treeViewTextures);
             CheckIfTreeViewEmpty(treeViewTexturesUncompressed);
             CheckIfTreeViewEmpty(treeViewHVQM);
@@ -499,12 +546,31 @@ namespace N64PPLEditorC
 
         private void LoadRessourcesList(byte[] buffRom)
         {
+            int indexRessourcesArrayStart;
+            int indexRessourcesEnd;
 
-            // search for "ABRA.BIF" pattern (start of array ressources location)
-            int indexRessourcesArrayStart = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternAbraBif) - 12;
-
-            // search for "N64 PtrTablesV2" pattern (end of ressources location)
-            int indexRessourcesEnd = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternN64WaveTable);
+            if (N64Game)
+            {
+                // search for "ABRA.BIF" pattern (start of array ressources location)
+                indexRessourcesArrayStart = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternAbraBif) - 12;
+                // search for "N64 PtrTablesV2" pattern (end of ressources location)
+                indexRessourcesEnd = CGeneric.SearchBytesInArray(buffRom, CGeneric.patternN64WaveTable);
+            }
+            else
+            {
+                switch (comboBoxRessourcesISO.SelectedIndex)
+                {
+                    case 1: indexRessourcesArrayStart = CGeneric.IsoPart2; indexRessourcesEnd = CGeneric.IsoEnd2; break;
+                    case 2: indexRessourcesArrayStart = CGeneric.IsoPart3; indexRessourcesEnd = CGeneric.IsoEnd3; break;
+                    case 3: indexRessourcesArrayStart = CGeneric.IsoPart4; indexRessourcesEnd = CGeneric.IsoEnd4; break;
+                    case 4: indexRessourcesArrayStart = CGeneric.IsoPart5; indexRessourcesEnd = CGeneric.IsoEnd5; break;
+                    case 5: indexRessourcesArrayStart = CGeneric.IsoPart6; indexRessourcesEnd = CGeneric.IsoEnd6; break;
+                    case 6: indexRessourcesArrayStart = CGeneric.IsoPart7; indexRessourcesEnd = CGeneric.IsoEnd7; break;
+                    case 0:
+                    default:
+                        indexRessourcesArrayStart = CGeneric.IsoPart1; indexRessourcesEnd = CGeneric.IsoEnd1; break;
+                }
+            }
 
             //read header of table data
             Byte[] nbElementsTable = new Byte[4];
@@ -526,12 +592,13 @@ namespace N64PPLEditorC
             this.ressourceList.Init(nbElementsInTable, dataTable, ressourcesData);
 
 
-            //list the texture (combobox) in the scene part (for adding textures)
+            //list the texture (combobox) in the scene part (for modifying/adding textures)
             int indexData = 0;
             for (int i = 0; i < this.ressourceList.fibList.Count; i++)
             {
                 indexData = this.ressourceList.Get3FIBIndexWithFIBName(this.ressourceList.fibList[i].GetRessourceName());
                 comboBoxSceneAddTexture.Items.Add(this.ressourceList.fibList[indexData].GetFIBName());
+                comboBoxSceneChangeTexture.Items.Add(this.ressourceList.fibList[indexData].GetFIBName());
             }
         }
 
@@ -569,43 +636,39 @@ namespace N64PPLEditorC
         private void buttonModifyRom_Click(object sender, EventArgs e)
         {
             UpdateFreeSpaceLeft();
-            if (freeSpaceLeft < 0)
+            if (freeSpaceLeft > 0)
             {
-                MessageBox.Show("There is not enought space in the rom file..." + Environment.NewLine + "Please supress some things and try again.", "Error saving rom...", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                buttonModifyRom.BackColor = Color.Orange;
-
-                //if it's lower than 64Mb.
-                if (freeSpaceLeft > -CGeneric.romSize)
-                {
-                    var res = MessageBox.Show("Do you want to make extended rom file ? (32 to 64Mb)", "Extend PPL rom ?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (res == DialogResult.Yes)
-                    {
-                        FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
-                        extendedRom = true;
-                        labelExtendedRom.Visible = true;
-                        //TODO add uncompressed image management
-                        misc.WriteToRom(fs);
-                        ressourceList.WriteAllData(fs);
-                        audioList.WriteAllData(fs);
-                        fillNullData(fs);
-                        fs.Close();
-                        buttonModifyRom.BackColor = Color.LimeGreen;
-                        
-                    }
-                }
-                
+                WriteToRom();
             }
             else
             {
-                FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
-                //TODO add uncompressed image management
-                misc.WriteToRom(fs);
-                ressourceList.WriteAllData(fs);
-                audioList.WriteAllData(fs);
-                fillNullData(fs);
-                fs.Close();
-                buttonModifyRom.BackColor = Color.LimeGreen;
+                MessageBox.Show("There is not enought space in the rom file..." + Environment.NewLine + "Please supress some things and try again.", "Error saving rom...", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                buttonModifyRom.BackColor = Color.Orange;
+                //if it's lower than 64Mb.
+                if (freeSpaceLeft > -CGeneric.romSize)
+                {
+
+                    var res = MessageBox.Show("Do you want to make extended rom file ? (32 to 64Mb)", "Extend PPL rom ?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (res == DialogResult.Yes)
+                    {
+                        extendedRom = true;
+                        labelExtendedRom.Visible = true;
+                        WriteToRom();
+                    }
+                }
             }
+        }
+
+        private void WriteToRom()
+        {
+            FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
+            romList.WriteToRom(fs);
+            misc.WriteToRom(fs);
+            ressourceList.WriteAllData(fs);
+            audioList.WriteAllData(fs);
+            fillNullData(fs);
+            fs.Close();
+            buttonModifyRom.BackColor = Color.LimeGreen;
         }
 
         private void fillNullData(FileStream fs)
@@ -1246,12 +1309,21 @@ namespace N64PPLEditorC
             {
                 numericUpDownSceneTexturePosX.Enabled = false;
                 numericUpDownSceneTexturePosY.Enabled = false;
+                comboBoxSceneChangeTexture.SelectedIndex = -1;
             }
             else
             {
+                //set the name for the combobox when changing index.
+                var sbf1 = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
+                int selectedTexture = sbf1.GetScene(treeViewSBF.SelectedNode.Index).GetTextureManagementObject((int)numericUpDownSceneTexture.Value).getTextureIndex();
+                string sceneBifName = sbf1.GetBifName(selectedTexture).Replace("\0", "");
+                comboBoxSceneChangeTexture.SelectedIndex = this.ressourceList.Get3FIBIndexWithFIBName(sceneBifName);
+
                 numericUpDownSceneTexturePosX.Enabled = true;
                 numericUpDownSceneTexturePosY.Enabled = true;
             }
+            
+
         }
 
         private void buttonScenesTextureAdd_Click(object sender, EventArgs e)
@@ -1279,5 +1351,121 @@ namespace N64PPLEditorC
             launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
         }
 
+        private void buttonScenesTextureReplace_Click(object sender, EventArgs e)
+        {
+            string fibName = this.ressourceList.fibList[comboBoxSceneChangeTexture.SelectedIndex].GetRessourceName();
+            //récupérer l'identifiant de la texture dans la scene pour la remplacer
+
+            this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).ReplaceTexture(treeViewSBF.SelectedNode.Index, fibName);
+        }
+
+        private void saveSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Index);
+
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "sbf files (*.sbf)|*.sbf";
+            saveFileDialog1.FileName = sbf.GetRessourceName();
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    
+                    var b = sbf.GetRawData();
+                    myStream.Write(b,0,b.Length);
+                    myStream.Close();
+                }
+            }
+           
+        }
+
+        private void contextMenuStripScenesTreeView_Opening(object sender, CancelEventArgs e)
+        {
+            if (treeViewSBF.SelectedNode.Level == 0)
+            {
+                ToolStripMenuItemLoadSBF.Enabled = true;
+                ToolStripMenuItemSaveSBF.Enabled = true;
+
+            }
+            else
+            {
+                ToolStripMenuItemLoadSBF.Enabled = false;
+                ToolStripMenuItemSaveSBF.Enabled = false;
+            }
+                
+        }
+
+        private void treeViewSBF_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            //small hack
+            treeViewSBF.SelectedNode = e.Node;
+        }
+
+        private void ToolStripMenuItemLoadSBF_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openSbfFile = new OpenFileDialog())
+            {
+                openSbfFile.Filter = "sbf file (*.sbf)|*.sbf";
+                openSbfFile.FilterIndex = 1;
+                openSbfFile.RestoreDirectory = true;
+
+                if (openSbfFile.ShowDialog() == DialogResult.OK)
+                {
+                    Byte[] buffRom = File.ReadAllBytes(openSbfFile.FileName);
+                    this.ressourceList.SetSBF1(buffRom, treeViewSBF.SelectedNode.Index);
+                }
+            }
+            LoadTreeView();
+            UpdateFreeSpaceLeft();
+        }
+
+        private void ExtractBinaryTextureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            C3FIB fib;
+            if (treeViewTextures.SelectedNode.Level == 0)
+                fib = this.ressourceList.fibList[treeViewTextures.SelectedNode.Index];
+            else
+                fib = this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index];
+
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "3fib files (*.3fib)|*.3fib";
+            saveFileDialog1.FileName = fib.GetFIBName();
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    var b = fib.GetRawData();
+                    myStream.Write(b, 0, b.Length);
+                    myStream.Close();
+                }
+            }
+        }
+
+        private void comboBoxRessourcesISO_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (N64Game)
+                return;
+            Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
+            LoadRessourcesList(buffRom);
+
+            LoadTreeView();
+            UpdateFreeSpaceLeft();
+            tabControlTexMovSce.Enabled = true;
+            buttonModifyRom.Enabled = true;
+            buttonLoadRom.Enabled = false;
+            buttonGetRomFolder.Enabled = false;
+            buttonLoadRom.Text = "ROM Loaded";
+            buffRom = new byte[0];
+        }
     }
 }

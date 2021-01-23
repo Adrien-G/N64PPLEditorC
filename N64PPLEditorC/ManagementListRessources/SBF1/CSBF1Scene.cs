@@ -33,11 +33,13 @@ namespace N64PPLEditorC
             byte[] dataWithoutHeader = new Byte[rawData.Length - 8 - sceneLength];
             Array.Copy(rawData, 8 + sceneLength, dataWithoutHeader, 0, dataWithoutHeader.Length);
 
+            var tmpToRemove = CGeneric.ConvertByteArrayToString(sceneName);
             //decompose data of scene
-            ChunkScene(dataWithoutHeader,8+sceneLength);
+            ChunkScene(dataWithoutHeader, 8 + sceneLength);
 
             //for text, decompose groups of text
             GroupTextData();
+
         }
 
         private void GroupTextData()
@@ -100,6 +102,15 @@ namespace N64PPLEditorC
             this.textObjectList = new List<CSBF1TextObject>();
             generalIndex += ChunkTextObject(data, CGeneric.ConvertByteArrayToInt(nbTextArray), generalIndex);
 
+            //var hidden2thData = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(data, generalIndex, 4));
+            //if (hidden2thData > 0xFF) {
+            //    switch (hidden2thData)
+            //    {
+
+            //    }
+            //}
+
+
             //get the number of texture management object
             byte[] nbTextureArray = new byte[4];
             Array.Copy(data, generalIndex, nbTextureArray, 0, nbTextureArray.Length);
@@ -111,7 +122,36 @@ namespace N64PPLEditorC
             generalIndex += ChunkTextureManagementObject(data, CGeneric.ConvertByteArrayToInt(nbTextureArray), generalIndex);
 
             //add 4 because the last object didn't seems to contains data
+            //add specific value for ISO file (they make an error in the ISO.. the nimber of scene is not accurate...
+            var hidden4thData = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(data, generalIndex, 4));
             generalIndex += 4;
+            if (hidden4thData != 0)
+            {
+                bool breakLoop = false;
+                for(int i = 0; i < hidden4thData; i++)
+                {
+                    var code4thData = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(data, generalIndex, 4));
+                    switch (code4thData)
+                    {
+                        case 0x1E:
+                        case 0x9E:
+                            generalIndex += 0x20;
+                            break;
+                        case 0x1F:
+                            generalIndex += 0x24;
+                            break;
+                        case 0x16: // fix the error in the rom, the number of texture is badly set.
+                            breakLoop = true;
+                            generalIndex += 0x20;
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                    if (breakLoop)
+                        break;
+                }
+            }
+               
 
             //with the datasize determinated set the new rawData array
             byte[] newArrayRawData = new byte[generalIndex+headerSize];
@@ -200,7 +240,7 @@ namespace N64PPLEditorC
 
         public void AddNewTextureObject(int index)
         {
-            textureManagementObjectList.Add(new CSBF1TextureManagement(0xCA,index));
+                textureManagementObjectList.Add(new CSBF1TextureManagement(0xCA,index));
         }
 
         public string GetSceneName()

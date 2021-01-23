@@ -46,6 +46,11 @@ namespace N64PPLEditorC
             return (int)textureIndex;
         }
 
+        public void SetTextureIndex(int textureIndex)
+        {
+           this.textureIndex = (byte)textureIndex;
+        }
+
         public int GetSize()
         {
             return rawData.Length;
@@ -62,27 +67,45 @@ namespace N64PPLEditorC
         {
             switch (headerValue)
             {
-                case 0x00000000: return 28;
-                case 0x00000002: return 28; //tested
-                case 0x00000004: return 28; //tested
-                case 0x00000006: return 28;
-                case 0x00000008: return 28; //tested
-                case 0x0000000C: return 28;
-                case 0x00000040: return 36;
-                case 0x00000044: return 36; //tested
-                case 0x00000080: return 28; //tested
-                case 0x00000082: return 28;
-                case 0x00000084: return 28; //tested
-                case 0x00000200: return 28;
-                case 0x00000400: return 32;
-                case 0x00000402: return 32;
-                case 0x00000404: return 32;
-                case 0x00000406: return 32; //tested
-                case 0x00000482: return 32;
-                case 0x00002000: return 28;
-                case 0x00002006: return 28; //tested
-                case 0x00002040: return 36;
-                case 0x00002406: return 32; //tested
+                case 0x00000000: return 0x1C;
+                case 0x00000002: return 0x1C; //tested
+                case 0x00000004: return 0x1C; //tested
+                case 0x00000006: return 0x1C;
+                case 0x00000008: return 0x1C; //tested
+                case 0x0000000C: return 0x1C;
+                case 0x00000040: return 0x24;
+                case 0x00000044: return 0x24; //tested
+                case 0x00000080: return 0x1C; //tested
+                case 0x00000082: return 0x1C;
+                case 0x00000084: return 0x1C; //tested
+                case 0x00000200: return 0x1C;
+                case 0x00000400: return 0x20; //tested
+                case 0x00000402: return 0x20;
+                case 0x00000404: return 0x20;
+                case 0x00000406: return 0x20; //tested
+                case 0x00000482: return 0x20;
+                case 0x00002000: return 0x1C;
+                case 0x00002006: return 0x1C; //tested
+                case 0x00002040: return 0x24;
+                case 0x00002406: return 0x20; //tested
+
+                //test cas ISO only
+                case 0x00000664: return 0x1C;
+                case 0x000000D2: return 0x1C;
+                case 0x000000D3: return 0x1C;
+                case 0x00000091: return 0x1C;
+                case 0x0000008C: return 0x1C;
+                case 0x00000010: return 0x1C;
+                case 0x00000210: return 0x1C;
+                case 0x00000204: return 0x1C;
+                case 0x00000104: return 0x1C;
+                
+                case 0x00001000: return 0x1C;
+                case 0x00000001: return 0x1C;
+                case 0x00000502: return 0x20;
+                case 0x00000202: return 0x1C;
+
+
             }
             throw new NotImplementedException();
         }

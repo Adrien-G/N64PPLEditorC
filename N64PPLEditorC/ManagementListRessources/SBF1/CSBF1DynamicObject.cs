@@ -46,6 +46,52 @@ namespace N64PPLEditorC
                 case 0x00C100E1: return 68;
                 case 0x030100E1: return 68;
                 case 0x030104E1: return 76; //tested
+
+                      //value added for ISO game
+                case 0x000204F1: return 56;
+                case 0x000260D1: return 0x38;
+                case 0x00000461: return 0x30;
+                case 0x000205F1: return 0x38;
+                case 0x000205F2: return 0x38;
+                case 0x00000051: return 0x30;
+                case 0x000003F1: return 0x38;
+                case 0x00000151: return 0x30;
+                case 0x002807F1: return 0x38;
+                case 0x002807E1: return 0x34;
+                case 0x002807F2: return 0x38;
+                case 0x002807E2: return 0x34;
+                case 0x30D080E1: return 0x34;
+                case -204439455: return 0x30;
+                case 0x01800061: return 0x30;
+                case 0x30D080E2: return 0x34;
+                case -1022328734:return 0x30;
+                case 0x001080e2: return 0x34;
+                case 0x042807f0: return 0x38;
+                case 0x042807e0: return 0x34;
+                case 0x082807f0: return 0x38;
+                case 0x082807e0: return 0x34;
+                case 0x30d08061: return 0x30;
+                case -1022328607:return 0x34;
+                case 0x30d08062: return 0x30;
+                case -1022328606: return 0x34;
+                case 0x34d08060: return 0x30;
+                case -955219744: return 0x34;
+                case 0x38d08060: return 0x30;
+                case -888110880: return 0x34;
+                case 0x30c09471: return 0x34;
+                case -1023372191: return 0x30;
+                case 0x00000471: return 0x34;
+                case 0x003083e1: return 0x34;
+                case 0x002007f1: return 0x38;
+                case 0x002107F1: return 0x48; //mess
+                case 0x001285f1: return 0x38;
+                case 0x000284f1: return 0x38;
+                case 0x000900F1: return 0x48;
+                case 0x30c08461: return 0x30;
+                case 0x30c080e1: return 0x34;
+                case -205487007: return 0x30;
+                case -1023376287: return 0x30;
+
                 default: throw new NotSupportedException();
             }
         }

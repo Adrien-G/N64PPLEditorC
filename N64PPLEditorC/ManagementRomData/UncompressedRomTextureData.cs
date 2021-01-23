@@ -6,17 +6,18 @@ namespace N64PPLEditorC
 {
     public class UncompressedRomTextureData 
     {
-        private byte[] dataRaw;
-        private int location;
-        private int sizeX, sizeY;
-        private int bytePerPixel;
+        public byte[] rawData { get; private set; }
+        public int location { get; private set; }
+        public int sizeX { get; private set; }
+        public int sizeY { get; private set; }
+        public int bytePerPixel { get; private set; }
         private string name;
         private byte[] palette;
 
 
-        public UncompressedRomTextureData(byte[] dataRaw, int location, int sizeX, int sizeY, int bytePerPixel, string name,byte[] palette = null)
+        public UncompressedRomTextureData(byte[] rawData, int location, int sizeX, int sizeY, int bytePerPixel, string name,byte[] palette = null)
         {
-            this.dataRaw = dataRaw;
+            this.rawData = rawData;
             this.location = location;
             this.sizeX = sizeX;
             this.sizeY = sizeY;
@@ -31,13 +32,13 @@ namespace N64PPLEditorC
             switch (bytePerPixel)
             {
                 case 32:
-                    tmpArray = dataRaw;
+                    tmpArray = rawData;
                     break;
                 case 16:
-                    tmpArray = CTextureManager.ConvertByteArrayToRGBA(dataRaw, CGeneric.Compression.trueColor16Bits);
+                    tmpArray = CTextureManager.ConvertByteArrayToRGBA(rawData, CGeneric.Compression.trueColor16Bits);
                     break;
                 case 8:
-                    tmpArray = CTextureManager.ConvertByteArrayToRGBA(dataRaw, CGeneric.Compression.max256Colors,palette);
+                    tmpArray = CTextureManager.ConvertByteArrayToRGBA(rawData, CGeneric.Compression.max256Colors,palette,true);
                     break;
 
             }
@@ -47,7 +48,7 @@ namespace N64PPLEditorC
 
         public void SetTexture(byte[] rawData)
         {
-            this.dataRaw = rawData;
+            this.rawData = rawData;
         }
 
         public string GetName()

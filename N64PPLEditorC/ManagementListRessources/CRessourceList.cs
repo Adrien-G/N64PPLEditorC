@@ -92,11 +92,18 @@ namespace N64PPLEditorC
                 if (sizeElement % 2 == 1)
                     generalIndex += 1;
             }
+
         }
 
         public CSBF1 GetSBF1(int index)
         {
             return sbfList[index];
+        }
+
+        public void SetSBF1(byte[] scene, int index)
+        {
+            var name = CGeneric.ConvertStringToByteArray(sbfList[index].GetRessourceName());
+            sbfList[index] = new CSBF1(scene,name);
         }
 
         public int Get3FIBIndexWithFIBName(string name)

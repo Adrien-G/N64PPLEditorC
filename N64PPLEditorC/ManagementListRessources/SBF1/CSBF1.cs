@@ -35,14 +35,16 @@ namespace N64PPLEditorC
             //send the data without SBF header for chuncking data..
             byte[] dataWithoutHeader = new byte[rawData.Length - headerSize];
             Array.Copy(rawData, headerSize ,dataWithoutHeader,0,dataWithoutHeader.Length);
+            
             SetChunk(dataWithoutHeader, nbScene);
+            
         }
 
         private void SetChunk(byte[] dataWithoutHeader,int nbScene)
         {
             scenesList = new List<CSBF1Scene>();
             int globalIndex = 0;
-            
+        
             for (int i = 0; i < nbScene; i++)
             {
                 byte[] tmpData = new byte[dataWithoutHeader.Length - globalIndex];
@@ -52,6 +54,7 @@ namespace N64PPLEditorC
                 globalIndex += item.GetChunckSize();
                 scenesList.Add(item);
             }
+
         }
 
         public CSBF1Scene GetScene(int index)
@@ -75,6 +78,18 @@ namespace N64PPLEditorC
             bifList.Add(CGeneric.ConvertStringToByteArray(bifName.ToLower()));
             scenesList[indexScene].AddNewTextureObject(bifList.Count - 1);
         }
+
+        public string GetBifName(int index)
+        {
+            return CGeneric.ConvertByteArrayToString(bifList[index]);
+        }
+
+        public void ReplaceTexture(int indexBif, string bifName)
+        {
+            bifList[indexBif] = CGeneric.ConvertStringToByteArray(bifName.ToLower());
+        }
+
+
 
         public List<string> GetBifList()
         {

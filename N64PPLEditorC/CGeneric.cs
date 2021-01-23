@@ -13,6 +13,7 @@ namespace N64PPLEditorC
     {
         //different path used in the application
         public static readonly String pathExtractedTexture = Application.StartupPath + @"\extractedTexture\";
+        public static readonly String pathExtractedTexture2 = Application.StartupPath + @"\extractedTexture2\";
         public static readonly String pathOtherContent = Application.StartupPath + @"\OtherContent\";
 
         //size of the elements present in the table of ressources
@@ -29,6 +30,25 @@ namespace N64PPLEditorC
         public static readonly Byte[] endOfRom = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
         public static readonly int romSize = 0x2000000;
         public static readonly int romSizeExtended = 0x4000000;
+
+        //just for test the GC iso
+        public static readonly int IsoPart1 = 0x2650D58;
+        public static readonly int IsoPart2 = 0x26554F8;
+        public static readonly int IsoPart3 = 0x7E402C4;
+        public static readonly int IsoPart4 = 0x7EC6850;
+        public static readonly int IsoPart5 = 0x7ECAFE4;
+        public static readonly int IsoPart6 = 0x824661C;
+        public static readonly int IsoPart7 = 0x894C3F8;
+
+        public static readonly int IsoEnd1 = 0x26554F8;
+        public static readonly int IsoEnd2 = 0x26CB1C6;
+        public static readonly int IsoEnd3 = 0x7EC684D;
+        public static readonly int IsoEnd4 = 0x7ECAFE4;
+        public static readonly int IsoEnd5 = 0x824661B;
+        public static readonly int IsoEnd6 = 0x894C41C;
+        public static readonly int IsoEnd7 = 0x89C20EA;
+
+
 
         public enum TextType : int
         {
@@ -191,8 +211,9 @@ namespace N64PPLEditorC
 
         public static void VerifyExistingPath()
         {
-                Directory.CreateDirectory(pathExtractedTexture);
-                Directory.CreateDirectory(pathOtherContent);
+            Directory.CreateDirectory(pathExtractedTexture);
+            Directory.CreateDirectory(pathExtractedTexture2);
+            Directory.CreateDirectory(pathOtherContent);
         }
     }
 }

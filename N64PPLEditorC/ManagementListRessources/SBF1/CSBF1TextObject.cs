@@ -751,8 +751,6 @@ namespace N64PPLEditorC
             }
         }
 
-
-
         private char ConvertByteToCharFr(Int16 letter)
         {
             switch (letter)
