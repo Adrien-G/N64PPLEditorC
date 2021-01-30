@@ -12,10 +12,11 @@ namespace N64PPLEditorC
         public int sizeY { get; private set; }
         public int bytePerPixel { get; private set; }
         private string name;
-        private byte[] palette;
+        public byte[] palette;
+        public int paletteLocation { get; private set; }
 
 
-        public UncompressedRomTextureData(byte[] rawData, int location, int sizeX, int sizeY, int bytePerPixel, string name,byte[] palette = null)
+        public UncompressedRomTextureData(byte[] rawData, int location, int sizeX, int sizeY, int bytePerPixel, string name,byte[] palette = null,int paletteLocation = 0)
         {
             this.rawData = rawData;
             this.location = location;
@@ -24,6 +25,7 @@ namespace N64PPLEditorC
             this.bytePerPixel = bytePerPixel;
             this.name = name;
             this.palette = palette;
+            this.paletteLocation = paletteLocation;
         }
 
         public Bitmap ShowTexture()
@@ -46,9 +48,13 @@ namespace N64PPLEditorC
             return CTextureManager.ConvertRGBAByteArrayToBitmap(tmpArray, sizeX, sizeY);
         }
 
-        public void SetTexture(byte[] rawData)
+        public void SetTexture(byte[] rawData,byte[] palette)
         {
             this.rawData = rawData;
+            //be sure to overwrite all the palette
+            this.palette = new byte[this.palette.Length];
+            Array.Copy(palette, 0, this.palette, 0, palette.Length);
+            
         }
 
         public string GetName()

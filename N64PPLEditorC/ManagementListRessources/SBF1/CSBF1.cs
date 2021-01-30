@@ -62,22 +62,22 @@ namespace N64PPLEditorC
             return scenesList[index];
         }
 
-        public void AddTexture(int indexScene, string bifName)
-        {
-            //if the texture is already in the sbf, just add the texture to the scene
-            for(int i = 0; i < bifList.Count; i++)
-            {
-                if(bifName == CGeneric.ConvertByteArrayToString(bifList[i]).ToUpper())
-                {
-                    scenesList[indexScene].AddNewTextureObject(i);
-                    return;
-                }
-            }
-            //else add before the texture and after add it to the scene
-            //store the name in lower just because it will be more pretty in the rom :)
-            bifList.Add(CGeneric.ConvertStringToByteArray(bifName.ToLower()));
-            scenesList[indexScene].AddNewTextureObject(bifList.Count - 1);
-        }
+        //public void AddTexture(int indexScene, string bifName)
+        //{
+        //    //if the texture is already in the sbf, just add the texture to the scene
+        //    for(int i = 0; i < bifList.Count; i++)
+        //    {
+        //        if(bifName == CGeneric.ConvertByteArrayToString(bifList[i]).ToUpper())
+        //        {
+        //            scenesList[indexScene].AddNewTextureObject(i);
+        //            return;
+        //        }
+        //    }
+        //    //else add before the texture and after add it to the scene
+        //    //store the name in lower just because it will be more pretty in the rom :)
+        //    bifList.Add(CGeneric.ConvertStringToByteArray(bifName.ToLower()));
+        //    scenesList[indexScene].AddNewTextureObject(bifList.Count - 1);
+        //}
 
         public string GetBifName(int index)
         {
@@ -100,6 +100,14 @@ namespace N64PPLEditorC
             }
             return list;
         }
+
+        public void AddBifToSbf(string bifName)
+        {
+            byte[] newBif = new byte[16];
+            Array.Copy(CGeneric.ConvertStringToByteArray(bifName), 0, newBif, 0, bifName.Length);
+            bifList.Add(newBif);
+        }
+
         public int GetSceneCount()
         {
             return scenesList.Count();

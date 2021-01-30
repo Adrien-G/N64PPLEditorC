@@ -327,9 +327,13 @@ namespace N64PPLEditorC
 
                     //make it at good format
                     byte[] palette;
-                    (palette, rawData) = CTextureManager.ConvertPixelsToGoodFormat(rawData, Compression.trueColor16Bits);
+                    var compression = Compression.trueColor16Bits;
+                    if (romList.graphicsRom[treeViewTexturesUncompressed.SelectedNode.Index].bytePerPixel == 8)
+                        compression = Compression.max256Colors;
 
-                    romList.SetTexture(treeViewTexturesUncompressed.SelectedNode.Index, rawData);
+                    //(palette, rawData) = CTextureManager.ConvertPixelsToGoodFormat(rawData, Compression.trueColor16Bits,true);
+                    (palette, rawData) = CTextureManager.ConvertPixelsToGoodFormat(rawData, compression,true);
+                    romList.SetTexture(treeViewTexturesUncompressed.SelectedNode.Index, rawData,palette);
 #if !DEBUG
                     }
                     catch (Exception ex)
@@ -449,7 +453,7 @@ namespace N64PPLEditorC
                 LoadAudioList(buffRom);
 
                 //load misc part
-                LoadMisc(buffRom);
+                //LoadMisc(buffRom);
             }
             LoadTreeView();
             UpdateFreeSpaceLeft();
@@ -533,6 +537,7 @@ namespace N64PPLEditorC
             treeViewHVQM.EndUpdate();
             treeViewSBF.EndUpdate();
             treeViewAudio.EndUpdate();
+            
 
         }
 
@@ -590,16 +595,6 @@ namespace N64PPLEditorC
             //init the ressources list and data associated
             this.ressourceList = new CRessourceList(indexRessourcesArrayStart);
             this.ressourceList.Init(nbElementsInTable, dataTable, ressourcesData);
-
-
-            //list the texture (combobox) in the scene part (for modifying/adding textures)
-            int indexData = 0;
-            for (int i = 0; i < this.ressourceList.fibList.Count; i++)
-            {
-                indexData = this.ressourceList.Get3FIBIndexWithFIBName(this.ressourceList.fibList[i].GetRessourceName());
-                comboBoxSceneAddTexture.Items.Add(this.ressourceList.fibList[indexData].GetFIBName());
-                comboBoxSceneChangeTexture.Items.Add(this.ressourceList.fibList[indexData].GetFIBName());
-            }
         }
 
 
@@ -663,7 +658,7 @@ namespace N64PPLEditorC
         {
             FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
             romList.WriteToRom(fs);
-            misc.WriteToRom(fs);
+            //misc.WriteToRom(fs);
             ressourceList.WriteAllData(fs);
             audioList.WriteAllData(fs);
             fillNullData(fs);
@@ -695,7 +690,7 @@ namespace N64PPLEditorC
             numericUpDownSceneText.Value = 0;
             numericUpDownSceneTexture.Value = -1;
 
-            if(treeViewSBF.SelectedNode.Level == 0)
+            if (treeViewSBF.SelectedNode.Level == 0)
             {
                 groupBoxSceneText.Enabled = false;
                 groupBoxSceneFontColor.Enabled = false;
@@ -703,8 +698,25 @@ namespace N64PPLEditorC
                 drawScene1.BackColor = Color.Gray;
                 return;
             }
+            CSBF1 sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
+            CSBF1Scene scene = sbf.GetScene(treeViewSBF.SelectedNode.Index);
 
-            int nbTextObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObjectCount();
+            //list the texture (combobox) present in the scene
+            comboBoxSceneChangeTexture.Items.Clear();
+            for (int i = 0; i < sbf.GetBifList().Count(); i++)
+                comboBoxSceneChangeTexture.Items.Add(sbf.GetBifName(i).ToLower().Replace(".bif", ""));
+
+            //list all the textures present in the rom (pretty name)
+            int indexData = 0;
+            comboBoxSceneAddTexture.Items.Clear();
+            for (int i = 0; i < this.ressourceList.fibList.Count; i++)
+            {
+                indexData = this.ressourceList.Get3FIBIndexWithFIBName(this.ressourceList.fibList[i].GetRessourceName());
+                comboBoxSceneAddTexture.Items.Add(this.ressourceList.fibList[indexData].GetFIBName());
+            }
+                
+
+            int nbTextObject = scene.GetTextObjectCount();
             if (nbTextObject == 0)
             {
                 groupBoxSceneText.Text = "Text Edit (0 Text)";
@@ -716,7 +728,7 @@ namespace N64PPLEditorC
                 numericUpDownSceneText.Maximum = nbTextObject - 1;
             }
 
-            int nbTextureObject = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextureManagementCount();
+            int nbTextureObject = scene.GetTextureManagementCount();
             if (nbTextureObject == 0)
                 numericUpDownSceneTexture.Maximum = 0;
             else
@@ -1314,10 +1326,13 @@ namespace N64PPLEditorC
             else
             {
                 //set the name for the combobox when changing index.
-                var sbf1 = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
-                int selectedTexture = sbf1.GetScene(treeViewSBF.SelectedNode.Index).GetTextureManagementObject((int)numericUpDownSceneTexture.Value).getTextureIndex();
-                string sceneBifName = sbf1.GetBifName(selectedTexture).Replace("\0", "");
-                comboBoxSceneChangeTexture.SelectedIndex = this.ressourceList.Get3FIBIndexWithFIBName(sceneBifName);
+                CSBF1 sbf1 = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
+                CSBF1Scene scene = sbf1.GetScene(treeViewSBF.SelectedNode.Index);
+                //grab index of the selected texture
+                int indexTextureSbf = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).getTextureIndex();
+                comboBoxSceneChangeTexture.SelectedIndex = indexTextureSbf;
+               
+
 
                 numericUpDownSceneTexturePosX.Enabled = true;
                 numericUpDownSceneTexturePosY.Enabled = true;
@@ -1328,8 +1343,17 @@ namespace N64PPLEditorC
 
         private void buttonScenesTextureAdd_Click(object sender, EventArgs e)
         {
+            CSBF1 sbf1 = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
             string fibName = this.ressourceList.fibList[comboBoxSceneAddTexture.SelectedIndex].GetRessourceName();
-            this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).AddTexture(treeViewSBF.SelectedNode.Index,fibName);
+
+            sbf1.AddBifToSbf(fibName);
+
+            //update the texture (combobox) present in the scene
+            comboBoxSceneChangeTexture.Items.Clear();
+            for (int i = 0; i < sbf1.GetBifList().Count(); i++)
+                comboBoxSceneChangeTexture.Items.Add(sbf1.GetBifName(i).ToLower().Replace(".bif", ""));
+
+
         }
 
         private void numericUpDownSceneTexturePosX_ValueChanged(object sender, EventArgs e)
@@ -1353,10 +1377,10 @@ namespace N64PPLEditorC
 
         private void buttonScenesTextureReplace_Click(object sender, EventArgs e)
         {
-            string fibName = this.ressourceList.fibList[comboBoxSceneChangeTexture.SelectedIndex].GetRessourceName();
-            //récupérer l'identifiant de la texture dans la scene pour la remplacer
-
-            this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).ReplaceTexture(treeViewSBF.SelectedNode.Index, fibName);
+            byte indexNewTexture = (byte)comboBoxSceneChangeTexture.SelectedIndex;
+            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
+            scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).textureIndex = indexNewTexture;
+            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
         }
 
         private void saveSceneToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1466,6 +1490,65 @@ namespace N64PPLEditorC
             buttonGetRomFolder.Enabled = false;
             buttonLoadRom.Text = "ROM Loaded";
             buffRom = new byte[0];
+        }
+
+        private void CreateNewContainertoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string nameContainer = "New container";
+            if (InputBox("Please set name", "Name for new container : ", ref nameContainer) == DialogResult.OK)
+            {
+                this.ressourceList.Add3FIB(nameContainer);
+                treeViewTextures.Nodes.Add((treeViewTextures.Nodes.Count+1) + ", " + nameContainer);
+
+                //visual, show where the data is added and select it
+                treeViewTextures.Nodes[treeViewTextures.Nodes.Count-1].EnsureVisible();
+                treeViewTextures.SelectedNode = treeViewTextures.Nodes[treeViewTextures.Nodes.Count - 1];
+            }
+            
+        }
+
+        public static DialogResult InputBox(string title, string promptText, ref string value)
+        {
+            Form form = new Form();
+            Label label = new Label();
+            TextBox textBox = new TextBox();
+            Button buttonOk = new Button();
+            Button buttonCancel = new Button();
+
+            form.Text = title;
+            label.Text = promptText;
+            textBox.Text = value;
+
+            buttonOk.Text = "OK";
+            buttonCancel.Text = "Cancel";
+            buttonOk.DialogResult = DialogResult.OK;
+            buttonCancel.DialogResult = DialogResult.Cancel;
+
+            label.SetBounds(9, 20, 372, 13);
+            textBox.SetBounds(12, 36, 372, 20);
+            buttonOk.SetBounds(228, 72, 75, 23);
+            buttonCancel.SetBounds(309, 72, 75, 23);
+
+            label.AutoSize = true;
+            textBox.Anchor = textBox.Anchor | AnchorStyles.Right;
+            buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+
+            textBox.MaxLength = 12;
+            form.ClientSize = new Size(396, 107);
+            form.Controls.AddRange(new Control[] { label, textBox, buttonOk, buttonCancel });
+            form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+            form.FormBorderStyle = FormBorderStyle.FixedDialog;
+            form.StartPosition = FormStartPosition.CenterScreen;
+            form.MinimizeBox = false;
+            form.MaximizeBox = false;
+            form.AcceptButton = buttonOk;
+            form.CancelButton = buttonCancel;
+            
+
+            DialogResult dialogResult = form.ShowDialog();
+            value = textBox.Text;
+            return dialogResult;
         }
     }
 }

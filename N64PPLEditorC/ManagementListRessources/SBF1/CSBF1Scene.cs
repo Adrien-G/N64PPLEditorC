@@ -9,6 +9,7 @@ namespace N64PPLEditorC
     class CSBF1Scene
     {
         private byte[] sceneName;
+        private string sceneNameDebug; // only for getting the scene all around treatment.
         private byte[] rawData;
 
         private List<CSBF1DynamicObject> dynamicObjectList;
@@ -33,7 +34,7 @@ namespace N64PPLEditorC
             byte[] dataWithoutHeader = new Byte[rawData.Length - 8 - sceneLength];
             Array.Copy(rawData, 8 + sceneLength, dataWithoutHeader, 0, dataWithoutHeader.Length);
 
-            var tmpToRemove = CGeneric.ConvertByteArrayToString(sceneName);
+            this.sceneNameDebug = CGeneric.ConvertByteArrayToString(sceneName);
             //decompose data of scene
             ChunkScene(dataWithoutHeader, 8 + sceneLength);
 
@@ -122,7 +123,7 @@ namespace N64PPLEditorC
             generalIndex += ChunkTextureManagementObject(data, CGeneric.ConvertByteArrayToInt(nbTextureArray), generalIndex);
 
             //add 4 because the last object didn't seems to contains data
-            //add specific value for ISO file (they make an error in the ISO.. the nimber of scene is not accurate...
+            //add specific value for ISO file
             var hidden4thData = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(data, generalIndex, 4));
             generalIndex += 4;
             if (hidden4thData != 0)

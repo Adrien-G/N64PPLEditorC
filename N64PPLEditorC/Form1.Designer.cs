@@ -41,6 +41,7 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.ExtractBinaryTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.CreateNewContainertoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.containerTypetoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.animatedBadgesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,19 +96,20 @@
             this.buttonSceneBackColor = new System.Windows.Forms.Button();
             this.buttonSceneForeColor = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.comboBoxSceneAddTexture = new System.Windows.Forms.ComboBox();
             this.buttonScenesTextureAdd = new System.Windows.Forms.Button();
             this.groupBoxSceneTextureManagement = new System.Windows.Forms.GroupBox();
             this.buttonScenesTextureReplace = new System.Windows.Forms.Button();
-            this.comboBoxSceneChangeTexture = new System.Windows.Forms.ComboBox();
             this.label17 = new System.Windows.Forms.Label();
             this.numericUpDownSceneTexture = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxSceneChangeTexture = new System.Windows.Forms.ComboBox();
             this.numericUpDownSceneTexturePosX = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.numericUpDownSceneTexturePosY = new System.Windows.Forms.NumericUpDown();
-            this.comboBoxSceneAddTexture = new System.Windows.Forms.ComboBox();
-            this.label19 = new System.Windows.Forms.Label();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.contextMenuStripScenesTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItemSaveSBF = new System.Windows.Forms.ToolStripMenuItem();
@@ -162,7 +164,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.labelExtendedRom = new System.Windows.Forms.Label();
             this.comboBoxRessourcesISO = new System.Windows.Forms.ComboBox();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -184,6 +185,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTextPosX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTextPosY)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.groupBox12.SuspendLayout();
             this.groupBoxSceneTextureManagement.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTexture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTexturePosX)).BeginInit();
@@ -281,19 +283,20 @@
             this.toolStripSeparator4,
             this.ExtractBinaryTextureToolStripMenuItem,
             this.toolStripSeparator2,
+            this.CreateNewContainertoolStripMenuItem,
             this.containerTypetoolStripMenuItem,
             this.toolStripSeparator1,
             this.expandAllToolStripMenuItem,
             this.collpseAllToolStripMenuItem});
             this.contextMenuStripTextureTreeview.Name = "contextMenuStrip1";
-            this.contextMenuStripTextureTreeview.Size = new System.Drawing.Size(184, 178);
+            this.contextMenuStripTextureTreeview.Size = new System.Drawing.Size(191, 204);
             this.contextMenuStripTextureTreeview.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripForTreeview_Opening);
             // 
             // addNewTextureToolStripMenuItem
             // 
             this.addNewTextureToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.AddImage_16x;
             this.addNewTextureToolStripMenuItem.Name = "addNewTextureToolStripMenuItem";
-            this.addNewTextureToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
+            this.addNewTextureToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
             this.addNewTextureToolStripMenuItem.Text = "Add New texture(s)";
             this.addNewTextureToolStripMenuItem.Click += new System.EventHandler(this.addNewTextureToolStripMenuItem_Click);
             // 
@@ -302,26 +305,33 @@
             this.removeThisTextureToolStripMenuItem.Enabled = false;
             this.removeThisTextureToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.RemoveGuide_16x;
             this.removeThisTextureToolStripMenuItem.Name = "removeThisTextureToolStripMenuItem";
-            this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
+            this.removeThisTextureToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
             this.removeThisTextureToolStripMenuItem.Text = "Remove this texture";
             this.removeThisTextureToolStripMenuItem.Click += new System.EventHandler(this.removeThisTextureToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(180, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(187, 6);
             // 
             // ExtractBinaryTextureToolStripMenuItem
             // 
             this.ExtractBinaryTextureToolStripMenuItem.Name = "ExtractBinaryTextureToolStripMenuItem";
-            this.ExtractBinaryTextureToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
+            this.ExtractBinaryTextureToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
             this.ExtractBinaryTextureToolStripMenuItem.Text = "Extract binary 3FIB";
             this.ExtractBinaryTextureToolStripMenuItem.Click += new System.EventHandler(this.ExtractBinaryTextureToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(180, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
+            // 
+            // CreateNewContainertoolStripMenuItem
+            // 
+            this.CreateNewContainertoolStripMenuItem.Name = "CreateNewContainertoolStripMenuItem";
+            this.CreateNewContainertoolStripMenuItem.Size = new System.Drawing.Size(190, 26);
+            this.CreateNewContainertoolStripMenuItem.Text = "Create new container";
+            this.CreateNewContainertoolStripMenuItem.Click += new System.EventHandler(this.CreateNewContainertoolStripMenuItem_Click);
             // 
             // containerTypetoolStripMenuItem
             // 
@@ -330,7 +340,7 @@
             this.animatedBadgesToolStripMenuItem,
             this.textureScrollbluePokeballBackgroundToolStripMenuItem});
             this.containerTypetoolStripMenuItem.Name = "containerTypetoolStripMenuItem";
-            this.containerTypetoolStripMenuItem.Size = new System.Drawing.Size(183, 26);
+            this.containerTypetoolStripMenuItem.Size = new System.Drawing.Size(190, 26);
             this.containerTypetoolStripMenuItem.Text = "Container Type";
             // 
             // fixedToolStripMenuItem
@@ -357,13 +367,13 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(180, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
             // 
             // expandAllToolStripMenuItem
             // 
             this.expandAllToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.ExpandAll_16x;
             this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
+            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
             this.expandAllToolStripMenuItem.Text = "Expand all";
             this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
             // 
@@ -371,7 +381,7 @@
             // 
             this.collpseAllToolStripMenuItem.Image = global::N64PPLEditorC.Properties.Resources.CollapseAll_16x;
             this.collpseAllToolStripMenuItem.Name = "collpseAllToolStripMenuItem";
-            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
+            this.collpseAllToolStripMenuItem.Size = new System.Drawing.Size(190, 26);
             this.collpseAllToolStripMenuItem.Text = "Collapse all";
             this.collpseAllToolStripMenuItem.Click += new System.EventHandler(this.collpseAllToolStripMenuItem_Click);
             // 
@@ -912,10 +922,8 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage2.Controls.Add(this.buttonScenesTextureAdd);
+            this.tabPage2.Controls.Add(this.groupBox12);
             this.tabPage2.Controls.Add(this.groupBoxSceneTextureManagement);
-            this.tabPage2.Controls.Add(this.comboBoxSceneAddTexture);
-            this.tabPage2.Controls.Add(this.label19);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -923,9 +931,29 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "textures edit";
             // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.comboBoxSceneAddTexture);
+            this.groupBox12.Controls.Add(this.buttonScenesTextureAdd);
+            this.groupBox12.Location = new System.Drawing.Point(6, 100);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(325, 50);
+            this.groupBox12.TabIndex = 25;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "append another textures to the scene";
+            // 
+            // comboBoxSceneAddTexture
+            // 
+            this.comboBoxSceneAddTexture.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSceneAddTexture.FormattingEnabled = true;
+            this.comboBoxSceneAddTexture.Location = new System.Drawing.Point(9, 17);
+            this.comboBoxSceneAddTexture.Name = "comboBoxSceneAddTexture";
+            this.comboBoxSceneAddTexture.Size = new System.Drawing.Size(99, 21);
+            this.comboBoxSceneAddTexture.TabIndex = 23;
+            // 
             // buttonScenesTextureAdd
             // 
-            this.buttonScenesTextureAdd.Location = new System.Drawing.Point(182, 176);
+            this.buttonScenesTextureAdd.Location = new System.Drawing.Point(114, 15);
             this.buttonScenesTextureAdd.Name = "buttonScenesTextureAdd";
             this.buttonScenesTextureAdd.Size = new System.Drawing.Size(35, 23);
             this.buttonScenesTextureAdd.TabIndex = 24;
@@ -936,9 +964,9 @@
             // groupBoxSceneTextureManagement
             // 
             this.groupBoxSceneTextureManagement.Controls.Add(this.buttonScenesTextureReplace);
-            this.groupBoxSceneTextureManagement.Controls.Add(this.comboBoxSceneChangeTexture);
             this.groupBoxSceneTextureManagement.Controls.Add(this.label17);
             this.groupBoxSceneTextureManagement.Controls.Add(this.numericUpDownSceneTexture);
+            this.groupBoxSceneTextureManagement.Controls.Add(this.comboBoxSceneChangeTexture);
             this.groupBoxSceneTextureManagement.Controls.Add(this.numericUpDownSceneTexturePosX);
             this.groupBoxSceneTextureManagement.Controls.Add(this.label16);
             this.groupBoxSceneTextureManagement.Controls.Add(this.label18);
@@ -946,7 +974,7 @@
             this.groupBoxSceneTextureManagement.Enabled = false;
             this.groupBoxSceneTextureManagement.Location = new System.Drawing.Point(6, 6);
             this.groupBoxSceneTextureManagement.Name = "groupBoxSceneTextureManagement";
-            this.groupBoxSceneTextureManagement.Size = new System.Drawing.Size(325, 100);
+            this.groupBoxSceneTextureManagement.Size = new System.Drawing.Size(325, 88);
             this.groupBoxSceneTextureManagement.TabIndex = 22;
             this.groupBoxSceneTextureManagement.TabStop = false;
             this.groupBoxSceneTextureManagement.Text = "Texture Management";
@@ -955,20 +983,11 @@
             // 
             this.buttonScenesTextureReplace.Location = new System.Drawing.Point(268, 11);
             this.buttonScenesTextureReplace.Name = "buttonScenesTextureReplace";
-            this.buttonScenesTextureReplace.Size = new System.Drawing.Size(57, 23);
+            this.buttonScenesTextureReplace.Size = new System.Drawing.Size(51, 23);
             this.buttonScenesTextureReplace.TabIndex = 26;
             this.buttonScenesTextureReplace.Text = "replace";
             this.buttonScenesTextureReplace.UseVisualStyleBackColor = true;
             this.buttonScenesTextureReplace.Click += new System.EventHandler(this.buttonScenesTextureReplace_Click);
-            // 
-            // comboBoxSceneChangeTexture
-            // 
-            this.comboBoxSceneChangeTexture.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSceneChangeTexture.FormattingEnabled = true;
-            this.comboBoxSceneChangeTexture.Location = new System.Drawing.Point(163, 13);
-            this.comboBoxSceneChangeTexture.Name = "comboBoxSceneChangeTexture";
-            this.comboBoxSceneChangeTexture.Size = new System.Drawing.Size(99, 21);
-            this.comboBoxSceneChangeTexture.TabIndex = 25;
             // 
             // label17
             // 
@@ -996,6 +1015,15 @@
             0,
             -2147483648});
             this.numericUpDownSceneTexture.ValueChanged += new System.EventHandler(this.numericUpDownSceneTexture_ValueChanged);
+            // 
+            // comboBoxSceneChangeTexture
+            // 
+            this.comboBoxSceneChangeTexture.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSceneChangeTexture.FormattingEnabled = true;
+            this.comboBoxSceneChangeTexture.Location = new System.Drawing.Point(163, 13);
+            this.comboBoxSceneChangeTexture.Name = "comboBoxSceneChangeTexture";
+            this.comboBoxSceneChangeTexture.Size = new System.Drawing.Size(99, 21);
+            this.comboBoxSceneChangeTexture.TabIndex = 25;
             // 
             // numericUpDownSceneTexturePosX
             // 
@@ -1051,24 +1079,6 @@
             this.numericUpDownSceneTexturePosY.TabIndex = 21;
             this.numericUpDownSceneTexturePosY.ValueChanged += new System.EventHandler(this.numericUpDownSceneTexturePosY_ValueChanged);
             // 
-            // comboBoxSceneAddTexture
-            // 
-            this.comboBoxSceneAddTexture.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSceneAddTexture.FormattingEnabled = true;
-            this.comboBoxSceneAddTexture.Location = new System.Drawing.Point(77, 176);
-            this.comboBoxSceneAddTexture.Name = "comboBoxSceneAddTexture";
-            this.comboBoxSceneAddTexture.Size = new System.Drawing.Size(99, 21);
-            this.comboBoxSceneAddTexture.TabIndex = 23;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(38, 181);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(34, 13);
-            this.label19.TabIndex = 22;
-            this.label19.Text = "add : ";
-            // 
             // groupBoxTextureSBF
             // 
             this.groupBoxTextureSBF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1080,6 +1090,13 @@
             this.groupBoxTextureSBF.TabIndex = 1;
             this.groupBoxTextureSBF.TabStop = false;
             this.groupBoxTextureSBF.Text = "Scene Editor";
+            // 
+            // drawScene1
+            // 
+            this.drawScene1.Location = new System.Drawing.Point(12, 16);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(320, 240);
+            this.drawScene1.TabIndex = 0;
             // 
             // treeViewSBF
             // 
@@ -1611,13 +1628,6 @@
             this.comboBoxRessourcesISO.Visible = false;
             this.comboBoxRessourcesISO.SelectedIndexChanged += new System.EventHandler(this.comboBoxRessourcesISO_SelectedIndexChanged);
             // 
-            // drawScene1
-            // 
-            this.drawScene1.Location = new System.Drawing.Point(12, 16);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(320, 240);
-            this.drawScene1.TabIndex = 0;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1662,7 +1672,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTextPosX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTextPosY)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.groupBox12.ResumeLayout(false);
             this.groupBoxSceneTextureManagement.ResumeLayout(false);
             this.groupBoxSceneTextureManagement.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTexture)).EndInit();
@@ -1816,7 +1826,6 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.NumericUpDown numericUpDownSceneTexturePosY;
         private System.Windows.Forms.ComboBox comboBoxSceneAddTexture;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Button buttonScenesTextureAdd;
         private System.Windows.Forms.Label labelExtendedRom;
         private System.Windows.Forms.CheckBox checkBox2;
@@ -1831,6 +1840,8 @@
         private System.Windows.Forms.ToolStripMenuItem ExtractBinaryTextureToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ComboBox comboBoxRessourcesISO;
+        private System.Windows.Forms.ToolStripMenuItem CreateNewContainertoolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox12;
     }
 }
 

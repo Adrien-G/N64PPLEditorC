@@ -10,7 +10,7 @@ namespace N64PPLEditorC
     {
         private byte[] rawData;
         public bool isCompressedTexture;
-        private byte textureIndex;
+        public byte textureIndex;
         public int posX;
         public int posY;
 
@@ -60,6 +60,7 @@ namespace N64PPLEditorC
         {
             Array.Copy(CGeneric.ConvertIntToByteArray(posX), 0, rawData, 4, 4);
             Array.Copy(CGeneric.ConvertIntToByteArray(posY), 0, rawData, 8, 4);
+            rawData[27] = this.textureIndex ;
             return this.rawData;
         }
 

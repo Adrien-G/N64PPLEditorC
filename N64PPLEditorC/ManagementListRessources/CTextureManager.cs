@@ -11,7 +11,7 @@ namespace N64PPLEditorC
     {
 
         #region Specific usage -> Make texture to good format ("compress" texture to good format)
-        public static (byte[] palette,byte[] data) ConvertPixelsToGoodFormat(byte[] texture, CGeneric.Compression textureType)
+        public static (byte[] palette,byte[] data) ConvertPixelsToGoodFormat(byte[] texture, CGeneric.Compression textureType, bool isCompressedPalette = false)
         {
 
             byte[] finalArray = texture;
@@ -26,7 +26,7 @@ namespace N64PPLEditorC
                     (palette, finalArray) = ConvertRGBAtoMax16Colors(texture);
                     break;
                 case CGeneric.Compression.max256Colors:
-                    (palette, finalArray) = ConvertRGBAtoMax256Colors(texture);
+                    (palette, finalArray) = ConvertRGBAtoMax256Colors(texture,isCompressedPalette);
                     break;
                 case CGeneric.Compression.trueColor16Bits :
                     finalArray = ConvertRGBAtoTrueColor16Bits(texture);
@@ -69,33 +69,79 @@ namespace N64PPLEditorC
             }
             return (palette, finalArray);
         }
-        private static (byte[] palette, byte[] data) ConvertRGBAtoMax256Colors(byte[] texture)
+        private static (byte[] palette, byte[] data) ConvertRGBAtoMax256Colors(byte[] texture,bool isCompressedPalette)
         {
             //construct palette and use it.
             List<Color> colors = ExtractPaletteFromByteArray(texture);
 
             //first array for palette color
-            byte[] palette = new byte[colors.Count * 4];
+            byte[] palette;
 
             //second array for palette data
             byte[] finalArray = new byte[texture.Length / 4];
 
-            // write palette 
-            for (int i = 0; i < colors.Count(); i++)
+            // write palette, if compressed palette, compress the palette else just write it
+            if (isCompressedPalette)
             {
-                palette[i * 4] = colors[i].R;
-                palette[i * 4 + 1] = colors[i].G;
-                palette[i * 4 + 2] = colors[i].B;
-                palette[i * 4 + 3] = colors[i].A;
+                palette = new byte[colors.Count * 2];
+                byte tmpR, tmpG,tmpG2, tmpB, tmpA;
+                byte res1, res2;
+                for (int i = 0; i < colors.Count(); i++)
+                {
+                    //red (5 bits),green (5 bits),blue (5 bits),Alpha (1bit)
+                    tmpR = (byte)Math.Floor((double)colors[i].R/8);
+                    tmpG = (byte)Math.Floor((double)colors[i].G/8);
+                    tmpG2 =(byte)Math.Floor((double)colors[i].G/8);
+                    tmpB = (byte)Math.Floor((double)colors[i].B/8);
+                    tmpA = (byte)Math.Floor((double)colors[i].A/255);
+                    
+
+                    //set first byte (5 red, 3 green)
+                    res1 =  tmpR;
+                    res1 <<= 3;
+                    tmpG >>= 2;
+                    res1 += tmpG;
+
+                    //set second byte (2 green, 5 blue, 1 alpha)
+                    res2 = tmpG2;
+                    res2 <<= 6;
+                    tmpB <<= 1;
+                    res2 += tmpB;
+                    res2 += tmpA;
+                    
+                    palette[i * 2] = (byte)res1;
+                    palette[i * 2 + 1] = (byte)res2;
+                }
+
+                int index = 0;
+                // write data with palette information
+                for (int i = 0; i < texture.Length; i += 4)
+                {
+                    finalArray[index] = GetIndexFromPalette(colors, Color.FromArgb(texture[i + 3], texture[i], texture[i + 1], texture[i + 2]));
+                    index++;
+                }
+            }
+            else
+            { 
+                palette = new byte[colors.Count * 4];
+                for (int i = 0; i < colors.Count(); i++)
+                {
+                    palette[i * 4] = colors[i].R;
+                    palette[i * 4 + 1] = colors[i].G;
+                    palette[i * 4 + 2] = colors[i].B;
+                    palette[i * 4 + 3] = colors[i].A;
+                }
+
+                int index = 0;
+                // write data with palette information
+                for (int i = 0; i < texture.Length; i += 4)
+                {
+                    finalArray[index] = GetIndexFromPalette(colors, Color.FromArgb(texture[i + 3], texture[i], texture[i + 1], texture[i + 2]));
+                    index++;
+                }
             }
 
-            int index = 0;
-            // write data with palette information
-            for (int i = 0; i < texture.Length; i += 4)
-            {
-                finalArray[index] = GetIndexFromPalette(colors, Color.FromArgb(texture[i + 3], texture[i], texture[i + 1], texture[i + 2]));
-                index++;
-            }
+            
             return (palette, finalArray);
         }
         private static byte[] ConvertRGBAtoTrueColor16Bits(byte[] texture)
@@ -238,7 +284,6 @@ namespace N64PPLEditorC
                 //convert palette to 32bpp
                 palette32bitColor = new byte[palette.Length * 2];
                 byte tmpR, tmpG, tmpG2, tmpB, tmpA;
-                byte tmpG3;
                 int R, G, B, A;
 
                 for (int i = 0; i < palette.Length; i += 2)

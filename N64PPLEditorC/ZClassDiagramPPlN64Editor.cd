@@ -11,13 +11,13 @@
     </NestedTypes>
     <AssociationLine Name="hvqmList" Type="N64PPLEditorC.CHVQM" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="6.75" Y="2.991" />
-        <Point X="5.75" Y="2.991" />
+        <Point X="6.75" Y="2.999" />
+        <Point X="5.75" Y="2.999" />
         <Point X="5.75" Y="2.191" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>iABBAkACAAAAEAAAAAAAAlCAQCAAIAAAAAASAAAJAAE=</HashCode>
+      <HashCode>jABBAkACAAAAEAABAAAAAlCAQCAAIAAAAAASAAAJAAE=</HashCode>
       <FileName>ManagementListRessources\CRessourceList.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -36,7 +36,7 @@
   <Class Name="N64PPLEditorC.CSBF1">
     <Position X="9" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAAABAAAAAAAAAAAAAIAAAAAAAAAAACAQAAQAAIAE=</HashCode>
+      <HashCode>AAFAAABAAAAAAAAAAAAAIAAAAAAAAAAACAQIAQAAIAE=</HashCode>
       <FileName>ManagementListRessources\SBF1\CSBF1.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -85,7 +85,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>BAAAIABARAACAGiAAAIAEAg4AAAAAIAgBBgAAgAAIAA=</HashCode>
+      <HashCode>BAAAIABARAACAGiAAAIAEAg4AAAAAIAgBBgAEgAAIAA=</HashCode>
       <FileName>ManagementListRessources\SBF1\CSBF1Scene.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -111,7 +111,7 @@
   <Class Name="N64PPLEditorC.CSBF1TextureManagement">
     <Position X="14.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAAAACAQgAAAAAAAAAsAAAAAAgAwEAAIAA=</HashCode>
+      <HashCode>AAAAAAiAAAAAAACAQgAAAAAAAAAMAAAAAAgAwAAAIAA=</HashCode>
       <FileName>ManagementListRessources\SBF1\CSBF1TextureManagement.cs</FileName>
     </TypeIdentifier>
   </Class>

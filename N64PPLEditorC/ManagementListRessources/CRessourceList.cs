@@ -95,6 +95,19 @@ namespace N64PPLEditorC
 
         }
 
+        public void Add3FIB(string name)
+        {
+            //set name and header initial data
+            byte[] byteName = CGeneric.ConvertStringToByteArray(name);
+            byte[] rawData = new byte[] { 0x33, 0x46, 0x49, 0x42, 8, 1, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0, (byte)byteName.Length, 0, 0, 0 };
+            rawData = rawData.Concat(byteName).ToArray();
+
+            //add .fib to the end, and init the 3fib.
+            C3FIB new3Fib = new C3FIB(rawData,byteName.Concat(new Byte[] { 0x2E, 0x42, 0x49, 0x46 }).ToArray());
+            new3Fib.Init();
+            fibList.Add(new3Fib);
+        }
+
         public CSBF1 GetSBF1(int index)
         {
             return sbfList[index];
@@ -112,7 +125,7 @@ namespace N64PPLEditorC
             var b = name.ToUpper().Replace("\0", "");
             for (int z = 0; z < ressourcesList.Count(); z++)
             {
-                var a = CGeneric.ConvertByteArrayToString(ressourcesList[z].ressourceName).Replace("\0","");
+                var a = CGeneric.ConvertByteArrayToString(ressourcesList[z].ressourceName).ToUpper().Replace("\0","");
                 if (a == b)
                 {
                     return increm;
@@ -187,7 +200,6 @@ namespace N64PPLEditorC
             {
                 var a = listOfressource[index].GetRawData();
                 var b = a.Length;
-                //var b = listOfressource[index].GetSize();
 
                 fs.Write(a, 0,b);
 
