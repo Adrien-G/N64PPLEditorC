@@ -82,8 +82,11 @@ On each scene (texture part) you can :
 
 ### movie part (fourth tab)
 
+please follow explanation on the specified tab. more information will be probably delivered later for best describing modification.
+
 ### Audio part (fifth tab)
 
+no explanation for now, i will write specific document, because it has few requirements and technics things. (not veryy complicated, but take huge time)
 ### Button Modify ROM part
 
 This button is for write to the rom the content that you modify.
