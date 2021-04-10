@@ -96,5 +96,5 @@ If you not modify the rom, all the changes will be lost when quit the tools.
 
 ## F.A.Q.
 
-Q : my compressed texture is weirdly displayed 
+Q : my compressed texture is weirdly displayed
 A : Please try to change the texture width and heigth by a multiple of 4 and ensure the texture width and heigth is always pair (ex. 64px, 68px, and so on)
