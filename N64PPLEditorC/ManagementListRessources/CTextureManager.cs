@@ -109,6 +109,7 @@ namespace N64PPLEditorC
                     res2 += tmpB;
                     res2 += tmpA;
                     
+
                     palette[i * 2] = (byte)res1;
                     palette[i * 2 + 1] = (byte)res2;
                 }

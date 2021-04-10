@@ -16,6 +16,8 @@ namespace N64PPLEditorC
         private Byte[] header3FIB;
         private Byte[] fibName;
         private byte fibNameSize;
+        //only for keep compression ratio
+        public Compression compressionType;
 
         public C3FIB(Byte[] rawData, Byte[] ressourceName) : base(rawData, ressourceName)
         {
@@ -40,6 +42,11 @@ namespace N64PPLEditorC
             Byte[] bffData = new byte[rawData.Length - fibNameSize - 20];
             Array.Copy(rawData, 20 + fibNameSize, bffData, 0, bffData.Length);
             MakeBFF2Chunks(bffData, bffCount);
+            
+            //keep compression information based on the first BFF2
+            if(bff2Childs.Count > 0)
+                compressionType = bff2Childs[0].GetCompressionType();
+
         }
 
         private void MakeBFF2Chunks(Byte[] bffsData, int bffCount)

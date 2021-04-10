@@ -107,9 +107,11 @@ namespace N64PPLEditorC
                                 pictureBoxTexture.Width = img.Width;
                                 pictureBoxTexture.Height = img.Height;
                                 pictureBoxTexture.Image = img;
-                                
+
                                 //test the best compression available
-                                var compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
+                                Compression compressionMethod = this.ressourceList.fibList[treeViewTextures.SelectedNode.Index].compressionType;
+                                if (!checkBoxKeepSameCompression.Checked)
+                                    compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
 
                                 //convert texture to byte array for future treatment 
                                 byte[] rawData = CTextureManager.ConvertRGBABitmapToByteArrayRGBA((Bitmap)pictureBoxTexture.Image);
@@ -274,7 +276,9 @@ namespace N64PPLEditorC
                 labelIsTextureContainer.Show();
                 pictureBoxTexture.SizeMode = PictureBoxSizeMode.AutoSize;
                 pictureBoxTexture.Hide();
+                labelTextureCompression.Text = "Compression : " + this.ressourceList.fibList[treeViewTextures.SelectedNode.Index].compressionType.ToString();
             }
+            
         }
 
         private void treeViewTextures_KeyDown(object sender, KeyEventArgs e)
@@ -453,7 +457,7 @@ namespace N64PPLEditorC
                 LoadAudioList(buffRom);
 
                 //load misc part
-                //LoadMisc(buffRom);
+                LoadMisc(buffRom);
             }
             LoadTreeView();
             UpdateFreeSpaceLeft();
@@ -658,7 +662,7 @@ namespace N64PPLEditorC
         {
             FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
             romList.WriteToRom(fs);
-            //misc.WriteToRom(fs);
+            misc.WriteToRom(fs);
             ressourceList.WriteAllData(fs);
             audioList.WriteAllData(fs);
             fillNullData(fs);
@@ -1332,13 +1336,9 @@ namespace N64PPLEditorC
                 int indexTextureSbf = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).getTextureIndex();
                 comboBoxSceneChangeTexture.SelectedIndex = indexTextureSbf;
                
-
-
                 numericUpDownSceneTexturePosX.Enabled = true;
                 numericUpDownSceneTexturePosY.Enabled = true;
             }
-            
-
         }
 
         private void buttonScenesTextureAdd_Click(object sender, EventArgs e)
@@ -1549,6 +1549,32 @@ namespace N64PPLEditorC
             DialogResult dialogResult = form.ShowDialog();
             value = textBox.Text;
             return dialogResult;
+        }
+
+        private void buttonConvertOldAVI_Click(object sender, EventArgs e)
+        {
+            if(!File.Exists(CGeneric.pathOtherContent + "hvqm2enc.exe"))
+            {
+                MessageBox.Show("Unable to find hvq2enc.exe, please move it in this folder : " + CGeneric.pathOtherContent, "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            using (OpenFileDialog openRomFile = new OpenFileDialog())
+            {
+                openRomFile.Filter = "avi file (*.avi)|*.avi";
+                openRomFile.FilterIndex = 1;
+                openRomFile.RestoreDirectory = true;
+
+                if (openRomFile.ShowDialog() == DialogResult.OK)
+                     Process.Start("cmd.exe","/c start " + CGeneric.pathOtherContent + "hvqm2enc.exe " + openRomFile.FileName + " " + CGeneric.pathOtherContent + "converted.hvqm");
+                                  
+            }
+            
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Process.Start(CGeneric.pathOtherContent);
         }
     }
 }

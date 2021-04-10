@@ -55,6 +55,8 @@
             this.labelIsTextureContainer = new System.Windows.Forms.Label();
             this.pictureBoxTexture = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.labelTextureCompression = new System.Windows.Forms.Label();
+            this.checkBoxKeepSameCompression = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDownTextureDisplayTime = new System.Windows.Forms.NumericUpDown();
             this.buttonExtractAllTextures = new System.Windows.Forms.Button();
@@ -109,7 +111,6 @@
             this.label18 = new System.Windows.Forms.Label();
             this.numericUpDownSceneTexturePosY = new System.Windows.Forms.NumericUpDown();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.contextMenuStripScenesTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItemSaveSBF = new System.Windows.Forms.ToolStripMenuItem();
@@ -120,7 +121,7 @@
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.buttonConvertOldAVI = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.buttonHvqmPathOpen = new System.Windows.Forms.Button();
@@ -164,6 +165,10 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.labelExtendedRom = new System.Windows.Forms.Label();
             this.comboBoxRessourcesISO = new System.Windows.Forms.ComboBox();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
+            this.label19 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -450,14 +455,35 @@
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.labelTextureCompression);
+            this.groupBox2.Controls.Add(this.checkBoxKeepSameCompression);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.numericUpDownTextureDisplayTime);
             this.groupBox2.Location = new System.Drawing.Point(411, 279);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(205, 46);
+            this.groupBox2.Size = new System.Drawing.Size(205, 95);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Texture option";
+            // 
+            // labelTextureCompression
+            // 
+            this.labelTextureCompression.AutoSize = true;
+            this.labelTextureCompression.Location = new System.Drawing.Point(6, 70);
+            this.labelTextureCompression.Name = "labelTextureCompression";
+            this.labelTextureCompression.Size = new System.Drawing.Size(76, 13);
+            this.labelTextureCompression.TabIndex = 12;
+            this.labelTextureCompression.Text = "Compression : ";
+            // 
+            // checkBoxKeepSameCompression
+            // 
+            this.checkBoxKeepSameCompression.AutoSize = true;
+            this.checkBoxKeepSameCompression.Location = new System.Drawing.Point(9, 50);
+            this.checkBoxKeepSameCompression.Name = "checkBoxKeepSameCompression";
+            this.checkBoxKeepSameCompression.Size = new System.Drawing.Size(142, 17);
+            this.checkBoxKeepSameCompression.TabIndex = 15;
+            this.checkBoxKeepSameCompression.Text = "Keep same Compression";
+            this.checkBoxKeepSameCompression.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -1091,13 +1117,6 @@
             this.groupBoxTextureSBF.TabStop = false;
             this.groupBoxTextureSBF.Text = "Scene Editor";
             // 
-            // drawScene1
-            // 
-            this.drawScene1.Location = new System.Drawing.Point(12, 16);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(320, 240);
-            this.drawScene1.TabIndex = 0;
-            // 
             // treeViewSBF
             // 
             this.treeViewSBF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1165,7 +1184,7 @@
             this.groupBox5.Controls.Add(this.groupBox6);
             this.groupBox5.Location = new System.Drawing.Point(272, 47);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(342, 379);
+            this.groupBox5.Size = new System.Drawing.Size(342, 424);
             this.groupBox5.TabIndex = 11;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Easy steps for converting AVI to HVQM video";
@@ -1174,9 +1193,9 @@
             // 
             this.groupBox8.Controls.Add(this.label5);
             this.groupBox8.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.groupBox8.Location = new System.Drawing.Point(6, 287);
+            this.groupBox8.Location = new System.Drawing.Point(6, 315);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(333, 83);
+            this.groupBox8.Size = new System.Drawing.Size(333, 101);
             this.groupBox8.TabIndex = 8;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Optimal Settings (Best compression)";
@@ -1187,31 +1206,34 @@
             this.label5.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label5.Location = new System.Drawing.Point(6, 20);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(332, 52);
+            this.label5.Size = new System.Drawing.Size(332, 65);
             this.label5.TabIndex = 6;
             this.label5.Text = resources.GetString("label5.Text");
             // 
             // groupBox7
             // 
             this.groupBox7.Controls.Add(this.button3);
+            this.groupBox7.Controls.Add(this.label19);
+            this.groupBox7.Controls.Add(this.buttonConvertOldAVI);
             this.groupBox7.Controls.Add(this.label6);
             this.groupBox7.ForeColor = System.Drawing.SystemColors.Highlight;
             this.groupBox7.Location = new System.Drawing.Point(6, 135);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(333, 146);
+            this.groupBox7.Size = new System.Drawing.Size(333, 174);
             this.groupBox7.TabIndex = 7;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Step 2 : Convert your video to Good Avi Format";
             // 
-            // button3
+            // buttonConvertOldAVI
             // 
-            this.button3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button3.Location = new System.Drawing.Point(111, 93);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(104, 42);
-            this.button3.TabIndex = 9;
-            this.button3.Text = "Convert Old AVI format to HVQM";
-            this.button3.UseVisualStyleBackColor = true;
+            this.buttonConvertOldAVI.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.buttonConvertOldAVI.Location = new System.Drawing.Point(111, 93);
+            this.buttonConvertOldAVI.Name = "buttonConvertOldAVI";
+            this.buttonConvertOldAVI.Size = new System.Drawing.Size(104, 42);
+            this.buttonConvertOldAVI.TabIndex = 9;
+            this.buttonConvertOldAVI.Text = "Convert Old AVI format to HVQM";
+            this.buttonConvertOldAVI.UseVisualStyleBackColor = true;
+            this.buttonConvertOldAVI.Click += new System.EventHandler(this.buttonConvertOldAVI_Click);
             // 
             // label6
             // 
@@ -1238,7 +1260,7 @@
             // buttonHvqmPathOpen
             // 
             this.buttonHvqmPathOpen.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonHvqmPathOpen.Location = new System.Drawing.Point(189, 82);
+            this.buttonHvqmPathOpen.Location = new System.Drawing.Point(198, 81);
             this.buttonHvqmPathOpen.Name = "buttonHvqmPathOpen";
             this.buttonHvqmPathOpen.Size = new System.Drawing.Size(62, 23);
             this.buttonHvqmPathOpen.TabIndex = 5;
@@ -1628,6 +1650,40 @@
             this.comboBoxRessourcesISO.Visible = false;
             this.comboBoxRessourcesISO.SelectedIndexChanged += new System.EventHandler(this.comboBoxRessourcesISO_SelectedIndexChanged);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(190, 26);
+            this.toolStripMenuItem1.Text = "toolStripMenuItem1";
+            // 
+            // drawScene1
+            // 
+            this.drawScene1.Location = new System.Drawing.Point(12, 16);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(320, 240);
+            this.drawScene1.TabIndex = 0;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label19.Location = new System.Drawing.Point(6, 138);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(218, 26);
+            this.label19.TabIndex = 10;
+            this.label19.Text = "- When finished, the file will be placed here : \r\n- And named \"converted.hvqm\"";
+            // 
+            // button3
+            // 
+            this.button3.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button3.Location = new System.Drawing.Point(220, 133);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(69, 23);
+            this.button3.TabIndex = 6;
+            this.button3.Text = "converted";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1757,7 +1813,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button buttonHVQMExtract;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button buttonConvertOldAVI;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.GroupBox groupBox6;
@@ -1842,6 +1898,11 @@
         private System.Windows.Forms.ComboBox comboBoxRessourcesISO;
         private System.Windows.Forms.ToolStripMenuItem CreateNewContainertoolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.CheckBox checkBoxKeepSameCompression;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.Label labelTextureCompression;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label19;
     }
 }
 

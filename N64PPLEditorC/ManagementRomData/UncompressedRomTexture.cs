@@ -106,11 +106,6 @@ namespace N64PPLEditorC
             AddTexture(0x957CAC, 104, 16, 32, "essayer encore");
             AddTexture(0x95984C, 104, 98, 32, "oui non multiples…");
             AddTexture(0x9635F0, 104, 18, 32, "appuyez sur un bouton!");
-
-            //AddTexture(0x0F9D90, 64, 24, 32, "prêt J1 ? (bleu)");
-            //AddTexture(0x0FB590, 24, 72, 32, "1 2 3 (bleu)");
-            //AddTexture(0x0FD090, 64, 24, 32, "prêt J2 ? (rouge)");
-            //AddTexture(0x0FE890, 24, 72, 32, "1 2 3 (rouge)");
         }
             private void InitGraphicsFr()
         {
@@ -122,7 +117,7 @@ namespace N64PPLEditorC
             AddTexture(0x9A1150, 104, 17, 32, "5 - essayer encore");
             AddTexture(0x9A31D0, 104, 94, 32, "6 - oui non multiples…");
             AddTexture(0x9ACDD0, 104, 16, 32, "7 - appuyez sur un bouton!");
-            AddTexture(0x937CD0, 64 , 23, 32, "8 - PAUSE");
+            AddTexture(0x937CD0, 64, 23, 32, "8 - PAUSE");
             AddTexture(0x93CC50, 104, 88, 32, "9 - stage fini (cœur)");
             AddTexture(0x945B4C, 104, 97, 32, "10 - manche finie (etoile)");
             AddTexture(0x97C850, 104, 88, 32, "11 - stage fini (cœur)");
@@ -131,16 +126,16 @@ namespace N64PPLEditorC
             AddTexture(0x96154C, 104, 16, 32, "14 - essayer encore");
             AddTexture(0x9630EC, 104, 98, 32, "15 - oui non multiples…");
             AddTexture(0x96CE90, 104, 18, 32, "16 - appuyez sur un bouton!");
-            AddTexture(0x0F9D90, 64 , 24, 32, "17 - prêt J1 (bleu)");
-            AddTexture(0x0FB590, 24 , 72, 32, "18 - 1 2 3 (bleu)");
-            AddTexture(0x0FD090, 64 , 24, 32, "19 - prêt J2 (rouge)");
-            AddTexture(0x0FE890, 24 , 72, 32, "20 - 1 2 3 (rouge)");
+            AddTexture(0x0F9D90, 64, 24, 32, "17 - prêt J1 (bleu)");
+            AddTexture(0x0FB590, 24, 72, 32, "18 - 1 2 3 (bleu)");
+            AddTexture(0x0FD090, 64, 24, 32, "19 - prêt J2 (rouge)");
+            AddTexture(0x0FE890, 24, 72, 32, "20 - 1 2 3 (rouge)");
 
             //16bpp textures
-            AddTexture(0x0F8690, 64 , 23 , 16, "21 - Curseur Gros");
-            AddTexture(0x0F9290, 64 , 23 , 16, "22 - Curseur Petit");
+            AddTexture(0x0F8690, 64, 23, 16, "21 - Curseur Gros");
+            AddTexture(0x0F9290, 64, 23, 16, "22 - Curseur Petit");
             AddTexture(0x100390, 320, 232, 16, "23 - continue screen (try again)");
-            AddTexture(0x124790, 64 , 60 , 16, "24 - continue screen (tête de sacha)");
+            AddTexture(0x124790, 64, 60, 16, "24 - continue screen (tête de sacha)");
             AddTexture(0x183900, 320, 232, 16, "25 - stade 1");
             AddTexture(0x1A7D00, 320, 232, 16, "26 - stade 2");
             AddTexture(0x1CC100, 320, 232, 16, "27 - Team rocket bateau");
@@ -167,43 +162,43 @@ namespace N64PPLEditorC
             AddTexture(0x4C5500, 320, 232, 16, "48 - arène avec terre nuit");
             AddTexture(0x4E9900, 320, 232, 16, "49 - arène avec terre aube");
             AddTexture(0x50DD00, 320, 232, 16, "50 - arène finale mewtwo");
-            AddTexture(0x536300, 64 , 96 , 16, "51 - bloc jaunes multiplicateur de combo");
-            AddTexture(0x53D500, 64 , 96 , 16, "52 - bloc rouge multiplicateur de combo");
-            AddTexture(0x544700, 64 , 96 , 16, "53 - bloc gris multiplicateur de combo");
-            AddTexture(0x54B900, 64 , 96 , 16, "54 - bloc violet multiplicateur de combo");
-            AddTexture(0x552B00, 64 , 96 , 16, "55 - bloc orange multiplicateur de combo");
-            AddTexture(0x559D00, 64 , 96 , 16, "56 - bloc vert multiplicateur de combo");
-            AddTexture(0x560F00, 64 , 96 , 16, "57 - bloc rose multiplicateur de combo");
-            AddTexture(0x568100, 64 , 96 , 16, "58 - bloc bleu moyen clair multiplicateur de combo");
-            AddTexture(0x56F300, 64 , 96 , 16, "59 - bloc bleu clair multiplicateur de combo");
-            AddTexture(0x576500, 64 , 96 , 16, "60 - bloc bleu foncé multiplicateur de combo");
-            AddTexture(0x57D700, 64 , 96 , 16, "61 - bloc rose foncé multiplicateur de combo");
+            AddTexture(0x536300, 64, 96, 16, "51 - bloc jaunes multiplicateur de combo");
+            AddTexture(0x53D500, 64, 96, 16, "52 - bloc rouge multiplicateur de combo");
+            AddTexture(0x544700, 64, 96, 16, "53 - bloc gris multiplicateur de combo");
+            AddTexture(0x54B900, 64, 96, 16, "54 - bloc violet multiplicateur de combo");
+            AddTexture(0x552B00, 64, 96, 16, "55 - bloc orange multiplicateur de combo");
+            AddTexture(0x559D00, 64, 96, 16, "56 - bloc vert multiplicateur de combo");
+            AddTexture(0x560F00, 64, 96, 16, "57 - bloc rose multiplicateur de combo");
+            AddTexture(0x568100, 64, 96, 16, "58 - bloc bleu moyen clair multiplicateur de combo");
+            AddTexture(0x56F300, 64, 96, 16, "59 - bloc bleu clair multiplicateur de combo");
+            AddTexture(0x576500, 64, 96, 16, "60 - bloc bleu foncé multiplicateur de combo");
+            AddTexture(0x57D700, 64, 96, 16, "61 - bloc rose foncé multiplicateur de combo");
             AddTexture(0x580718, 112, 155, 16, "62 - stade, ondine");
-            AddTexture(0x588EB8, 88 , 72 , 16, "63 - stade, pikachu et togepi");
+            AddTexture(0x588EB8, 88, 72, 16, "63 - stade, pikachu et togepi");
             AddTexture(0x58C058, 112, 167, 16, "64 - stade, prof chen, madame et richie");
-            AddTexture(0x595338, 96 , 71 , 16, "65 - stade, pikachu et marill");
+            AddTexture(0x595338, 96, 71, 16, "65 - stade, pikachu et marill");
             AddTexture(0x598898, 128, 184, 16, "66 - bateau, team rocket");
-            AddTexture(0x5A4098, 80 , 84 , 16, "67 - bateau, miaouss");
+            AddTexture(0x5A4098, 80, 84, 16, "67 - bateau, miaouss");
             AddTexture(0x5A7538, 128, 156, 16, "68 - ville, team rocket");
-            AddTexture(0x5B1138, 96 , 84 , 16, "69 - ville, miaouss");
+            AddTexture(0x5B1138, 96, 84, 16, "69 - ville, miaouss");
             AddTexture(0x5B5058, 128, 184, 16, "70 - eau, team rocket");
-            AddTexture(0x5C0858, 96 , 90 , 16, "71 - eau, miaouss");
+            AddTexture(0x5C0858, 96, 90, 16, "71 - eau, miaouss");
             AddTexture(0x5C4BF8, 128, 156, 16, "72 - mariage, team rocket");
-            AddTexture(0x5CE7F8, 112, 84 , 16, "73 - mariage, miaouss");
+            AddTexture(0x5CE7F8, 112, 84, 16, "73 - mariage, miaouss");
             AddTexture(0x5D3298, 128, 185, 16, "74 - ninja, team rocket");
-            AddTexture(0x5DEB98, 128, 98 , 16, "75 - ninja, miaouss");
+            AddTexture(0x5DEB98, 128, 98, 16, "75 - ninja, miaouss");
             AddTexture(0x5E4DB8, 112, 173, 16, "76 - etoile, team rocket");
-            AddTexture(0x5EE518, 80 , 84 , 16, "77 - etoile, miaouss");
+            AddTexture(0x5EE518, 80, 84, 16, "77 - etoile, miaouss");
             AddTexture(0x5F19B8, 112, 162, 16, "78 - labo, team rocket 2");
-            AddTexture(0x5FA778, 80 , 86 , 16, "79 - labo, soporifik");
+            AddTexture(0x5FA778, 80, 86, 16, "79 - labo, soporifik");
             AddTexture(0x5FDD58, 144, 113, 16, "80 - labo, giovanni rire");
-            AddTexture(0x605B58, 96 , 98 , 16, "81 - labo, persian");
-            AddTexture(0x60A4F8, 96 , 135, 16, "82 - bibliothèque, richie");
-            AddTexture(0x610A38, 80 , 77 , 16, "83 - bibliothèque, pikachu");
-            AddTexture(0x613A78, 64 , 170, 16, "84 - bibliothèque, olga");
-            AddTexture(0x618F78, 96 , 72 , 16, "85 - bibliothèque, tetarte");
+            AddTexture(0x605B58, 96, 98, 16, "81 - labo, persian");
+            AddTexture(0x60A4F8, 96, 135, 16, "82 - bibliothèque, richie");
+            AddTexture(0x610A38, 80, 77, 16, "83 - bibliothèque, pikachu");
+            AddTexture(0x613A78, 64, 170, 16, "84 - bibliothèque, olga");
+            AddTexture(0x618F78, 96, 72, 16, "85 - bibliothèque, tetarte");
             AddTexture(0x61C598, 128, 169, 16, "86 - bibliothèque, pierre");
-            AddTexture(0x626E98, 64 , 75 , 16, "87 - bibliothèque, goupix");
+            AddTexture(0x626E98, 64, 75, 16, "87 - bibliothèque, goupix");
             AddTexture(0x629420, 112, 387, 16, "88 - fond ingame J1 1 - sacha");
             AddTexture(0x63E6C0, 112, 381, 16, "89 - fond ingame J1 2 - Regis");
             AddTexture(0x653420, 112, 390, 16, "90 - fond ingame J1 3 - Pierre");
@@ -242,7 +237,9 @@ namespace N64PPLEditorC
             //8bpp textures
             AddTexture(0xCA218, 64, 448, 8, "122 - Bloc pokemon", 0xC8FA0, 0x200);
             AddTexture(0xD1217, 64, 320, 8, "123 - Bloc basic", 0xC93D0, 0x200);
-            AddTexture(0xE226F, 64, 320, 8, "124 - Bloc basic", 0xE2058, 0x200);
+            //wrong size at the end, but share the same palette..
+            AddTexture(0xE226F, 64, 373, 8, "124 - Bloc basic", 0xE2058, 0x200);
+            //to modify, because same palette (so when modify texture it can influate on other palette..
             AddTexture(0xE8340, 64, 192, 8, "125 - numeros…", 0xE8128, 0x200);
             AddTexture(0xEB440, 64, 26, 8, "126 - texte reac. Combos", 0xE8128, 0x200);
             AddTexture(0xEBCF9, 64, 28, 8, "127 - texte fini", 0xE8128, 0x200);
@@ -270,11 +267,11 @@ namespace N64PPLEditorC
             AddTexture(0x572300, 64, 256, 8, "149 - bloc bleu foncé combo dans ta gueule", 0x576300, 0x200);
             AddTexture(0x579500, 64, 256, 8, "150 - bloc rose foncé combo dans ta gueule", 0x57D500, 0x200);
             AddTexture(0x91609E, 96, 200, 8, "151 - rondoudou STOP!", 0x91ABA0, 0x200);
-            AddTexture(0x91AD40, 64, 138, 8, "152 - rondoudou boite de dialogue", 0x91CFC0, 0x200);
-            AddTexture(0x91D110, 128, 442,8, "153 - ouverture en début de match 2D", 0x92AE10, 0x200);
-            AddTexture(0x92AF30, 128, 392,8, "154 - ouverture en début de match 3D", 0x937330, 0x200);
+            AddTexture(0x91AD40, 64, 138, 8, "152 - rondoudou boite de dialogue", 0x91CFC0, 0x150);// beware
+            AddTexture(0x91D110, 128, 442, 8, "153 - ouverture en début de match 2D", 0x92AE10, 0x120); //beware
+            AddTexture(0x92AF30, 128, 392, 8, "154 - ouverture en début de match 3D", 0x937330, 0x200);
             AddTexture(0x937530, 128, 15, 8, "155 - texte statistik", 0x937CB0, 0x200);
-            AddTexture(0x9394D0, 128, 107,8, "156 - continuer; ret. Selection; continuer; recommencer; ret.selection", 0x93CA50, 0x200);
+            AddTexture(0x9394D0, 128, 107, 8, "156 - continuer; ret. Selection; continuer; recommencer; ret.selection", 0x93CA50, 0x200);
         }
 
         public int GetGraphicsCount()

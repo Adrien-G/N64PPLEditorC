@@ -120,12 +120,10 @@
   <metadata name="contextMenuStripTextureTreeview.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>252, 19</value>
   </metadata>
-  <metadata name="contextMenuStripScenesTreeView.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>927, 23</value>
-  </metadata>
   <data name="label5.Text" xml:space="preserve">
     <value>- reduce the number of FPS of your video (10 is the best compromise)
 - Do not exceed 1500 Frames
+- The max size of the video is 320x240
 - The compression is best when it's animated movie 
     (and when few things are animated between frames)</value>
   </data>
@@ -136,13 +134,16 @@
 - Export movie to old AVI Format ("File -&gt; Save Old Format AVI...")
 - Click on "convert old AVI to HVQM" below</value>
   </data>
+  <metadata name="contextMenuStripScenesTreeView.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>927, 23</value>
+  </metadata>
   <data name="label3.Text" xml:space="preserve">
     <value>- Download VirtualDub
 - Download the official N64 developper SDK
      \-&gt; extract the executable hvq2enc.exe 
             (in nintendo\n64kit\HVQ\HVQ\hvq2enc) 
 
-- Move hvq2enc.exe in this directory : </value>
+- Move hvqm2enc.exe in this directory : </value>
   </data>
   <metadata name="contextMenuStripAudioTreeview.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>610, 19</value>

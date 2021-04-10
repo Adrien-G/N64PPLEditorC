@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static N64PPLEditorC.CGeneric;
 
 namespace N64PPLEditorC
 { 
@@ -222,6 +223,11 @@ namespace N64PPLEditorC
         public Byte[] GetRawData()
         {
             return rawData;
+        }
+
+        public Compression GetCompressionType()
+        {
+            return (Compression)headerBFF2.textureType;
         }
 
         public void DecompressTexture()
