@@ -241,7 +241,7 @@ namespace N64PPLEditorC
             if (headerBFF2.isCompressedTexture)
                 decompressedTex = CTextureDecompress.DecompressTexture(headerBFF2);
             else
-                decompressedTex = compressedTex;
+                decompressedTex = headerBFF2.dataCompressed;
 
             //convert all textures to 32 bit RGBA for display to user.
             decompressedTex = CTextureManager.ConvertByteArrayToRGBA(decompressedTex,(CGeneric.Compression)headerBFF2.textureType,headerBFF2.palette);
