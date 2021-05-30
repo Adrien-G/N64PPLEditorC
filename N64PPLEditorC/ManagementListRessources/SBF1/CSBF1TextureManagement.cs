@@ -105,7 +105,7 @@ namespace N64PPLEditorC
                 case 0x00000001: return 0x1C;
                 case 0x00000502: return 0x20;
                 case 0x00000202: return 0x1C;
-
+                case 0x00000020: return 0x18;
 
             }
             throw new NotImplementedException();

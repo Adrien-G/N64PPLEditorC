@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using static N64PPLEditorC.CGeneric;
 using N64PPLEditorC.ManagementAudio;
-using N64PPLEditorC.ManagementRomData;
 
 namespace N64PPLEditorC
 {
@@ -22,10 +21,12 @@ namespace N64PPLEditorC
         CRessourceList ressourceList;
         UncompressedRomTexture romList;
         AudioList audioList;
-        AssemblyReversedAddress misc;
         int freeSpaceLeft = 0;
         bool extendedRom = false;
         bool N64Game = true;
+
+        //store iso data, avoir reading all when changing ressources...
+        byte[] isoRawData;
 
 
         List<TextBox> txtBox = new List<TextBox>();
@@ -445,6 +446,8 @@ namespace N64PPLEditorC
             //grab rom langage
             RomLangAddress.romLang = (CGeneric.romLang)buffRom[0x3E];
             }
+            else
+                isoRawData = buffRom;
             //load graphics compressed / hvqm and sbf
             LoadRessourcesList(buffRom);
 
@@ -457,7 +460,7 @@ namespace N64PPLEditorC
                 LoadAudioList(buffRom);
 
                 //load misc part
-                LoadMisc(buffRom);
+                //LoadMisc(buffRom);
             }
             LoadTreeView();
             UpdateFreeSpaceLeft();
@@ -473,13 +476,6 @@ namespace N64PPLEditorC
                 MessageBox.Show("Error opening rom..." + Environment.NewLine + "details : " + ex.Message, "PPL Rom management error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 #endif
-        }
-
-        private void LoadMisc(byte[] buffRom)
-        {
-            this.misc = new AssemblyReversedAddress(buffRom);
-            this.MiscTrackBarDifficultyLevel.Value = misc.GetDifficultyLevel();
-
         }
 
 
@@ -528,7 +524,14 @@ namespace N64PPLEditorC
                     treeViewTexturesUncompressed.Nodes.Add(this.romList.GetGraphicsName(romGraphics));
 
                 for (int audioSoundbank = 0; audioSoundbank < this.audioList?.soundBankList.Count(); audioSoundbank++)
-                    treeViewAudio.Nodes.Add("Soundbank " + Convert.ToString(audioSoundbank, 16).ToUpper());
+                {
+                    treeViewAudio.Nodes.Add("Soundbank " + Convert.ToString(audioSoundbank, 10).ToUpper());
+                    for (int j = 0; j < this.audioList?.soundBankList[audioSoundbank].songList?.Count; j++)
+                    {
+                        treeViewAudio.Nodes[audioSoundbank].Nodes.Add("Song " + (j+1));
+                    }
+                }
+                    
             }
             CheckIfTreeViewEmpty(treeViewTextures);
             CheckIfTreeViewEmpty(treeViewTexturesUncompressed);
@@ -638,6 +641,8 @@ namespace N64PPLEditorC
             if (freeSpaceLeft > 0)
             {
                 WriteToRom();
+                if (checkBoxLaunchEverdrive.Checked)
+                    launchOnEverdrive();
             }
             else
             {
@@ -653,16 +658,49 @@ namespace N64PPLEditorC
                         extendedRom = true;
                         labelExtendedRom.Visible = true;
                         WriteToRom();
+                        if (checkBoxLaunchEverdrive.Checked)
+                            launchOnEverdrive();
                     }
                 }
             }
+        }
+
+        private void launchOnEverdrive()
+        {
+            //copy the file to output repertory (mandatory because usb64 doesn't seems support filepath)
+            var fileIn = File.ReadAllBytes(textBoxPPLLocation.Text);
+            File.WriteAllBytes(CGeneric.pathOtherContent + "out.z64", fileIn);
+
+            Process p = new Process();
+            ProcessStartInfo info = new ProcessStartInfo();
+            info.FileName = "cmd.exe";
+            info.RedirectStandardInput = true;
+            info.RedirectStandardOutput = true;
+            info.UseShellExecute = false;
+            p.StartInfo = info;
+            p.Start();
+
+            using (StreamWriter sw = p.StandardInput)
+            {
+                if (sw.BaseStream.CanWrite)
+                {
+                    sw.WriteLine("cd "+ CGeneric.pathOtherContent);
+                    sw.WriteLine("usb64.exe -rom=out.z64 -start");
+                }
+            }
+
+
+
+
+
+
         }
 
         private void WriteToRom()
         {
             FileStream fs = new FileStream(textBoxPPLLocation.Text, FileMode.Open, FileAccess.ReadWrite);
             romList.WriteToRom(fs);
-            misc.WriteToRom(fs);
+            //misc.WriteToRom(fs);
             ressourceList.WriteAllData(fs);
             audioList.WriteAllData(fs);
             fillNullData(fs);
@@ -862,33 +900,6 @@ namespace N64PPLEditorC
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            textBox1.Clear();
-            Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
-            List<string> list = new List<string>();
-
-            int val1 = Convert.ToInt32(textBox2.Text, 16);
-            int val2 = Convert.ToInt32(textBox3.Text, 16);
-
-            for (int i = 0; i < 10208296; i += 4)
-            {
-                int value = BitConverter.ToInt32(new[] { buffRom[i + 3], buffRom[i + 2], buffRom[i + 1], buffRom[i] }, 0);
-                if (value >= val1 && value <= val2)
-                {
-                    if (value % 4 == 0)
-                        list.Add(Convert.ToString(i, 16));
-                }
-            }
-            foreach (string str in list)
-            {
-                textBox1.AppendText(str);
-                textBox1.AppendText(Environment.NewLine);
-            }
-
-        }
-
-
         private void buttonHvqmPathOpen_Click(object sender, EventArgs e)
         {
             Process.Start(CGeneric.pathOtherContent);
@@ -1003,33 +1014,34 @@ namespace N64PPLEditorC
         private void button4_Click(object sender, EventArgs e)
         {
 #if DEBUG
-            int sbfIndex = 0;
-            foreach (CSBF1 sbf in ressourceList.sbfList)
-            {
+            launchOnEverdrive();
+            //int sbfIndex = 0;
+            //foreach (CSBF1 sbf in ressourceList.sbfList)
+            //{
 
-                foreach (CSBF1Scene scene in sbf.scenesList)
-                {
+            //    foreach (CSBF1Scene scene in sbf.scenesList)
+            //    {
 
-                    //foreach (CSBF1TextureManagement txt in scene.textureManagementObjectList)
-                    //{
-                    //    textBox1.AppendText(sbfIndex.ToString());
-                    //    textBox1.AppendText("[" + scene.GetSceneName() + "[");
-                    //    //textBox1.AppendText(txt. + "[");
-                    //    textBox1.AppendText(BitConverter.ToString(txt.GetRawData()).Replace("-", " "));
+            //        foreach (CSBF1TextureManagement texture in scene.textureManagementObjectList)
+            //        {
+            //            textBox1.AppendText(texture.ToString());
+            //            textBox1.AppendText("[" + scene.GetSceneName() + "[");
+            //            //textBox1.AppendText(txt. + "[");
+            //            textBox1.AppendText(BitConverter.ToString(txt.GetRawData()).Replace("-", " "));
 
-                    //    textBox1.AppendText(Environment.NewLine);
-                    //}
-                }
-                sbfIndex++;
-            }
+            //            textBox1.AppendText(Environment.NewLine);
+            //        }
+            //    }
+            //    sbfIndex++;
+            //}
 #endif
         }
 
         private void toolStripMenuItemReplaceAudioAllSoundBank_Click(object sender, EventArgs e)
         {
-            byte[] PtrTable = ReadAudioPtrTable();
-            byte[] WaveTable = ReadAudioWaveTable();
-            byte[] SfxTable = ReadAudioSfxTable();
+            byte[] PtrTable = OpenFileAndGetBytes("ptr file (*.ptr)|*.ptr");
+            byte[] WaveTable = OpenFileAndGetBytes("wbk file (*.wbk)|*.wbk");
+            byte[] SfxTable = OpenFileAndGetBytes("sfx file (*.bfx)|*.bfx");
             int oldAllLength =
                 audioList.soundBankList[treeViewAudio.SelectedNode.Index].ptrTable.Length +
                 audioList.soundBankList[treeViewAudio.SelectedNode.Index].waveTable.Length +
@@ -1049,60 +1061,26 @@ namespace N64PPLEditorC
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private byte[] ReadAudioPtrTable()
+        private byte[] OpenFileAndGetBytes(string filter= "bin file (*.bin)|*.bin")
         {
-            byte[] PtrTable = null;
-            using (OpenFileDialog openPointerTable = new OpenFileDialog())
+            byte[] outData = null;
+            using (OpenFileDialog openFile = new OpenFileDialog())
             {
-                openPointerTable.Filter = "ptr file (*.ptr)|*.ptr";
-                openPointerTable.FilterIndex = 1;
-                openPointerTable.RestoreDirectory = true;
+                openFile.Filter = filter;
+                openFile.FilterIndex = 1;
+                openFile.RestoreDirectory = true;
 
-                if (openPointerTable.ShowDialog() == DialogResult.OK)
+                if (openFile.ShowDialog() == DialogResult.OK)
                 {
-                    PtrTable = File.ReadAllBytes(openPointerTable.FileName);
+                    outData = File.ReadAllBytes(openFile.FileName);
                 }
             }
-            return PtrTable;
-        }
-
-        private byte[] ReadAudioWaveTable()
-        {
-            byte[] waveTable = null;
-            using (OpenFileDialog openWaveTable = new OpenFileDialog())
-            {
-                openWaveTable.Filter = "wbk file (*.wbk)|*.wbk";
-                openWaveTable.FilterIndex = 1;
-                openWaveTable.RestoreDirectory = true;
-
-                if (openWaveTable.ShowDialog() == DialogResult.OK)
-                {
-                    waveTable = File.ReadAllBytes(openWaveTable.FileName);
-                }
-            }
-            return waveTable;
-        }
-
-        private byte[] ReadAudioSfxTable()
-        {
-            byte[] SfxTable = null;
-            using (OpenFileDialog openSfxTable = new OpenFileDialog())
-            {
-                openSfxTable.Filter = "sfx file (*.bfx)|*.bfx";
-                openSfxTable.FilterIndex = 1;
-                openSfxTable.RestoreDirectory = true;
-
-                if (openSfxTable.ShowDialog() == DialogResult.OK)
-                {
-                    SfxTable = File.ReadAllBytes(openSfxTable.FileName);
-                }
-            }
-            return SfxTable;
+            return outData;
         }
 
         private void toolStripMenuItemReplacePointerTable_Click(object sender, EventArgs e)
         {
-            byte[] newPtrTable = ReadAudioPtrTable();
+            byte[] newPtrTable = OpenFileAndGetBytes("ptr file (*.ptr)|*.ptr");
             int oldPtrTableLength = audioList.soundBankList[treeViewAudio.SelectedNode.Index].ptrTable.Length;
 
             if (newPtrTable != null)
@@ -1122,18 +1100,18 @@ namespace N64PPLEditorC
 
         private void toolStripMenuItemReplaceWaveTable_Click(object sender, EventArgs e)
         {
-            byte[] newWaveTable = ReadAudioWaveTable();
+            byte[] newWaveTable = OpenFileAndGetBytes("wbk file (*.wbk)|*.wbk");
             int oldWaveTableLength = audioList.soundBankList[treeViewAudio.SelectedNode.Index].waveTable.Length;
 
             if (newWaveTable != null)
             {
-                if (newWaveTable.Length <= oldWaveTableLength || (newWaveTable.Length - oldWaveTableLength) < freeSpaceLeft)
-                {
+                //if (newWaveTable.Length <= oldWaveTableLength || (newWaveTable.Length - oldWaveTableLength) < freeSpaceLeft)
+                //{
                     audioList.ReplaceWaveTable(newWaveTable, treeViewAudio.SelectedNode.Index);
                     UpdateFreeSpaceLeft();
-                }
-                else
-                    MessageBox.Show("Not enought space in the rom.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                //}
+                //else
+                //    MessageBox.Show("Not enought space in the rom.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
                 MessageBox.Show("Cancelled operation, No modification were made.", "PPL manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1141,7 +1119,7 @@ namespace N64PPLEditorC
 
         private void toolStripMenuItemReplaceSfxTable_Click(object sender, EventArgs e)
         {
-            byte[] newSfxTable = ReadAudioSfxTable();
+            byte[] newSfxTable = OpenFileAndGetBytes("sfx file (*.bfx)|*.bfx");
             int oldSfxLength = audioList.soundBankList[treeViewAudio.SelectedNode.Index].sfx.Length;
 
             if (newSfxTable != null)
@@ -1164,19 +1142,20 @@ namespace N64PPLEditorC
             toolStripMenuItemReplacePointerTable.Enabled = true;
             toolStripMenuItemReplaceSfxTable.Enabled = true;
             toolStripMenuItemReplaceWaveTable.Enabled = true;
+            toolStripMenuItemReplaceThisSong.Enabled = false;
 
-            switch (treeViewAudio.SelectedNode?.Index)
+            if (treeViewAudio.SelectedNode.Level == 1)
             {
-                case 0:
-                    toolStripMenuItemReplaceAudioAllSoundBank.Enabled = false;
-                    toolStripMenuItemReplacePointerTable.Enabled = false;
-                    toolStripMenuItemReplaceSfxTable.Enabled = false;
-                    toolStripMenuItemReplaceWaveTable.Enabled = false;
-                    break;
-                case 2:
-                    toolStripMenuItemReplaceSfxTable.Enabled = false;
-                    break;
+                toolStripMenuItemReplaceThisSong.Enabled = true;
+                toolStripMenuItemReplaceAudioAllSoundBank.Enabled = false;
+                toolStripMenuItemReplacePointerTable.Enabled = false;
+                toolStripMenuItemReplaceSfxTable.Enabled = false;
+                toolStripMenuItemReplaceWaveTable.Enabled = false;
             }
+
+            if(treeViewAudio.SelectedNode?.Index == 2)
+                toolStripMenuItemReplaceSfxTable.Enabled = false;
+
         }
 
         private void treeViewAudio_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -1188,11 +1167,6 @@ namespace N64PPLEditorC
         private void textBoxSceneText_Leave(object sender, EventArgs e)
         {
             UpdateFreeSpaceLeft();
-        }
-
-        private void numericUpDownScenePosX_Leave(object sender, EventArgs e)
-        {
-
         }
 
         private void checkBoxSceneTextScrolling_CheckedChanged(object sender, EventArgs e)
@@ -1207,25 +1181,6 @@ namespace N64PPLEditorC
             CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
             var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
             textObject.isCenteredText = checkBoxSceneCentered.Checked;
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            //textBox1.Clear();
-            //foreach(CSBF1 sceneList in ressourceList.sbfList)
-            //{
-            //    foreach (CSBF1Scene scene in sceneList.scenesList)
-            //    {
-            //        foreach(CSBF1TextObject txt in scene.textObjectList)
-            //        {
-            //            textBox1.AppendText("0x"+txt.BackColor.B.ToString("x"));
-            //            textBox1.AppendText(txt.BackColor.G.ToString("x"));
-            //            textBox1.AppendText(txt.BackColor.R.ToString("x"));
-            //            textBox1.AppendText(Environment.NewLine);
-
-            //        }
-            //    }
-            //}
         }
 
         private void buttonScenesAddText_Click(object sender, EventArgs e)
@@ -1292,20 +1247,6 @@ namespace N64PPLEditorC
             CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
             var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
             textObject.isHidden = checkBoxScenesIsHidden.Checked;
-
-        }
-
-        private void MiscTrackBarDifficultyLevel_Scroll(object sender, EventArgs e)
-        {
-            this.MisclabelDifficultyLevel.Text = this.MiscTrackBarDifficultyLevel.Value.ToString();
-            if (this.MiscTrackBarDifficultyLevel.Value == 0)
-                this.MisclabelDifficultyLevel.ForeColor = Color.Black;
-            else if (this.MiscTrackBarDifficultyLevel.Value < 0)
-                this.MisclabelDifficultyLevel.ForeColor = Color.FromArgb(255, 0, Math.Abs(this.MiscTrackBarDifficultyLevel.Value) * 35, 0);
-            else
-                this.MisclabelDifficultyLevel.ForeColor = Color.FromArgb(255, this.MiscTrackBarDifficultyLevel.Value * 35, 0,0);
-
-            misc.SetDifficulty(-this.MiscTrackBarDifficultyLevel.Value);
 
         }
 
@@ -1479,8 +1420,14 @@ namespace N64PPLEditorC
         {
             if (N64Game)
                 return;
-            Byte[] buffRom = File.ReadAllBytes(textBoxPPLLocation.Text);
-            LoadRessourcesList(buffRom);
+            try
+            {
+                LoadRessourcesList(isoRawData);
+            }
+            catch
+            {
+
+            }
 
             LoadTreeView();
             UpdateFreeSpaceLeft();
@@ -1489,7 +1436,6 @@ namespace N64PPLEditorC
             buttonLoadRom.Enabled = false;
             buttonGetRomFolder.Enabled = false;
             buttonLoadRom.Text = "ROM Loaded";
-            buffRom = new byte[0];
         }
 
         private void CreateNewContainertoolStripMenuItem_Click(object sender, EventArgs e)
@@ -1575,6 +1521,23 @@ namespace N64PPLEditorC
         private void button3_Click(object sender, EventArgs e)
         {
             Process.Start(CGeneric.pathOtherContent);
+        }
+
+        private void buttonAudioExtractAllSounds_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < audioList.soundBankList.Count; i++)
+            {
+                for (int j = 0; j < audioList.soundBankList[i].nbInstruments; j++)
+                {
+                    File.WriteAllBytes(CGeneric.pathExtractedSound + "Soundbank "+ i.ToString("D" + 2) + @"\" + j.ToString("X" + 2) + ".wav", this.audioList.soundBankList[i].soundList[j].GetWave(i, j));
+                }
+            }
+            Process.Start(CGeneric.pathExtractedSound);
+        }
+
+        private void ToolStripMenuItemReplaceThisSong_Click(object sender, EventArgs e)
+        {
+            audioList.ReplaceSong(OpenFileAndGetBytes(), treeViewAudio.SelectedNode.Parent.Index, treeViewAudio.SelectedNode.Index);
         }
     }
 }

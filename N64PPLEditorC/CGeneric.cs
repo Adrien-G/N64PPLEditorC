@@ -15,6 +15,7 @@ namespace N64PPLEditorC
         public static readonly String pathExtractedTexture = Application.StartupPath + @"\extractedTexture\";
         public static readonly String pathExtractedTexture2 = Application.StartupPath + @"\extractedTexture2\";
         public static readonly String pathOtherContent = Application.StartupPath + @"\OtherContent\";
+        public static readonly String pathExtractedSound = Application.StartupPath + @"\extractedSounds\";
 
         //size of the elements present in the table of ressources
         public static int sizeOfElementTable = 24;
@@ -31,7 +32,7 @@ namespace N64PPLEditorC
         public static readonly int romSize = 0x2000000;
         public static readonly int romSizeExtended = 0x4000000;
 
-        //just for test the GC iso
+        //just for read the GC iso
         public static readonly int IsoPart1 = 0x2650D58;
         public static readonly int IsoPart2 = 0x26554F8;
         public static readonly int IsoPart3 = 0x7E402C4;
@@ -39,7 +40,6 @@ namespace N64PPLEditorC
         public static readonly int IsoPart5 = 0x7ECAFE4;
         public static readonly int IsoPart6 = 0x824661C;
         public static readonly int IsoPart7 = 0x894C3F8;
-
         public static readonly int IsoEnd1 = 0x26554F8;
         public static readonly int IsoEnd2 = 0x26CB1C6;
         public static readonly int IsoEnd3 = 0x7EC684D;
@@ -48,7 +48,35 @@ namespace N64PPLEditorC
         public static readonly int IsoEnd6 = 0x894C41C;
         public static readonly int IsoEnd7 = 0x89C20EA;
 
+        public static readonly Byte[] patternHeaderWavFile = { 
+            0x52, 0x49, 0x46, 0x46, // RIFF
+            0x00, 0x00, 0x00, 0x00, // File size
+            0x57, 0x41, 0x56, 0x45, // WAVE
+            0x66, 0x6D, 0x74, 0x20, // fmt 
+            0x10, 0x00, 0x00, 0x00, // SubChunk1 fmt size
+            0x01, 0x00,             // type of format (01 = PCM)
+            0x01, 0x00,             // nb channel
+            0x00, 0x00, 0x00, 0x00, // sample rate
+            0x00, 0x00, 0x00, 0x00, // byte rate
+            0x02, 0x00,             // block align
+            0x10, 0x00,             // bits per sample
+            0x64, 0x61, 0x74, 0x61, // data
+            0x00, 0x00, 0x00, 0x00  // data length
+        };
 
+        public static readonly Byte[] patternBottomWavFile = {
+            0x73, 0x6D, 0x70, 0x6C, // smp1
+            0x00, 0x00, 0x00, 0x00, //
+            0x00, 0x00, 0x00, 0x00, //
+            0x00, 0x00, 0x00, 0x00, //
+            0x00, 0x00, 0x00, 0x00, //
+            0x00, 0x00, 0x00, 0x00, //
+            0x00, 0x00, 0x00, 0x00, //
+            0x00, 0x00, 0x00, 0x00, //
+            0x00, 0x00, 0x00, 0x00, //
+            0x00, 0x00, 0x00, 0x00, //
+            0x00, 0x00, 0x00, 0x00  //
+        };
 
         public enum TextType : int
         {
@@ -97,6 +125,7 @@ namespace N64PPLEditorC
         {
             var data = new byte[sizeData];
             Array.Copy(rawData, startingData, data, 0, data.Length);
+
             return data;
         }
 
@@ -130,13 +159,17 @@ namespace N64PPLEditorC
 
         public static int ConvertByteArrayToInt(Byte[] byteArray)
         {
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(byteArray);
+            //dont know why.. but need copy for not modify the initial array.. (??)
+            Byte[] tmp = new byte[byteArray.Length];
+            Array.Copy(byteArray, tmp, byteArray.Length);
 
-            if (byteArray.Length == 2)
-                return BitConverter.ToInt16(byteArray, 0);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(tmp);
+
+            if (tmp.Length == 2)
+                return BitConverter.ToInt16(tmp, 0);
             else
-                return BitConverter.ToInt32(byteArray, 0);
+                return BitConverter.ToInt32(tmp, 0);
         }
 
         public static Byte[] ConvertIntToByteArray(Int32 nb)
@@ -214,6 +247,10 @@ namespace N64PPLEditorC
             Directory.CreateDirectory(pathExtractedTexture);
             Directory.CreateDirectory(pathExtractedTexture2);
             Directory.CreateDirectory(pathOtherContent);
+            Directory.CreateDirectory(pathExtractedSound);
+
+            for(int i = 0; i < 22; i++)
+             Directory.CreateDirectory(pathExtractedSound + @"Soundbank " + i.ToString("D" + 2));
         }
     }
 }

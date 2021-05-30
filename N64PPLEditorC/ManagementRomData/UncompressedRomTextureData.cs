@@ -54,7 +54,6 @@ namespace N64PPLEditorC
             //be sure to overwrite all the palette
             this.palette = new byte[this.palette.Length];
             Array.Copy(palette, 0, this.palette, 0, palette.Length);
-            
         }
 
         public string GetName()

@@ -81,7 +81,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ManagementRomData\AssemblyReversedAddress.cs" />
+    <Compile Include="ManagementAudio\AudioDecode.cs" />
+    <Compile Include="ManagementAudio\Song.cs" />
+    <Compile Include="ManagementAudio\Sound.cs" />
     <Compile Include="RomLangAddress.cs" />
     <Compile Include="ManagementAudio\AudioList.cs" />
     <Compile Include="ManagementAudio\SoundBank.cs" />

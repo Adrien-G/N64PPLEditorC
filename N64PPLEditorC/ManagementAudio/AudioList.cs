@@ -12,20 +12,7 @@ namespace N64PPLEditorC.ManagementAudio
         //partie rawData
         public List<SoundBank> soundBankList { get; private set; }
 
-        //partie addresses
-        //private List<> soundBankAddress;
-
         private byte[] rawData;
-
-        public int GetSizeOfAllAudio()
-        {
-            int totalSize = 0;
-            foreach(SoundBank soundb in soundBankList)
-                totalSize += soundb.ptrTable.Length + soundb.waveTable.Length + soundb.midi.Length + soundb.sfx.Length;
-
-            return totalSize;
-        }
-
         private int initialIndexAudioStart;
         private int finalIndexAudioStart;
 
@@ -35,6 +22,15 @@ namespace N64PPLEditorC.ManagementAudio
             this.initialIndexAudioStart = indexAudioStart;
             this.rawData = rawData;
             ChunkSoundBank();
+        }
+
+        public int GetSizeOfAllAudio()
+        {
+            int totalSize = 0;
+            foreach(SoundBank soundb in soundBankList)
+            totalSize += soundb.ptrTable.Length + soundb.waveTable.Length + soundb.GetRawSongs().Length/*soundb.midi.Length*/ + soundb.sfx.Length;
+
+            return totalSize;
         }
 
         //search for N64 PtrTable V2 for cutting soundbank
@@ -58,7 +54,13 @@ namespace N64PPLEditorC.ManagementAudio
                     positionNext = CGeneric.SearchBytesInArray(rawData, CGeneric.endOfRom, 0, position + 16, 16);
 
                 sizeOfSoundBank = positionNext - position;
-                soundBankList.Add(new SoundBank(CGeneric.GiveMeArray(rawData, position, sizeOfSoundBank), soundBankList.Count));
+                if(i == 0)//for the first soundBank, give 
+                {
+                    byte[] startingEndingAddress = CGeneric.GiveMeArray(rawData,RomLangAddress.GetMidiSongSoundBank0(),0x238);
+                    soundBankList.Add(new SoundBank(CGeneric.GiveMeArray(rawData, position, sizeOfSoundBank), soundBankList.Count,position,startingEndingAddress));
+                }
+                else
+                    soundBankList.Add(new SoundBank(CGeneric.GiveMeArray(rawData, position, sizeOfSoundBank), soundBankList.Count));
 
                 position += sizeOfSoundBank;
                 sizeOfSoundBank = 16;
@@ -85,6 +87,10 @@ namespace N64PPLEditorC.ManagementAudio
             soundBankList[index].sfx = Set16BitAlignment(data);
         }
 
+        public void ReplaceSong(byte[] songData,int indexSbf,int indexSong)
+        {
+            soundBankList[indexSbf].songList[indexSong].rawData = Set16BitAlignment(songData);
+        }
         private byte[] Set16BitAlignment(byte[] data)
         {
             //add 00 byte for 16 bit alignment and return it
@@ -106,11 +112,25 @@ namespace N64PPLEditorC.ManagementAudio
             //update address of midi (SoundBank 0) by making the difference between old position and new position
             this.finalIndexAudioStart = (int)fs.Position;
 
-            byte[] addressHeaderSb0 = new byte[0x238];
-            Array.Copy(rawData, RomLangAddress.GetMidiSongSoundBank0(), addressHeaderSb0, 0, addressHeaderSb0.Length);
 
-            //convert to int, add the difference, convert to byte, store the new value
-            for (int i = 0; i < addressHeaderSb0.Length; i += 4)
+            //Array.Copy(rawData, RomLangAddress.GetMidiSongSoundBank0(), addressHeaderSb0, 0, addressHeaderSb0.Length);
+
+            //set the good position of song, and write to rom
+            int valueToStore1 = 0;
+            int lengthData = 0;
+            int adder = 0;
+            fs.Position = RomLangAddress.GetMidiSongSoundBank0();
+            for (int i = 0; i < soundBankList[0].songList.Count; i++)
+            {
+                //finalindexaudiostart + ptrlength+wavedatalength
+                valueToStore1 = finalIndexAudioStart + soundBankList[0].ptrTable.Length + soundBankList[0].waveTable.Length + adder;
+                lengthData = soundBankList[0].songList[i].rawData.Length;
+                fs.Write(CGeneric.ConvertIntToByteArray(valueToStore1), 0, 4);
+                fs.Write(CGeneric.ConvertIntToByteArray(valueToStore1 + lengthData), 0, 4);
+                adder += lengthData;
+            }
+
+            /*for (int i = 0; i < addressHeaderSb0.Length; i += 4)
             {
                 int tmpValue = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(addressHeaderSb0, i, 4));
                 if (finalIndexAudioStart > initialIndexAudioStart)
@@ -120,11 +140,8 @@ namespace N64PPLEditorC.ManagementAudio
                 byte[] tmpBytesNew = CGeneric.ConvertIntToByteArray(tmpValue);
                 for(int j = 0; j < tmpBytesNew.Length; j++)
                     addressHeaderSb0[i + j] = tmpBytesNew[j];
-            }
-
-            //set the good position, and write to rom
-            fs.Position = RomLangAddress.GetMidiSongSoundBank0();
-            fs.Write(addressHeaderSb0, 0, addressHeaderSb0.Length);
+                
+            }*/
 
             //write rawData soundBank
             fs.Position = finalIndexAudioStart;
@@ -142,7 +159,7 @@ namespace N64PPLEditorC.ManagementAudio
 
                 //write midi song and update sfx position ! (will only change the position of soundbank 1 and 2, the others doesn't have midi)
                 soundBankList[i].address.Sfx = CGeneric.ConvertIntToByteArray((int)fs.Position);
-                fs.Write(soundBankList[i].midi, 0, soundBankList[i].midi.Length);
+                fs.Write(soundBankList[i].GetRawSongs()/*midi*/, 0, soundBankList[i].GetRawSongs().Length/*midi.Length*/);
 
                 //write sfx and update position
                 fs.Write(soundBankList[i].sfx, 0, soundBankList[i].sfx.Length);

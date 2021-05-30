@@ -14,7 +14,7 @@ namespace N64PPLEditorC
 
         private List<CSBF1DynamicObject> dynamicObjectList;
         private List<CSBF1TextObject> textObjectList;
-        private List<CSBF1TextureManagement> textureManagementObjectList;
+        public List<CSBF1TextureManagement> textureManagementObjectList;
 
         public int nbTextGroupObject { get; private set; }
 

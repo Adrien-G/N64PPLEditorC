@@ -234,10 +234,10 @@ namespace N64PPLEditorC
             switch (compressionType)
             {
                 case CGeneric.Compression.unknow22:
-                    arrayRGBA = texture; //unknow
+                    arrayRGBA = Convert4bitIntensityAlphaColorsToRGBA(texture);
                     break;
                 case CGeneric.Compression.unknow23:
-                    arrayRGBA = texture; //unknow
+                    arrayRGBA = Convert8bitIntensityAlphaColorsToRGBA(texture);
                     break;
                 case CGeneric.Compression.greyscale:
                     arrayRGBA = ConvertGreyscaleToRGBA(texture);
@@ -355,6 +355,76 @@ namespace N64PPLEditorC
                 tmpB2 >>= 4;
                 Array.Copy(palette, tmpB1 * 4, rgbaArray, 8 * i, 4);
                 Array.Copy(palette, tmpB2 * 4, rgbaArray, 8 * i + 4, 4);
+            }
+            return rgbaArray;
+        }
+
+        private static byte[] Convert4bitIntensityAlphaColorsToRGBA(byte[] texture)
+        {
+            byte[] rgbaArray = new byte[texture.Length * 8];
+            byte intensity1;
+            byte alpha1;
+            byte intensity2;
+            byte alpha2;
+
+            for (int i = 0; i < texture.Length - 1; i++)
+            {
+                //take nibble1 and keep only intensity
+                intensity1 = texture[i];
+                intensity1 >>= 5;
+
+                alpha1 = texture[i];
+                alpha1 <<= 3;
+                alpha1 >>= 7;
+
+                intensity2 = texture[i];
+                intensity2 <<= 4;
+                intensity2 >>= 5;
+
+                alpha2 = texture[i];
+                alpha2 <<= 7;
+                alpha2 >>= 7;
+
+                //write intensity (3 first bytes)
+                for (int j = 0; j < 3; j++)
+                    rgbaArray[i * 8 + j] = (byte)((int)intensity1 * 36);
+
+                //write alpha (last byte)
+                rgbaArray[i * 8 + 3] = (byte)((int)alpha1 * 255);
+
+                //write intensity (3 first bytes)
+                for (int j = 4; j < 7; j++)
+                    rgbaArray[i * 8 + j] = (byte)((int)intensity2 * 36);
+
+                //write alpha (last byte)
+                rgbaArray[i * 8 + 7] = (byte)((int)alpha2 * 255);
+            }
+            return rgbaArray;
+        }
+
+        private static byte[] Convert8bitIntensityAlphaColorsToRGBA(byte[] texture)
+        {
+            byte[] rgbaArray = new byte[texture.Length * 4];
+            byte intensity;
+            byte alpha;
+
+            for (int i = 0; i < texture.Length - 1; i++)
+            {
+                //take nibble1 (intensity)
+                intensity = texture[i];
+                intensity >>= 4;
+
+                //take nibble2 (alpha)
+                alpha = texture[i];
+                alpha <<= 4;
+                alpha >>= 4;
+
+                //write intensity (3 first bytes)
+                for(int j = 0; j < 3; j++)
+                    rgbaArray[i * 4+j] = (byte)((int)intensity * 16);
+
+                //write alpha (last byte)
+                rgbaArray[i * 4+3] = (byte)((int)alpha * 16); 
             }
             return rgbaArray;
         }
