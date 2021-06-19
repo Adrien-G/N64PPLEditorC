@@ -369,18 +369,21 @@ namespace N64PPLEditorC
 
             for (int i = 0; i < texture.Length - 1; i++)
             {
-                //take nibble1 and keep only intensity
+                //keep only intensity1
                 intensity1 = texture[i];
                 intensity1 >>= 5;
 
+                //keep only alpha1
                 alpha1 = texture[i];
                 alpha1 <<= 3;
                 alpha1 >>= 7;
 
+                //keep only intensity2
                 intensity2 = texture[i];
                 intensity2 <<= 4;
                 intensity2 >>= 5;
 
+                //keep only alpha2
                 alpha2 = texture[i];
                 alpha2 <<= 7;
                 alpha2 >>= 7;

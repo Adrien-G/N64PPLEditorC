@@ -40,6 +40,7 @@ namespace N64PPLEditorC
                     return 0x16E0;
                 case CGeneric.romLang.European:
                 case CGeneric.romLang.USA:
+                case CGeneric.romLang.JAP:
                     return 0x16B0;
                 default: throw new NotImplementedException();
             }
@@ -55,6 +56,7 @@ namespace N64PPLEditorC
                     return 0x2760;
                 case CGeneric.romLang.European:
                 case CGeneric.romLang.USA:
+                case CGeneric.romLang.JAP:
                     return 0x2730;
                 default: throw new NotImplementedException();
             }
@@ -67,6 +69,7 @@ namespace N64PPLEditorC
                 case CGeneric.romLang.French:   return 0xB4B00;
                 case CGeneric.romLang.German:   return 0xABD30;
                 case CGeneric.romLang.European: return 0xB6450;
+                case CGeneric.romLang.JAP:
                 case CGeneric.romLang.USA:      return 0xB5F30;
                 default: throw new NotImplementedException();
             }

@@ -102,6 +102,8 @@
             this.comboBoxSceneAddTexture = new System.Windows.Forms.ComboBox();
             this.buttonScenesTextureAdd = new System.Windows.Forms.Button();
             this.groupBoxSceneTextureManagement = new System.Windows.Forms.GroupBox();
+            this.checkBoxTexturesExtra2 = new System.Windows.Forms.CheckBox();
+            this.checkBoxTexturesExtra1 = new System.Windows.Forms.CheckBox();
             this.buttonScenesTextureReplace = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.numericUpDownSceneTexture = new System.Windows.Forms.NumericUpDown();
@@ -111,11 +113,11 @@
             this.label18 = new System.Windows.Forms.Label();
             this.numericUpDownSceneTexturePosY = new System.Windows.Forms.NumericUpDown();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.contextMenuStripScenesTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItemSaveSBF = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemLoadSBF = new System.Windows.Forms.ToolStripMenuItem();
+            this.importNewSBFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageMovies = new System.Windows.Forms.TabPage();
             this.buttonHVQMRemove = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -157,6 +159,8 @@
             this.comboBoxRessourcesISO = new System.Windows.Forms.ComboBox();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxLaunchEverdrive = new System.Windows.Forms.CheckBox();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
+            this.numericUpDownTextureTransparency = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -194,6 +198,7 @@
             this.contextMenuStripAudioTreeview.SuspendLayout();
             this.TabPageMisc.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureTransparency)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -765,6 +770,7 @@
             // 
             // textBoxSceneText
             // 
+            this.textBoxSceneText.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.textBoxSceneText.Location = new System.Drawing.Point(3, 43);
             this.textBoxSceneText.Multiline = true;
             this.textBoxSceneText.Name = "textBoxSceneText";
@@ -971,6 +977,9 @@
             // 
             // groupBoxSceneTextureManagement
             // 
+            this.groupBoxSceneTextureManagement.Controls.Add(this.numericUpDownTextureTransparency);
+            this.groupBoxSceneTextureManagement.Controls.Add(this.checkBoxTexturesExtra2);
+            this.groupBoxSceneTextureManagement.Controls.Add(this.checkBoxTexturesExtra1);
             this.groupBoxSceneTextureManagement.Controls.Add(this.buttonScenesTextureReplace);
             this.groupBoxSceneTextureManagement.Controls.Add(this.label17);
             this.groupBoxSceneTextureManagement.Controls.Add(this.numericUpDownSceneTexture);
@@ -986,6 +995,28 @@
             this.groupBoxSceneTextureManagement.TabIndex = 22;
             this.groupBoxSceneTextureManagement.TabStop = false;
             this.groupBoxSceneTextureManagement.Text = "Texture Management";
+            // 
+            // checkBoxTexturesExtra2
+            // 
+            this.checkBoxTexturesExtra2.AutoSize = true;
+            this.checkBoxTexturesExtra2.Location = new System.Drawing.Point(141, 60);
+            this.checkBoxTexturesExtra2.Name = "checkBoxTexturesExtra2";
+            this.checkBoxTexturesExtra2.Size = new System.Drawing.Size(56, 17);
+            this.checkBoxTexturesExtra2.TabIndex = 28;
+            this.checkBoxTexturesExtra2.Text = "Extra2";
+            this.checkBoxTexturesExtra2.UseVisualStyleBackColor = true;
+            this.checkBoxTexturesExtra2.CheckedChanged += new System.EventHandler(this.checkBoxTexturesExtra2_CheckedChanged);
+            // 
+            // checkBoxTexturesExtra1
+            // 
+            this.checkBoxTexturesExtra1.AutoSize = true;
+            this.checkBoxTexturesExtra1.Location = new System.Drawing.Point(141, 43);
+            this.checkBoxTexturesExtra1.Name = "checkBoxTexturesExtra1";
+            this.checkBoxTexturesExtra1.Size = new System.Drawing.Size(100, 17);
+            this.checkBoxTexturesExtra1.TabIndex = 27;
+            this.checkBoxTexturesExtra1.Text = "Transparency : ";
+            this.checkBoxTexturesExtra1.UseVisualStyleBackColor = true;
+            this.checkBoxTexturesExtra1.CheckedChanged += new System.EventHandler(this.checkBoxTexturesExtra1_CheckedChanged);
             // 
             // buttonScenesTextureReplace
             // 
@@ -1099,13 +1130,6 @@
             this.groupBoxTextureSBF.TabStop = false;
             this.groupBoxTextureSBF.Text = "Scene Editor";
             // 
-            // drawScene1
-            // 
-            this.drawScene1.Location = new System.Drawing.Point(12, 16);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(320, 240);
-            this.drawScene1.TabIndex = 0;
-            // 
             // treeViewSBF
             // 
             this.treeViewSBF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1122,24 +1146,32 @@
             // 
             this.contextMenuStripScenesTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItemSaveSBF,
-            this.ToolStripMenuItemLoadSBF});
+            this.ToolStripMenuItemLoadSBF,
+            this.importNewSBFToolStripMenuItem});
             this.contextMenuStripScenesTreeView.Name = "contextMenuStripScenesTreeView";
-            this.contextMenuStripScenesTreeView.Size = new System.Drawing.Size(126, 48);
+            this.contextMenuStripScenesTreeView.Size = new System.Drawing.Size(158, 70);
             this.contextMenuStripScenesTreeView.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripScenesTreeView_Opening);
             // 
             // ToolStripMenuItemSaveSBF
             // 
             this.ToolStripMenuItemSaveSBF.Name = "ToolStripMenuItemSaveSBF";
-            this.ToolStripMenuItemSaveSBF.Size = new System.Drawing.Size(125, 22);
+            this.ToolStripMenuItemSaveSBF.Size = new System.Drawing.Size(157, 22);
             this.ToolStripMenuItemSaveSBF.Text = "Save .SBF";
             this.ToolStripMenuItemSaveSBF.Click += new System.EventHandler(this.saveSceneToolStripMenuItem_Click);
             // 
             // ToolStripMenuItemLoadSBF
             // 
             this.ToolStripMenuItemLoadSBF.Name = "ToolStripMenuItemLoadSBF";
-            this.ToolStripMenuItemLoadSBF.Size = new System.Drawing.Size(125, 22);
+            this.ToolStripMenuItemLoadSBF.Size = new System.Drawing.Size(157, 22);
             this.ToolStripMenuItemLoadSBF.Text = "Load .SBF";
             this.ToolStripMenuItemLoadSBF.Click += new System.EventHandler(this.ToolStripMenuItemLoadSBF_Click);
+            // 
+            // importNewSBFToolStripMenuItem
+            // 
+            this.importNewSBFToolStripMenuItem.Name = "importNewSBFToolStripMenuItem";
+            this.importNewSBFToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.importNewSBFToolStripMenuItem.Text = "Import new SBF";
+            this.importNewSBFToolStripMenuItem.Click += new System.EventHandler(this.importNewSBFToolStripMenuItem_Click);
             // 
             // tabPageMovies
             // 
@@ -1542,6 +1574,26 @@
             this.checkBoxLaunchEverdrive.Text = "Launch on everdrive";
             this.checkBoxLaunchEverdrive.UseVisualStyleBackColor = true;
             // 
+            // drawScene1
+            // 
+            this.drawScene1.Location = new System.Drawing.Point(12, 16);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(320, 240);
+            this.drawScene1.TabIndex = 0;
+            // 
+            // numericUpDownTextureTransparency
+            // 
+            this.numericUpDownTextureTransparency.Location = new System.Drawing.Point(236, 40);
+            this.numericUpDownTextureTransparency.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDownTextureTransparency.Name = "numericUpDownTextureTransparency";
+            this.numericUpDownTextureTransparency.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownTextureTransparency.TabIndex = 29;
+            this.numericUpDownTextureTransparency.ValueChanged += new System.EventHandler(this.numericUpDownTextureTransparency_ValueChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1609,6 +1661,7 @@
             this.TabPageMisc.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextureTransparency)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1743,6 +1796,10 @@
         private System.Windows.Forms.Button buttonAudioExtractAllSounds;
         private System.Windows.Forms.CheckBox checkBoxLaunchEverdrive;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReplaceThisSong;
+        private System.Windows.Forms.ToolStripMenuItem importNewSBFToolStripMenuItem;
+        private System.Windows.Forms.CheckBox checkBoxTexturesExtra2;
+        private System.Windows.Forms.CheckBox checkBoxTexturesExtra1;
+        private System.Windows.Forms.NumericUpDown numericUpDownTextureTransparency;
     }
 }
 

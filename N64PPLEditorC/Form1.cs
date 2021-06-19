@@ -447,7 +447,11 @@ namespace N64PPLEditorC
             RomLangAddress.romLang = (CGeneric.romLang)buffRom[0x3E];
             }
             else
+            {
                 isoRawData = buffRom;
+                RomLangAddress.romLang = CGeneric.romLang.JAP;
+            }
+                
             //load graphics compressed / hvqm and sbf
             LoadRessourcesList(buffRom);
 
@@ -459,8 +463,6 @@ namespace N64PPLEditorC
                 //load the audio part
                 LoadAudioList(buffRom);
 
-                //load misc part
-                //LoadMisc(buffRom);
             }
             LoadTreeView();
             UpdateFreeSpaceLeft();
@@ -868,9 +870,9 @@ namespace N64PPLEditorC
                     comboBoxSceneFontSize.SelectedIndex = 0;
                 else
                     if (textObject.isFontMedium)
-                    comboBoxSceneFontSize.SelectedIndex = 1;
-                else
-                    comboBoxSceneFontSize.SelectedIndex = 2;
+                        comboBoxSceneFontSize.SelectedIndex = 1;
+                    else
+                        comboBoxSceneFontSize.SelectedIndex = 2;
 
                 //text object
                 var sceneTxt = scene.GetTextObjectGroup(textObject.group);
@@ -891,9 +893,12 @@ namespace N64PPLEditorC
                     Size size = TextRenderer.MeasureText(txtBox[index].Text, txtBox[index].Font);
                     txtBox[index].ClientSize = new Size(size.Width, size.Height);
 
-                    if (textBoxSceneText.Text == txtBox[index].Text && sceneTxt.Count > 1)
+                    if (textBoxSceneText.Text == txtBox[index].Text && sceneTxt.Count >= 1)
+                    {
                         txtBox[index].BackColor = Color.LightGreen;
-
+                        txtBox[index].BringToFront();
+                    }
+                        
                     drawScene1.Controls.Add(txtBox[index]);
                     index++;
                 }
@@ -1274,11 +1279,18 @@ namespace N64PPLEditorC
                 CSBF1 sbf1 = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
                 CSBF1Scene scene = sbf1.GetScene(treeViewSBF.SelectedNode.Index);
                 //grab index of the selected texture
-                int indexTextureSbf = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).getTextureIndex();
-                comboBoxSceneChangeTexture.SelectedIndex = indexTextureSbf;
+                var textureSbf = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
+                comboBoxSceneChangeTexture.SelectedIndex = textureSbf.getTextureIndex();
                
                 numericUpDownSceneTexturePosX.Enabled = true;
                 numericUpDownSceneTexturePosY.Enabled = true;
+                if (textureSbf.transparencybit)
+                {
+                    checkBoxTexturesExtra1.Checked = true;
+                    numericUpDownTextureTransparency.Value = textureSbf.transparency;
+                }
+                else
+                    checkBoxTexturesExtra1.Checked = false;
             }
         }
 
@@ -1538,6 +1550,51 @@ namespace N64PPLEditorC
         private void ToolStripMenuItemReplaceThisSong_Click(object sender, EventArgs e)
         {
             audioList.ReplaceSong(OpenFileAndGetBytes(), treeViewAudio.SelectedNode.Parent.Index, treeViewAudio.SelectedNode.Index);
+        }
+
+        private void importNewSBFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openSbfFile = new OpenFileDialog())
+            {
+                openSbfFile.Filter = "sbf file (*.sbf)|*.sbf";
+                openSbfFile.FilterIndex = 1;
+                openSbfFile.RestoreDirectory = true;
+
+                if (openSbfFile.ShowDialog() == DialogResult.OK)
+                {
+                    Byte[] buffRom = File.ReadAllBytes(openSbfFile.FileName);
+                    var name = CGeneric.ConvertStringToByteArray(openSbfFile.SafeFileName);
+                    this.ressourceList.sbfList.Add(new CSBF1(buffRom,name));
+                }
+            }
+            LoadTreeView();
+            UpdateFreeSpaceLeft();
+            
+        }
+
+        private void checkBoxTexturesExtra1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!checkBoxTexturesExtra1.Checked)
+            {
+                CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
+                var textureObj = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
+                textureObj.transparencybit = false;
+            }
+        }
+
+        private void checkBoxTexturesExtra2_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDownTextureTransparency_ValueChanged(object sender, EventArgs e)
+        {
+            if (checkBoxTexturesExtra1.Checked)
+            {
+                CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
+                var textureObj = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
+                textureObj.SetTransparencyValue(true, (byte)numericUpDownTextureTransparency.Value);
+            }
         }
     }
 }
