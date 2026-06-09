@@ -12,7 +12,7 @@ namespace N64PPLEditorC
         private string sceneNameDebug; // only for getting the scene all around treatment.
         private byte[] rawData;
 
-        private List<CSBF1DynamicObject> dynamicObjectList;
+        public List<CSBF1DynamicObject> dynamicObjectList;
         private List<CSBF1TextObject> textObjectList;
         public List<CSBF1TextureManagement> textureManagementObjectList;
         public List<CSBF1FourthObject> fourthObjectList;
@@ -296,6 +296,11 @@ namespace N64PPLEditorC
 
         }
 
+        public void AddNew4thObject(byte[] rawData)
+        {
+            fourthObjectList.Add(new CSBF1FourthObject(rawData));
+        }
+
         public int GetDynamicObjectCount()
         {
             return dynamicObjectList.Count();
@@ -309,6 +314,11 @@ namespace N64PPLEditorC
         public int GetTextureManagementCount()
         {
             return textureManagementObjectList.Count();
+        }
+
+        public int Get4thObjCount()
+        {
+            return fourthObjectList.Count();
         }
 
         public int GetSize()
@@ -378,6 +388,11 @@ namespace N64PPLEditorC
             //res = res.Concat(test).ToArray();
 
             return res;
+        }
+
+        internal void AddNewDynamicObject(byte[] rawData)
+        {
+            dynamicObjectList.Add(new CSBF1DynamicObject(rawData));
         }
     }
 }

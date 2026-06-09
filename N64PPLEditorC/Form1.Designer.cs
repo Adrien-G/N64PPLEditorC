@@ -115,8 +115,13 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.numericUpDownSceneTexturePosY = new System.Windows.Forms.NumericUpDown();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.buttonAdd4thObj = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label4thCount = new System.Windows.Forms.Label();
+            this.label4thObjectData = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.groupBoxTextureSBF = new System.Windows.Forms.GroupBox();
-            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.treeViewSBF = new System.Windows.Forms.TreeView();
             this.contextMenuStripScenesTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItemSaveSBF = new System.Windows.Forms.ToolStripMenuItem();
@@ -168,6 +173,15 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxLaunchEverdrive = new System.Windows.Forms.CheckBox();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.button4thremove = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.buttonDynamicObjectRemove = new System.Windows.Forms.Button();
+            this.buttonDynamicObjectAdd = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.labelDynamicObjCount = new System.Windows.Forms.Label();
+            this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripTextureTreeview.SuspendLayout();
             this.tabControlTexMovSce.SuspendLayout();
@@ -196,6 +210,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTexture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTexturePosX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTexturePosY)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.groupBoxTextureSBF.SuspendLayout();
             this.contextMenuStripScenesTreeView.SuspendLayout();
             this.tabPageMovies.SuspendLayout();
@@ -208,6 +223,7 @@
             this.TabPageMisc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -630,8 +646,10 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(363, 336);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
@@ -1242,6 +1260,73 @@
             this.numericUpDownSceneTexturePosY.TabIndex = 21;
             this.numericUpDownSceneTexturePosY.ValueChanged += new System.EventHandler(this.numericUpDownSceneTexturePosY_ValueChanged);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.button4thremove);
+            this.tabPage3.Controls.Add(this.buttonAdd4thObj);
+            this.tabPage3.Controls.Add(this.label13);
+            this.tabPage3.Controls.Add(this.label4thCount);
+            this.tabPage3.Controls.Add(this.label4thObjectData);
+            this.tabPage3.Controls.Add(this.label11);
+            this.tabPage3.Location = new System.Drawing.Point(4, 25);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(448, 340);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "4thObject";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // buttonAdd4thObj
+            // 
+            this.buttonAdd4thObj.Location = new System.Drawing.Point(10, 48);
+            this.buttonAdd4thObj.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonAdd4thObj.Name = "buttonAdd4thObj";
+            this.buttonAdd4thObj.Size = new System.Drawing.Size(68, 28);
+            this.buttonAdd4thObj.TabIndex = 27;
+            this.buttonAdd4thObj.Text = "Add";
+            this.buttonAdd4thObj.UseVisualStyleBackColor = true;
+            this.buttonAdd4thObj.Click += new System.EventHandler(this.buttonAdd4thObj_Click);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(7, 28);
+            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(41, 16);
+            this.label13.TabIndex = 26;
+            this.label13.Text = "Count";
+            // 
+            // label4thCount
+            // 
+            this.label4thCount.AutoSize = true;
+            this.label4thCount.Location = new System.Drawing.Point(88, 28);
+            this.label4thCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4thCount.Name = "label4thCount";
+            this.label4thCount.Size = new System.Drawing.Size(11, 16);
+            this.label4thCount.TabIndex = 25;
+            this.label4thCount.Text = "-";
+            // 
+            // label4thObjectData
+            // 
+            this.label4thObjectData.AutoSize = true;
+            this.label4thObjectData.Location = new System.Drawing.Point(88, 12);
+            this.label4thObjectData.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4thObjectData.Name = "label4thObjectData";
+            this.label4thObjectData.Size = new System.Drawing.Size(34, 16);
+            this.label4thObjectData.TabIndex = 24;
+            this.label4thObjectData.Text = "data";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(7, 12);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(73, 16);
+            this.label11.TabIndex = 23;
+            this.label11.Text = "4th object : ";
+            // 
             // groupBoxTextureSBF
             // 
             this.groupBoxTextureSBF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1255,14 +1340,6 @@
             this.groupBoxTextureSBF.TabIndex = 1;
             this.groupBoxTextureSBF.TabStop = false;
             this.groupBoxTextureSBF.Text = "Scene Editor";
-            // 
-            // drawScene1
-            // 
-            this.drawScene1.Location = new System.Drawing.Point(16, 20);
-            this.drawScene1.Margin = new System.Windows.Forms.Padding(4);
-            this.drawScene1.Name = "drawScene1";
-            this.drawScene1.Size = new System.Drawing.Size(427, 295);
-            this.drawScene1.TabIndex = 0;
             // 
             // treeViewSBF
             // 
@@ -1790,6 +1867,103 @@
             this.timer2.Interval = 1000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
+            // button4thremove
+            // 
+            this.button4thremove.Location = new System.Drawing.Point(12, 84);
+            this.button4thremove.Margin = new System.Windows.Forms.Padding(4);
+            this.button4thremove.Name = "button4thremove";
+            this.button4thremove.Size = new System.Drawing.Size(68, 28);
+            this.button4thremove.TabIndex = 28;
+            this.button4thremove.Text = "Remove";
+            this.button4thremove.UseVisualStyleBackColor = true;
+            this.button4thremove.Click += new System.EventHandler(this.button4thremove_Click);
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.labelDynamicObjCount);
+            this.tabPage4.Controls.Add(this.buttonDynamicObjectRemove);
+            this.tabPage4.Controls.Add(this.buttonDynamicObjectAdd);
+            this.tabPage4.Controls.Add(this.label14);
+            this.tabPage4.Controls.Add(this.label15);
+            this.tabPage4.Controls.Add(this.label20);
+            this.tabPage4.Location = new System.Drawing.Point(4, 25);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(448, 340);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Dynamic Object";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // buttonDynamicObjectRemove
+            // 
+            this.buttonDynamicObjectRemove.Location = new System.Drawing.Point(12, 85);
+            this.buttonDynamicObjectRemove.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonDynamicObjectRemove.Name = "buttonDynamicObjectRemove";
+            this.buttonDynamicObjectRemove.Size = new System.Drawing.Size(68, 28);
+            this.buttonDynamicObjectRemove.TabIndex = 33;
+            this.buttonDynamicObjectRemove.Text = "Remove";
+            this.buttonDynamicObjectRemove.UseVisualStyleBackColor = true;
+            this.buttonDynamicObjectRemove.Click += new System.EventHandler(this.buttonDynamicObjectRemove_Click);
+            // 
+            // buttonDynamicObjectAdd
+            // 
+            this.buttonDynamicObjectAdd.Location = new System.Drawing.Point(10, 49);
+            this.buttonDynamicObjectAdd.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonDynamicObjectAdd.Name = "buttonDynamicObjectAdd";
+            this.buttonDynamicObjectAdd.Size = new System.Drawing.Size(68, 28);
+            this.buttonDynamicObjectAdd.TabIndex = 32;
+            this.buttonDynamicObjectAdd.Text = "Add";
+            this.buttonDynamicObjectAdd.UseVisualStyleBackColor = true;
+            this.buttonDynamicObjectAdd.Click += new System.EventHandler(this.buttonDynamicObjectAdd_Click);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(7, 29);
+            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(41, 16);
+            this.label14.TabIndex = 31;
+            this.label14.Text = "Count";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(117, 13);
+            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(34, 16);
+            this.label15.TabIndex = 30;
+            this.label15.Text = "data";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(7, 13);
+            this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(102, 16);
+            this.label20.TabIndex = 29;
+            this.label20.Text = "Dynamic Object";
+            // 
+            // labelDynamicObjCount
+            // 
+            this.labelDynamicObjCount.AutoSize = true;
+            this.labelDynamicObjCount.Location = new System.Drawing.Point(117, 29);
+            this.labelDynamicObjCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelDynamicObjCount.Name = "labelDynamicObjCount";
+            this.labelDynamicObjCount.Size = new System.Drawing.Size(11, 16);
+            this.labelDynamicObjCount.TabIndex = 34;
+            this.labelDynamicObjCount.Text = "-";
+            // 
+            // drawScene1
+            // 
+            this.drawScene1.Location = new System.Drawing.Point(16, 20);
+            this.drawScene1.Margin = new System.Windows.Forms.Padding(4);
+            this.drawScene1.Name = "drawScene1";
+            this.drawScene1.Size = new System.Drawing.Size(427, 295);
+            this.drawScene1.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1844,6 +2018,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTexture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTexturePosX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTexturePosY)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.groupBoxTextureSBF.ResumeLayout(false);
             this.contextMenuStripScenesTreeView.ResumeLayout(false);
             this.tabPageMovies.ResumeLayout(false);
@@ -1861,6 +2037,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2006,6 +2184,20 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.ToolStripMenuItem extractBinToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label4thObjectData;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label4thCount;
+        private System.Windows.Forms.Button buttonAdd4thObj;
+        private System.Windows.Forms.Button button4thremove;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Label labelDynamicObjCount;
+        private System.Windows.Forms.Button buttonDynamicObjectRemove;
+        private System.Windows.Forms.Button buttonDynamicObjectAdd;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label20;
     }
 }
 

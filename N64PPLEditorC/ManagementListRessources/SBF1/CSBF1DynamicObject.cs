@@ -12,28 +12,64 @@ namespace N64PPLEditorC
     class CSBF1DynamicObject
     {
         private byte[] rawData;
+
+        public byte[] HeaderData { get; private set; }
+        private byte[] BaseX;
+        private int BaseY;
+        private int BaseId;
+        private int Unknown1;
+        private int Unknown2;
+        private int Unknown3; //pointCount
+        private int Unknown4; //descripteur lié ou un truc du genre (texte disparait sur GC)
+        private int ItemCount; //nombre d'élément a reproduire dans le menu (ex. 4 pour 4 éléments)
+        private int TextureId; //OK - identifiant de la texture au sein de la scene
+        private int RectX0; //OK
+        private int RectY0; //OK
+        private int RectX1;
+        private int RectY1; //OK
+
+        //partie header
+        private bool OrientationUpDown; //définit le sens du tableau (haut en bas ou bas en haut)
+        private bool Enabled; //définit le sens du tableau (haut en bas ou bas en haut)
+
+        public enum TextType : int
+        {
+            Vertical = 0x10,
+            Horizontal = 0x20,
+            Grid2D = 0x30,
+        }
+
         public CSBF1DynamicObject(byte[] rawData)
         {
             this.rawData = rawData;
+
+            //data grabbed from 4 first bytes (converted to bits)
+            int dataInitial = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 0, 4));
+
+            //unknown data for now
+            this.OrientationUpDown = CGeneric.GetBitStateFromInt(dataInitial, 18);
+            if (CGeneric.GetBitStateFromInt(dataInitial, 19)) //grid mode
+            {
+            }
+            
         }
 
         public static int GetHeaderLength(int headerValue,int extra)
         {
-            int finalValue = 44;
-
-            if (CGeneric.GetBitStateFromInt(headerValue, 19))
+            int finalValue = 28;
+            if (CGeneric.GetBitStateFromInt(headerValue, 19)) //0x00002000
                 finalValue += 4;
 
-            if (CGeneric.GetBitStateFromInt(headerValue, 25))
+            if (CGeneric.GetBitStateFromInt(headerValue, 25)) //0x00000080
                 finalValue += 4;
 
-            //if (CGeneric.GetBitStateFromInt(headerValue, 26))
-            //    finalValue += 16;
+            if (CGeneric.GetBitStateFromInt(headerValue, 26)) //0x00000040
+                finalValue += 16;
 
-            if (CGeneric.GetBitStateFromInt(headerValue, 27))
+            if (CGeneric.GetBitStateFromInt(headerValue, 27)) //0x00000020
                 finalValue += 4;
 
-            if (CGeneric.GetBitStateFromInt(headerValue, 28))
+            if (CGeneric.GetBitStateFromInt(headerValue, 28)) //0x00000010
                 finalValue += 4;
 
             if (extra > 0)

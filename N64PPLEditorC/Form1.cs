@@ -755,7 +755,7 @@ namespace N64PPLEditorC
                 comboBoxSceneAddTexture.Items.Add(this.ressourceList.fibList[indexData].GetFIBName());
             }
                 
-
+            //text objects
             int nbTextObject = scene.GetTextObjectCount();
             if (nbTextObject == 0)
             {
@@ -768,11 +768,20 @@ namespace N64PPLEditorC
                 numericUpDownSceneText.Maximum = nbTextObject - 1;
             }
 
+            //textures object
             int nbTextureObject = scene.GetTextureManagementCount();
             if (nbTextureObject == 0)
                 numericUpDownSceneTexture.Maximum = 0;
             else
                 numericUpDownSceneTexture.Maximum = nbTextureObject - 1;
+
+            //4th object
+            int nb4thObject = scene.Get4thObjCount();
+            label4thCount.Text = nb4thObject.ToString();
+
+            //dynamic object
+            int nbDynamicObject = scene.GetDynamicObjectCount();
+            labelDynamicObjCount.Text = nbDynamicObject.ToString();
 
             groupBoxSceneText.Enabled = true;
             groupBoxSceneFontColor.Enabled = true;
@@ -1682,9 +1691,50 @@ namespace N64PPLEditorC
         }
 
 
-        private void replaceSBFToolStripMenuItem_Click(object sender, EventArgs e)
+        private void buttonAdd4thObj_Click(object sender, EventArgs e)
         {
+            using (OpenFileDialog open4thFile = new OpenFileDialog())
+            {
+                open4thFile.Filter = "4th file (*.bin)|*.bin";
+                open4thFile.FilterIndex = 1;
+                open4thFile.RestoreDirectory = true;
 
+                if (open4thFile.ShowDialog() == DialogResult.OK)
+                {
+                    Byte[] buffRom = File.ReadAllBytes(open4thFile.FileName);
+                    ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].AddNew4thObject(buffRom);
+                }
+            }
+
+            UpdateFreeSpaceLeft();
+        }
+
+        private void button4thremove_Click(object sender, EventArgs e)
+        {
+            ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].fourthObjectList = new List<CSBF1FourthObject>();
+        }
+
+        private void buttonDynamicObjectAdd_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dynamicObjectFile = new OpenFileDialog())
+            {
+                dynamicObjectFile.Filter = "Dynamic object file (*.bin)|*.bin";
+                dynamicObjectFile.FilterIndex = 1;
+                dynamicObjectFile.RestoreDirectory = true;
+
+                if (dynamicObjectFile.ShowDialog() == DialogResult.OK)
+                {
+                    Byte[] buffRom = File.ReadAllBytes(dynamicObjectFile.FileName);
+                    ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].AddNewDynamicObject(buffRom);
+                }
+            }
+
+            UpdateFreeSpaceLeft();
+        }
+
+        private void buttonDynamicObjectRemove_Click(object sender, EventArgs e)
+        {
+            ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].dynamicObjectList = new List<CSBF1DynamicObject>();
         }
     }
 }
