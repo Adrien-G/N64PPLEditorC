@@ -5,12 +5,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using static N64PPLEditorC.CGeneric;
 using N64PPLEditorC.ManagementAudio;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace N64PPLEditorC
 {
@@ -451,10 +450,8 @@ namespace N64PPLEditorC
                 isoRawData = buffRom;
                 RomLangAddress.romLang = CGeneric.romLang.JAP;
             }
-                
             //load graphics compressed / hvqm and sbf
             LoadRessourcesList(buffRom);
-
             if (N64Game)
             {
                 //load the uncompressed texture
@@ -462,7 +459,6 @@ namespace N64PPLEditorC
 
                 //load the audio part
                 LoadAudioList(buffRom);
-
             }
             LoadTreeView();
             UpdateFreeSpaceLeft();
@@ -479,7 +475,6 @@ namespace N64PPLEditorC
             }
 #endif
         }
-
 
         private void LoadAudioList(byte[] buffRom)
         {
@@ -502,8 +497,7 @@ namespace N64PPLEditorC
             treeViewAudio.Nodes.Clear();
 
 
-
-            for (int fib = 0; fib < this.ressourceList.GetFIBCount(); fib++)
+            for (int fib = 0; fib < this.ressourceList.fibList.Count(); fib++)
             {
                 treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.fibList[fib].GetFIBName());
                 for (int bff = 0; bff < this.ressourceList.fibList[fib].GetBFFCount(); bff++)
@@ -532,8 +526,12 @@ namespace N64PPLEditorC
                     {
                         treeViewAudio.Nodes[audioSoundbank].Nodes.Add("Song " + (j+1));
                     }
+                    for (int j = 0; j < this.audioList?.soundBankList[audioSoundbank].soundList?.Count; j++)
+                    {
+                        treeViewAudio.Nodes[audioSoundbank].Nodes.Add("Sound " + (j + 1));
+                    }
                 }
-                    
+
             }
             CheckIfTreeViewEmpty(treeViewTextures);
             CheckIfTreeViewEmpty(treeViewTexturesUncompressed);
@@ -546,7 +544,6 @@ namespace N64PPLEditorC
             treeViewHVQM.EndUpdate();
             treeViewSBF.EndUpdate();
             treeViewAudio.EndUpdate();
-            
 
         }
 
@@ -562,7 +559,6 @@ namespace N64PPLEditorC
         {
             int indexRessourcesArrayStart;
             int indexRessourcesEnd;
-
             if (N64Game)
             {
                 // search for "ABRA.BIF" pattern (start of array ressources location)
@@ -612,7 +608,7 @@ namespace N64PPLEditorC
         private void bWDecompress_DoWork(object sender, DoWorkEventArgs e)
         {
             int index = 1;
-            for (int i = 0; i < ressourceList.GetFIBCount(); i++)
+            for (int i = 0; i < ressourceList.fibList.Count(); i++)
             {
                 for (int j = 0; j < ressourceList.fibList[i].GetBFFCount(); j++)
                 {
@@ -798,37 +794,37 @@ namespace N64PPLEditorC
 
         private void launchGraphicDisplayPart(int displaySpecificTexture = -1)
         {
-            var sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
-            var scene = sbf.GetScene(treeViewSBF.SelectedNode.Index);
-            var ListTextureName = sbf.GetBifList();
+                var sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
+                var scene = sbf.GetScene(treeViewSBF.SelectedNode.Index);
+                var ListTextureName = sbf.GetBifList();
 
-            int nbItem = scene.GetTextureManagementCount() - 1;
+                int nbItem = scene.GetTextureManagementCount() - 1;
 
-            
-            drawScene1.Init();
-            for (int i = 0; i <= nbItem; i++)
-            {
-                string textureInsideSbfName = ListTextureName[scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
-                int indexData = this.ressourceList.Get3FIBIndexWithFIBName(textureInsideSbfName);
-                if (indexData != -1 && scene.GetTextureManagementObject(i).isCompressedTexture && (displaySpecificTexture == -1 || displaySpecificTexture == i))
+
+                drawScene1.Init();
+                for (int i = 0; i <= nbItem; i++)
                 {
-                    try
+                    string textureInsideSbfName = ListTextureName[scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
+                    int indexData = this.ressourceList.Get3FIBIndexWithFIBName(textureInsideSbfName);
+                    if (indexData != -1 && scene.GetTextureManagementObject(i).isCompressedTexture && (displaySpecificTexture == -1 || displaySpecificTexture == i))
                     {
-                        var bmp = this.ressourceList.fibList[indexData].GetBmpTexture(0);
-                        var posY = scene.GetTextureManagementObject(i).posY;
-                        var posX = scene.GetTextureManagementObject(i).posX;
-                        this.drawScene1.AddBmp(bmp, new Point(posX, posY));
+                        try
+                        {
+                            var bmp = this.ressourceList.fibList[indexData].GetBmpTexture(0);
+                            var posY = scene.GetTextureManagementObject(i).posY;
+                            var posX = scene.GetTextureManagementObject(i).posX;
+                            this.drawScene1.AddBmp(bmp, new Point(posX, posY));
+                        }
+                        catch { }
                     }
-                    catch { }
+                    if (displaySpecificTexture != -1)
+                    {
+                        numericUpDownSceneTexturePosX.Value = scene.GetTextureManagementObject(displaySpecificTexture).posX;
+                        numericUpDownSceneTexturePosY.Value = scene.GetTextureManagementObject(displaySpecificTexture).posY;
+                    }
                 }
-                if (displaySpecificTexture != -1)
-                {
-                    numericUpDownSceneTexturePosX.Value = scene.GetTextureManagementObject(displaySpecificTexture).posX;
-                    numericUpDownSceneTexturePosY.Value = scene.GetTextureManagementObject(displaySpecificTexture).posY;
-                }
+                this.drawScene1.Invalidate();
             }
-            this.drawScene1.Invalidate();
-        }
         private void launchTextDisplayGroup()
         {
             //clear all textbox
@@ -934,6 +930,7 @@ namespace N64PPLEditorC
         {
             if (treeViewSBF.SelectedNode.Level == 1)
                 this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).SetText(textBoxSceneText.Text);
+            
         }
 
         private void buttonSceneForeColor_Click(object sender, EventArgs e)
@@ -1281,7 +1278,6 @@ namespace N64PPLEditorC
                 //grab index of the selected texture
                 var textureSbf = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
                 comboBoxSceneChangeTexture.SelectedIndex = textureSbf.getTextureIndex();
-               
                 numericUpDownSceneTexturePosX.Enabled = true;
                 numericUpDownSceneTexturePosY.Enabled = true;
                 if (textureSbf.transparencybit)
@@ -1291,6 +1287,9 @@ namespace N64PPLEditorC
                 }
                 else
                     checkBoxTexturesExtra1.Checked = false;
+                
+               
+                
             }
         }
 
@@ -1432,14 +1431,14 @@ namespace N64PPLEditorC
         {
             if (N64Game)
                 return;
-            try
-            {
+            //try
+            //{
                 LoadRessourcesList(isoRawData);
-            }
-            catch
-            {
+            //}
+            //catch
+            //{
 
-            }
+            //}
 
             LoadTreeView();
             UpdateFreeSpaceLeft();
@@ -1595,6 +1594,97 @@ namespace N64PPLEditorC
                 var textureObj = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
                 textureObj.SetTransparencyValue(true, (byte)numericUpDownTextureTransparency.Value);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Byte[] buffPalette = new byte[0] ;
+            Byte[] buffTexture = new byte[0];
+            using (OpenFileDialog openFile = new OpenFileDialog())
+            {
+                openFile.InitialDirectory = Application.StartupPath;
+                openFile.RestoreDirectory = true;
+
+                if (openFile.ShowDialog() == DialogResult.OK)
+                {
+                    buffPalette = File.ReadAllBytes(openFile.FileName);
+
+                    
+                }
+            }
+            using (OpenFileDialog openFile = new OpenFileDialog())
+            {
+                openFile.InitialDirectory = Application.StartupPath;
+                openFile.RestoreDirectory = true;
+
+                if (openFile.ShowDialog() == DialogResult.OK)
+                {
+                    buffTexture = File.ReadAllBytes(openFile.FileName);
+
+
+                }
+            }
+            var outTex = CTextureManager.ConvertByteArrayToRGBA(buffTexture, Compression.trueColor16Bits, buffPalette);
+            pictureBox1.Image = CTextureManager.ConvertRGBAByteArrayToBitmap(outTex,216,134);
+        }
+
+        private void buttonScenesTextureAddNew_Click(object sender, EventArgs e)
+        {
+            this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].AddNewTextureObject();
+            numericUpDownSceneTexture.Maximum += 1;
+            numericUpDownSceneTexture.Value = numericUpDownSceneTexture.Maximum;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            System.Threading.Thread.Sleep(3000);
+            timer2.Start();
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+
+            //SendKeys.Send("+{DOWN}");
+            //SendKeys.Send("%");
+            //SendKeys.Send("{RIGHT}");
+            //SendKeys.Send("{DOWN 3}");
+            //SendKeys.Send("{ENTER}");
+            //System.Threading.Thread.Sleep(200);
+            //SendKeys.Send("%{TAB}");
+            //System.Threading.Thread.Sleep(200);
+            //SendKeys.Send("^V");
+            //SendKeys.Send("{ENTER}");
+            //System.Threading.Thread.Sleep(200);
+            //SendKeys.Send("%{TAB}");
+            //System.Threading.Thread.Sleep(200);
+            //SendKeys.Send("{DOWN}");
+            //SendKeys.Send("{UP}");
+        }
+
+        private void extractBinToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "bin files (*.bin)|*.bin";
+            saveFileDialog1.FileName = "raw sound";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    var b = audioList.soundBankList[treeViewAudio.SelectedNode.Parent.Index].soundList[treeViewAudio.SelectedNode.Index].rawData;
+                    myStream.Write(b, 0, b.Length);
+                    myStream.Close();
+                }
+            }
+        }
+
+
+        private void replaceSBFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

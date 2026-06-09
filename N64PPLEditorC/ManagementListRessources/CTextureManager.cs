@@ -332,7 +332,7 @@ namespace N64PPLEditorC
             else
                 palette32bitColor = palette;
                
-            //with the god palette create the good texture
+            //with the good palette create the good texture
             for (int i = 0; i < texture.Length - 1; i++)
                 Array.Copy(palette32bitColor, texture[i]*4, rgbaArray, i * 4, 4);
 

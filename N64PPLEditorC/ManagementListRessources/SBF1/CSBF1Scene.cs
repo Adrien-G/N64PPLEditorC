@@ -15,6 +15,7 @@ namespace N64PPLEditorC
         private List<CSBF1DynamicObject> dynamicObjectList;
         private List<CSBF1TextObject> textObjectList;
         public List<CSBF1TextureManagement> textureManagementObjectList;
+        public List<CSBF1FourthObject> fourthObjectList;
 
         public int nbTextGroupObject { get; private set; }
 
@@ -30,11 +31,12 @@ namespace N64PPLEditorC
             this.sceneName = new byte[sceneLength];
             Array.Copy(rawData, 8, sceneName, 0, sceneLength);
 
-            //decompose scene in 3 parts.
+            //decompose scene in 4 parts
             byte[] dataWithoutHeader = new Byte[rawData.Length - 8 - sceneLength];
             Array.Copy(rawData, 8 + sceneLength, dataWithoutHeader, 0, dataWithoutHeader.Length);
 
             this.sceneNameDebug = CGeneric.ConvertByteArrayToString(sceneName);
+
             //decompose data of scene
             ChunkScene(dataWithoutHeader, 8 + sceneLength);
 
@@ -80,7 +82,7 @@ namespace N64PPLEditorC
 
         private void ChunkScene(byte[] data,int headerSize)
         {
-            //separate 3 types of data -> dynamicObject, text and textureManagment
+            //separate 4 types of data -> dynamicObject, text, textureManagment, 4th object
              int generalIndex = 0;
 
             //get the number of dynamic object
@@ -113,30 +115,18 @@ namespace N64PPLEditorC
             this.textureManagementObjectList = new List<CSBF1TextureManagement>();
             generalIndex += ChunkTextureManagementObject(data, CGeneric.ConvertByteArrayToInt(nbTextureArray), generalIndex);
 
-            //add 4 because 0x00000000 at the end of each scene..
-            //add specific value for ISO file (the 4th hidden thing in sbf...
-            var hidden4thData = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(data, generalIndex, 4));
-            generalIndex += 4;
-            if (hidden4thData != 0)
-            {
-                for (int i = 0; i < hidden4thData; i++)
-                {
-                    var code4thData = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(data, generalIndex, 4));
-                    switch (code4thData)
-                    {
-                        case 0x1E:
-                        case 0x9E:
-                            generalIndex += 0x20;
-                            break;
-                        case 0x1F:
-                            generalIndex += 0x24;
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
-                }
-            }
+            //get the number of fourth object
+            byte[] nbfourthObjectArray = new byte[4];
+            Array.Copy(data, generalIndex, nbfourthObjectArray, 0, nbfourthObjectArray.Length);
+            //increment the global index with 4 (the size of nbDynamicArray.Length)
+            generalIndex += nbfourthObjectArray.Length;
+
+            //fill fourth object
+            this.fourthObjectList = new List<CSBF1FourthObject>();
+            generalIndex += ChunkFourthObject(data, CGeneric.ConvertByteArrayToInt(nbfourthObjectArray), generalIndex);
+#if DEBUG
             var a = sceneNameDebug;
+#endif
             //with the datasize determinated set the new rawData array
             byte[] newArrayRawData = new byte[generalIndex+headerSize];
             Array.Copy(this.rawData, 0, newArrayRawData, 0, newArrayRawData.Length);
@@ -146,6 +136,7 @@ namespace N64PPLEditorC
         private int ChunkDynamicObject(byte[] data, int nbDynamicObject, int indexDataStart)
         {
             byte[] lengthData = new byte[4];
+            byte[] lengthDataExtra = new byte[4];
             int lengthDataInt;
             int totalSize = 0;
 
@@ -153,7 +144,8 @@ namespace N64PPLEditorC
             {
                 // get the length of the dynamic object
                 Array.Copy(data, indexDataStart, lengthData, 0, lengthData.Length);
-                lengthDataInt = CSBF1DynamicObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData));
+                Array.Copy(data, indexDataStart+24, lengthDataExtra, 0, lengthDataExtra.Length);
+                lengthDataInt = CSBF1DynamicObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData), CGeneric.ConvertByteArrayToInt(lengthDataExtra));
 
                 //create the array to add the object
                 byte[] dataDynamicObject = new byte[lengthDataInt];
@@ -221,9 +213,34 @@ namespace N64PPLEditorC
             return totalSize;
         }
 
-        public void AddNewTextureObject(int index)
+        private int ChunkFourthObject(byte[] data, int nbTextureManagementObject, int indexDataStart)
         {
-                textureManagementObjectList.Add(new CSBF1TextureManagement(0xCA,index));
+            byte[] lengthData = new byte[4];
+            int lengthDataInt;
+
+            int totalSize = 0;
+
+            for (int i = 0; i < nbTextureManagementObject; i++)
+            {
+                // get the length of the fourth object
+                Array.Copy(data, indexDataStart, lengthData, 0, lengthData.Length);
+                lengthDataInt = CSBF1FourthObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData));
+
+                //create the new fourth object item
+                byte[] datafourthObject = new byte[lengthDataInt];
+                Array.Copy(data, indexDataStart, datafourthObject, 0, datafourthObject.Length);
+                fourthObjectList.Add(new CSBF1FourthObject(datafourthObject));
+
+                indexDataStart += lengthDataInt;
+                totalSize += lengthDataInt;
+            }
+            return totalSize;
+        }
+
+        public void AddNewTextureObject()
+        {
+            var index = textureManagementObjectList.Count + 0x64;
+            textureManagementObjectList.Add(new CSBF1TextureManagement(index,0));
         }
 
         public string GetSceneName()
@@ -252,6 +269,7 @@ namespace N64PPLEditorC
         {
             return textureManagementObjectList[index];
         }
+
         public void AddNewTextObject(bool sameScene)
         {
             //get the last element
@@ -347,9 +365,17 @@ namespace N64PPLEditorC
             foreach (CSBF1TextureManagement texManObj in textureManagementObjectList)
                 res = res.Concat(texManObj.GetRawData()).ToArray();
 
-            //dont renember why.. but needed
-            byte[] test = new byte[] { 0x00,0x00,0x00,0x00 };
-            res = res.Concat(test).ToArray();
+            //Size fourthObject
+            res = res.Concat(CGeneric.ConvertIntToByteArray(fourthObjectList.Count)).ToArray();
+
+            //fourthObject
+            foreach (CSBF1FourthObject fourthObj in fourthObjectList)
+                res = res.Concat(fourthObj.GetRawData()).ToArray();
+
+            //used for fourth part..
+            ////dont renember why.. but needed
+            //byte[] test = new byte[] { 0x00,0x00,0x00,0x00 };
+            //res = res.Concat(test).ToArray();
 
             return res;
         }

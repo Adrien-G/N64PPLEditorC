@@ -106,11 +106,30 @@ namespace N64PPLEditorC
             C3FIB new3Fib = new C3FIB(rawData,byteName.Concat(new Byte[] { 0x2E, 0x42, 0x49, 0x46 }).ToArray());
             new3Fib.Init();
             fibList.Add(new3Fib);
+
+            var element = new ListFormat();
+            element.ressourceIndex = new byte[4]; //don't care, will be recalculated
+            element.ressourceSize = new byte[4];  //don't care, will be recalculated
+            element.ressourceName = new byte[16];
+
+            //write name of FIB (BIF Name)
+            byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(name.ToUpper() + ".BIF");
+            Array.Copy(nameBIF, 0, element.ressourceName, 0, nameBIF.Length);
+            this.ressourcesList.Add(element);
         }
 
         public CSBF1 GetSBF1(int index)
         {
             return sbfList[index];
+        }
+
+        public CSBF1 GetSBF1(string name)
+        {
+            foreach(var element in sbfList)
+                if (element.GetRessourceName().ToUpper().Replace("\0", "") == name)
+                    return element;
+                
+            return null;
         }
 
         public void SetSBF1(byte[] scene, int index)
@@ -142,10 +161,6 @@ namespace N64PPLEditorC
             return hvqmList[indexHVQM];
         }
 
-        public int GetFIBCount()
-        {
-            return fibList.Count();
-        }
         public int GetSBFCount()
         {
             return sbfList.Count();
@@ -221,7 +236,7 @@ namespace N64PPLEditorC
                 fs.Write(CGeneric.ConvertIntToByteArray(indexData), 0, 4);
 
                 //write name of FIB (BIF Name)
-                byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(listOfressource[index].GetRessourceName());
+                byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(listOfressource[index].GetRessourceName().ToUpper());
                 fs.Write(nameBIF, 0, nameBIF.Length);
 
                 //fill free space (of name) by 0

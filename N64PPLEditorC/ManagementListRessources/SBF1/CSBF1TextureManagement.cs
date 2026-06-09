@@ -17,7 +17,7 @@ namespace N64PPLEditorC
 
         //flags
         public bool bit19;
-        public bool bit20;
+        public bool bit20; //semble correspondre au fait d'afficher ou non la texture
         public bool bit21;
         public bool bit23;
         public bool bit24;

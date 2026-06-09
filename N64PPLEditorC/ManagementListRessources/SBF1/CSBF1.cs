@@ -62,6 +62,17 @@ namespace N64PPLEditorC
             return scenesList[index];
         }
 
+        public CSBF1Scene GetScene(string name)
+        {
+            foreach (var element in scenesList)
+                if (element.GetSceneName().ToUpper().Replace("\0", "") == name)
+                    return element;
+
+            return null;
+        }
+
+         
+
         //public void AddTexture(int indexScene, string bifName)
         //{
         //    //if the texture is already in the sbf, just add the texture to the scene

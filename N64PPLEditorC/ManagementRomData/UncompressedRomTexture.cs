@@ -45,46 +45,11 @@ namespace N64PPLEditorC
         }
         private void InitGraphicsUsa()
         {
-            //32bpp textures
-
-
             //16bpp textures
             AddTexture(0x9702C0, 112, 88,  16, "1 - Win Lose");
             AddTexture(0x62AB10, 112, 387, 16, "2 - fond ingame J1 1 - sacha");
             AddTexture(0x63FDB0, 112, 381, 16, "3 - fond ingame J1 2 - Regis");
             AddTexture(0x7E5010, 112, 306, 16, "4 - fond ingame J2 2 - Regis");
-
-            //french version : 
-            //AddTexture(0x, 112, 390, 16, "3 - fond ingame J1 3 - Pierre");
-            //AddTexture(0x, 112, 405, 16, "4 - fond ingame J1 4 - Ondine");
-            //AddTexture(0x, 112, 495, 16, "92 - fond ingame J1 5 - Major bob");
-            //AddTexture(0x, 112, 426, 16, "93 - fond ingame J1 6 - Erika");
-            //AddTexture(0x, 112, 570, 16, "94 - fond ingame J1 7 - Koga");
-            //AddTexture(0x, 112, 429, 16, "95 - fond ingame J1 8 - Morganne");
-            //AddTexture(0x, 112, 471, 16, "96 - fond ingame J1 9 - Auguste");
-            //AddTexture(0x, 112, 453, 16, "97 - fond ingame J1 10 - Jacky");
-            //AddTexture(0x, 112, 708, 16, "98 - fond ingame J1 11 - Team Rocket");
-            //AddTexture(0x, 112, 447, 16, "99 - fond ingame J1 12 - Giovanni");
-            //AddTexture(0x, 112, 431, 16, "100 - fond ingame J1 13 - Ritchie");
-            //AddTexture(0x, 112, 531, 16, "101 - fond ingame J1 14 - Olga");
-            //AddTexture(0x, 112, 768, 16, "102 - fond ingame J1 15 - Aldo");
-            //AddTexture(0x, 112, 477, 16, "103 - fond ingame J1 16 - Regis2");
-            //AddTexture(0x, 112, 318, 16, "104 - fond ingame J2 1 - Sacha");
-            //AddTexture(0x, 112, 306, 16, "105 - fond ingame J2 2 - Regis");
-            //AddTexture(0x, 112, 344, 16, "106 - fond ingame J2 3 - Pierre");
-            //AddTexture(0x, 112, 324, 16, "107 - fond ingame J2 4 - Ondine");
-            //AddTexture(0x, 112, 334, 16, "108 - fond ingame J2 5 - Major bob");
-            //AddTexture(0x, 112, 332, 16, "109 - fond ingame J2 6 - Erika");
-            //AddTexture(0x, 112, 354, 16, "110 - fond ingame J2 7 - Koga");
-            //AddTexture(0x, 112, 362, 16, "111 - fond ingame J2 8 - Morganne");
-            //AddTexture(0x, 112, 374, 16, "112 - fond ingame J2 9 - Auguste");
-            //AddTexture(0x, 112, 354, 16, "113 - fond ingame J2 10 - Jacky");
-            //AddTexture(0x, 112, 482, 16, "114 - fond ingame J2 11 - Team Rocket");
-            //AddTexture(0x, 112, 354, 16, "115 - fond ingame J2 12 - Giovanni");
-            //AddTexture(0x, 112, 344, 16, "116 - fond ingame J2 13 - Ritchie");
-            //AddTexture(0x, 112, 374, 16, "117 - fond ingame J2 14 - Olga");
-            //AddTexture(0x, 112, 576, 16, "118 - fond ingame J2 15 - Aldo");
-            //AddTexture(0x, 112, 390, 16, "119 - fond ingame J2 16 - Regis2");
         }
 
         private void InitGraphicsGer()

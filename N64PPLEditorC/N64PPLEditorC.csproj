@@ -70,6 +70,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing.Common, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.9.0.0\lib\net462\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -84,6 +88,7 @@
     <Compile Include="ManagementAudio\AudioDecode.cs" />
     <Compile Include="ManagementAudio\Song.cs" />
     <Compile Include="ManagementAudio\Sound.cs" />
+    <Compile Include="ManagementListRessources\SBF1\CSBF1FourthObject.cs" />
     <Compile Include="RomLangAddress.cs" />
     <Compile Include="ManagementAudio\AudioList.cs" />
     <Compile Include="ManagementAudio\SoundBank.cs" />
@@ -126,6 +131,7 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="ZClassDiagramPPlN64Editor.cd" />
     <None Include="PPLSignature.pfx" />
     <None Include="Properties\Settings.settings">
