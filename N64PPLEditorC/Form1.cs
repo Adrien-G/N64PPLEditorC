@@ -1498,6 +1498,12 @@ namespace N64PPLEditorC
 
         private void buttonEditScene_Click(object sender, EventArgs e)
         {
+            if (treeViewSBF.SelectedNode.Level == 0)
+            {
+                MessageBox.Show("Merci de sélectionner une scène.");
+                return;
+            }
+            
             CSBF1 sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
             
             var form2 = new SceneEdit(sbf,ressourceList, treeViewSBF.SelectedNode.Index);

@@ -28,33 +28,22 @@ namespace N64PPLEditorC
         public CSBF1TextAnimation Animation { get; set; }
         public CSBF1Text Text { get; set; }
 
-        //valeur encore inconnue pour le moment..
-        public int SerializedValue28 { get; private set; }
+        public CSBF1TextRendering Rendering { get; set; }
+        //valeur qui n'a pas l'air d'être utilisé
+        public int DeclaredLineCount { get; private set; }
 
 
 
-
-
-
-
-        //private int nblines;
 
         //flags
         public bool  isCenteredText;
-        //private bool isCenteredTextFirstBit;
-        //private bool isCenteredTextSecondBit;
         public bool isFontSmall;
         public bool isFontMedium;
         public bool isHidden;
         public bool hasFontColor;
         public bool isForegroundText;
-        //private bool unknow3;
-        //private bool unknow4;
         public bool unknow8;
-        //private bool unknow12;
         public bool unknow28;
-        //private bool unknow30;
-        //additional size for header (unknow Data)
         public bool isExtraSize1;
 
         
@@ -88,7 +77,9 @@ namespace N64PPLEditorC
             //ajout des styles visuels
             this.VisualStyle = new CSBF1TextVisualStyle(ref globalIndex, FlagsInt, rawData);
 
-            SerializedValue28 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex, 4));
+            this.Rendering = new CSBF1TextRendering(FlagsInt);
+
+            DeclaredLineCount = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex, 4));
             globalIndex += 4;
 
             //ajout des packetMetadata
@@ -150,10 +141,10 @@ namespace N64PPLEditorC
             }
 
             //serialized28
-            rawData.AddRange(CGeneric.ConvertIntToByteArray(this.SerializedValue28)); 
+            rawData.AddRange(CGeneric.ConvertIntToByteArray(this.DeclaredLineCount)); 
             
             //packedMetaData
-            rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Animation.PackedMetadata));
+            rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Animation.PackedPagination));
 
             //add XPositions
             rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Layout.XPositions.Count));

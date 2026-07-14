@@ -14,12 +14,7 @@ namespace N64PPLEditorC
         public FontMode FontSize { get; set; }
         public List<Color> PrimaryColor { get; set; }
         public List<Color> SecondaryColor { get; set; }
-        public int RenderLayer { get;set; }
 
-        public CSBF1TextVisualStyle()
-        {
-            
-        }
 
         public CSBF1TextVisualStyle(ref int index,int flags, byte[] rawData)
         {

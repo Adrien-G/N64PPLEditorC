@@ -4,7 +4,7 @@ namespace N64PPLEditorC
 {
     public class CSBF1TextAnimation
     {
-        public int PackedMetadata { get; set; }
+        public int PackedPagination { get; set; }
         /// <summary>
         /// indique si il y a une liaison avec une texture
         /// </summary>
@@ -29,7 +29,7 @@ namespace N64PPLEditorC
 
         public void AddPackedMetadata(ref int index, byte[] RawData)
         {
-            PackedMetadata = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(RawData, index, 4));
+            PackedPagination = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(RawData, index, 4));
             index += 4;
         }
     }

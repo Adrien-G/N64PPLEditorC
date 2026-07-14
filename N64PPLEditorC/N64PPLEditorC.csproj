@@ -96,6 +96,7 @@
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextBase.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextLayout.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextObject.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextRendering.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextVisualStyle.cs" />
     <Compile Include="RomLangAddress.cs" />
     <Compile Include="ManagementAudio\AudioList.cs" />

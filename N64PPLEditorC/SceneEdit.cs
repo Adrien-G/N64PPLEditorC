@@ -148,9 +148,18 @@ namespace N64PPLEditorC
                 numericUpDownTextLinkedTexture.Value = textObject.Animation.LinkedTextureId;
 
                 //check visual styles
-                buttonScenePrimaryColor.BackColor = textObject.VisualStyle.PrimaryColor[0];
-                buttonSceneSecondaryColor.BackColor = textObject.VisualStyle.SecondaryColor[0];
-                comboBoxSceneFontSize.SelectedIndex = (int)textObject.VisualStyle.FontSize;
+                if(textObject.VisualStyle.PrimaryColor.Count > 0)
+                {
+                    buttonScenePrimaryColor.BackColor = textObject.VisualStyle.PrimaryColor[0];
+                    buttonSceneSecondaryColor.BackColor = textObject.VisualStyle.SecondaryColor[0];
+                }
+                else
+                {
+                    buttonScenePrimaryColor.BackColor = Color.WhiteSmoke;
+                    buttonSceneSecondaryColor.BackColor = Color.WhiteSmoke;
+                }
+
+                    comboBoxSceneFontSize.SelectedIndex = (int)textObject.VisualStyle.FontSize;
 
                 //check text output
                 textBoxTextOutput.Text = textObject.Text.GetAsciiText();
