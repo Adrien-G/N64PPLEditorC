@@ -88,7 +88,15 @@
     <Compile Include="ManagementAudio\AudioDecode.cs" />
     <Compile Include="ManagementAudio\Song.cs" />
     <Compile Include="ManagementAudio\Sound.cs" />
+    <Compile Include="ManagementListRessources\SBF1\CSBF1DynamicObjectPoint.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1FourthObject.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextCode.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1Text.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextAnimation.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextBase.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextLayout.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextObject.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextVisualStyle.cs" />
     <Compile Include="RomLangAddress.cs" />
     <Compile Include="ManagementAudio\AudioList.cs" />
     <Compile Include="ManagementAudio\SoundBank.cs" />
@@ -101,7 +109,6 @@
     <Compile Include="ManagementRomData\UncompressedRomTexture.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1DynamicObject.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1Scene.cs" />
-    <Compile Include="ManagementListRessources\SBF1\CSBF1TextObject.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1TextureManagement.cs" />
     <Compile Include="ManagementListRessources\CTextureCompress.cs" />
     <Compile Include="ManagementListRessources\CRessourceList.cs" />
@@ -117,6 +124,12 @@
     <Compile Include="ManagementListRessources\AbsRessource.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SceneEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SceneEdit.Designer.cs">
+      <DependentUpon>SceneEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="TransparentPanel\DrawScene.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -125,11 +138,15 @@
     </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SceneEdit.resx">
+      <DependentUpon>SceneEdit.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="ZClassDiagramPPlN64Editor.cd" />

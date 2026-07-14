@@ -174,6 +174,21 @@ namespace N64PPLEditorC
                 return BitConverter.ToInt32(tmp, 0);
         }
 
+        public static ushort ReadUInt16BigEndian(byte[] data, int offset)
+        {
+            return (ushort)((data[offset] << 8) | data[offset + 1]);
+        }
+
+        public static byte[] ConvertUShortToByteArray(ushort value)
+        {
+            byte[] bytes =
+            {
+                (byte)(value >> 8),
+                (byte)value
+            };
+            return bytes;
+        }
+
         public static Byte[] ConvertIntToByteArray(Int32 nb)
         {
             byte[] res = BitConverter.GetBytes(nb);
@@ -189,8 +204,14 @@ namespace N64PPLEditorC
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(res);
 
-            return new byte[] { res[2], res[3] }; ;
+            return new byte[] { res[2], res[3] };
         }
+
+        public static Int32 Convert16BitsArrayToInt(Byte[] bytes)
+        {
+            return (bytes[0] << 8) | bytes[1];
+        }
+
 
         public static byte[] ConvertStringToByteArray(string text)
         {
@@ -200,6 +221,36 @@ namespace N64PPLEditorC
         public static string ConvertByteArrayToString(Byte[] text)
         {
             return Encoding.UTF8.GetString(text);
+        }
+
+        /// <summary>
+        /// convertit une chaine en tableau de Byte ayant la valeur de la string
+        /// </summary>
+        /// <param name="rawBytes"></param>
+        /// <returns></returns>
+        public static string ConvertByteArrayToRawString(byte[] rawBytes)
+        {
+            return rawBytes.Select(b => b.ToString("X2")).ToString();
+
+        }
+
+        public static byte[] ConvertRawStringToByteArray(string rawBytes)
+        {
+
+            byte[] bytes = new byte[rawBytes.Length / 2];
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                bytes[i] = Convert.ToByte(rawBytes.Substring(i * 2, 2), 16);
+            }
+
+            return bytes;
+        
+        }
+
+        public static ushort ConvertBytesToUshort(byte[] bytes)
+        {
+            return (ushort)((bytes[0] << 8) | bytes[1]);
         }
 
         public static int SearchBytesInArray(Byte[] arraySource, Byte[] dataSearched,int nbOccurence=0,int startingAddress=0,int step=1)

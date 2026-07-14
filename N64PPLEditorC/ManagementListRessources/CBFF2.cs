@@ -9,7 +9,7 @@ using static N64PPLEditorC.CGeneric;
 
 namespace N64PPLEditorC
 { 
-    class CBFF2
+    public class CBFF2
     {
         private Byte[] rawData;
         private BFFHeader headerBFF2;

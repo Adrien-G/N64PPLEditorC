@@ -6,34 +6,60 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-
-
-
-    class CSBF1DynamicObject
+    public class CSBF1DynamicObject
     {
+        //les données brutes du dynamic object (header + data)
         private byte[] rawData;
 
+        //les flags du header du dynamic object (4 premiers octets)
         public byte[] HeaderData { get; private set; }
-        private byte[] BaseX;
+
+        //position X de base de l'objet
+        private int BaseX;
+
+        //position Y de base de l'objet
         private int BaseY;
-        private int BaseId;
-        private int Unknown1;
-        private int Unknown2;
-        private int Unknown3; //pointCount
-        private int Unknown4; //descripteur lié ou un truc du genre (texte disparait sur GC)
-        private int ItemCount; //nombre d'élément a reproduire dans le menu (ex. 4 pour 4 éléments)
-        private int TextureId; //OK - identifiant de la texture au sein de la scene
-        private int RectX0; //OK
-        private int RectY0; //OK
-        private int RectX1;
-        private int RectY1; //OK
 
-        //partie header
-        private bool OrientationUpDown; //définit le sens du tableau (haut en bas ou bas en haut)
-        private bool Enabled; //définit le sens du tableau (haut en bas ou bas en haut)
+        //index dans la liste bif, est présent uniquement si le header 0x80 est set.
+        private int? BifRessourceIndex;
 
-        public enum TextType : int
+        // Présent avec le flag 0x2000.
+        // Bits 0..7  : nombre de textes associés à chaque ligne.
+        // Bits 8..19 : ID du premier texte.
+        private uint? LinkedTextDescriptor;
+
+        private int LinkedTextCountPerRow;
+        public int LinkedTextBaseId;
+        //utilisé lorsque le flag 0x40 n'est pas set. il permet de distribuer les cellules (X)
+        private int SpanX;
+
+        //utilisé lorsque le flag 0x40 n'est pas set. il permet de distribuer les cellules (Y)
+        private int SpanY;
+
+        //id du dynamic object
+        private int Id;
+
+        //nombre et pointeur runtime des poisitions explicites
+        private int PointCount;
+
+        private List<CSBF1DynamicObjectPoint> PointTable = new List<CSBF1DynamicObjectPoint>();
+
+        //dimensions logique du tableau (lignes), rempli uniquement si le mode de disposition est Grid2D ou Vertical
+        private int GridHeight;  
+
+        private LayoutMode Layout; //mode de disposition du dynamic object, 0x10 = vertical, 0x20 = horizontal, 0x30 = grid2D
+
+        //dimensions logique du tableau (colonnes), rempli uniquement si le mode de disposition est Grid2D ou Horizontal
+        private int GridWidth;   
+        private int? RectX0;
+        private int? RectY0;
+        private int? RectX1;
+        private int? RectY1;
+
+        //Mode de disposition du dynamic object
+        public enum LayoutMode : int
         {
+            None = 0x00,
             Vertical = 0x10,
             Horizontal = 0x20,
             Grid2D = 0x30,
@@ -42,16 +68,92 @@ namespace N64PPLEditorC
         public CSBF1DynamicObject(byte[] rawData)
         {
             this.rawData = rawData;
+            this.HeaderData = CGeneric.GiveMeArray(rawData, 0, 4);
 
-            //data grabbed from 4 first bytes (converted to bits)
-            int dataInitial = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 0, 4));
+            //générique
+            this.BaseX = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 4, 4));
+            this.BaseY = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 8, 4));
+            this.Id = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 12, 4));
+            this.SpanX = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 16, 4));
+            this.SpanY = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 20, 4));
+            this.PointCount = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, 24, 4));
 
-            //unknown data for now
-            this.OrientationUpDown = CGeneric.GetBitStateFromInt(dataInitial, 18);
-            if (CGeneric.GetBitStateFromInt(dataInitial, 19)) //grid mode
+            //conditionnelle
+            int globalOffset = 28;
+            if( this.PointCount > 0)
             {
+                
+                PointTable = new List<CSBF1DynamicObjectPoint>();
+                for (int i = 0; i < this.PointCount; i++)
+                {
+                    int pointOffset = globalOffset + (i * 8);
+                    var pointData = CGeneric.GiveMeArray(rawData, pointOffset, 8);
+                    PointTable.Add(new CSBF1DynamicObjectPoint(pointData));
+                }
+                globalOffset += this.PointCount * 8;
             }
             
+
+            //conditionnelle flag
+            if (CGeneric.GetBitStateFromInt(CGeneric.ConvertByteArrayToInt(HeaderData), 19))
+            {
+                this.LinkedTextDescriptor = (uint?)CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalOffset, 4));
+                this.LinkedTextCountPerRow = (int)(LinkedTextDescriptor.GetValueOrDefault() & 0xFF);
+                this.LinkedTextBaseId = (int)((LinkedTextDescriptor.GetValueOrDefault() << 8) & 0xFFF);
+                globalOffset += 4;
+            }
+
+            if (CGeneric.GetBitStateFromInt(CGeneric.ConvertByteArrayToInt(HeaderData), 28))
+            {
+                this.GridHeight = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalOffset, 4));
+                globalOffset += 4;
+            }
+
+            if (CGeneric.GetBitStateFromInt(CGeneric.ConvertByteArrayToInt(HeaderData), 27))
+            {
+                this.GridWidth = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalOffset, 4));
+                globalOffset += 4;
+            }
+
+            if (CGeneric.GetBitStateFromInt(CGeneric.ConvertByteArrayToInt(HeaderData), 25))
+            {
+                this.BifRessourceIndex = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalOffset, 4));
+                globalOffset += 4;
+            }
+
+            if (CGeneric.GetBitStateFromInt(CGeneric.ConvertByteArrayToInt(HeaderData), 26))
+            {
+                this.RectX0 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalOffset, 4));
+                this.RectY0 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalOffset+4, 4));
+                this.RectX1 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalOffset+8, 4));
+                this.RectY1 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalOffset+12, 4));
+                globalOffset += 16;
+            }
+
+            if(globalOffset != rawData.Length)
+            {
+                throw new Exception("CSBF1DynamicObject : globalOffset != rawData.Length");
+            }
+            //set layout
+            var hasVerticalLayout = CGeneric.GetBitStateFromInt(CGeneric.ConvertByteArrayToInt(HeaderData), 28);
+            var hasHorizontalLayout = CGeneric.GetBitStateFromInt(CGeneric.ConvertByteArrayToInt(HeaderData), 27);
+
+            if(hasVerticalLayout && hasHorizontalLayout)
+                this.Layout = LayoutMode.Grid2D;
+            else if (hasVerticalLayout)
+            {
+                this.Layout = LayoutMode.Vertical;
+                this.GridWidth = 1;
+            }
+            else if (hasHorizontalLayout)
+            {
+                this.Layout = LayoutMode.Horizontal;
+                this.GridHeight = 1;
+            }
+            else
+                this.Layout = LayoutMode.None;
+
+
         }
 
         public static int GetHeaderLength(int headerValue,int extra)
@@ -76,85 +178,6 @@ namespace N64PPLEditorC
                 finalValue += extra * 8;
 
             return finalValue;
-
-
-
-            //switch (headerValue)
-            //{
-            //    case 0x00024051: return 0x30;
-            //    case 0x00C01461: return 0x30;
-            //    case 0x03000061: return 0x30;
-            //    case 0x03000062: return 0x30;
-            //    case 0x00000071: return 0x34;
-            //    case 0x000000E2: return 0x34;
-            //    case 0x00001471: return 0x34;
-            //    case 0x000014E1: return 0x34;
-            //    case 0x000200D1: return 0x34;
-            //    case 0x00020471: return 0x34;
-            //    case 0x00020472: return 0x34;
-            //    case 0x00020071: return 0x34;//test pour pimp
-            //    case 0x00024071: return 0x34;
-            //    case 0x000240D1: return 0x34;
-            //    case 0x00201471: return 0x34;
-            //    case 0x00280771: return 0x34;
-            //    case 0x00280772: return 0x34;
-            //    case 0x00C000E2: return 0x34;
-            //    case 0x00C01471: return 0x34;
-            //    case 0x030000E1: return 0x34;
-            //    case 0x03C000E1: return 0x34;
-            //    case 0x000001F1: return 0x38;
-            //    case 0x000104E1: return 0x44;
-            //    case 0x00C100E1: return 0x44;
-            //    case 0x030100E1: return 0x44;
-            //    case 0x030104E1: return 0x4C; //tested
-
-            //          //value added for ISO game
-            //    case 0x000204F1: return 0x38;
-            //    case 0x000260D1: return 0x38;
-            //    case 0x00000461: return 0x30;
-            //    case 0x000205F1: return 0x38;
-            //    case 0x000205F2: return 0x38;
-            //    case 0x00000051: return 0x30;
-            //    case 0x000003F1: return 0x38;
-            //    case 0x00000151: return 0x30;
-            //    case 0x002807F1: return 0x38;
-            //    case 0x002807E1: return 0x34;
-            //    case 0x002807F2: return 0x38;
-            //    case 0x002807E2: return 0x34;
-            //    case 0x30D080E1: return 0x34;
-            //    case -204439455: return 0x30;
-            //    case 0x01800061: return 0x30;
-            //    case 0x30D080E2: return 0x34;
-            //    case -1022328734:return 0x30;
-            //    case 0x001080e2: return 0x34;
-            //    case 0x042807f0: return 0x38;
-            //    case 0x042807e0: return 0x34;
-            //    case 0x082807f0: return 0x38;
-            //    case 0x082807e0: return 0x34;
-            //    case 0x30d08061: return 0x30;
-            //    case -1022328607:return 0x34;
-            //    case 0x30d08062: return 0x30;
-            //    case -1022328606: return 0x34;
-            //    case 0x34d08060: return 0x30;
-            //    case -955219744: return 0x34;
-            //    case 0x38d08060: return 0x30;
-            //    case -888110880: return 0x34;
-            //    case 0x30c09471: return 0x34;
-            //    case -1023372191: return 0x30;
-            //    case 0x00000471: return 0x34;
-            //    case 0x003083e1: return 0x34;
-            //    case 0x002007f1: return 0x38;
-            //    case 0x002107F1: return 0x48; //mess
-            //    case 0x001285f1: return 0x38;
-            //    case 0x000284f1: return 0x38;
-            //    case 0x000900F1: return 0x48;
-            //    case 0x30c08461: return 0x30;
-            //    case 0x30c080e1: return 0x34;
-            //    case -205487007: return 0x30;
-            //    case -1023376287: return 0x30;
-
-                //default: throw new NotSupportedException();
-            //}
         }
 
         public int GetSize()
@@ -164,16 +187,7 @@ namespace N64PPLEditorC
 
         public byte[] GetRawData()
         {
-
-            int flags = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData,0,4));
-
-            //set unknown bit values
-            //CGeneric.SetBitInInt(ref flags, 1, true);
-
-            //Array.Copy(CGeneric.ConvertIntToByteArray(flags), 0, rawData, 0, 4);
-
-           
-
+            //todo reconstruire une sortie de rawData à partir des données du dynamic object, pour l'instant on retourne juste le rawData d'origine
             return rawData;
         }
     }

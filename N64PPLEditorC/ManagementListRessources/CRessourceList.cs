@@ -6,7 +6,7 @@ using System.Runtime.Remoting.Messaging;
 
 namespace N64PPLEditorC
 {
-    class CRessourceList
+    public class CRessourceList
     {
         
         private struct ListFormat

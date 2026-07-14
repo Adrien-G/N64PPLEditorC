@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class CSBF1TextureManagement
+    public class CSBF1TextureManagement
     {
         private byte[] rawData;
         public bool isCompressedTexture;

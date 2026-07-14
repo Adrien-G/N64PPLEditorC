@@ -368,11 +368,6 @@ namespace N64PPLEditorC
         
         #endregion
 
-        #region scenes
-
-        #endregion
-
-
         private void UpdateFreeSpaceLeft()
         {
             if (extendedRom)
@@ -686,12 +681,6 @@ namespace N64PPLEditorC
                     sw.WriteLine("usb64.exe -rom=out.z64 -start");
                 }
             }
-
-
-
-
-
-
         }
 
         private void WriteToRom()
@@ -727,13 +716,10 @@ namespace N64PPLEditorC
 
         private void treeViewSBF_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            numericUpDownSceneText.Value = 0;
             numericUpDownSceneTexture.Value = -1;
 
             if (treeViewSBF.SelectedNode.Level == 0)
             {
-                groupBoxSceneText.Enabled = false;
-                groupBoxSceneFontColor.Enabled = false;
                 groupBoxSceneTextureManagement.Enabled = true;
                 drawScene1.BackColor = Color.Gray;
                 return;
@@ -754,19 +740,6 @@ namespace N64PPLEditorC
                 indexData = this.ressourceList.Get3FIBIndexWithFIBName(this.ressourceList.fibList[i].GetRessourceName());
                 comboBoxSceneAddTexture.Items.Add(this.ressourceList.fibList[indexData].GetFIBName());
             }
-                
-            //text objects
-            int nbTextObject = scene.GetTextObjectCount();
-            if (nbTextObject == 0)
-            {
-                groupBoxSceneText.Text = "Text Edit (0 Text)";
-                numericUpDownSceneText.Maximum = 0;
-            }
-            else
-            {
-                groupBoxSceneText.Text = "Text Edit (" + nbTextObject + " Text(s))";
-                numericUpDownSceneText.Maximum = nbTextObject - 1;
-            }
 
             //textures object
             int nbTextureObject = scene.GetTextureManagementCount();
@@ -775,24 +748,10 @@ namespace N64PPLEditorC
             else
                 numericUpDownSceneTexture.Maximum = nbTextureObject - 1;
 
-            //4th object
-            int nb4thObject = scene.Get4thObjCount();
-            label4thCount.Text = nb4thObject.ToString();
 
-            //dynamic object
-            int nbDynamicObject = scene.GetDynamicObjectCount();
-            labelDynamicObjCount.Text = nbDynamicObject.ToString();
 
-            groupBoxSceneText.Enabled = true;
-            groupBoxSceneFontColor.Enabled = true;
-            groupBoxSceneTextureManagement.Enabled = true;
             launchSceneDisplay();
 
-        }
-
-        private void numericUpDownSceneText_ValueChanged(object sender, EventArgs e)
-        {
-            launchTextDisplayGroup();
         }
 
         private void launchSceneDisplay()
@@ -850,139 +809,11 @@ namespace N64PPLEditorC
             //get object count and verify > 0
             int nbTextObject = scene.GetTextObjectCount();
 
-            if (nbTextObject > 0)
-            {
-                var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-
-                //print text for editing
-                textBoxSceneText.Text = textObject.GetText();
-
-                //add text options (posX,posY, backColor, forecolor)
-                numericUpDownSceneTextPosX.Value = textObject.GetPosX();
-                numericUpDownSceneTextPosY.Value = textObject.GetPosY();
-                buttonSceneBackColor.BackColor = textObject.BackColor;
-                buttonSceneForeColor.BackColor = textObject.ForeColor;
-                checkBoxSceneScrolling.Checked = textObject.isTextScrolling;
-                checkBoxScenesForegroundText.Checked = textObject.isForegroundText;
-                checkBoxSceneCentered.Checked = textObject.isCenteredText;
-                checkBoxScenesExtra1.Checked = textObject.isExtraSize1;
-                checkBoxScenesExtra3.Checked = textObject.isManualSpace;
-                checkBoxScenesWaitInput.Checked = textObject.isWaitingInput;
-                checkBoxScenesIsHidden.Checked = textObject.isHidden;
-                checkBoxScenesExtra4.Checked = textObject.hasFontColor;
-
-                if (textObject.isFontSmall)
-                    comboBoxSceneFontSize.SelectedIndex = 0;
-                else
-                    if (textObject.isFontMedium)
-                        comboBoxSceneFontSize.SelectedIndex = 1;
-                    else
-                        comboBoxSceneFontSize.SelectedIndex = 2;
-
-                //text object
-                var sceneTxt = scene.GetTextObjectGroup(textObject.group);
-
-                int index = 0;
-                foreach (CSBF1TextObject txtObj in sceneTxt)
-                {
-                    var txtBoxTmp = new TextBox();
-                    txtBoxTmp.Multiline = true;
-                    txtBoxTmp.ReadOnly = true;
-                    txtBoxTmp.BorderStyle = BorderStyle.None;
-                    txtBox.Add(txtBoxTmp);
-
-                    txtBox[index].Text = txtObj.GetText();
-                    txtBox[index].Top = txtObj.GetPosY();
-                    txtBox[index].Left = txtObj.GetPosX();
-
-                    Size size = TextRenderer.MeasureText(txtBox[index].Text, txtBox[index].Font);
-                    txtBox[index].ClientSize = new Size(size.Width, size.Height);
-
-                    if (textBoxSceneText.Text == txtBox[index].Text && sceneTxt.Count >= 1)
-                    {
-                        txtBox[index].BackColor = Color.LightGreen;
-                        txtBox[index].BringToFront();
-                    }
-                        
-                    drawScene1.Controls.Add(txtBox[index]);
-                    index++;
-                }
-            }
         }
 
         private void buttonHvqmPathOpen_Click(object sender, EventArgs e)
         {
             Process.Start(CGeneric.pathOtherContent);
-        }
-
-        private void numericUpDownScenePosX_ValueChanged(object sender, EventArgs e)
-        {
-            var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
-            textObj.SetPosX(Convert.ToInt32(numericUpDownSceneTextPosX.Value));
-            launchTextDisplayGroup();
-        }
-        private void numericUpDownScenePosY_ValueChanged(object sender, EventArgs e)
-        {
-            var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
-            textObj.SetPosY(Convert.ToInt32(numericUpDownSceneTextPosY.Value));
-            launchTextDisplayGroup();
-        }
-
-
-
-        private void numericUpDownGropuText_ValueChanged(object sender, EventArgs e)
-        {
-            //launchTextDisplayGroup((int)numericUpDownGroupText.Value);
-        }
-
-        private void textBoxSceneText_TextChanged(object sender, EventArgs e)
-        {
-            if (treeViewSBF.SelectedNode.Level == 1)
-                this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value).SetText(textBoxSceneText.Text);
-            
-        }
-
-        private void buttonSceneForeColor_Click(object sender, EventArgs e)
-        {
-            var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
-            colorDialog1.Color = textObj.ForeColor;
-            colorDialog1.CustomColors = new int[] { 0xb17941, 0xffaf55, 0xef9542, 0xd9be8d, 0x36cfff, 0x4254ef, 0xc955ff, 0xef42bb, 0xffce65, 0xf7b982, 0xf18379, 0x66ff83, 0x84dffc, 0x8085f3, 0xd176ff, 0xc074b9, 0x57ccd6 };
-
-            if (colorDialog1.ShowDialog() == DialogResult.OK)
-            {
-
-                textObj.ForeColor = colorDialog1.Color;
-                buttonSceneForeColor.BackColor = textObj.ForeColor;
-                //launchTextDisplayText();
-            }
-
-        }
-
-        private void buttonSceneBackColor_Click(object sender, EventArgs e)
-        {
-            var textObj = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index).GetTextObject((int)numericUpDownSceneText.Value);
-            colorDialog1.Color = textObj.BackColor;
-            colorDialog1.CustomColors = new int[] { 0xe4b88d, 0xe4b88d, 0xbc5746, 0x6d128, 0xb42ff0, 0x3362f, 0x431c19, 0 };
-
-            if (colorDialog1.ShowDialog() == DialogResult.OK)
-            {
-                textObj.BackColor = colorDialog1.Color;
-                buttonSceneBackColor.BackColor = textObj.BackColor;
-                //launchTextDisplayText();
-            }
-        }
-
-        private void buttonSceneSuppressText_Click(object sender, EventArgs e)
-        {
-            var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            if (scene.GetTextObjectCount() > 0)
-            {
-                scene.RemoveText((int)numericUpDownSceneText.Value);
-                if (numericUpDownSceneText.Value > 0)
-                    numericUpDownSceneText.Maximum -= 1;
-                else
-                    numericUpDownSceneText.Maximum = 0;
-            }
         }
 
         private void buttonHVQMExtract_Click(object sender, EventArgs e)
@@ -1020,32 +851,6 @@ namespace N64PPLEditorC
             this.ressourceList.hvqmList.RemoveAt(treeViewHVQM.SelectedNode.Index);
             treeViewHVQM.Nodes.RemoveAt(treeViewHVQM.SelectedNode.Index);
             UpdateFreeSpaceLeft();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-#if DEBUG
-            launchOnEverdrive();
-            //int sbfIndex = 0;
-            //foreach (CSBF1 sbf in ressourceList.sbfList)
-            //{
-
-            //    foreach (CSBF1Scene scene in sbf.scenesList)
-            //    {
-
-            //        foreach (CSBF1TextureManagement texture in scene.textureManagementObjectList)
-            //        {
-            //            textBox1.AppendText(texture.ToString());
-            //            textBox1.AppendText("[" + scene.GetSceneName() + "[");
-            //            //textBox1.AppendText(txt. + "[");
-            //            textBox1.AppendText(BitConverter.ToString(txt.GetRawData()).Replace("-", " "));
-
-            //            textBox1.AppendText(Environment.NewLine);
-            //        }
-            //    }
-            //    sbfIndex++;
-            //}
-#endif
         }
 
         private void toolStripMenuItemReplaceAudioAllSoundBank_Click(object sender, EventArgs e)
@@ -1175,99 +980,6 @@ namespace N64PPLEditorC
             treeViewAudio.SelectedNode = e.Node;
         }
 
-        private void textBoxSceneText_Leave(object sender, EventArgs e)
-        {
-            UpdateFreeSpaceLeft();
-        }
-
-        private void checkBoxSceneTextScrolling_CheckedChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.isTextScrolling = checkBoxSceneScrolling.Checked;
-        }
-
-        private void checkBoxSceneCentered_CheckedChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.isCenteredText = checkBoxSceneCentered.Checked;
-        }
-
-        private void buttonScenesAddText_Click(object sender, EventArgs e)
-        {
-            ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].AddNewTextObject(radioButtonScenesNewScene.Checked);
-            numericUpDownSceneText.Maximum += 1;
-            numericUpDownSceneText.Value = numericUpDownSceneText.Maximum;
-            groupBoxSceneText.Text = "Text Edit (" + Convert.ToInt32(numericUpDownSceneText.Value + 1) + " Text(s))";
-            textBoxSceneText.Text = "(set new text here)";
-            UpdateFreeSpaceLeft();
-        }
-
-        private void comboBoxSceneFontSize_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-
-            switch (comboBoxSceneFontSize.SelectedIndex)
-            {
-                case 0: // small
-                    textObject.isFontSmall = true;
-                    break;
-                case 1: // medium
-                    textObject.isFontSmall = false;
-                    textObject.isFontMedium = true;
-                    break;
-                case 2: // big
-                    textObject.isFontSmall = false;
-                    textObject.isFontMedium = false;
-                    break;
-            }
-        }
-
-        private void checkBoxScenesExtra1_CheckedChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.isExtraSize1 = checkBoxScenesExtra1.Checked;
-        }
-
-        private void checkBoxScenesExtra3_CheckedChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.isManualSpace = checkBoxScenesExtra3.Checked;
-        }
-
-        private void checkBoxScenesWaitInput_CheckedChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.isWaitingInput = checkBoxScenesWaitInput.Checked;
-        }
-
-        private void checkBoxScenesForegroundText_CheckedChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.isForegroundText = checkBoxScenesForegroundText.Checked;
-        }
-
-        private void checkBoxScenesIsHidden_CheckedChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.isHidden = checkBoxScenesIsHidden.Checked;
-
-        }
-
-        private void checkBoxScenesExtra4_CheckedChanged(object sender, EventArgs e)
-        {
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            var textObject = scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.hasFontColor = checkBoxScenesExtra4.Checked;
-        }
-
         private void numericUpDownSceneTexture_ValueChanged(object sender, EventArgs e)
         {
             if (treeViewSBF.SelectedNode.Level == 0)
@@ -1375,12 +1087,14 @@ namespace N64PPLEditorC
             {
                 ToolStripMenuItemLoadSBF.Enabled = true;
                 ToolStripMenuItemSaveSBF.Enabled = true;
+                ToolStripMenuItemReplaceScene.Enabled = false;
 
             }
             else
             {
                 ToolStripMenuItemLoadSBF.Enabled = false;
                 ToolStripMenuItemSaveSBF.Enabled = false;
+                ToolStripMenuItemReplaceScene.Enabled = true;
             }
                 
         }
@@ -1644,32 +1358,6 @@ namespace N64PPLEditorC
             numericUpDownSceneTexture.Value = numericUpDownSceneTexture.Maximum;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            System.Threading.Thread.Sleep(3000);
-            timer2.Start();
-        }
-
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-
-            //SendKeys.Send("+{DOWN}");
-            //SendKeys.Send("%");
-            //SendKeys.Send("{RIGHT}");
-            //SendKeys.Send("{DOWN 3}");
-            //SendKeys.Send("{ENTER}");
-            //System.Threading.Thread.Sleep(200);
-            //SendKeys.Send("%{TAB}");
-            //System.Threading.Thread.Sleep(200);
-            //SendKeys.Send("^V");
-            //SendKeys.Send("{ENTER}");
-            //System.Threading.Thread.Sleep(200);
-            //SendKeys.Send("%{TAB}");
-            //System.Threading.Thread.Sleep(200);
-            //SendKeys.Send("{DOWN}");
-            //SendKeys.Send("{UP}");
-        }
-
         private void extractBinToolStripMenuItem_Click(object sender, EventArgs e)
         {
            Stream myStream;
@@ -1735,6 +1423,89 @@ namespace N64PPLEditorC
         private void buttonDynamicObjectRemove_Click(object sender, EventArgs e)
         {
             ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].dynamicObjectList = new List<CSBF1DynamicObject>();
+        }
+
+        private void buttonDynamicObjectExport_Click(object sender, EventArgs e)
+        {
+            var DynamicList = this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].dynamicObjectList;
+
+            byte[] res = new byte[0];
+            foreach (CSBF1DynamicObject dynObj in DynamicList)
+                res = res.Concat(dynObj.GetRawData()).ToArray();
+
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "DynamicObject files (*.bin)|*.bin";
+            saveFileDialog1.FileName = "DynamicObject1";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    myStream.Write(res, 0, res.Length);
+                    myStream.Close();
+                }
+            }
+
+           
+        }
+
+        private void ToolStripMenuItemReplaceScene_Click(object sender, EventArgs e)
+        {
+            var scene = this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index];
+
+
+            using (OpenFileDialog openSceneFile = new OpenFileDialog())
+            {
+                openSceneFile.Filter = "scene file (*.scene)|*.scene";
+                openSceneFile.FilterIndex = 1;
+                openSceneFile.RestoreDirectory = true;
+
+                if (openSceneFile.ShowDialog() == DialogResult.OK)
+                {
+                    Byte[] buffRaw = File.ReadAllBytes(openSceneFile.FileName);
+                    this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index] = new CSBF1Scene(buffRaw);
+                }
+            }
+            UpdateFreeSpaceLeft();
+        }
+
+        private void ToolStripMenuItemExportScene_Click(object sender, EventArgs e)
+        {
+            var scene = this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index];
+
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "Scene files (*.scene)|*.scene";
+            saveFileDialog1.FileName = "SceneFile1";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    var rawData = scene.GetRawData();
+                    myStream.Write(rawData, 0, rawData.Length);
+                    myStream.Close();
+                }
+            }
+        }
+
+        private void buttonEditScene_Click(object sender, EventArgs e)
+        {
+            CSBF1 sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
+            
+            var form2 = new SceneEdit(sbf,ressourceList, treeViewSBF.SelectedNode.Index);
+            if (form2.ShowDialog() == DialogResult.OK)
+            {
+                //récupération des données en fin..
+                sbf.SetScene(form2.Scene,treeViewSBF.SelectedNode.Index);
+            }
         }
     }
 }

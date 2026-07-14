@@ -10,7 +10,7 @@ using static N64PPLEditorC.CGeneric;
 
 namespace N64PPLEditorC
 {
-    class C3FIB : AbsRessource
+    public class C3FIB : AbsRessource
     {
         private List<CBFF2> bff2Childs;
         private Byte[] header3FIB;

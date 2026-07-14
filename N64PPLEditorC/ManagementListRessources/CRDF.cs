@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class CRDF : AbsRessource
+    public class CRDF : AbsRessource
     {
         public CRDF(Byte[] rawData, Byte[] ressourceName) : base(rawData, ressourceName)
         {

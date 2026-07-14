@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class CSBF1 : AbsRessource
+    public class CSBF1 : AbsRessource
     {
         //texture scene name
         private List<byte[]> bifList;
@@ -60,6 +60,11 @@ namespace N64PPLEditorC
         public CSBF1Scene GetScene(int index)
         {
             return scenesList[index];
+        }
+
+        public void SetScene(CSBF1Scene scene,int index)
+        {
+            scenesList[index] = scene;
         }
 
         public CSBF1Scene GetScene(string name)

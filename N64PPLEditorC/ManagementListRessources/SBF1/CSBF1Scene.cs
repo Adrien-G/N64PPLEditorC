@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    class CSBF1Scene
+    public class CSBF1Scene
     {
         private byte[] sceneName;
         private string sceneNameDebug; // only for getting the scene all around treatment.
@@ -19,6 +19,10 @@ namespace N64PPLEditorC
 
         public int nbTextGroupObject { get; private set; }
 
+        public CSBF1Scene()
+        {
+            
+        }
         public CSBF1Scene(byte[] rawData)
         {
             this.rawData = rawData;
@@ -51,22 +55,22 @@ namespace N64PPLEditorC
                 return;
 
             //set the first to the first group
-            var id = textObjectList[0].id;
+            var id = textObjectList[0].Base.Id;
             textObjectList[0].group = 0;
 
             var group = 0;
             for(int i = 1; i < textObjectList.Count(); i++)
             {
                 //si l'id est égal a 0xFFFFFFFF ou l'id précédent + 1 
-                var tmpId = textObjectList[i].id;
-                var tmpIdM1 = textObjectList[i - 1].id+1;
+                var tmpId = textObjectList[i].Base.Id;
+                var tmpIdM1 = textObjectList[i - 1].Base.Id+1;
                 //TODO if 44 -> set next group
 
                 if (tmpIdM1 == 0xFFFFFFFF)
                 { }
-                else if (textObjectList[i].headerData.Length == 44)
+                else if (textObjectList[i].Flags.Length == 44)
                     group++;
-                else if (textObjectList[i].headerData.Length == 52 && tmpId != tmpIdM1)
+                else if (textObjectList[i].Flags.Length == 52 && tmpId != tmpIdM1)
                     group++;
                 else
                 { }
@@ -103,7 +107,10 @@ namespace N64PPLEditorC
 
             //fill text objects
             this.textObjectList = new List<CSBF1TextObject>();
-            generalIndex += ChunkTextObject(data, CGeneric.ConvertByteArrayToInt(nbTextArray), generalIndex);
+            for (int i = 0; i < CGeneric.ConvertByteArrayToInt(nbTextArray); i++)
+            {
+                textObjectList.Add(new CSBF1TextObject(data, ref generalIndex));
+            }
 
             //get the number of texture management object
             byte[] nbTextureArray = new byte[4];
@@ -161,35 +168,6 @@ namespace N64PPLEditorC
             return totalSize;
         }
 
-        private int ChunkTextObject(byte[] data, int nbTextObject, int indexDataStart)
-        {
-            byte[] lengthHeader = new byte[4];
-            byte[] lengthText = new byte[4];
-            int lengthHeaderInt;
-            int lengthTextInt;
-            int totalSize = 0;
-
-            for (int i = 0; i < nbTextObject; i++)
-            {
-                // get the length of the header text object
-                Array.Copy(data, indexDataStart, lengthHeader, 0, lengthHeader.Length);
-                lengthHeaderInt = CSBF1TextObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthHeader));
-
-                //grab the size of the text (add 4 for the header (size text) and determine length of text (multiply per 2))
-                Array.Copy(data, indexDataStart + lengthHeaderInt, lengthText, 0, lengthText.Length);
-                lengthTextInt = lengthText.Length + CGeneric.ConvertByteArrayToInt(lengthText) * 2;
-
-                //store the new item
-                byte[] dataTextObject = new byte[lengthHeaderInt + lengthTextInt];
-                Array.Copy(data, indexDataStart, dataTextObject, 0, dataTextObject.Length);
-                textObjectList.Add(new CSBF1TextObject(dataTextObject,lengthHeaderInt,lengthTextInt));
-
-                //increment totalSize and indexStart
-                indexDataStart += lengthHeaderInt + lengthTextInt;
-                totalSize += lengthHeaderInt + lengthTextInt;
-            }
-            return totalSize;
-        }
         private int ChunkTextureManagementObject(byte[] data, int nbTextureManagementObject, int indexDataStart)
         {
             byte[] lengthData = new byte[4];
@@ -278,7 +256,7 @@ namespace N64PPLEditorC
                 var LastText = textObjectList[textObjectList.Count - 1];
 
                 //add one to ID and take his group
-                int textId = LastText.id + 1;
+                int textId = LastText.Base.Id + 1;
                 int groupText = LastText.group;
 
                 //if the text is independant
@@ -287,11 +265,12 @@ namespace N64PPLEditorC
                     textId += 0x64;
                     groupText += 1;
                 }
+                //TODO a redéfinir
                 //create the new text object
-                textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertIntToByteArray(textId), groupText));
+                //textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertIntToByteArray(textId), groupText));
             }
-            else
-                textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertIntToByteArray(0), 0));
+            //else
+                //textObjectList.Add(new CSBF1TextObject(CGeneric.ConvertIntToByteArray(0), 0));
 
 
         }
@@ -321,19 +300,19 @@ namespace N64PPLEditorC
             return fourthObjectList.Count();
         }
 
-        public int GetSize()
-        {
-            // 24 = size of header and number of elements
-            int totalSize = 24 + sceneName.Length;
+        //public int GetSize()
+        //{
+        //    // 24 = size of header and number of elements
+        //    int totalSize = 24 + sceneName.Length;
 
-            foreach (CSBF1DynamicObject dynObj in dynamicObjectList)
-                totalSize += dynObj.GetSize();
-            foreach (CSBF1TextObject TexObj in textObjectList)
-                totalSize += TexObj.GetSize();
-            foreach (CSBF1TextureManagement texObj in textureManagementObjectList)
-                totalSize += texObj.GetSize();
-            return totalSize;
-        }
+        //    foreach (CSBF1DynamicObject dynObj in dynamicObjectList)
+        //        totalSize += dynObj.GetSize();
+        //    foreach (CSBF1TextObject TexObj in textObjectList)
+        //        totalSize += TexObj.GetSize();
+        //    foreach (CSBF1TextureManagement texObj in textureManagementObjectList)
+        //        totalSize += texObj.GetSize();
+        //    return totalSize;
+        //}
 
         public void RemoveText(int index)
         {
@@ -366,7 +345,7 @@ namespace N64PPLEditorC
 
             //TextObject
             foreach (CSBF1TextObject TexObj in textObjectList)
-                res = res.Concat(TexObj.GetRawData()).ToArray();
+                res = res.Concat(TexObj.RecomposeRawData()).ToArray();
 
             //Size textureManagement
             res = res.Concat(CGeneric.ConvertIntToByteArray(textureManagementObjectList.Count)).ToArray();
