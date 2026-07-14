@@ -172,11 +172,7 @@ namespace N64PPLEditorC
 
                 //add text options (posX,posY, backColor, forecolor)
                 checkBoxScenesForegroundText.Checked = textObject.isForegroundText;
-                checkBoxSceneCentered.Checked = textObject.isCenteredText;
-                checkBoxScenesExtra1.Checked = textObject.isExtraSize1;
-                checkBoxScenesWaitInput.Checked = textObject.isWaitingInput;
                 checkBoxScenesIsHidden.Checked = textObject.isHidden;
-                checkBoxScenesExtra4.Checked = textObject.hasFontColor;
 
 
                 //text object
@@ -285,7 +281,6 @@ namespace N64PPLEditorC
                 return;
 
             var textObject = Scene.GetTextObject((int)numericUpDownSceneText.Value);
-            textObject.isCenteredText = checkBoxSceneCentered.Checked;
         }
 
         private void comboBoxSceneFontSize_SelectedIndexChanged(object sender, EventArgs e)

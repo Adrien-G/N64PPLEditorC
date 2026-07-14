@@ -36,15 +36,8 @@ namespace N64PPLEditorC
 
 
         //flags
-        public bool  isCenteredText;
-        public bool isFontSmall;
-        public bool isFontMedium;
         public bool isHidden;
-        public bool hasFontColor;
         public bool isForegroundText;
-        public bool unknow8;
-        public bool unknow28;
-        public bool isExtraSize1;
 
         
         
@@ -189,88 +182,9 @@ namespace N64PPLEditorC
         }
 
         //public byte[] GetRawData()
-        //{
-        //    int newHeaderDataSize = 36;
-        //    if (this.isExtraSize1) newHeaderDataSize += 8;
-        //    if (this.isCenteredText) newHeaderDataSize += 8;
-        //   // if (this.isManualSpace) newHeaderDataSize += 8;
-        //    if (this.hasFontColor) newHeaderDataSize += 8;
 
-        //    byte[] newHeaderData = new byte[newHeaderDataSize];
-
-        //    //set differents flags
-        //    int flags = 0;
-        //    CGeneric.SetBitInInt(ref flags, 2, this.isExtraSize1);
-        //    CGeneric.SetBitInInt(ref flags, 7, this.isFontSmall);
-        //    CGeneric.SetBitInInt(ref flags, 9, this.isCenteredTextFirstBit);
-        //    CGeneric.SetBitInInt(ref flags, 13, this.isFontMedium);
-        //    CGeneric.SetBitInInt(ref flags, 17, this.isCenteredTextSecondBit);
-        //    CGeneric.SetBitInInt(ref flags, 18, this.isCenteredText);
-        //    CGeneric.SetBitInInt(ref flags, 20, this.Animation.ProgressiveDisplay);
-        //   // CGeneric.SetBitInInt(ref flags, 21, this.isManualSpace);
         //    CGeneric.SetBitInInt(ref flags, 22, this.isHidden);
-        //    CGeneric.SetBitInInt(ref flags, 26, this.isForegroundText);
-        //    CGeneric.SetBitInInt(ref flags, 32, this.hasFontColor);
-
-        //    //set unknown flags
-        //    CGeneric.SetBitInInt(ref flags, 3, this.unknow3);
-        //    CGeneric.SetBitInInt(ref flags, 4, this.unknow4);
-        //    CGeneric.SetBitInInt(ref flags, 8, this.unknow8);
-        //    CGeneric.SetBitInInt(ref flags, 12, this.unknow12);
         //    CGeneric.SetBitInInt(ref flags, 28, this.unknow28); // mise en gras ?
-        //    CGeneric.SetBitInInt(ref flags, 30, this.unknow30);
-        //    CGeneric.SetBitInInt(ref flags, 31, true);
-
-        //    Array.Copy(CGeneric.ConvertIntToByteArray(flags), 0, newHeaderData, 0, 4);
-
-        //    //update X / Y position
-        //    var sizeX = CGeneric.ConvertIntToByteArray(this.Base.X);
-        //    var sizeY = CGeneric.ConvertIntToByteArray(this.Base.Y);
-        //    Array.Copy(sizeX, 0, newHeaderData, 4, sizeX.Length);
-        //    Array.Copy(sizeY, 0, newHeaderData, 8, sizeY.Length);
-
-        //    //update id
-        //    var id = CGeneric.ConvertIntToByteArray(this.Base.Id);
-        //    Array.Copy(id, 0, newHeaderData, 12, id.Length);
-
-        //    if (!this.isWaitingInput)
-        //        Array.Copy(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }, 0, newHeaderData, 16, 4);
-
-        //    int index = 20;
-
-
-        //    //special fix for header 36 (only used in debug by dev's i think)
-        //    if(newHeaderData.Length == 36)
-        //        Array.Copy(new byte[] { 0,0,0,1}, 0, newHeaderData, index+4, 4);
-        //    else
-        //        Array.Copy(new byte[] { 0, 0, 0, 1 }, 0, newHeaderData, index, 4);
-        //    index += 4;
-            
-        //    if (this.hasFontColor)
-        //    {
-        //        //update forecolor and backcolor
-        //        var foreColor = new byte[] { this.VisualStyle.PrimaryColor[0].R, this.VisualStyle.PrimaryColor[0].G, this.VisualStyle.PrimaryColor[0].B, this.VisualStyle.PrimaryColor[0].A };
-        //        var backColor = new byte[] { this.VisualStyle.SecondaryColor[0].R, this.VisualStyle.SecondaryColor[0].G, this.VisualStyle.SecondaryColor[0].B, this.VisualStyle.SecondaryColor[0].A };
-        //        Array.Copy(backColor, 0, newHeaderData, index, foreColor.Length);
-        //        Array.Copy(foreColor, 0, newHeaderData, index + 4, backColor.Length);
-        //        index += 8;
-        //    }
-        //    Array.Copy(CGeneric.ConvertIntToByteArray(this.nblines), 0, newHeaderData, index, 4);
-        //    //Array.Copy(CGeneric.ConvertIntToByteArray(this.packedRevealMetadata), 0, newHeaderData, index + 4, 4);
-
-        //    //update the text size
-        //    //var lenText = CGeneric.ConvertIntToByteArray((this.textData.Length - 4) / 2);
-        //   // Array.Copy(lenText, 0, textData, 0, lenText.Length);
-
-        //    //merge the two arrays
-        //    byte[] res = new byte[0];
-        //    res = res.Concat(newHeaderData).ToArray();
-        //    //res = res.Concat(textData).ToArray();
-
-        //    return res;
-
-
-        //}
 
         #region set text and show it
 
