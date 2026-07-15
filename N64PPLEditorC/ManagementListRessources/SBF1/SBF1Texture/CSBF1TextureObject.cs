@@ -1,14 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace N64PPLEditorC
 {
-    public class CSBF1TextureManagement
+    public class CSBF1TextureObject
     {
+        public CSBF1TextureBase Base {get;set;}
+        public CSBF1TextureAnimation Animation {get;set;}
+
+        public int BifRessourceIndex { get; set;}
+        public int BifField14InitialValue { get; set; }
+        public int BifField94InitialValue { get; set; }
+        public int BifField98InitialValue { get; set; }
+
         private byte[] rawData;
+        private byte[] Flags;
         public bool isCompressedTexture;
         public byte textureIndex;
         public int posX;
@@ -31,14 +36,33 @@ namespace N64PPLEditorC
         public bool transparencybit;
         public bool extra2;
 
+        public CSBF1TextureObject(byte[] rawData,ref int globalIndex)
+        {
+            this.rawData = rawData;
+            decomposeData(rawData, ref globalIndex);
+        }
 
-        public CSBF1TextureManagement(byte[] rawData)
+        private void decomposeData(byte[] rawData, ref int index)
+        {
+            this.Flags = CGeneric.GiveMeArray(rawData, index, 4);
+            index += 4;
+
+            this.Base = new CSBF1TextureBase(rawData,ref index);
+            this.Animation = new CSBF1TextureAnimation(rawData,ref index);
+            Base.AddId(rawData, ref index);
+            Animation.AddLinkedtextureId(rawData, ref index);
+
+            this.BifRessourceIndex = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
+            index += 4;
+        }
+
+        public CSBF1TextureObject(byte[] rawData)
         {
             this.rawData = rawData;
             decomposeHeader();
         }
 
-        public CSBF1TextureManagement(int id, int index)
+        public CSBF1TextureObject(int id, int index)
         {
             byte[] newTexture = new byte[28];
             Array.Copy(CGeneric.ConvertIntToByteArray(id), 0, newTexture, 16,4);

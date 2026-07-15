@@ -15,9 +15,7 @@ namespace N64PPLEditorC
     /// </summary>
     public class CSBF1TextObject
     {
-        //private byte[] RawData;
-
-        public byte[] Flags { get; private set; }
+        public CSBF1TextFlags Flags { get; private set; }
 
         /// <summary> Informations de base d'un texte (toujours présentes) </summary>
         public CSBF1TextBase Base { get; set; }
@@ -28,21 +26,12 @@ namespace N64PPLEditorC
         public CSBF1TextAnimation Animation { get; set; }
         public CSBF1Text Text { get; set; }
 
-        public CSBF1TextRendering Rendering { get; set; }
         //valeur qui n'a pas l'air d'être utilisé
-        public int DeclaredLineCount { get; private set; }
-
-
-
-
-        //flags
-        public bool isHidden;
-        public bool isForegroundText;
+        public int SerializedValue28 { get; private set; }
 
         
         
         public int group { get; set; }
-        public bool isWaitingInput { get; set; }
 
         public CSBF1TextObject(byte[] rawData, ref int globalIndex)
         {
@@ -51,32 +40,26 @@ namespace N64PPLEditorC
 
         private void DecomposeData(byte[] rawData,ref int globalIndex)
         {
-
-            //flags 
-            this.Flags = CGeneric.GiveMeArray(rawData, globalIndex, 4);
-            int FlagsInt = CGeneric.ConvertByteArrayToInt(this.Flags);
-
-            globalIndex += 4;
+            //Flags
+            this.Flags = new CSBF1TextFlags(ref globalIndex, rawData);
 
             //initialisation des informations de base du texte (BaseX, BaseY et Id)
             this.Base = new CSBF1TextBase(ref globalIndex, rawData);
 
             //initialisation des données de revealSound et linkedTextureId
-            this.Animation = new CSBF1TextAnimation(ref globalIndex, FlagsInt, rawData);
+            this.Animation = new CSBF1TextAnimation(ref globalIndex, this.Flags, rawData);
             
             //initialisation des informations de layout (si présentes)
-            this.Layout = new CSBF1TextLayout(ref globalIndex, FlagsInt, rawData);
+            this.Layout = new CSBF1TextLayout(ref globalIndex, this.Flags, rawData);
             
             //ajout des styles visuels
-            this.VisualStyle = new CSBF1TextVisualStyle(ref globalIndex, FlagsInt, rawData);
+            this.VisualStyle = new CSBF1TextVisualStyle(ref globalIndex, this.Flags, rawData);
 
-            this.Rendering = new CSBF1TextRendering(FlagsInt);
-
-            DeclaredLineCount = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex, 4));
+            SerializedValue28 = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex, 4));
             globalIndex += 4;
 
             //ajout des packetMetadata
-            this.Animation.AddPackedMetadata(ref globalIndex, rawData);
+            this.Animation.AddPackedRevealMetadata(ref globalIndex, rawData);
 
             this.Layout.AddXPositions(ref globalIndex, rawData);
 
@@ -86,10 +69,10 @@ namespace N64PPLEditorC
         public byte[] RecomposeRawData()
         {
             var rawData = new List<byte>();
-            var flagInt = CGeneric.ConvertByteArrayToInt(this.Flags);
 
             //Flags
-            rawData.AddRange(recalculateFlags());
+            this.Flags.UpdateFlags();
+            rawData.AddRange(this.Flags.Flags);
 
             //Base
             rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Base.X));
@@ -97,16 +80,16 @@ namespace N64PPLEditorC
             rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Base.Id));
 
             //Animation
-            rawData.AddRange(CGeneric.ConvertUShortToByteArray(this.Animation.ProgressiveSoundStyle));
+            rawData.AddRange(CGeneric.ConvertUShortToByteArray(this.Animation.ProgressiveSound));
             rawData.AddRange(CGeneric.ConvertUShortToByteArray(this.Animation.LinkedTextureId));
 
             //Layout
-            if ((flagInt & 0x40000800) != 0)
+            if (this.Flags.IsFixedGlyphAdvance || this.Flags.IsAdditionalGlyphAdvance)
             {
                 rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Layout.FixedGlyphAdvance));
                 rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Layout.LineAdvance));
             }
-            if ((flagInt & 0x00004000) != 0)
+            if (this.Flags.IsBoundedLayout)
             {
                 rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Layout.WrapWidth));
                 rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Layout.LayoutHeight));
@@ -134,10 +117,10 @@ namespace N64PPLEditorC
             }
 
             //serialized28
-            rawData.AddRange(CGeneric.ConvertIntToByteArray(this.DeclaredLineCount)); 
+            rawData.AddRange(CGeneric.ConvertIntToByteArray(this.SerializedValue28)); 
             
             //packedMetaData
-            rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Animation.PackedPagination));
+            rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Animation.PackedRevealMetadata));
 
             //add XPositions
             rawData.AddRange(CGeneric.ConvertIntToByteArray(this.Layout.XPositions.Count));
@@ -155,35 +138,8 @@ namespace N64PPLEditorC
             return rawData.ToArray();
         }
 
-        private byte[] recalculateFlags()
-        {
-            int flags = CGeneric.ConvertByteArrayToInt(Flags);
-
-            // ProgressiveDisplay
-            if (Animation.ProgressiveDisplay)
-                flags |= 0x00001000;
-            else
-                flags &= ~0x00001000;
-
-            // Retirer les deux flags de taille.
-            flags &= ~0x02080000;
-
-            switch (VisualStyle.FontSize)
-            {
-                case CSBF1TextVisualStyle.FontMode.Normal:
-                    flags |= 0x00080000;
-                    break;
-
-                case CSBF1TextVisualStyle.FontMode.Small:
-                    flags |= 0x02000000;
-                    break;
-            }
-            return CGeneric.ConvertIntToByteArray(flags);
-        }
-
         //public byte[] GetRawData()
 
-        //    CGeneric.SetBitInInt(ref flags, 22, this.isHidden);
         //    CGeneric.SetBitInInt(ref flags, 28, this.unknow28); // mise en gras ?
 
         #region set text and show it

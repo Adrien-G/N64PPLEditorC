@@ -9,13 +9,6 @@
         public int Y;
         public int Id;
 
-        public CSBF1TextBase(int baseX, int baseY, int Id)
-        {
-            this.X = baseX;
-            this.Y = baseY;
-            this.Id = Id;
-        }
-
         public CSBF1TextBase(ref int index, byte[] rawData)
         {
             this.X = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));

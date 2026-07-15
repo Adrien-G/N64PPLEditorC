@@ -12,7 +12,7 @@ namespace N64PPLEditorC
         //permet de déterminer si nous sommes en chasse fixe
         public int FixedGlyphAdvance { get; set; }
 
-        //espacement Verticale utilisé lors du passage a la ligne suivante
+        //espacement Horizontal utilisé lors du passage a la ligne suivante
         //en fonction du flag il remplace ou complète la hauteur normale de la police
         public int LineAdvance { get; set; }
 
@@ -27,16 +27,16 @@ namespace N64PPLEditorC
         {
             XPositions = new List<int>();
         }
-        public CSBF1TextLayout(ref int index, int flags, byte[] rawData) : this()
+        public CSBF1TextLayout(ref int index, CSBF1TextFlags flags, byte[] rawData) : this()
         {
-            if ((flags & 0x40000800) != 0)
+            if (flags.IsFixedGlyphAdvance || flags.IsAdditionalGlyphAdvance)
             {
                 FixedGlyphAdvance = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
                 LineAdvance = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index + 4, 4));
 
                 index += 8;
             }
-            if ((flags & 0x00004000) != 0)
+            if (flags.IsBoundedLayout)
             {
                 WrapWidth = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
                 LayoutHeight = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index + 4, 4));

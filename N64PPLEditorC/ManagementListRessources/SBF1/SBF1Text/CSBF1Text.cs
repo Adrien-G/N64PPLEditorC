@@ -12,7 +12,7 @@ namespace N64PPLEditorC
 
         public CSBF1Text()
         {
-            
+            Character = new List<CSBF1TextCode>();
         }
 
         public CSBF1Text(ref int index, byte[] rawData)
@@ -41,7 +41,7 @@ namespace N64PPLEditorC
 
         public void SetAsciiText(string asciiText)
         {
-            asciiText = asciiText.Replace("\r\n", "#").ToLower();
+            asciiText = asciiText.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "#").ToLower();
             Character = new List<CSBF1TextCode>();
             var sb = new StringBuilder();
             bool isSpecialCar = false;
@@ -65,6 +65,8 @@ namespace N64PPLEditorC
                 else
                     Character.Add(new CSBF1TextCode(asciiText[i].ToString()));
             }
+            if (isSpecialCar)
+                throw new Exception("Le caractère n'est pas terminé correctement");
         }
     }
 }

@@ -30,14 +30,8 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.checkBoxScenesIsHidden = new System.Windows.Forms.CheckBox();
-            this.checkBoxScenesForegroundText = new System.Windows.Forms.CheckBox();
-            this.groupBoxSceneText = new System.Windows.Forms.GroupBox();
-            this.buttonScenesAddText = new System.Windows.Forms.Button();
-            this.radioButtonSceneSameScene = new System.Windows.Forms.RadioButton();
             this.buttonSceneSuppressText = new System.Windows.Forms.Button();
-            this.radioButtonScenesNewScene = new System.Windows.Forms.RadioButton();
+            this.buttonScenesAddText = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.buttonDynamicObjectExport = new System.Windows.Forms.Button();
             this.labelDynamicObjCount = new System.Windows.Forms.Label();
@@ -71,39 +65,71 @@
             this.label4thCount = new System.Windows.Forms.Label();
             this.label4thObjectData = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.checkBoxSceneTextHidden = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.comboBoxSceneFontSize = new System.Windows.Forms.ComboBox();
             this.checkBoxSceneProgressiveDisplay = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.numericUpDownSceneTextPosX = new System.Windows.Forms.NumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.numericUpDownSceneTextPosY = new System.Windows.Forms.NumericUpDown();
-            this.buttonSceneSecondaryColor = new System.Windows.Forms.Button();
-            this.buttonScenePrimaryColor = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.buttonSceneColor1Secondary = new System.Windows.Forms.Button();
+            this.buttonSceneColor1Primary = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.checkBoxAlternateTextMode = new System.Windows.Forms.CheckBox();
+            this.checkBoxDynamicLayoutRuntimeState = new System.Windows.Forms.CheckBox();
+            this.checkBoxAlternateGlyphRendering = new System.Windows.Forms.CheckBox();
+            this.checkBoxDynamicLayoutText = new System.Windows.Forms.CheckBox();
+            this.checkBoxAlternateRevealControl = new System.Windows.Forms.CheckBox();
+            this.checkBoxRuntimeGlyphState = new System.Windows.Forms.CheckBox();
+            this.checkBoxAdditionalGlyphAdvance = new System.Windows.Forms.CheckBox();
+            this.checkBoxFixedGlyphAdvance = new System.Windows.Forms.CheckBox();
+            this.checkBoxUnk00000002 = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseFixedColor = new System.Windows.Forms.CheckBox();
+            this.checkBoxBoundedLayout = new System.Windows.Forms.CheckBox();
+            this.checkBoxCenterVertically = new System.Windows.Forms.CheckBox();
+            this.checkBoxCenterLineHorizontally = new System.Windows.Forms.CheckBox();
             this.textBoxTextOutput = new System.Windows.Forms.TextBox();
             this.numericUpDownSceneText = new System.Windows.Forms.NumericUpDown();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.numericUpDownTextLinkedTexture = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.numericUpDownTextProgressiveSound = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxProgressiveSound = new System.Windows.Forms.CheckBox();
             this.Générique = new System.Windows.Forms.GroupBox();
+            this.numericUpDownTextId = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxRenderingPass = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.labelTextId = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPageTexts = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.checkBoxColor3 = new System.Windows.Forms.CheckBox();
+            this.buttonSetOnCursorColor3 = new System.Windows.Forms.Button();
+            this.buttonSceneColor3Primary = new System.Windows.Forms.Button();
+            this.buttonSceneColor3Secondary = new System.Windows.Forms.Button();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.checkBoxColor2 = new System.Windows.Forms.CheckBox();
+            this.buttonSetOnCursorColor2 = new System.Windows.Forms.Button();
+            this.buttonSceneColor2Primary = new System.Windows.Forms.Button();
+            this.buttonSceneColor2Secondary = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.checkBoxColor1 = new System.Windows.Forms.CheckBox();
+            this.buttonSetOnCursorColor1 = new System.Windows.Forms.Button();
+            this.tabPageTextures = new System.Windows.Forms.TabPage();
+            this.tabPageDynamicObject = new System.Windows.Forms.TabPage();
+            this.tabPage4th = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.numericUpDownFixedGlyphAdvance = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.numericUpDownWrapWidth = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownLayoutHeight = new System.Windows.Forms.NumericUpDown();
             this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.groupBox9.SuspendLayout();
-            this.groupBoxSceneText.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -116,14 +142,23 @@
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTextPosX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTextPosY)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).BeginInit();
-            this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextLinkedTexture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextProgressiveSound)).BeginInit();
             this.Générique.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextId)).BeginInit();
+            this.tabControl2.SuspendLayout();
+            this.tabPageTexts.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFixedGlyphAdvance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWrapWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLayoutHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -141,84 +176,18 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage1.Controls.Add(this.groupBox9);
-            this.tabPage1.Controls.Add(this.groupBoxSceneText);
+            this.tabPage1.Controls.Add(this.buttonSceneSuppressText);
+            this.tabPage1.Controls.Add(this.buttonScenesAddText);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(334, 274);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Text edit";
             // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.checkBoxScenesIsHidden);
-            this.groupBox9.Controls.Add(this.checkBoxScenesForegroundText);
-            this.groupBox9.Location = new System.Drawing.Point(125, 19);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(114, 114);
-            this.groupBox9.TabIndex = 16;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Text Effects";
-            // 
-            // checkBoxScenesIsHidden
-            // 
-            this.checkBoxScenesIsHidden.AutoSize = true;
-            this.checkBoxScenesIsHidden.Location = new System.Drawing.Point(0, 68);
-            this.checkBoxScenesIsHidden.Name = "checkBoxScenesIsHidden";
-            this.checkBoxScenesIsHidden.Size = new System.Drawing.Size(60, 17);
-            this.checkBoxScenesIsHidden.TabIndex = 21;
-            this.checkBoxScenesIsHidden.Text = "Hidden";
-            this.checkBoxScenesIsHidden.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxScenesForegroundText
-            // 
-            this.checkBoxScenesForegroundText.AutoSize = true;
-            this.checkBoxScenesForegroundText.Location = new System.Drawing.Point(0, 36);
-            this.checkBoxScenesForegroundText.Name = "checkBoxScenesForegroundText";
-            this.checkBoxScenesForegroundText.Size = new System.Drawing.Size(91, 17);
-            this.checkBoxScenesForegroundText.TabIndex = 16;
-            this.checkBoxScenesForegroundText.Text = "always on top";
-            this.checkBoxScenesForegroundText.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxSceneText
-            // 
-            this.groupBoxSceneText.Controls.Add(this.buttonScenesAddText);
-            this.groupBoxSceneText.Controls.Add(this.radioButtonSceneSameScene);
-            this.groupBoxSceneText.Controls.Add(this.buttonSceneSuppressText);
-            this.groupBoxSceneText.Controls.Add(this.radioButtonScenesNewScene);
-            this.groupBoxSceneText.Location = new System.Drawing.Point(3, 3);
-            this.groupBoxSceneText.Name = "groupBoxSceneText";
-            this.groupBoxSceneText.Size = new System.Drawing.Size(100, 117);
-            this.groupBoxSceneText.TabIndex = 5;
-            this.groupBoxSceneText.TabStop = false;
-            this.groupBoxSceneText.Text = "Text management";
-            // 
-            // buttonScenesAddText
-            // 
-            this.buttonScenesAddText.Location = new System.Drawing.Point(3, 61);
-            this.buttonScenesAddText.Name = "buttonScenesAddText";
-            this.buttonScenesAddText.Size = new System.Drawing.Size(84, 23);
-            this.buttonScenesAddText.TabIndex = 5;
-            this.buttonScenesAddText.Text = "add new text";
-            this.buttonScenesAddText.UseVisualStyleBackColor = true;
-            this.buttonScenesAddText.Click += new System.EventHandler(this.buttonScenesAddText_Click);
-            // 
-            // radioButtonSceneSameScene
-            // 
-            this.radioButtonSceneSameScene.AutoSize = true;
-            this.radioButtonSceneSameScene.Checked = true;
-            this.radioButtonSceneSameScene.Location = new System.Drawing.Point(6, 16);
-            this.radioButtonSceneSameScene.Name = "radioButtonSceneSameScene";
-            this.radioButtonSceneSameScene.Size = new System.Drawing.Size(93, 17);
-            this.radioButtonSceneSameScene.TabIndex = 14;
-            this.radioButtonSceneSameScene.TabStop = true;
-            this.radioButtonSceneSameScene.Text = "in same scene";
-            this.radioButtonSceneSameScene.UseVisualStyleBackColor = true;
-            // 
             // buttonSceneSuppressText
             // 
-            this.buttonSceneSuppressText.Location = new System.Drawing.Point(8, 90);
+            this.buttonSceneSuppressText.Location = new System.Drawing.Point(15, 22);
             this.buttonSceneSuppressText.Name = "buttonSceneSuppressText";
             this.buttonSceneSuppressText.Size = new System.Drawing.Size(85, 23);
             this.buttonSceneSuppressText.TabIndex = 13;
@@ -226,15 +195,15 @@
             this.buttonSceneSuppressText.UseVisualStyleBackColor = true;
             this.buttonSceneSuppressText.Click += new System.EventHandler(this.buttonSceneSuppressText_Click);
             // 
-            // radioButtonScenesNewScene
+            // buttonScenesAddText
             // 
-            this.radioButtonScenesNewScene.AutoSize = true;
-            this.radioButtonScenesNewScene.Location = new System.Drawing.Point(6, 38);
-            this.radioButtonScenesNewScene.Name = "radioButtonScenesNewScene";
-            this.radioButtonScenesNewScene.Size = new System.Drawing.Size(88, 17);
-            this.radioButtonScenesNewScene.TabIndex = 15;
-            this.radioButtonScenesNewScene.Text = "in new scene";
-            this.radioButtonScenesNewScene.UseVisualStyleBackColor = true;
+            this.buttonScenesAddText.Location = new System.Drawing.Point(16, 51);
+            this.buttonScenesAddText.Name = "buttonScenesAddText";
+            this.buttonScenesAddText.Size = new System.Drawing.Size(84, 23);
+            this.buttonScenesAddText.TabIndex = 5;
+            this.buttonScenesAddText.Text = "add new text";
+            this.buttonScenesAddText.UseVisualStyleBackColor = true;
+            this.buttonScenesAddText.Click += new System.EventHandler(this.buttonScenesAddText_Click);
             // 
             // tabPage4
             // 
@@ -246,9 +215,9 @@
             this.tabPage4.Controls.Add(this.label15);
             this.tabPage4.Controls.Add(this.label20);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage4.Size = new System.Drawing.Size(334, 274);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Dynamic Object";
@@ -325,7 +294,7 @@
             this.tabPage2.Controls.Add(this.groupBoxSceneTextureManagement);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(334, 274);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "textures edit";
@@ -536,9 +505,9 @@
             this.tabPage3.Controls.Add(this.label4thObjectData);
             this.tabPage3.Controls.Add(this.label11);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage3.Size = new System.Drawing.Size(334, 274);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "4thObject";
@@ -598,10 +567,20 @@
             this.label11.TabIndex = 23;
             this.label11.Text = "4th object : ";
             // 
+            // checkBoxSceneTextHidden
+            // 
+            this.checkBoxSceneTextHidden.AutoSize = true;
+            this.checkBoxSceneTextHidden.Location = new System.Drawing.Point(5, 18);
+            this.checkBoxSceneTextHidden.Name = "checkBoxSceneTextHidden";
+            this.checkBoxSceneTextHidden.Size = new System.Drawing.Size(60, 17);
+            this.checkBoxSceneTextHidden.TabIndex = 21;
+            this.checkBoxSceneTextHidden.Text = "Hidden";
+            this.checkBoxSceneTextHidden.UseVisualStyleBackColor = true;
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(5, 72);
+            this.label10.Location = new System.Drawing.Point(3, 99);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(57, 13);
             this.label10.TabIndex = 17;
@@ -615,7 +594,7 @@
             "Big",
             "Medium",
             "Small"});
-            this.comboBoxSceneFontSize.Location = new System.Drawing.Point(74, 69);
+            this.comboBoxSceneFontSize.Location = new System.Drawing.Point(65, 96);
             this.comboBoxSceneFontSize.Name = "comboBoxSceneFontSize";
             this.comboBoxSceneFontSize.Size = new System.Drawing.Size(86, 21);
             this.comboBoxSceneFontSize.TabIndex = 16;
@@ -624,7 +603,7 @@
             // checkBoxSceneProgressiveDisplay
             // 
             this.checkBoxSceneProgressiveDisplay.AutoSize = true;
-            this.checkBoxSceneProgressiveDisplay.Location = new System.Drawing.Point(5, 18);
+            this.checkBoxSceneProgressiveDisplay.Location = new System.Drawing.Point(5, 41);
             this.checkBoxSceneProgressiveDisplay.Name = "checkBoxSceneProgressiveDisplay";
             this.checkBoxSceneProgressiveDisplay.Size = new System.Drawing.Size(118, 17);
             this.checkBoxSceneProgressiveDisplay.TabIndex = 14;
@@ -635,7 +614,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(5, 37);
+            this.label9.Location = new System.Drawing.Point(5, 42);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(60, 13);
             this.label9.TabIndex = 7;
@@ -654,15 +633,6 @@
             this.numericUpDownSceneTextPosX.TabIndex = 8;
             this.numericUpDownSceneTextPosX.ValueChanged += new System.EventHandler(this.numericUpDownSceneTextPosX_ValueChanged);
             // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(5, 43);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(91, 13);
-            this.label12.TabIndex = 13;
-            this.label12.Text = "Secondary Color :";
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -672,18 +642,9 @@
             this.label8.TabIndex = 6;
             this.label8.Text = "Position X :";
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(5, 16);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(77, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Primary Color : ";
-            // 
             // numericUpDownSceneTextPosY
             // 
-            this.numericUpDownSceneTextPosY.Location = new System.Drawing.Point(65, 35);
+            this.numericUpDownSceneTextPosY.Location = new System.Drawing.Point(65, 40);
             this.numericUpDownSceneTextPosY.Maximum = new decimal(new int[] {
             240,
             0,
@@ -694,72 +655,183 @@
             this.numericUpDownSceneTextPosY.TabIndex = 9;
             this.numericUpDownSceneTextPosY.ValueChanged += new System.EventHandler(this.numericUpDownSceneTextPosY_ValueChanged);
             // 
-            // buttonSceneSecondaryColor
+            // buttonSceneColor1Secondary
             // 
-            this.buttonSceneSecondaryColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSceneSecondaryColor.Location = new System.Drawing.Point(97, 37);
-            this.buttonSceneSecondaryColor.Name = "buttonSceneSecondaryColor";
-            this.buttonSceneSecondaryColor.Size = new System.Drawing.Size(64, 26);
-            this.buttonSceneSecondaryColor.TabIndex = 11;
-            this.buttonSceneSecondaryColor.Text = "Set";
-            this.buttonSceneSecondaryColor.UseVisualStyleBackColor = true;
-            this.buttonSceneSecondaryColor.Click += new System.EventHandler(this.buttonSceneSecondaryColor_Click);
+            this.buttonSceneColor1Secondary.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSceneColor1Secondary.Location = new System.Drawing.Point(95, 8);
+            this.buttonSceneColor1Secondary.Name = "buttonSceneColor1Secondary";
+            this.buttonSceneColor1Secondary.Size = new System.Drawing.Size(64, 26);
+            this.buttonSceneColor1Secondary.TabIndex = 11;
+            this.buttonSceneColor1Secondary.Text = "Set";
+            this.buttonSceneColor1Secondary.UseVisualStyleBackColor = true;
+            this.buttonSceneColor1Secondary.Click += new System.EventHandler(this.buttonSceneSecondaryColor_Click);
             // 
-            // buttonScenePrimaryColor
+            // buttonSceneColor1Primary
             // 
-            this.buttonScenePrimaryColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonScenePrimaryColor.Location = new System.Drawing.Point(97, 9);
-            this.buttonScenePrimaryColor.Name = "buttonScenePrimaryColor";
-            this.buttonScenePrimaryColor.Size = new System.Drawing.Size(62, 26);
-            this.buttonScenePrimaryColor.TabIndex = 10;
-            this.buttonScenePrimaryColor.Text = "Set";
-            this.buttonScenePrimaryColor.UseVisualStyleBackColor = true;
-            this.buttonScenePrimaryColor.Click += new System.EventHandler(this.buttonScenePrimaryColor_Click);
+            this.buttonSceneColor1Primary.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSceneColor1Primary.Location = new System.Drawing.Point(27, 8);
+            this.buttonSceneColor1Primary.Name = "buttonSceneColor1Primary";
+            this.buttonSceneColor1Primary.Size = new System.Drawing.Size(62, 26);
+            this.buttonSceneColor1Primary.TabIndex = 10;
+            this.buttonSceneColor1Primary.Text = "Set";
+            this.buttonSceneColor1Primary.UseVisualStyleBackColor = true;
+            this.buttonSceneColor1Primary.Click += new System.EventHandler(this.buttonScenePrimaryColor_Click);
             // 
-            // groupBox1
+            // groupBox6
             // 
-            this.groupBox1.Controls.Add(this.groupBox5);
-            this.groupBox1.Controls.Add(this.textBoxTextOutput);
-            this.groupBox1.Controls.Add(this.numericUpDownSceneText);
-            this.groupBox1.Controls.Add(this.groupBox4);
-            this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Controls.Add(this.Générique);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(350, 10);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox1.Size = new System.Drawing.Size(464, 467);
-            this.groupBox1.TabIndex = 26;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Text editing";
+            this.groupBox6.Controls.Add(this.checkBoxAlternateTextMode);
+            this.groupBox6.Controls.Add(this.checkBoxDynamicLayoutRuntimeState);
+            this.groupBox6.Controls.Add(this.checkBoxAlternateGlyphRendering);
+            this.groupBox6.Controls.Add(this.checkBoxDynamicLayoutText);
+            this.groupBox6.Controls.Add(this.checkBoxAlternateRevealControl);
+            this.groupBox6.Controls.Add(this.checkBoxRuntimeGlyphState);
+            this.groupBox6.Controls.Add(this.checkBoxAdditionalGlyphAdvance);
+            this.groupBox6.Controls.Add(this.checkBoxUnk00000002);
+            this.groupBox6.Controls.Add(this.checkBoxUseFixedColor);
+            this.groupBox6.Location = new System.Drawing.Point(9, 380);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(449, 120);
+            this.groupBox6.TabIndex = 23;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Flags";
             // 
-            // groupBox5
+            // checkBoxAlternateTextMode
             // 
-            this.groupBox5.Controls.Add(this.label6);
-            this.groupBox5.Location = new System.Drawing.Point(246, 129);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox5.Size = new System.Drawing.Size(211, 125);
-            this.groupBox5.TabIndex = 17;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Edit on character";
+            this.checkBoxAlternateTextMode.AutoSize = true;
+            this.checkBoxAlternateTextMode.Location = new System.Drawing.Point(304, 15);
+            this.checkBoxAlternateTextMode.Name = "checkBoxAlternateTextMode";
+            this.checkBoxAlternateTextMode.Size = new System.Drawing.Size(116, 17);
+            this.checkBoxAlternateTextMode.TabIndex = 39;
+            this.checkBoxAlternateTextMode.Text = "AlternateTextMode";
+            this.checkBoxAlternateTextMode.UseVisualStyleBackColor = true;
             // 
-            // label6
+            // checkBoxDynamicLayoutRuntimeState
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(4, 18);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 13);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "label6";
+            this.checkBoxDynamicLayoutRuntimeState.AutoSize = true;
+            this.checkBoxDynamicLayoutRuntimeState.Location = new System.Drawing.Point(152, 38);
+            this.checkBoxDynamicLayoutRuntimeState.Name = "checkBoxDynamicLayoutRuntimeState";
+            this.checkBoxDynamicLayoutRuntimeState.Size = new System.Drawing.Size(163, 17);
+            this.checkBoxDynamicLayoutRuntimeState.TabIndex = 38;
+            this.checkBoxDynamicLayoutRuntimeState.Text = "DynamicLayoutRuntimeState";
+            this.checkBoxDynamicLayoutRuntimeState.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAlternateGlyphRendering
+            // 
+            this.checkBoxAlternateGlyphRendering.AutoSize = true;
+            this.checkBoxAlternateGlyphRendering.Location = new System.Drawing.Point(7, 65);
+            this.checkBoxAlternateGlyphRendering.Name = "checkBoxAlternateGlyphRendering";
+            this.checkBoxAlternateGlyphRendering.Size = new System.Drawing.Size(144, 17);
+            this.checkBoxAlternateGlyphRendering.TabIndex = 37;
+            this.checkBoxAlternateGlyphRendering.Text = "AlternateGlyphRendering";
+            this.checkBoxAlternateGlyphRendering.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxDynamicLayoutText
+            // 
+            this.checkBoxDynamicLayoutText.AutoSize = true;
+            this.checkBoxDynamicLayoutText.Location = new System.Drawing.Point(152, 15);
+            this.checkBoxDynamicLayoutText.Name = "checkBoxDynamicLayoutText";
+            this.checkBoxDynamicLayoutText.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxDynamicLayoutText.TabIndex = 36;
+            this.checkBoxDynamicLayoutText.Text = "DynamicLayoutText";
+            this.checkBoxDynamicLayoutText.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAlternateRevealControl
+            // 
+            this.checkBoxAlternateRevealControl.AutoSize = true;
+            this.checkBoxAlternateRevealControl.Location = new System.Drawing.Point(152, 65);
+            this.checkBoxAlternateRevealControl.Name = "checkBoxAlternateRevealControl";
+            this.checkBoxAlternateRevealControl.Size = new System.Drawing.Size(135, 17);
+            this.checkBoxAlternateRevealControl.TabIndex = 35;
+            this.checkBoxAlternateRevealControl.Text = "AlternateRevealControl";
+            this.checkBoxAlternateRevealControl.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxRuntimeGlyphState
+            // 
+            this.checkBoxRuntimeGlyphState.AutoSize = true;
+            this.checkBoxRuntimeGlyphState.Location = new System.Drawing.Point(6, 42);
+            this.checkBoxRuntimeGlyphState.Name = "checkBoxRuntimeGlyphState";
+            this.checkBoxRuntimeGlyphState.Size = new System.Drawing.Size(117, 17);
+            this.checkBoxRuntimeGlyphState.TabIndex = 34;
+            this.checkBoxRuntimeGlyphState.Text = "RuntimeGlyphState";
+            this.checkBoxRuntimeGlyphState.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAdditionalGlyphAdvance
+            // 
+            this.checkBoxAdditionalGlyphAdvance.AutoSize = true;
+            this.checkBoxAdditionalGlyphAdvance.Location = new System.Drawing.Point(5, 88);
+            this.checkBoxAdditionalGlyphAdvance.Name = "checkBoxAdditionalGlyphAdvance";
+            this.checkBoxAdditionalGlyphAdvance.Size = new System.Drawing.Size(142, 17);
+            this.checkBoxAdditionalGlyphAdvance.TabIndex = 33;
+            this.checkBoxAdditionalGlyphAdvance.Text = "AdditionalGlyphAdvance";
+            this.checkBoxAdditionalGlyphAdvance.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxFixedGlyphAdvance
+            // 
+            this.checkBoxFixedGlyphAdvance.AutoSize = true;
+            this.checkBoxFixedGlyphAdvance.Location = new System.Drawing.Point(6, 18);
+            this.checkBoxFixedGlyphAdvance.Name = "checkBoxFixedGlyphAdvance";
+            this.checkBoxFixedGlyphAdvance.Size = new System.Drawing.Size(130, 17);
+            this.checkBoxFixedGlyphAdvance.TabIndex = 32;
+            this.checkBoxFixedGlyphAdvance.Text = "FixedGlyphAdvance : ";
+            this.checkBoxFixedGlyphAdvance.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxUnk00000002
+            // 
+            this.checkBoxUnk00000002.AutoSize = true;
+            this.checkBoxUnk00000002.Location = new System.Drawing.Point(152, 88);
+            this.checkBoxUnk00000002.Name = "checkBoxUnk00000002";
+            this.checkBoxUnk00000002.Size = new System.Drawing.Size(94, 17);
+            this.checkBoxUnk00000002.TabIndex = 29;
+            this.checkBoxUnk00000002.Text = "Unk00000002";
+            this.checkBoxUnk00000002.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxUseFixedColor
+            // 
+            this.checkBoxUseFixedColor.AutoSize = true;
+            this.checkBoxUseFixedColor.Location = new System.Drawing.Point(7, 19);
+            this.checkBoxUseFixedColor.Name = "checkBoxUseFixedColor";
+            this.checkBoxUseFixedColor.Size = new System.Drawing.Size(94, 17);
+            this.checkBoxUseFixedColor.TabIndex = 24;
+            this.checkBoxUseFixedColor.Text = "UseFixedColor";
+            this.checkBoxUseFixedColor.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxBoundedLayout
+            // 
+            this.checkBoxBoundedLayout.AutoSize = true;
+            this.checkBoxBoundedLayout.Location = new System.Drawing.Point(6, 41);
+            this.checkBoxBoundedLayout.Name = "checkBoxBoundedLayout";
+            this.checkBoxBoundedLayout.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxBoundedLayout.TabIndex = 23;
+            this.checkBoxBoundedLayout.Text = "BoundedLayout :";
+            this.checkBoxBoundedLayout.UseVisualStyleBackColor = true;
+            this.checkBoxBoundedLayout.CheckedChanged += new System.EventHandler(this.checkBoxBoundedLayout_CheckedChanged);
+            // 
+            // checkBoxCenterVertically
+            // 
+            this.checkBoxCenterVertically.AutoSize = true;
+            this.checkBoxCenterVertically.Location = new System.Drawing.Point(126, 43);
+            this.checkBoxCenterVertically.Name = "checkBoxCenterVertically";
+            this.checkBoxCenterVertically.Size = new System.Drawing.Size(57, 17);
+            this.checkBoxCenterVertically.TabIndex = 30;
+            this.checkBoxCenterVertically.Text = "Center";
+            this.checkBoxCenterVertically.UseVisualStyleBackColor = true;
+            this.checkBoxCenterVertically.CheckedChanged += new System.EventHandler(this.checkBoxCenterVertically_CheckedChanged);
+            // 
+            // checkBoxCenterLineHorizontally
+            // 
+            this.checkBoxCenterLineHorizontally.AutoSize = true;
+            this.checkBoxCenterLineHorizontally.Location = new System.Drawing.Point(126, 16);
+            this.checkBoxCenterLineHorizontally.Name = "checkBoxCenterLineHorizontally";
+            this.checkBoxCenterLineHorizontally.Size = new System.Drawing.Size(57, 17);
+            this.checkBoxCenterLineHorizontally.TabIndex = 28;
+            this.checkBoxCenterLineHorizontally.Text = "Center";
+            this.checkBoxCenterLineHorizontally.UseVisualStyleBackColor = true;
+            this.checkBoxCenterLineHorizontally.CheckedChanged += new System.EventHandler(this.checkBoxCenterLineHorizontally_CheckedChanged);
             // 
             // textBoxTextOutput
             // 
             this.textBoxTextOutput.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.textBoxTextOutput.Location = new System.Drawing.Point(8, 45);
+            this.textBoxTextOutput.Location = new System.Drawing.Point(9, 38);
             this.textBoxTextOutput.Multiline = true;
             this.textBoxTextOutput.Name = "textBoxTextOutput";
             this.textBoxTextOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -769,70 +841,32 @@
             // 
             // numericUpDownSceneText
             // 
-            this.numericUpDownSceneText.Location = new System.Drawing.Point(73, 20);
+            this.numericUpDownSceneText.Location = new System.Drawing.Point(84, 13);
             this.numericUpDownSceneText.Name = "numericUpDownSceneText";
             this.numericUpDownSceneText.Size = new System.Drawing.Size(57, 20);
             this.numericUpDownSceneText.TabIndex = 3;
             this.numericUpDownSceneText.ValueChanged += new System.EventHandler(this.numericUpDownSceneText_ValueChanged);
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Controls.Add(this.comboBoxSceneFontSize);
-            this.groupBox4.Controls.Add(this.label12);
-            this.groupBox4.Controls.Add(this.label7);
-            this.groupBox4.Controls.Add(this.buttonScenePrimaryColor);
-            this.groupBox4.Controls.Add(this.buttonSceneSecondaryColor);
-            this.groupBox4.Location = new System.Drawing.Point(190, 17);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox4.Size = new System.Drawing.Size(166, 107);
-            this.groupBox4.TabIndex = 16;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Visual Style";
-            // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.numericUpDownTextLinkedTexture);
             this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.checkBoxSceneProgressiveDisplay);
             this.groupBox2.Controls.Add(this.numericUpDownTextProgressiveSound);
-            this.groupBox2.Location = new System.Drawing.Point(8, 191);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Controls.Add(this.checkBoxProgressiveSound);
+            this.groupBox2.Controls.Add(this.checkBoxSceneTextHidden);
+            this.groupBox2.Location = new System.Drawing.Point(9, 257);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox2.Size = new System.Drawing.Size(234, 84);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Size = new System.Drawing.Size(195, 118);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Animation";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(172, 61);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(60, 13);
-            this.label4.TabIndex = 27;
-            this.label4.Text = "(ReadOnly)";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(172, 41);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(60, 13);
-            this.label5.TabIndex = 28;
-            this.label5.Text = "(ReadOnly)";
-            // 
             // numericUpDownTextLinkedTexture
             // 
-            this.numericUpDownTextLinkedTexture.Location = new System.Drawing.Point(110, 59);
+            this.numericUpDownTextLinkedTexture.Location = new System.Drawing.Point(132, 87);
             this.numericUpDownTextLinkedTexture.Maximum = new decimal(new int[] {
             -1,
             0,
@@ -841,28 +875,20 @@
             this.numericUpDownTextLinkedTexture.Name = "numericUpDownTextLinkedTexture";
             this.numericUpDownTextLinkedTexture.Size = new System.Drawing.Size(57, 20);
             this.numericUpDownTextLinkedTexture.TabIndex = 16;
+            this.numericUpDownTextLinkedTexture.ValueChanged += new System.EventHandler(this.numericUpDownTextLinkedTexture_ValueChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 61);
+            this.label3.Location = new System.Drawing.Point(22, 89);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 13);
+            this.label3.Size = new System.Drawing.Size(92, 13);
             this.label3.TabIndex = 15;
-            this.label3.Text = "Linked texture :";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(5, 41);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(105, 13);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Progressive Sound : ";
+            this.label3.Text = "Linked texture Id :";
             // 
             // numericUpDownTextProgressiveSound
             // 
-            this.numericUpDownTextProgressiveSound.Location = new System.Drawing.Point(110, 40);
+            this.numericUpDownTextProgressiveSound.Location = new System.Drawing.Point(132, 63);
             this.numericUpDownTextProgressiveSound.Maximum = new decimal(new int[] {
             -1,
             0,
@@ -871,27 +897,86 @@
             this.numericUpDownTextProgressiveSound.Name = "numericUpDownTextProgressiveSound";
             this.numericUpDownTextProgressiveSound.Size = new System.Drawing.Size(57, 20);
             this.numericUpDownTextProgressiveSound.TabIndex = 12;
+            this.numericUpDownTextProgressiveSound.ValueChanged += new System.EventHandler(this.numericUpDownTextProgressiveSound_ValueChanged);
+            // 
+            // checkBoxProgressiveSound
+            // 
+            this.checkBoxProgressiveSound.AutoSize = true;
+            this.checkBoxProgressiveSound.Location = new System.Drawing.Point(5, 64);
+            this.checkBoxProgressiveSound.Name = "checkBoxProgressiveSound";
+            this.checkBoxProgressiveSound.Size = new System.Drawing.Size(121, 17);
+            this.checkBoxProgressiveSound.TabIndex = 26;
+            this.checkBoxProgressiveSound.Text = "Progressive Sound :";
+            this.checkBoxProgressiveSound.UseVisualStyleBackColor = true;
             // 
             // Générique
             // 
+            this.Générique.Controls.Add(this.checkBoxCenterVertically);
+            this.Générique.Controls.Add(this.checkBoxCenterLineHorizontally);
+            this.Générique.Controls.Add(this.numericUpDownTextId);
+            this.Générique.Controls.Add(this.comboBoxRenderingPass);
+            this.Générique.Controls.Add(this.label2);
+            this.Générique.Controls.Add(this.label10);
             this.Générique.Controls.Add(this.labelTextId);
             this.Générique.Controls.Add(this.numericUpDownSceneTextPosY);
+            this.Générique.Controls.Add(this.comboBoxSceneFontSize);
             this.Générique.Controls.Add(this.label9);
             this.Générique.Controls.Add(this.label8);
             this.Générique.Controls.Add(this.numericUpDownSceneTextPosX);
-            this.Générique.Location = new System.Drawing.Point(8, 107);
-            this.Générique.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Générique.Location = new System.Drawing.Point(5, 101);
+            this.Générique.Margin = new System.Windows.Forms.Padding(2);
             this.Générique.Name = "Générique";
-            this.Générique.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.Générique.Size = new System.Drawing.Size(145, 79);
+            this.Générique.Padding = new System.Windows.Forms.Padding(2);
+            this.Générique.Size = new System.Drawing.Size(183, 152);
             this.Générique.TabIndex = 14;
             this.Générique.TabStop = false;
             this.Générique.Text = "Base";
             // 
+            // numericUpDownTextId
+            // 
+            this.numericUpDownTextId.Location = new System.Drawing.Point(65, 66);
+            this.numericUpDownTextId.Maximum = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+            this.numericUpDownTextId.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownTextId.Name = "numericUpDownTextId";
+            this.numericUpDownTextId.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownTextId.TabIndex = 26;
+            this.numericUpDownTextId.ValueChanged += new System.EventHandler(this.numericUpDownTextId_ValueChanged);
+            // 
+            // comboBoxRenderingPass
+            // 
+            this.comboBoxRenderingPass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxRenderingPass.FormattingEnabled = true;
+            this.comboBoxRenderingPass.Items.AddRange(new object[] {
+            "Default",
+            "Middle",
+            "Late"});
+            this.comboBoxRenderingPass.Location = new System.Drawing.Point(65, 123);
+            this.comboBoxRenderingPass.Name = "comboBoxRenderingPass";
+            this.comboBoxRenderingPass.Size = new System.Drawing.Size(86, 21);
+            this.comboBoxRenderingPass.TabIndex = 25;
+            this.comboBoxRenderingPass.SelectedIndexChanged += new System.EventHandler(this.comboBoxRenderingPass_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(2, 126);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "Priority :";
+            // 
             // labelTextId
             // 
             this.labelTextId.AutoSize = true;
-            this.labelTextId.Location = new System.Drawing.Point(5, 55);
+            this.labelTextId.Location = new System.Drawing.Point(5, 68);
             this.labelTextId.Name = "labelTextId";
             this.labelTextId.Size = new System.Drawing.Size(25, 13);
             this.labelTextId.TabIndex = 10;
@@ -900,15 +985,305 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 22);
+            this.label1.Location = new System.Drawing.Point(6, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Text number :";
             // 
+            // tabControl2
+            // 
+            this.tabControl2.Controls.Add(this.tabPageTexts);
+            this.tabControl2.Controls.Add(this.tabPageTextures);
+            this.tabControl2.Controls.Add(this.tabPageDynamicObject);
+            this.tabControl2.Controls.Add(this.tabPage4th);
+            this.tabControl2.Location = new System.Drawing.Point(338, 12);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(473, 571);
+            this.tabControl2.TabIndex = 27;
+            // 
+            // tabPageTexts
+            // 
+            this.tabPageTexts.Controls.Add(this.groupBox4);
+            this.tabPageTexts.Controls.Add(this.groupBox1);
+            this.tabPageTexts.Controls.Add(this.groupBox6);
+            this.tabPageTexts.Controls.Add(this.label1);
+            this.tabPageTexts.Controls.Add(this.textBoxTextOutput);
+            this.tabPageTexts.Controls.Add(this.Générique);
+            this.tabPageTexts.Controls.Add(this.numericUpDownSceneText);
+            this.tabPageTexts.Controls.Add(this.groupBox2);
+            this.tabPageTexts.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTexts.Name = "tabPageTexts";
+            this.tabPageTexts.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTexts.Size = new System.Drawing.Size(465, 545);
+            this.tabPageTexts.TabIndex = 0;
+            this.tabPageTexts.Text = "Texts";
+            this.tabPageTexts.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.groupBox8);
+            this.groupBox1.Controls.Add(this.groupBox7);
+            this.groupBox1.Controls.Add(this.groupBox5);
+            this.groupBox1.Location = new System.Drawing.Point(194, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(265, 155);
+            this.groupBox1.TabIndex = 24;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Text Colors";
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.checkBoxColor3);
+            this.groupBox8.Controls.Add(this.buttonSetOnCursorColor3);
+            this.groupBox8.Controls.Add(this.buttonSceneColor3Primary);
+            this.groupBox8.Controls.Add(this.buttonSceneColor3Secondary);
+            this.groupBox8.Location = new System.Drawing.Point(6, 111);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(253, 40);
+            this.groupBox8.TabIndex = 16;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "3";
+            // 
+            // checkBoxColor3
+            // 
+            this.checkBoxColor3.AutoSize = true;
+            this.checkBoxColor3.Location = new System.Drawing.Point(6, 15);
+            this.checkBoxColor3.Name = "checkBoxColor3";
+            this.checkBoxColor3.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxColor3.TabIndex = 14;
+            this.checkBoxColor3.UseVisualStyleBackColor = true;
+            // 
+            // buttonSetOnCursorColor3
+            // 
+            this.buttonSetOnCursorColor3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSetOnCursorColor3.Location = new System.Drawing.Point(165, 8);
+            this.buttonSetOnCursorColor3.Name = "buttonSetOnCursorColor3";
+            this.buttonSetOnCursorColor3.Size = new System.Drawing.Size(82, 26);
+            this.buttonSetOnCursorColor3.TabIndex = 13;
+            this.buttonSetOnCursorColor3.Text = "Set on cursor";
+            this.buttonSetOnCursorColor3.UseVisualStyleBackColor = true;
+            this.buttonSetOnCursorColor3.Click += new System.EventHandler(this.buttonSetOnCursorColor3_Click);
+            // 
+            // buttonSceneColor3Primary
+            // 
+            this.buttonSceneColor3Primary.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSceneColor3Primary.Location = new System.Drawing.Point(27, 8);
+            this.buttonSceneColor3Primary.Name = "buttonSceneColor3Primary";
+            this.buttonSceneColor3Primary.Size = new System.Drawing.Size(62, 26);
+            this.buttonSceneColor3Primary.TabIndex = 10;
+            this.buttonSceneColor3Primary.Text = "Set";
+            this.buttonSceneColor3Primary.UseVisualStyleBackColor = true;
+            this.buttonSceneColor3Primary.Click += new System.EventHandler(this.buttonSceneColor3Primary_Click);
+            // 
+            // buttonSceneColor3Secondary
+            // 
+            this.buttonSceneColor3Secondary.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSceneColor3Secondary.Location = new System.Drawing.Point(95, 8);
+            this.buttonSceneColor3Secondary.Name = "buttonSceneColor3Secondary";
+            this.buttonSceneColor3Secondary.Size = new System.Drawing.Size(64, 26);
+            this.buttonSceneColor3Secondary.TabIndex = 11;
+            this.buttonSceneColor3Secondary.Text = "Set";
+            this.buttonSceneColor3Secondary.UseVisualStyleBackColor = true;
+            this.buttonSceneColor3Secondary.Click += new System.EventHandler(this.buttonSceneColor3Secondary_Click);
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.checkBoxColor2);
+            this.groupBox7.Controls.Add(this.buttonSetOnCursorColor2);
+            this.groupBox7.Controls.Add(this.buttonSceneColor2Primary);
+            this.groupBox7.Controls.Add(this.buttonSceneColor2Secondary);
+            this.groupBox7.Location = new System.Drawing.Point(6, 65);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(253, 40);
+            this.groupBox7.TabIndex = 15;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "2";
+            // 
+            // checkBoxColor2
+            // 
+            this.checkBoxColor2.AutoSize = true;
+            this.checkBoxColor2.Location = new System.Drawing.Point(6, 15);
+            this.checkBoxColor2.Name = "checkBoxColor2";
+            this.checkBoxColor2.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxColor2.TabIndex = 14;
+            this.checkBoxColor2.UseVisualStyleBackColor = true;
+            // 
+            // buttonSetOnCursorColor2
+            // 
+            this.buttonSetOnCursorColor2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSetOnCursorColor2.Location = new System.Drawing.Point(165, 8);
+            this.buttonSetOnCursorColor2.Name = "buttonSetOnCursorColor2";
+            this.buttonSetOnCursorColor2.Size = new System.Drawing.Size(82, 26);
+            this.buttonSetOnCursorColor2.TabIndex = 13;
+            this.buttonSetOnCursorColor2.Text = "Set on cursor";
+            this.buttonSetOnCursorColor2.UseVisualStyleBackColor = true;
+            this.buttonSetOnCursorColor2.Click += new System.EventHandler(this.buttonSetOnCursorColor2_Click);
+            // 
+            // buttonSceneColor2Primary
+            // 
+            this.buttonSceneColor2Primary.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSceneColor2Primary.Location = new System.Drawing.Point(27, 8);
+            this.buttonSceneColor2Primary.Name = "buttonSceneColor2Primary";
+            this.buttonSceneColor2Primary.Size = new System.Drawing.Size(62, 26);
+            this.buttonSceneColor2Primary.TabIndex = 10;
+            this.buttonSceneColor2Primary.Text = "Set";
+            this.buttonSceneColor2Primary.UseVisualStyleBackColor = true;
+            this.buttonSceneColor2Primary.Click += new System.EventHandler(this.buttonSceneColor2Primary_Click);
+            // 
+            // buttonSceneColor2Secondary
+            // 
+            this.buttonSceneColor2Secondary.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSceneColor2Secondary.Location = new System.Drawing.Point(95, 8);
+            this.buttonSceneColor2Secondary.Name = "buttonSceneColor2Secondary";
+            this.buttonSceneColor2Secondary.Size = new System.Drawing.Size(64, 26);
+            this.buttonSceneColor2Secondary.TabIndex = 11;
+            this.buttonSceneColor2Secondary.Text = "Set";
+            this.buttonSceneColor2Secondary.UseVisualStyleBackColor = true;
+            this.buttonSceneColor2Secondary.Click += new System.EventHandler(this.buttonSceneColor2Secondary_Click);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.checkBoxColor1);
+            this.groupBox5.Controls.Add(this.buttonSetOnCursorColor1);
+            this.groupBox5.Controls.Add(this.buttonSceneColor1Primary);
+            this.groupBox5.Controls.Add(this.buttonSceneColor1Secondary);
+            this.groupBox5.Location = new System.Drawing.Point(6, 19);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(253, 40);
+            this.groupBox5.TabIndex = 13;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "1";
+            // 
+            // checkBoxColor1
+            // 
+            this.checkBoxColor1.AutoSize = true;
+            this.checkBoxColor1.Location = new System.Drawing.Point(6, 15);
+            this.checkBoxColor1.Name = "checkBoxColor1";
+            this.checkBoxColor1.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxColor1.TabIndex = 14;
+            this.checkBoxColor1.UseVisualStyleBackColor = true;
+            // 
+            // buttonSetOnCursorColor1
+            // 
+            this.buttonSetOnCursorColor1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSetOnCursorColor1.Location = new System.Drawing.Point(165, 8);
+            this.buttonSetOnCursorColor1.Name = "buttonSetOnCursorColor1";
+            this.buttonSetOnCursorColor1.Size = new System.Drawing.Size(82, 26);
+            this.buttonSetOnCursorColor1.TabIndex = 13;
+            this.buttonSetOnCursorColor1.Text = "Set on cursor";
+            this.buttonSetOnCursorColor1.UseVisualStyleBackColor = true;
+            this.buttonSetOnCursorColor1.Click += new System.EventHandler(this.buttonSetOnCursorColor1_Click);
+            // 
+            // tabPageTextures
+            // 
+            this.tabPageTextures.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTextures.Name = "tabPageTextures";
+            this.tabPageTextures.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTextures.Size = new System.Drawing.Size(465, 545);
+            this.tabPageTextures.TabIndex = 1;
+            this.tabPageTextures.Text = "Textures";
+            this.tabPageTextures.UseVisualStyleBackColor = true;
+            // 
+            // tabPageDynamicObject
+            // 
+            this.tabPageDynamicObject.Location = new System.Drawing.Point(4, 22);
+            this.tabPageDynamicObject.Name = "tabPageDynamicObject";
+            this.tabPageDynamicObject.Size = new System.Drawing.Size(465, 545);
+            this.tabPageDynamicObject.TabIndex = 2;
+            this.tabPageDynamicObject.Text = "DynamicObject";
+            this.tabPageDynamicObject.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4th
+            // 
+            this.tabPage4th.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4th.Name = "tabPage4th";
+            this.tabPage4th.Size = new System.Drawing.Size(465, 545);
+            this.tabPage4th.TabIndex = 3;
+            this.tabPage4th.Text = "4th";
+            this.tabPage4th.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.numericUpDownLayoutHeight);
+            this.groupBox4.Controls.Add(this.numericUpDownWrapWidth);
+            this.groupBox4.Controls.Add(this.label4);
+            this.groupBox4.Controls.Add(this.numericUpDownFixedGlyphAdvance);
+            this.groupBox4.Controls.Add(this.checkBoxFixedGlyphAdvance);
+            this.groupBox4.Controls.Add(this.checkBoxBoundedLayout);
+            this.groupBox4.Location = new System.Drawing.Point(194, 166);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox4.Size = new System.Drawing.Size(266, 87);
+            this.groupBox4.TabIndex = 27;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Layout";
+            // 
+            // numericUpDownFixedGlyphAdvance
+            // 
+            this.numericUpDownFixedGlyphAdvance.Location = new System.Drawing.Point(142, 15);
+            this.numericUpDownFixedGlyphAdvance.Maximum = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+            this.numericUpDownFixedGlyphAdvance.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFixedGlyphAdvance.Name = "numericUpDownFixedGlyphAdvance";
+            this.numericUpDownFixedGlyphAdvance.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownFixedGlyphAdvance.TabIndex = 31;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(205, 19);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(60, 13);
+            this.label4.TabIndex = 27;
+            this.label4.Text = "(ReadOnly)";
+            // 
+            // numericUpDownWrapWidth
+            // 
+            this.numericUpDownWrapWidth.Location = new System.Drawing.Point(119, 40);
+            this.numericUpDownWrapWidth.Maximum = new decimal(new int[] {
+            -1,
+            0,
+            0,
+            0});
+            this.numericUpDownWrapWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownWrapWidth.Name = "numericUpDownWrapWidth";
+            this.numericUpDownWrapWidth.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownWrapWidth.TabIndex = 33;
+            // 
+            // numericUpDownLayoutHeight
+            // 
+            this.numericUpDownLayoutHeight.Location = new System.Drawing.Point(182, 40);
+            this.numericUpDownLayoutHeight.Maximum = new decimal(new int[] {
+            -1,
+            0,
+            0,
+            0});
+            this.numericUpDownLayoutHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownLayoutHeight.Name = "numericUpDownLayoutHeight";
+            this.numericUpDownLayoutHeight.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownLayoutHeight.TabIndex = 34;
+            // 
             // drawScene1
             // 
-            this.drawScene1.Location = new System.Drawing.Point(10, 10);
+            this.drawScene1.Location = new System.Drawing.Point(12, 12);
             this.drawScene1.Name = "drawScene1";
             this.drawScene1.Size = new System.Drawing.Size(320, 240);
             this.drawScene1.TabIndex = 25;
@@ -918,20 +1293,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(823, 595);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.drawScene1);
             this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SceneEdit";
             this.Text = "SceneEdit";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SceneEdit_FormClosing);
             this.Load += new System.EventHandler(this.SceneEdit_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
-            this.groupBoxSceneText.ResumeLayout(false);
-            this.groupBoxSceneText.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -947,19 +1318,31 @@
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTextPosX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneTextPosY)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSceneText)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextLinkedTexture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextProgressiveSound)).EndInit();
             this.Générique.ResumeLayout(false);
             this.Générique.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTextId)).EndInit();
+            this.tabControl2.ResumeLayout(false);
+            this.tabPageTexts.ResumeLayout(false);
+            this.tabPageTexts.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFixedGlyphAdvance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWrapWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLayoutHeight)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -975,25 +1358,18 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.CheckBox checkBoxScenesIsHidden;
-        private System.Windows.Forms.CheckBox checkBoxScenesForegroundText;
+        private System.Windows.Forms.CheckBox checkBoxSceneTextHidden;
         private System.Windows.Forms.CheckBox checkBoxSceneProgressiveDisplay;
-        private System.Windows.Forms.GroupBox groupBoxSceneText;
         private System.Windows.Forms.Button buttonScenesAddText;
-        private System.Windows.Forms.RadioButton radioButtonSceneSameScene;
         private System.Windows.Forms.Button buttonSceneSuppressText;
-        private System.Windows.Forms.RadioButton radioButtonScenesNewScene;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBoxSceneFontSize;
         private System.Windows.Forms.NumericUpDown numericUpDownSceneTextPosX;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown numericUpDownSceneTextPosY;
-        private System.Windows.Forms.Button buttonSceneSecondaryColor;
-        private System.Windows.Forms.Button buttonScenePrimaryColor;
+        private System.Windows.Forms.Button buttonSceneColor1Secondary;
+        private System.Windows.Forms.Button buttonSceneColor1Primary;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button buttonScenesTextureAddNew;
@@ -1020,22 +1396,57 @@
         private System.Windows.Forms.Label label4thObjectData;
         private System.Windows.Forms.Label label11;
         private TransparentPanel.DrawScene drawScene1;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDownSceneText;
         private System.Windows.Forms.GroupBox Générique;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Label labelTextId;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDownTextProgressiveSound;
         private System.Windows.Forms.NumericUpDown numericUpDownTextLinkedTexture;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBoxTextOutput;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.CheckBox checkBoxFixedGlyphAdvance;
+        private System.Windows.Forms.CheckBox checkBoxCenterVertically;
+        private System.Windows.Forms.CheckBox checkBoxUnk00000002;
+        private System.Windows.Forms.CheckBox checkBoxCenterLineHorizontally;
+        private System.Windows.Forms.CheckBox checkBoxProgressiveSound;
+        private System.Windows.Forms.CheckBox checkBoxUseFixedColor;
+        private System.Windows.Forms.CheckBox checkBoxBoundedLayout;
+        private System.Windows.Forms.CheckBox checkBoxDynamicLayoutRuntimeState;
+        private System.Windows.Forms.CheckBox checkBoxAlternateGlyphRendering;
+        private System.Windows.Forms.CheckBox checkBoxDynamicLayoutText;
+        private System.Windows.Forms.CheckBox checkBoxAlternateRevealControl;
+        private System.Windows.Forms.CheckBox checkBoxRuntimeGlyphState;
+        private System.Windows.Forms.CheckBox checkBoxAdditionalGlyphAdvance;
+        private System.Windows.Forms.CheckBox checkBoxAlternateTextMode;
+        private System.Windows.Forms.ComboBox comboBoxRenderingPass;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabPage tabPageTexts;
+        private System.Windows.Forms.TabPage tabPageTextures;
+        private System.Windows.Forms.TabPage tabPageDynamicObject;
+        private System.Windows.Forms.TabPage tabPage4th;
+        private System.Windows.Forms.NumericUpDown numericUpDownTextId;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.CheckBox checkBoxColor3;
+        private System.Windows.Forms.Button buttonSetOnCursorColor3;
+        private System.Windows.Forms.Button buttonSceneColor3Primary;
+        private System.Windows.Forms.Button buttonSceneColor3Secondary;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.CheckBox checkBoxColor2;
+        private System.Windows.Forms.Button buttonSetOnCursorColor2;
+        private System.Windows.Forms.Button buttonSceneColor2Primary;
+        private System.Windows.Forms.Button buttonSceneColor2Secondary;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox checkBoxColor1;
+        private System.Windows.Forms.Button buttonSetOnCursorColor1;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown numericUpDownFixedGlyphAdvance;
+        private System.Windows.Forms.NumericUpDown numericUpDownLayoutHeight;
+        private System.Windows.Forms.NumericUpDown numericUpDownWrapWidth;
     }
 }

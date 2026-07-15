@@ -295,6 +295,19 @@ namespace N64PPLEditorC
                 value &= ~(1 << position);
         }
 
+        public static void SetBitInMask(ref int value, int mask, bool state)
+        {
+            if (state)
+                value |= mask;
+            else
+                value &= ~mask;
+        }
+
+        public static bool GetBitInMask(int value, int mask)
+        {
+            return (value & mask) != 0;
+        }
+
         public static void VerifyExistingPath()
         {
             Directory.CreateDirectory(pathExtractedTexture);

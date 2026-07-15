@@ -4,7 +4,7 @@ namespace N64PPLEditorC
 {
     public class CSBF1TextAnimation
     {
-        public int PackedPagination { get; set; }
+        public int PackedRevealMetadata { get; set; }
         /// <summary>
         /// indique si il y a une liaison avec une texture
         /// </summary>
@@ -12,24 +12,18 @@ namespace N64PPLEditorC
         /// <summary>
         /// indique si un son est joué pendant l'affichage progressive du texte
         /// </summary>
-        public ushort ProgressiveSoundStyle { get; set; }
+        public ushort ProgressiveSound { get; set; }
 
-        /// <summary>
-        /// permet d'indiquer si le texte est affiché de manière progressive ou non
-        /// </summary>
-        public bool ProgressiveDisplay { get; set; }
-
-        public CSBF1TextAnimation(ref int index,int flags, byte[] rawData)
+        public CSBF1TextAnimation(ref int index,CSBF1TextFlags flags, byte[] rawData)
         {
-            ProgressiveSoundStyle = CGeneric.ReadUInt16BigEndian(rawData, index);
+            ProgressiveSound = CGeneric.ReadUInt16BigEndian(rawData, index);
             LinkedTextureId = CGeneric.ReadUInt16BigEndian(rawData, index + 2);
-            ProgressiveDisplay = (flags & 0x00001000) != 0;
             index += 4;
         }
 
-        public void AddPackedMetadata(ref int index, byte[] RawData)
+        public void AddPackedRevealMetadata(ref int index, byte[] RawData)
         {
-            PackedPagination = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(RawData, index, 4));
+            PackedRevealMetadata = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(RawData, index, 4));
             index += 4;
         }
     }

@@ -90,6 +90,9 @@
     <Compile Include="ManagementAudio\Sound.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1DynamicObjectPoint.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1FourthObject.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Texture\CSBF1TextureAnimation.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Texture\CSBF1TextureBase.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextFlags.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextCode.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1Text.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextAnimation.cs" />
@@ -110,7 +113,7 @@
     <Compile Include="ManagementRomData\UncompressedRomTexture.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1DynamicObject.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1Scene.cs" />
-    <Compile Include="ManagementListRessources\SBF1\CSBF1TextureManagement.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Texture\CSBF1TextureObject.cs" />
     <Compile Include="ManagementListRessources\CTextureCompress.cs" />
     <Compile Include="ManagementListRessources\CRessourceList.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1.cs" />
@@ -199,5 +202,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

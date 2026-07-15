@@ -14,7 +14,7 @@ namespace N64PPLEditorC
 
         public List<CSBF1DynamicObject> dynamicObjectList;
         private List<CSBF1TextObject> textObjectList;
-        public List<CSBF1TextureManagement> textureManagementObjectList;
+        public List<CSBF1TextureObject> textureManagementObjectList;
         public List<CSBF1FourthObject> fourthObjectList;
 
         public int nbTextGroupObject { get; private set; }
@@ -68,10 +68,10 @@ namespace N64PPLEditorC
 
                 if (tmpIdM1 == 0xFFFFFFFF)
                 { }
-                else if (textObjectList[i].Flags.Length == 44)
-                    group++;
-                else if (textObjectList[i].Flags.Length == 52 && tmpId != tmpIdM1)
-                    group++;
+                //else if (textObjectList[i].Flags.Length == 44)
+                //    group++;
+                //else if (textObjectList[i].Flags.Length == 52 && tmpId != tmpIdM1)
+                //    group++;
                 else
                 { }
                 textObjectList[i].group = group;
@@ -119,7 +119,7 @@ namespace N64PPLEditorC
             generalIndex += nbTextureArray.Length;
 
             //fill texture management object
-            this.textureManagementObjectList = new List<CSBF1TextureManagement>();
+            this.textureManagementObjectList = new List<CSBF1TextureObject>();
             generalIndex += ChunkTextureManagementObject(data, CGeneric.ConvertByteArrayToInt(nbTextureArray), generalIndex);
 
             //get the number of fourth object
@@ -178,12 +178,12 @@ namespace N64PPLEditorC
             {
                 // get the length of the texture management object
                 Array.Copy(data, indexDataStart, lengthData, 0, lengthData.Length);
-                lengthDataInt = CSBF1TextureManagement.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData)) ;
+                lengthDataInt = CSBF1TextureObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData)) ;
 
                 //create the new texture management item
                 byte[] dataTextureManagementObject = new byte[lengthDataInt];
                 Array.Copy(data, indexDataStart, dataTextureManagementObject, 0, dataTextureManagementObject.Length);
-                textureManagementObjectList.Add(new CSBF1TextureManagement(dataTextureManagementObject));
+                textureManagementObjectList.Add(new CSBF1TextureObject(dataTextureManagementObject));
 
                 indexDataStart += lengthDataInt;
                 totalSize += lengthDataInt;
@@ -218,7 +218,7 @@ namespace N64PPLEditorC
         public void AddNewTextureObject()
         {
             var index = textureManagementObjectList.Count + 0x64;
-            textureManagementObjectList.Add(new CSBF1TextureManagement(index,0));
+            textureManagementObjectList.Add(new CSBF1TextureObject(index,0));
         }
 
         public string GetSceneName()
@@ -243,7 +243,7 @@ namespace N64PPLEditorC
             return endList;
         }
 
-        public CSBF1TextureManagement GetTextureManagementObject(int index)
+        public CSBF1TextureObject GetTextureManagementObject(int index)
         {
             return textureManagementObjectList[index];
         }
@@ -351,7 +351,7 @@ namespace N64PPLEditorC
             res = res.Concat(CGeneric.ConvertIntToByteArray(textureManagementObjectList.Count)).ToArray();
 
             //TextureManagement
-            foreach (CSBF1TextureManagement texManObj in textureManagementObjectList)
+            foreach (CSBF1TextureObject texManObj in textureManagementObjectList)
                 res = res.Concat(texManObj.GetRawData()).ToArray();
 
             //Size fourthObject
