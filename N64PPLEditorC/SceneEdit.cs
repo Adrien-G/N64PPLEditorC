@@ -99,7 +99,7 @@ namespace N64PPLEditorC
             {
                 string textureInsideSbfName = ListTextureName[Scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
                 int indexData = RessourceList.Get3FIBIndexWithFIBName(textureInsideSbfName);
-                if (indexData != -1 && Scene.GetTextureManagementObject(i).isCompressedTexture && (displaySpecificTexture == -1 || displaySpecificTexture == i))
+                if (indexData != -1 /*&& Scene.GetTextureManagementObject(i).isCompressedTexture*/ && (displaySpecificTexture == -1 || displaySpecificTexture == i))
                 {
                     try
                     {
@@ -607,6 +607,19 @@ namespace N64PPLEditorC
                 else
                     checkBoxTexturesExtra1.Checked = false;
 
+                //set flags
+                checkBoxIsHidden.Checked = textureSbf.Flags.IsHidden;
+                checkBoxIsRenderedLate.Checked = textureSbf.Flags.IsRenderedLate;
+                checkBoxIsFramePreservedOnShow.Checked = textureSbf.Flags.IsFramePreservedOnShow;
+                checkBoxIsCallbackSuppressed.Checked = textureSbf.Flags.IsCallbackSuppressed;
+                checkBoxIsCallbackObject.Checked = textureSbf.Flags.IsCallbackObject;
+                checkBoxIsNormalBifRenderingSkipped.Checked = textureSbf.Flags.IsNormalBifRenderingSkipped;
+                checkBoxHasBifBlendAlphaOverride.Checked = textureSbf.Flags.HasBifBlendAlphaOverride;
+                checkBoxHasBifFields94And98.Checked = textureSbf.Flags.HasBifFields94And98;
+                checkBoxIsBifBlendAlphaForcedToZero.Checked = textureSbf.Flags.IsBifBlendAlphaForcedToZero;
+                checkBoxIsBifPingPongAnimationEnabled.Checked = textureSbf.Flags.IsBifPingPongAnimationEnabled;
+                checkBoxUsesCenteredBifAnchor.Checked = textureSbf.Flags.UsesCenteredBifAnchor;
+                checkBoxIsBifFlag1000Enabled.Checked = textureSbf.Flags.IsBifFlag1000Enabled;
 
 
             }

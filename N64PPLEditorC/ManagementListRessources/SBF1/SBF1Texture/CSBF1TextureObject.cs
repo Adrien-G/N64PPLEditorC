@@ -11,8 +11,8 @@ namespace N64PPLEditorC
 
         public int BifRessourceIndex { get; set;}
 
-        //détermine potentiellement la taille de la texture
-        public int BifField14InitialValue { get; set; }
+        //gestion de l'alpha 
+        public int BifBlendAlphaOverride { get; set; }
         public int BifField94InitialValue { get; set; }
         public int BifField98InitialValue { get; set; }
 
@@ -41,9 +41,9 @@ namespace N64PPLEditorC
             this.BifRessourceIndex = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
             index += 4;
 
-            if (Flags.HasBifField14InitialValue)
+            if (Flags.HasBifBlendAlphaOverride)
             {
-                BifField14InitialValue = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
+                BifBlendAlphaOverride = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, index, 4));
                 index += 4;
             }
             if (Flags.HasBifFields94And98)
@@ -79,8 +79,8 @@ namespace N64PPLEditorC
             rawData.AddRange(CGeneric.ConvertIntToByteArray(this.BifRessourceIndex));
 
             //additionnal
-            if(this.Flags.HasBifField14InitialValue)
-                rawData.AddRange(CGeneric.ConvertIntToByteArray(this.BifField14InitialValue));
+            if(this.Flags.HasBifBlendAlphaOverride)
+                rawData.AddRange(CGeneric.ConvertIntToByteArray(this.BifBlendAlphaOverride));
 
             if (this.Flags.HasBifFields94And98)
             {

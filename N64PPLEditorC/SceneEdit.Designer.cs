@@ -128,6 +128,21 @@
             this.tabPageDynamicObject = new System.Windows.Forms.TabPage();
             this.tabPage4th = new System.Windows.Forms.TabPage();
             this.drawScene1 = new N64PPLEditorC.TransparentPanel.DrawScene();
+            this.checkBoxIsHidden = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsRenderedLate = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsFramePreservedOnShow = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsCallbackSuppressed = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsCallbackObject = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsNormalBifRenderingSkipped = new System.Windows.Forms.CheckBox();
+            this.checkBoxHasBifBlendAlphaOverride = new System.Windows.Forms.CheckBox();
+            this.checkBoxHasBifFields94And98 = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsBifBlendAlphaForcedToZero = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsBifPingPongAnimationEnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxUsesCenteredBifAnchor = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsBifPreparedOnActivation = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsBifFlag1000Enabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsBifFlag10000Enabled = new System.Windows.Forms.CheckBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -159,6 +174,7 @@
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -993,6 +1009,7 @@
             // 
             // tabPageTextures
             // 
+            this.tabPageTextures.Controls.Add(this.groupBox9);
             this.tabPageTextures.Controls.Add(this.numericUpDownSceneTexturePosX);
             this.tabPageTextures.Controls.Add(this.label18);
             this.tabPageTextures.Controls.Add(this.numericUpDownSceneTexturePosY);
@@ -1292,6 +1309,169 @@
             this.drawScene1.Size = new System.Drawing.Size(320, 240);
             this.drawScene1.TabIndex = 25;
             // 
+            // checkBoxIsHidden
+            // 
+            this.checkBoxIsHidden.AutoSize = true;
+            this.checkBoxIsHidden.Location = new System.Drawing.Point(7, 19);
+            this.checkBoxIsHidden.Name = "checkBoxIsHidden";
+            this.checkBoxIsHidden.Size = new System.Drawing.Size(68, 17);
+            this.checkBoxIsHidden.TabIndex = 29;
+            this.checkBoxIsHidden.Text = "IsHidden";
+            this.checkBoxIsHidden.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsRenderedLate
+            // 
+            this.checkBoxIsRenderedLate.AutoSize = true;
+            this.checkBoxIsRenderedLate.Location = new System.Drawing.Point(7, 42);
+            this.checkBoxIsRenderedLate.Name = "checkBoxIsRenderedLate";
+            this.checkBoxIsRenderedLate.Size = new System.Drawing.Size(102, 17);
+            this.checkBoxIsRenderedLate.TabIndex = 30;
+            this.checkBoxIsRenderedLate.Text = "IsRenderedLate";
+            this.checkBoxIsRenderedLate.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsFramePreservedOnShow
+            // 
+            this.checkBoxIsFramePreservedOnShow.AutoSize = true;
+            this.checkBoxIsFramePreservedOnShow.Location = new System.Drawing.Point(7, 65);
+            this.checkBoxIsFramePreservedOnShow.Name = "checkBoxIsFramePreservedOnShow";
+            this.checkBoxIsFramePreservedOnShow.Size = new System.Drawing.Size(152, 17);
+            this.checkBoxIsFramePreservedOnShow.TabIndex = 31;
+            this.checkBoxIsFramePreservedOnShow.Text = "IsFramePreservedOnShow";
+            this.checkBoxIsFramePreservedOnShow.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsCallbackSuppressed
+            // 
+            this.checkBoxIsCallbackSuppressed.AutoSize = true;
+            this.checkBoxIsCallbackSuppressed.Location = new System.Drawing.Point(7, 88);
+            this.checkBoxIsCallbackSuppressed.Name = "checkBoxIsCallbackSuppressed";
+            this.checkBoxIsCallbackSuppressed.Size = new System.Drawing.Size(131, 17);
+            this.checkBoxIsCallbackSuppressed.TabIndex = 32;
+            this.checkBoxIsCallbackSuppressed.Text = "IsCallbackSuppressed";
+            this.checkBoxIsCallbackSuppressed.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsCallbackObject
+            // 
+            this.checkBoxIsCallbackObject.AutoSize = true;
+            this.checkBoxIsCallbackObject.Location = new System.Drawing.Point(7, 111);
+            this.checkBoxIsCallbackObject.Name = "checkBoxIsCallbackObject";
+            this.checkBoxIsCallbackObject.Size = new System.Drawing.Size(106, 17);
+            this.checkBoxIsCallbackObject.TabIndex = 33;
+            this.checkBoxIsCallbackObject.Text = "IsCallbackObject";
+            this.checkBoxIsCallbackObject.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsNormalBifRenderingSkipped
+            // 
+            this.checkBoxIsNormalBifRenderingSkipped.AutoSize = true;
+            this.checkBoxIsNormalBifRenderingSkipped.Location = new System.Drawing.Point(141, 19);
+            this.checkBoxIsNormalBifRenderingSkipped.Name = "checkBoxIsNormalBifRenderingSkipped";
+            this.checkBoxIsNormalBifRenderingSkipped.Size = new System.Drawing.Size(167, 17);
+            this.checkBoxIsNormalBifRenderingSkipped.TabIndex = 34;
+            this.checkBoxIsNormalBifRenderingSkipped.Text = "IsNormalBifRenderingSkipped";
+            this.checkBoxIsNormalBifRenderingSkipped.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxHasBifBlendAlphaOverride
+            // 
+            this.checkBoxHasBifBlendAlphaOverride.AutoSize = true;
+            this.checkBoxHasBifBlendAlphaOverride.Location = new System.Drawing.Point(141, 42);
+            this.checkBoxHasBifBlendAlphaOverride.Name = "checkBoxHasBifBlendAlphaOverride";
+            this.checkBoxHasBifBlendAlphaOverride.Size = new System.Drawing.Size(151, 17);
+            this.checkBoxHasBifBlendAlphaOverride.TabIndex = 35;
+            this.checkBoxHasBifBlendAlphaOverride.Text = "HasBifBlendAlphaOverride";
+            this.checkBoxHasBifBlendAlphaOverride.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxHasBifFields94And98
+            // 
+            this.checkBoxHasBifFields94And98.AutoSize = true;
+            this.checkBoxHasBifFields94And98.Location = new System.Drawing.Point(141, 65);
+            this.checkBoxHasBifFields94And98.Name = "checkBoxHasBifFields94And98";
+            this.checkBoxHasBifFields94And98.Size = new System.Drawing.Size(127, 17);
+            this.checkBoxHasBifFields94And98.TabIndex = 36;
+            this.checkBoxHasBifFields94And98.Text = "HasBifFields94And98";
+            this.checkBoxHasBifFields94And98.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsBifBlendAlphaForcedToZero
+            // 
+            this.checkBoxIsBifBlendAlphaForcedToZero.AutoSize = true;
+            this.checkBoxIsBifBlendAlphaForcedToZero.Location = new System.Drawing.Point(141, 88);
+            this.checkBoxIsBifBlendAlphaForcedToZero.Name = "checkBoxIsBifBlendAlphaForcedToZero";
+            this.checkBoxIsBifBlendAlphaForcedToZero.Size = new System.Drawing.Size(168, 17);
+            this.checkBoxIsBifBlendAlphaForcedToZero.TabIndex = 37;
+            this.checkBoxIsBifBlendAlphaForcedToZero.Text = "IsBifBlendAlphaForcedToZero";
+            this.checkBoxIsBifBlendAlphaForcedToZero.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsBifPingPongAnimationEnabled
+            // 
+            this.checkBoxIsBifPingPongAnimationEnabled.AutoSize = true;
+            this.checkBoxIsBifPingPongAnimationEnabled.Location = new System.Drawing.Point(141, 111);
+            this.checkBoxIsBifPingPongAnimationEnabled.Name = "checkBoxIsBifPingPongAnimationEnabled";
+            this.checkBoxIsBifPingPongAnimationEnabled.Size = new System.Drawing.Size(177, 17);
+            this.checkBoxIsBifPingPongAnimationEnabled.TabIndex = 38;
+            this.checkBoxIsBifPingPongAnimationEnabled.Text = "IsBifPingPongAnimationEnabled";
+            this.checkBoxIsBifPingPongAnimationEnabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxUsesCenteredBifAnchor
+            // 
+            this.checkBoxUsesCenteredBifAnchor.AutoSize = true;
+            this.checkBoxUsesCenteredBifAnchor.Location = new System.Drawing.Point(305, 19);
+            this.checkBoxUsesCenteredBifAnchor.Name = "checkBoxUsesCenteredBifAnchor";
+            this.checkBoxUsesCenteredBifAnchor.Size = new System.Drawing.Size(139, 17);
+            this.checkBoxUsesCenteredBifAnchor.TabIndex = 39;
+            this.checkBoxUsesCenteredBifAnchor.Text = "UsesCenteredBifAnchor";
+            this.checkBoxUsesCenteredBifAnchor.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsBifPreparedOnActivation
+            // 
+            this.checkBoxIsBifPreparedOnActivation.AutoSize = true;
+            this.checkBoxIsBifPreparedOnActivation.Location = new System.Drawing.Point(305, 61);
+            this.checkBoxIsBifPreparedOnActivation.Name = "checkBoxIsBifPreparedOnActivation";
+            this.checkBoxIsBifPreparedOnActivation.Size = new System.Drawing.Size(150, 17);
+            this.checkBoxIsBifPreparedOnActivation.TabIndex = 40;
+            this.checkBoxIsBifPreparedOnActivation.Text = "IsBifPreparedOnActivation";
+            this.checkBoxIsBifPreparedOnActivation.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsBifFlag1000Enabled
+            // 
+            this.checkBoxIsBifFlag1000Enabled.AutoSize = true;
+            this.checkBoxIsBifFlag1000Enabled.Location = new System.Drawing.Point(305, 42);
+            this.checkBoxIsBifFlag1000Enabled.Name = "checkBoxIsBifFlag1000Enabled";
+            this.checkBoxIsBifFlag1000Enabled.Size = new System.Drawing.Size(129, 17);
+            this.checkBoxIsBifFlag1000Enabled.TabIndex = 41;
+            this.checkBoxIsBifFlag1000Enabled.Text = "IsBifFlag1000Enabled";
+            this.checkBoxIsBifFlag1000Enabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsBifFlag10000Enabled
+            // 
+            this.checkBoxIsBifFlag10000Enabled.AutoSize = true;
+            this.checkBoxIsBifFlag10000Enabled.Location = new System.Drawing.Point(305, 84);
+            this.checkBoxIsBifFlag10000Enabled.Name = "checkBoxIsBifFlag10000Enabled";
+            this.checkBoxIsBifFlag10000Enabled.Size = new System.Drawing.Size(135, 17);
+            this.checkBoxIsBifFlag10000Enabled.TabIndex = 42;
+            this.checkBoxIsBifFlag10000Enabled.Text = "IsBifFlag10000Enabled";
+            this.checkBoxIsBifFlag10000Enabled.UseVisualStyleBackColor = true;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.checkBoxHasBifFields94And98);
+            this.groupBox9.Controls.Add(this.checkBoxIsHidden);
+            this.groupBox9.Controls.Add(this.checkBoxIsBifFlag10000Enabled);
+            this.groupBox9.Controls.Add(this.checkBoxIsRenderedLate);
+            this.groupBox9.Controls.Add(this.checkBoxIsBifPreparedOnActivation);
+            this.groupBox9.Controls.Add(this.checkBoxIsBifFlag1000Enabled);
+            this.groupBox9.Controls.Add(this.checkBoxIsFramePreservedOnShow);
+            this.groupBox9.Controls.Add(this.checkBoxIsCallbackSuppressed);
+            this.groupBox9.Controls.Add(this.checkBoxUsesCenteredBifAnchor);
+            this.groupBox9.Controls.Add(this.checkBoxIsCallbackObject);
+            this.groupBox9.Controls.Add(this.checkBoxIsBifPingPongAnimationEnabled);
+            this.groupBox9.Controls.Add(this.checkBoxIsNormalBifRenderingSkipped);
+            this.groupBox9.Controls.Add(this.checkBoxIsBifBlendAlphaForcedToZero);
+            this.groupBox9.Controls.Add(this.checkBoxHasBifBlendAlphaOverride);
+            this.groupBox9.Location = new System.Drawing.Point(9, 391);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(450, 148);
+            this.groupBox9.TabIndex = 43;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Flags";
+            // 
             // SceneEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1350,6 +1530,8 @@
             this.groupBox7.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1455,5 +1637,20 @@
         private System.Windows.Forms.NumericUpDown numericUpDownLayoutHeight;
         private System.Windows.Forms.NumericUpDown numericUpDownWrapWidth;
         private System.Windows.Forms.Label labelTextCount;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.CheckBox checkBoxIsBifFlag10000Enabled;
+        private System.Windows.Forms.CheckBox checkBoxIsBifFlag1000Enabled;
+        private System.Windows.Forms.CheckBox checkBoxIsBifPreparedOnActivation;
+        private System.Windows.Forms.CheckBox checkBoxUsesCenteredBifAnchor;
+        private System.Windows.Forms.CheckBox checkBoxIsBifPingPongAnimationEnabled;
+        private System.Windows.Forms.CheckBox checkBoxIsBifBlendAlphaForcedToZero;
+        private System.Windows.Forms.CheckBox checkBoxHasBifFields94And98;
+        private System.Windows.Forms.CheckBox checkBoxHasBifBlendAlphaOverride;
+        private System.Windows.Forms.CheckBox checkBoxIsNormalBifRenderingSkipped;
+        private System.Windows.Forms.CheckBox checkBoxIsCallbackObject;
+        private System.Windows.Forms.CheckBox checkBoxIsCallbackSuppressed;
+        private System.Windows.Forms.CheckBox checkBoxIsFramePreservedOnShow;
+        private System.Windows.Forms.CheckBox checkBoxIsRenderedLate;
+        private System.Windows.Forms.CheckBox checkBoxIsHidden;
     }
 }
