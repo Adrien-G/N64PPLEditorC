@@ -104,16 +104,16 @@ namespace N64PPLEditorC
                     try
                     {
                         var bmp = RessourceList.fibList[indexData].GetBmpTexture(0);
-                        var posY = Scene.GetTextureManagementObject(i).posY;
-                        var posX = Scene.GetTextureManagementObject(i).posX;
+                        var posY = Scene.GetTextureManagementObject(i).Base.Y;
+                        var posX = Scene.GetTextureManagementObject(i).Base.X;
                         this.drawScene1.AddBmp(bmp, new Point(posX, posY));
                     }
                     catch { }
                 }
                 if (displaySpecificTexture != -1)
                 {
-                    numericUpDownSceneTexturePosX.Value = Scene.GetTextureManagementObject(displaySpecificTexture).posX;
-                    numericUpDownSceneTexturePosY.Value = Scene.GetTextureManagementObject(displaySpecificTexture).posY;
+                    numericUpDownSceneTexturePosX.Value = Scene.GetTextureManagementObject(displaySpecificTexture).Base.X;
+                    numericUpDownSceneTexturePosY.Value = Scene.GetTextureManagementObject(displaySpecificTexture).Base.Y;
                 }
             }
             this.drawScene1.Invalidate();
@@ -128,132 +128,134 @@ namespace N64PPLEditorC
             //get object count and verify > 0
             int nbTextObject = Scene.GetTextObjectCount();
 
-            if (nbTextObject > 0)
+            labelTextCount.Text = " / " + Scene.GetTextObjectCount().ToString();
+            if (nbTextObject == 0)
+                return;
+
+            var textObject = Scene.GetTextObject((int)numericUpDownSceneText.Value);
+
+            
+            //Check base
+            numericUpDownSceneTextPosX.Value = textObject.Base.X;
+            numericUpDownSceneTextPosY.Value = textObject.Base.Y;
+            numericUpDownTextId.Value = textObject.Base.Id;
+
+            //Check animation
+            checkBoxSceneProgressiveDisplay.Checked = textObject.Flags.IsProgressiveDisplay;
+            numericUpDownTextProgressiveSound.Value = textObject.Animation.ProgressiveSound;
+            numericUpDownTextLinkedTexture.Value = textObject.Animation.LinkedTextureId;
+
+            //check visual styles
+            buttonSceneColor1Primary.BackColor = Color.WhiteSmoke;
+            buttonSceneColor2Primary.BackColor = Color.WhiteSmoke;
+            buttonSceneColor3Primary.BackColor = Color.WhiteSmoke;
+            buttonSceneColor1Secondary.BackColor = Color.WhiteSmoke;
+            buttonSceneColor2Secondary.BackColor = Color.WhiteSmoke;
+            buttonSceneColor3Secondary.BackColor = Color.WhiteSmoke;
+            checkBoxColor1.Checked = false;
+            checkBoxColor2.Checked = false;
+            checkBoxColor3.Checked = false;
+
+            if (textObject.VisualStyle.PrimaryColor.Count > 0)
             {
-                var textObject = Scene.GetTextObject((int)numericUpDownSceneText.Value);
+                checkBoxColor1.Checked = true;
+                buttonSceneColor1Primary.BackColor = textObject.VisualStyle.PrimaryColor[0];
+                buttonSceneColor1Secondary.BackColor = textObject.VisualStyle.SecondaryColor[0];
+            }
+            if (textObject.VisualStyle.PrimaryColor.Count > 1)
+            {
+                checkBoxColor2.Checked = true;
+                buttonSceneColor2Primary.BackColor = textObject.VisualStyle.PrimaryColor[1];
+                buttonSceneColor2Secondary.BackColor = textObject.VisualStyle.SecondaryColor[1];
+            }
+            if (textObject.VisualStyle.PrimaryColor.Count > 2)
+            {
+                checkBoxColor3.Checked = true;
+                buttonSceneColor3Primary.BackColor = textObject.VisualStyle.PrimaryColor[2];
+                buttonSceneColor3Secondary.BackColor = textObject.VisualStyle.SecondaryColor[2];
+            }
 
-                //Check base
-                numericUpDownSceneTextPosX.Value = textObject.Base.X;
-                numericUpDownSceneTextPosY.Value = textObject.Base.Y;
-                numericUpDownTextId.Value = textObject.Base.Id;
+            //check layout
+            checkBoxFixedGlyphAdvance.Checked = textObject.Flags.IsFixedGlyphAdvance;
+            numericUpDownFixedGlyphAdvance.Value = textObject.Layout.FixedGlyphAdvance;
 
-                //Check animation
-                checkBoxSceneProgressiveDisplay.Checked = textObject.Flags.IsProgressiveDisplay;
-                numericUpDownTextProgressiveSound.Value = textObject.Animation.ProgressiveSound;
-                numericUpDownTextLinkedTexture.Value = textObject.Animation.LinkedTextureId;
+            checkBoxBoundedLayout.Checked = textObject.Flags.IsBoundedLayout;
+            numericUpDownWrapWidth.Value = textObject.Layout.WrapWidth;
+            numericUpDownLayoutHeight.Value = textObject.Layout.LayoutHeight;
 
-                //check visual styles
-                buttonSceneColor1Primary.BackColor = Color.WhiteSmoke;
-                buttonSceneColor2Primary.BackColor = Color.WhiteSmoke;
-                buttonSceneColor3Primary.BackColor = Color.WhiteSmoke;
-                buttonSceneColor1Secondary.BackColor = Color.WhiteSmoke;
-                buttonSceneColor2Secondary.BackColor = Color.WhiteSmoke;
-                buttonSceneColor3Secondary.BackColor = Color.WhiteSmoke;
-                checkBoxColor1.Checked = false;
-                checkBoxColor2.Checked = false;
-                checkBoxColor3.Checked = false;
+            //check text output
+            textBoxTextOutput.Text = textObject.Text.GetAsciiText();
 
-                if (textObject.VisualStyle.PrimaryColor.Count > 0)
-                {
-                    checkBoxColor1.Checked = true;
-                    buttonSceneColor1Primary.BackColor = textObject.VisualStyle.PrimaryColor[0];
-                    buttonSceneColor1Secondary.BackColor = textObject.VisualStyle.SecondaryColor[0];
-                }
-                if (textObject.VisualStyle.PrimaryColor.Count > 1)
-                {
-                    checkBoxColor2.Checked = true;
-                    buttonSceneColor2Primary.BackColor = textObject.VisualStyle.PrimaryColor[1];
-                    buttonSceneColor2Secondary.BackColor = textObject.VisualStyle.SecondaryColor[1];
-                }
-                if (textObject.VisualStyle.PrimaryColor.Count > 2)
-                {
-                    checkBoxColor3.Checked = true;
-                    buttonSceneColor3Primary.BackColor = textObject.VisualStyle.PrimaryColor[2];
-                    buttonSceneColor3Secondary.BackColor = textObject.VisualStyle.SecondaryColor[2];
-                }
-
-                //check layout
-                checkBoxFixedGlyphAdvance.Checked = textObject.Flags.IsFixedGlyphAdvance;
-                numericUpDownFixedGlyphAdvance.Value = textObject.Layout.FixedGlyphAdvance;
-
-                checkBoxBoundedLayout.Checked = textObject.Flags.IsBoundedLayout;
-                numericUpDownWrapWidth.Value = textObject.Layout.WrapWidth;
-                numericUpDownLayoutHeight.Value = textObject.Layout.LayoutHeight;
-
-                //check text output
-                textBoxTextOutput.Text = textObject.Text.GetAsciiText();
-
-                //update flags
-                checkBoxSceneTextHidden.Checked = textObject.Flags.IsTextHidden;
+            //update flags
+            checkBoxSceneTextHidden.Checked = textObject.Flags.IsTextHidden;
                 
-                checkBoxProgressiveSound.Checked = textObject.Flags.IsProgressiveSound;
+            checkBoxProgressiveSound.Checked = textObject.Flags.IsProgressiveSound;
                 
-                checkBoxCenterVertically.Checked = textObject.Flags.IsCenterVertically;
-                checkBoxUseFixedColor.Checked = textObject.Flags.IsUseFixedColors;
-                checkBoxProgressiveSound.Checked = textObject.Flags.IsProgressiveSound;
-                checkBoxCenterLineHorizontally.Checked = textObject.Flags.IsCenterHorizontally;
-                checkBoxAdditionalGlyphAdvance.Checked = textObject.Flags.IsAdditionalGlyphAdvance;
-                checkBoxRuntimeGlyphState.Checked = textObject.Flags.IsRuntimeGlyphState1;
-                checkBoxUnk00000002.Checked = textObject.Flags.IsUnknown00000002;
-                checkBoxAlternateGlyphRendering.Checked = textObject.Flags.IsAlternateGlyphRendering;
-                checkBoxDynamicLayoutRuntimeState.Checked = textObject.Flags.IsDynamicLayoutRuntimeState;
-                checkBoxDynamicLayoutText.Checked = textObject.Flags.IsDynamicLayoutText;
-                checkBoxAlternateRevealControl.Checked = textObject.Flags.IsAlternateRevealControl;
-                checkBoxAlternateTextMode.Checked = textObject.Flags.IsAlternateTextMode;
+            checkBoxCenterVertically.Checked = textObject.Flags.IsCenterVertically;
+            checkBoxUseFixedColor.Checked = textObject.Flags.IsUseFixedColors;
+            checkBoxProgressiveSound.Checked = textObject.Flags.IsProgressiveSound;
+            checkBoxCenterLineHorizontally.Checked = textObject.Flags.IsCenterHorizontally;
+            checkBoxAdditionalGlyphAdvance.Checked = textObject.Flags.IsAdditionalGlyphAdvance;
+            checkBoxRuntimeGlyphState.Checked = textObject.Flags.IsRuntimeGlyphState1;
+            checkBoxUnk00000002.Checked = textObject.Flags.IsUnknown00000002;
+            checkBoxAlternateGlyphRendering.Checked = textObject.Flags.IsAlternateGlyphRendering;
+            checkBoxDynamicLayoutRuntimeState.Checked = textObject.Flags.IsDynamicLayoutRuntimeState;
+            checkBoxDynamicLayoutText.Checked = textObject.Flags.IsDynamicLayoutText;
+            checkBoxAlternateRevealControl.Checked = textObject.Flags.IsAlternateRevealControl;
+            checkBoxAlternateTextMode.Checked = textObject.Flags.IsAlternateTextMode;
 
-                //font
-                if (textObject.Flags.IsSmallFont)
-                    comboBoxSceneFontSize.SelectedIndex = 2;
-                else if (textObject.Flags.IsNormalFont)
-                    comboBoxSceneFontSize.SelectedIndex = 1;
-                else
-                    comboBoxSceneFontSize.SelectedIndex = 0;
+            //font
+            if (textObject.Flags.IsSmallFont)
+                comboBoxSceneFontSize.SelectedIndex = 2;
+            else if (textObject.Flags.IsNormalFont)
+                comboBoxSceneFontSize.SelectedIndex = 1;
+            else
+                comboBoxSceneFontSize.SelectedIndex = 0;
 
-                //render
-                if (textObject.Flags.IsRenderLatePass)
-                    comboBoxRenderingPass.SelectedIndex = 2;
-                else if (textObject.Flags.IsRenderMiddlePass)
-                    comboBoxRenderingPass.SelectedIndex = 1;
-                else
-                    comboBoxRenderingPass.SelectedIndex = 0;
-
-
+            //render
+            if (textObject.Flags.IsRenderLatePass)
+                comboBoxRenderingPass.SelectedIndex = 2;
+            else if (textObject.Flags.IsRenderMiddlePass)
+                comboBoxRenderingPass.SelectedIndex = 1;
+            else
+                comboBoxRenderingPass.SelectedIndex = 0;
 
 
 
-                //text object
-                var sceneTxt = Scene.GetTextObjectGroup(textObject.group);
 
-                int index = 0;
-                foreach (CSBF1TextObject txtObj in sceneTxt)
+
+            //text object
+            var sceneTxt = Scene.GetTextObjectGroup(textObject.group);
+
+            int index = 0;
+            foreach (CSBF1TextObject txtObj in sceneTxt)
+            {
+                var txtBoxTmp = new TextBox();
+                txtBoxTmp.Multiline = true;
+                txtBoxTmp.ReadOnly = true;
+                txtBoxTmp.BorderStyle = BorderStyle.None;
+                txtBox.Add(txtBoxTmp);
+
+                txtBox[index].Text = txtObj.Text.GetAsciiText();
+                txtBox[index].Top = txtObj.Base.Y;
+                txtBox[index].Left = txtObj.Base.X;
+
+                Size size = TextRenderer.MeasureText(txtBox[index].Text, txtBox[index].Font);
+                txtBox[index].ClientSize = new Size(size.Width, size.Height);
+                if (txtObj.Flags.IsCenterHorizontally)
+                    txtBox[index].Left += 320/2-size.Width/2;
+
+                if (txtObj.Flags.IsCenterVertically)
+                    txtBox[index].Top += 240 / 2 - size.Height / 2;
+
+                if (textBoxTextOutput.Text == txtBox[index].Text && sceneTxt.Count >= 1)
                 {
-                    var txtBoxTmp = new TextBox();
-                    txtBoxTmp.Multiline = true;
-                    txtBoxTmp.ReadOnly = true;
-                    txtBoxTmp.BorderStyle = BorderStyle.None;
-                    txtBox.Add(txtBoxTmp);
-
-                    txtBox[index].Text = txtObj.Text.GetAsciiText();
-                    txtBox[index].Top = txtObj.Base.Y;
-                    txtBox[index].Left = txtObj.Base.X;
-
-                    Size size = TextRenderer.MeasureText(txtBox[index].Text, txtBox[index].Font);
-                    txtBox[index].ClientSize = new Size(size.Width, size.Height);
-                    if (txtObj.Flags.IsCenterHorizontally)
-                        txtBox[index].Left += 320/2-size.Width/2;
-
-                    if (txtObj.Flags.IsCenterVertically)
-                        txtBox[index].Top += 240 / 2 - size.Height / 2;
-
-                    if (textBoxTextOutput.Text == txtBox[index].Text && sceneTxt.Count >= 1)
-                    {
-                        txtBox[index].BackColor = Color.LightGreen;
-                        txtBox[index].BringToFront();
-                    }
-
-                    drawScene1.Controls.Add(txtBox[index]);
-                    index++;
+                    txtBox[index].BackColor = Color.LightGreen;
+                    txtBox[index].BringToFront();
                 }
+
+                drawScene1.Controls.Add(txtBox[index]);
+                index++;
             }
         }
 
@@ -566,6 +568,87 @@ namespace N64PPLEditorC
         {
             var textObj = Scene.GetTextObject((int)numericUpDownSceneText.Value);
             textObj.Flags.IsBoundedLayout = checkBoxBoundedLayout.Checked;
+        }
+
+        private void numericUpDownSceneTexturePosX_ValueChanged(object sender, EventArgs e)
+        {
+            Scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).Base.X = (int)numericUpDownSceneTexturePosX.Value;
+            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
+        }
+
+        private void numericUpDownSceneTexturePosY_ValueChanged(object sender, EventArgs e)
+        {
+            Scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).Base.Y = (int)numericUpDownSceneTexturePosY.Value;
+            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
+        }
+
+        private void numericUpDownSceneTexture_ValueChanged(object sender, EventArgs e)
+        {
+           
+            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
+            if ((int)numericUpDownSceneTexture.Value == -1)
+            {
+                numericUpDownSceneTexturePosX.Enabled = false;
+                numericUpDownSceneTexturePosY.Enabled = false;
+                comboBoxSceneChangeTexture.SelectedIndex = -1;
+            }
+            else
+            {
+                //grab index of the selected texture
+                var textureSbf = Scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
+                comboBoxSceneChangeTexture.SelectedIndex = textureSbf.getTextureIndex();
+                numericUpDownSceneTexturePosX.Enabled = true;
+                numericUpDownSceneTexturePosY.Enabled = true;
+                if (textureSbf.transparencybit)
+                {
+                    checkBoxTexturesExtra1.Checked = true;
+                    numericUpDownTextureTransparency.Value = textureSbf.transparency;
+                }
+                else
+                    checkBoxTexturesExtra1.Checked = false;
+
+
+
+            }
+        }
+
+        private void buttonScenesTextureReplace_Click(object sender, EventArgs e)
+        {
+            byte indexNewTexture = (byte)comboBoxSceneChangeTexture.SelectedIndex;
+            Scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).BifRessourceIndex = indexNewTexture;
+            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
+        }
+
+        private void checkBoxTexturesExtra1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!checkBoxTexturesExtra1.Checked)
+            {
+              
+                var textureObj = Scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
+                textureObj.transparencybit = false;
+            }
+        }
+
+        private void numericUpDownTextureTransparency_ValueChanged(object sender, EventArgs e)
+        {
+            if (checkBoxTexturesExtra1.Checked)
+            {
+              
+                var textureObj = Scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
+                textureObj.SetTransparencyValue(true, (byte)numericUpDownTextureTransparency.Value);
+            }
+        }
+
+        private void buttonScenesTextureAdd_Click(object sender, EventArgs e)
+        {
+            string fibName = this.RessourceList.fibList[comboBoxSceneAddTexture.SelectedIndex].GetRessourceName();
+
+            Sbf.AddBifToSbf(fibName);
+
+            //update the texture (combobox) present in the scene
+            comboBoxSceneChangeTexture.Items.Clear();
+            for (int i = 0; i < Sbf.GetBifList().Count(); i++)
+                comboBoxSceneChangeTexture.Items.Add(Sbf.GetBifName(i).ToLower().Replace(".bif", ""));
         }
     }
 }

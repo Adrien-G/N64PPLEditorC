@@ -14,7 +14,7 @@ namespace N64PPLEditorC
 
         public List<CSBF1DynamicObject> dynamicObjectList;
         private List<CSBF1TextObject> textObjectList;
-        public List<CSBF1TextureObject> textureManagementObjectList;
+        public List<CSBF1TextureObject> textureObjectList;
         public List<CSBF1FourthObject> fourthObjectList;
 
         public int nbTextGroupObject { get; private set; }
@@ -102,25 +102,22 @@ namespace N64PPLEditorC
             //get the number of text object
             byte[] nbTextArray = new byte[4];
             Array.Copy(data, generalIndex, nbTextArray, 0, nbTextArray.Length);
-            //increment the global index with 4 (the size of nbDynamicArray.Length)
             generalIndex += nbTextArray.Length;
 
             //fill text objects
             this.textObjectList = new List<CSBF1TextObject>();
             for (int i = 0; i < CGeneric.ConvertByteArrayToInt(nbTextArray); i++)
-            {
                 textObjectList.Add(new CSBF1TextObject(data, ref generalIndex));
-            }
 
             //get the number of texture management object
             byte[] nbTextureArray = new byte[4];
             Array.Copy(data, generalIndex, nbTextureArray, 0, nbTextureArray.Length);
-            //increment the global index with 4 (the size of nbDynamicArray.Length)
             generalIndex += nbTextureArray.Length;
 
             //fill texture management object
-            this.textureManagementObjectList = new List<CSBF1TextureObject>();
-            generalIndex += ChunkTextureManagementObject(data, CGeneric.ConvertByteArrayToInt(nbTextureArray), generalIndex);
+            this.textureObjectList = new List<CSBF1TextureObject>();
+            for (int i = 0; i < CGeneric.ConvertByteArrayToInt(nbTextureArray); i++)
+                textureObjectList.Add(new CSBF1TextureObject(data, ref generalIndex));
 
             //get the number of fourth object
             byte[] nbfourthObjectArray = new byte[4];
@@ -168,29 +165,6 @@ namespace N64PPLEditorC
             return totalSize;
         }
 
-        private int ChunkTextureManagementObject(byte[] data, int nbTextureManagementObject, int indexDataStart)
-        {
-            byte[] lengthData = new byte[4];
-            int lengthDataInt;
-
-            int totalSize = 0;
-            for (int i = 0; i < nbTextureManagementObject; i++)
-            {
-                // get the length of the texture management object
-                Array.Copy(data, indexDataStart, lengthData, 0, lengthData.Length);
-                lengthDataInt = CSBF1TextureObject.GetHeaderLength(CGeneric.ConvertByteArrayToInt(lengthData)) ;
-
-                //create the new texture management item
-                byte[] dataTextureManagementObject = new byte[lengthDataInt];
-                Array.Copy(data, indexDataStart, dataTextureManagementObject, 0, dataTextureManagementObject.Length);
-                textureManagementObjectList.Add(new CSBF1TextureObject(dataTextureManagementObject));
-
-                indexDataStart += lengthDataInt;
-                totalSize += lengthDataInt;
-            }
-            return totalSize;
-        }
-
         private int ChunkFourthObject(byte[] data, int nbTextureManagementObject, int indexDataStart)
         {
             byte[] lengthData = new byte[4];
@@ -215,11 +189,6 @@ namespace N64PPLEditorC
             return totalSize;
         }
 
-        public void AddNewTextureObject()
-        {
-            var index = textureManagementObjectList.Count + 0x64;
-            textureManagementObjectList.Add(new CSBF1TextureObject(index,0));
-        }
 
         public string GetSceneName()
         {
@@ -245,7 +214,7 @@ namespace N64PPLEditorC
 
         public CSBF1TextureObject GetTextureManagementObject(int index)
         {
-            return textureManagementObjectList[index];
+            return textureObjectList[index];
         }
 
         public void AddNewTextObject(bool sameScene)
@@ -292,27 +261,13 @@ namespace N64PPLEditorC
 
         public int GetTextureManagementCount()
         {
-            return textureManagementObjectList.Count();
+            return textureObjectList.Count();
         }
 
         public int Get4thObjCount()
         {
             return fourthObjectList.Count();
         }
-
-        //public int GetSize()
-        //{
-        //    // 24 = size of header and number of elements
-        //    int totalSize = 24 + sceneName.Length;
-
-        //    foreach (CSBF1DynamicObject dynObj in dynamicObjectList)
-        //        totalSize += dynObj.GetSize();
-        //    foreach (CSBF1TextObject TexObj in textObjectList)
-        //        totalSize += TexObj.GetSize();
-        //    foreach (CSBF1TextureManagement texObj in textureManagementObjectList)
-        //        totalSize += texObj.GetSize();
-        //    return totalSize;
-        //}
 
         public void RemoveText(int index)
         {
@@ -348,11 +303,11 @@ namespace N64PPLEditorC
                 res = res.Concat(TexObj.RecomposeRawData()).ToArray();
 
             //Size textureManagement
-            res = res.Concat(CGeneric.ConvertIntToByteArray(textureManagementObjectList.Count)).ToArray();
+            res = res.Concat(CGeneric.ConvertIntToByteArray(textureObjectList.Count)).ToArray();
 
             //TextureManagement
-            foreach (CSBF1TextureObject texManObj in textureManagementObjectList)
-                res = res.Concat(texManObj.GetRawData()).ToArray();
+            foreach (CSBF1TextureObject texManObj in textureObjectList)
+                res = res.Concat(texManObj.RecomposeRawData()).ToArray();
 
             //Size fourthObject
             res = res.Concat(CGeneric.ConvertIntToByteArray(fourthObjectList.Count)).ToArray();

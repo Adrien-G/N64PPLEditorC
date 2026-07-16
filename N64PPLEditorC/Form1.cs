@@ -716,98 +716,40 @@ namespace N64PPLEditorC
 
         private void treeViewSBF_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            numericUpDownSceneTexture.Value = -1;
 
             if (treeViewSBF.SelectedNode.Level == 0)
             {
-                groupBoxSceneTextureManagement.Enabled = true;
                 drawScene1.BackColor = Color.Gray;
                 return;
             }
-            CSBF1 sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
-            CSBF1Scene scene = sbf.GetScene(treeViewSBF.SelectedNode.Index);
 
-            //list the texture (combobox) present in the scene
-            comboBoxSceneChangeTexture.Items.Clear();
-            for (int i = 0; i < sbf.GetBifList().Count(); i++)
-                comboBoxSceneChangeTexture.Items.Add(sbf.GetBifName(i).ToLower().Replace(".bif", ""));
+            //scene display part
+            var sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
+            var scene = sbf.GetScene(treeViewSBF.SelectedNode.Index);
+            var ListTextureName = sbf.GetBifList();
 
-            //list all the textures present in the rom (pretty name)
-            int indexData = 0;
-            comboBoxSceneAddTexture.Items.Clear();
-            for (int i = 0; i < this.ressourceList.fibList.Count; i++)
+            int nbItem = scene.GetTextureManagementCount() - 1;
+
+
+            drawScene1.Init();
+            for (int i = 0; i <= nbItem; i++)
             {
-                indexData = this.ressourceList.Get3FIBIndexWithFIBName(this.ressourceList.fibList[i].GetRessourceName());
-                comboBoxSceneAddTexture.Items.Add(this.ressourceList.fibList[indexData].GetFIBName());
-            }
-
-            //textures object
-            int nbTextureObject = scene.GetTextureManagementCount();
-            if (nbTextureObject == 0)
-                numericUpDownSceneTexture.Maximum = 0;
-            else
-                numericUpDownSceneTexture.Maximum = nbTextureObject - 1;
-
-
-
-            launchSceneDisplay();
-
-        }
-
-        private void launchSceneDisplay()
-        {
-            launchGraphicDisplayPart();
-            launchTextDisplayGroup();
-        }
-
-        private void launchGraphicDisplayPart(int displaySpecificTexture = -1)
-        {
-                var sbf = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
-                var scene = sbf.GetScene(treeViewSBF.SelectedNode.Index);
-                var ListTextureName = sbf.GetBifList();
-
-                int nbItem = scene.GetTextureManagementCount() - 1;
-
-
-                drawScene1.Init();
-                for (int i = 0; i <= nbItem; i++)
+                string textureInsideSbfName = ListTextureName[scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
+                int indexData = this.ressourceList.Get3FIBIndexWithFIBName(textureInsideSbfName);
+                if (indexData != -1)
                 {
-                    string textureInsideSbfName = ListTextureName[scene.GetTextureManagementObject(i).getTextureIndex()]; //select good texture
-                    int indexData = this.ressourceList.Get3FIBIndexWithFIBName(textureInsideSbfName);
-                    if (indexData != -1 && scene.GetTextureManagementObject(i).isCompressedTexture && (displaySpecificTexture == -1 || displaySpecificTexture == i))
+                    try
                     {
-                        try
-                        {
-                            var bmp = this.ressourceList.fibList[indexData].GetBmpTexture(0);
-                            var posY = scene.GetTextureManagementObject(i).posY;
-                            var posX = scene.GetTextureManagementObject(i).posX;
-                            this.drawScene1.AddBmp(bmp, new Point(posX, posY));
-                        }
-                        catch { }
+                        var bmp = this.ressourceList.fibList[indexData].GetBmpTexture(0);
+                        var posY = scene.GetTextureManagementObject(i).Base.Y;
+                        var posX = scene.GetTextureManagementObject(i).Base.X;
+                        this.drawScene1.AddBmp(bmp, new Point(posX, posY));
                     }
-                    if (displaySpecificTexture != -1)
-                    {
-                        numericUpDownSceneTexturePosX.Value = scene.GetTextureManagementObject(displaySpecificTexture).posX;
-                        numericUpDownSceneTexturePosY.Value = scene.GetTextureManagementObject(displaySpecificTexture).posY;
+                    catch { 
                     }
                 }
-                this.drawScene1.Invalidate();
             }
-        private void launchTextDisplayGroup()
-        {
-            //clear all textbox
-            foreach (TextBox txtObj in txtBox)
-                drawScene1.Controls.Remove(txtObj);
-            txtBox.Clear();
-
-            if (treeViewSBF.SelectedNode.Level != 1)
-                return;
-
-            //get scene
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-
-            //get object count and verify > 0
-            int nbTextObject = scene.GetTextObjectCount();
+            this.drawScene1.Invalidate();
 
         }
 
@@ -980,80 +922,12 @@ namespace N64PPLEditorC
             treeViewAudio.SelectedNode = e.Node;
         }
 
-        private void numericUpDownSceneTexture_ValueChanged(object sender, EventArgs e)
-        {
-            if (treeViewSBF.SelectedNode.Level == 0)
-                return;
-            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
-            if((int)numericUpDownSceneTexture.Value == -1)
-            {
-                numericUpDownSceneTexturePosX.Enabled = false;
-                numericUpDownSceneTexturePosY.Enabled = false;
-                comboBoxSceneChangeTexture.SelectedIndex = -1;
-            }
-            else
-            {
-                //set the name for the combobox when changing index.
-                CSBF1 sbf1 = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
-                CSBF1Scene scene = sbf1.GetScene(treeViewSBF.SelectedNode.Index);
-                //grab index of the selected texture
-                var textureSbf = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
-                comboBoxSceneChangeTexture.SelectedIndex = textureSbf.getTextureIndex();
-                numericUpDownSceneTexturePosX.Enabled = true;
-                numericUpDownSceneTexturePosY.Enabled = true;
-                if (textureSbf.transparencybit)
-                {
-                    checkBoxTexturesExtra1.Checked = true;
-                    numericUpDownTextureTransparency.Value = textureSbf.transparency;
-                }
-                else
-                    checkBoxTexturesExtra1.Checked = false;
-                
-               
-                
-            }
-        }
 
         private void buttonScenesTextureAdd_Click(object sender, EventArgs e)
         {
-            CSBF1 sbf1 = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index);
-            string fibName = this.ressourceList.fibList[comboBoxSceneAddTexture.SelectedIndex].GetRessourceName();
-
-            sbf1.AddBifToSbf(fibName);
-
-            //update the texture (combobox) present in the scene
-            comboBoxSceneChangeTexture.Items.Clear();
-            for (int i = 0; i < sbf1.GetBifList().Count(); i++)
-                comboBoxSceneChangeTexture.Items.Add(sbf1.GetBifName(i).ToLower().Replace(".bif", ""));
+           
 
 
-        }
-
-        private void numericUpDownSceneTexturePosX_ValueChanged(object sender, EventArgs e)
-        {
-            if (treeViewSBF.SelectedNode.Level == 0)
-                return;
-            var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).posX = (int)numericUpDownSceneTexturePosX.Value;
-            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
-        }
-
-        private void numericUpDownSceneTexturePosY_ValueChanged(object sender, EventArgs e)
-        {
-            if (treeViewSBF.SelectedNode.Level == 0)
-                return;
-
-            var scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).posY = (int)numericUpDownSceneTexturePosY.Value;
-            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
-        }
-
-        private void buttonScenesTextureReplace_Click(object sender, EventArgs e)
-        {
-            byte indexNewTexture = (byte)comboBoxSceneChangeTexture.SelectedIndex;
-            CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-            scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value).textureIndex = indexNewTexture;
-            launchGraphicDisplayPart((int)numericUpDownSceneTexture.Value);
         }
 
         private void saveSceneToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1294,29 +1168,10 @@ namespace N64PPLEditorC
             
         }
 
-        private void checkBoxTexturesExtra1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!checkBoxTexturesExtra1.Checked)
-            {
-                CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-                var textureObj = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
-                textureObj.transparencybit = false;
-            }
-        }
-
-        private void checkBoxTexturesExtra2_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void numericUpDownTextureTransparency_ValueChanged(object sender, EventArgs e)
         {
-            if (checkBoxTexturesExtra1.Checked)
-            {
-                CSBF1Scene scene = this.ressourceList.GetSBF1(treeViewSBF.SelectedNode.Parent.Index).GetScene(treeViewSBF.SelectedNode.Index);
-                var textureObj = scene.GetTextureManagementObject((int)numericUpDownSceneTexture.Value);
-                textureObj.SetTransparencyValue(true, (byte)numericUpDownTextureTransparency.Value);
-            }
+           
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -1349,13 +1204,6 @@ namespace N64PPLEditorC
             }
             var outTex = CTextureManager.ConvertByteArrayToRGBA(buffTexture, Compression.trueColor16Bits, buffPalette);
             pictureBox1.Image = CTextureManager.ConvertRGBAByteArrayToBitmap(outTex,216,134);
-        }
-
-        private void buttonScenesTextureAddNew_Click(object sender, EventArgs e)
-        {
-            this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].AddNewTextureObject();
-            numericUpDownSceneTexture.Maximum += 1;
-            numericUpDownSceneTexture.Value = numericUpDownSceneTexture.Maximum;
         }
 
         private void extractBinToolStripMenuItem_Click(object sender, EventArgs e)

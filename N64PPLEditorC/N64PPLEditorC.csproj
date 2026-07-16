@@ -92,6 +92,7 @@
     <Compile Include="ManagementListRessources\SBF1\CSBF1FourthObject.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Texture\CSBF1TextureAnimation.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Texture\CSBF1TextureBase.cs" />
+    <Compile Include="ManagementListRessources\SBF1\SBF1Texture\CSBF1TextureFlags.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextFlags.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1TextCode.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Text\CSBF1Text.cs" />
