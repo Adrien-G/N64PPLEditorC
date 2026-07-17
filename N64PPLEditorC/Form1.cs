@@ -1034,7 +1034,7 @@ namespace N64PPLEditorC
             {
                 if ((myStream = saveFileDialog1.OpenFile()) != null)
                 {
-                    var b = fib.GetRawData();
+                    var b = fib.RecomposeRawData();
                     myStream.Write(b, 0, b.Length);
                     myStream.Close();
                 }

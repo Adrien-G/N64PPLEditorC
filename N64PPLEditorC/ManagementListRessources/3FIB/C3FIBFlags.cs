@@ -39,7 +39,7 @@ namespace N64PPLEditorC
             this.Unknow00000100 =         CGeneric.GetBitInMask(FlagsInt, 0x00000100);
             this.UsesSharedFrameBuffers = CGeneric.GetBitInMask(FlagsInt, 0x00000200);
             this.PingPongAnimation =      CGeneric.GetBitInMask(FlagsInt, 0x00000400);
-            this.PingPongDirection =      CGeneric.GetBitInMask(FlagsInt, 0x00000400);
+            this.PingPongDirection =      CGeneric.GetBitInMask(FlagsInt, 0x00000800);
             index += 4;
         }
 
@@ -57,11 +57,11 @@ namespace N64PPLEditorC
             CGeneric.SetBitInMask(ref newFlags,0x00000100 , this.Unknow00000100);
             CGeneric.SetBitInMask(ref newFlags,0x00000200 , this.UsesSharedFrameBuffers);
             CGeneric.SetBitInMask(ref newFlags,0x00000400 , this.PingPongAnimation);
-            CGeneric.SetBitInMask(ref newFlags,0x00000400 , this.PingPongDirection);
+            CGeneric.SetBitInMask(ref newFlags,0x00000800 , this.PingPongDirection);
 
           
 
-            this.Flags = CGeneric.SwapBigAndLittleEndian(CGeneric.ConvertIntToByteArray(newFlags));
+            this.Flags = CGeneric.ConvertIntToByteArray(newFlags);
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 
 namespace N64PPLEditorC
 {
@@ -105,7 +104,7 @@ namespace N64PPLEditorC
 
             //add .fib to the end, and init the 3fib.
             C3FIB new3Fib = new C3FIB(rawData,byteName.Concat(new Byte[] { 0x2E, 0x42, 0x49, 0x46 }).ToArray());
-            new3Fib.Init();
+            //new3Fib.Init();
             fibList.Add(new3Fib);
 
             var element = new ListFormat();
@@ -196,13 +195,13 @@ namespace N64PPLEditorC
             int indexData = (fibList.Count() + GetHVQMCount() + GetSBFCount() + GetRTFCount()) * 24 + 4;
 
             //write list header (FIB,HVQM,SBF1,RDF1)
-            WriteListHeader(ref fs, ref indexData, fibList);
+            WriteListHeaderSpecific(ref fs, ref indexData, fibList);
             WriteListHeader(ref fs, ref indexData, hvqmList);
             WriteListHeader(ref fs, ref indexData, sbfList);
             WriteListHeader(ref fs, ref indexData, rdfList);
 
             //write data associated
-            WriteRessourceData(ref fs, fibList);
+            WriteRessourceDataSpecific(ref fs, fibList);
             WriteRessourceData(ref fs, hvqmList);
             WriteRessourceData(ref fs, sbfList);
             WriteRessourceData(ref fs, rdfList);
@@ -223,6 +222,49 @@ namespace N64PPLEditorC
                 if(listOfressource[index].GetRawData().Length % 2 == 1){
                     fs.WriteByte(255);
                 }
+            }
+        }
+
+        private void WriteRessourceDataSpecific(ref FileStream fs, List<C3FIB> listOfressource) 
+        {
+            for (int index = 0; index < listOfressource.Count(); index++)
+            {
+                var a = listOfressource[index].RecomposeRawData();
+                var b = a.Length;
+
+                fs.Write(a, 0, b);
+
+                //check if the size is pair, if not add a byte. (don't know why..but required)
+                if (listOfressource[index].RecomposeRawData().Length % 2 == 1)
+                {
+                    fs.WriteByte(255);
+                }
+            }
+        }
+
+        private void WriteListHeaderSpecific(ref FileStream fs, ref int indexData, List<C3FIB> listOfressource)
+        {
+            for (int index = 0; index < listOfressource.Count(); index++)
+            {
+                //write size
+                fs.Write(CGeneric.ConvertIntToByteArray(listOfressource[index].RecomposeRawData().Length), 0, 4);
+
+                // write index start
+                fs.Write(CGeneric.ConvertIntToByteArray(indexData), 0, 4);
+
+                //write name of FIB (BIF Name)
+                byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(listOfressource[index].GetRessourceName().ToUpper());
+                fs.Write(nameBIF, 0, nameBIF.Length);
+
+                //fill free space (of name) by 0
+                for (int freeSpace = 0; freeSpace < 16 - nameBIF.Length; freeSpace++)
+                    fs.WriteByte(0);
+
+                //if data is not pair, add a FF for to be sure it's pair... (because !)
+                if (listOfressource[index].RecomposeRawData().Length % 2 == 1)
+                    indexData++;
+
+                indexData += listOfressource[index].RecomposeRawData().Length;
             }
         }
 
@@ -256,7 +298,7 @@ namespace N64PPLEditorC
             int size = 0;
             foreach (C3FIB c3fibdata in fibList)
             {
-                var tmp = c3fibdata.GetRawData().Length;
+                var tmp = c3fibdata.RecomposeRawData().Length;
                 if (tmp % 2 == 0) size += tmp; else size += tmp + 1;
             }
             foreach (CHVQM hvqmdata in hvqmList)

@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using static N64PPLEditorC.CGeneric;
 
 namespace N64PPLEditorC
 {
-    public class C3FIB : AbsRessource
+    public class C3FIB
     {
         private List<CBFF2> Bff2Childs;
         public C3FIBFlags Flags;
         private byte[] Name;
         private byte[] NameLength;
         public int NameLengthInt { get { return CGeneric.ConvertByteArrayToInt(NameLength); } }
+        private byte[] RessourceName;
 
         private byte[] PrimaryColor;
         private byte[] SecondColor;
-        private byte[] FrameCount;
 
         //nouveau constructeur pour ré-écriture
-        public C3FIB(Byte[] rawData, Byte[] ressourceName, bool newVersion) : base(rawData, ressourceName)
+        public C3FIB(Byte[] rawData, Byte[] ressourceName, bool newVersion)
         {
 
             int globalIndex = 0;
@@ -34,7 +35,7 @@ namespace N64PPLEditorC
             this.PrimaryColor = CGeneric.GiveMeArray(rawData, globalIndex, 4);
             globalIndex += 4;
 
-            this.FrameCount = CGeneric.GiveMeArray(rawData, globalIndex, 4);
+            var FrameCount = CGeneric.GiveMeArray(rawData, globalIndex, 4);
             globalIndex += 4;
 
             if (this.Flags.SecondRGBAColor)
@@ -51,7 +52,8 @@ namespace N64PPLEditorC
                 globalIndex += NameLengthInt;
             }
 
-            TempPartInit();
+            this.RessourceName = ressourceName;
+            TempPartInit(rawData,FrameCount);
 
         }
 
@@ -64,20 +66,20 @@ namespace N64PPLEditorC
 
             //Flags
             this.Flags.UpdateFlags();
-            rawData.AddRange(this.Flags.Flags);
+            rawData.AddRange(CGeneric.SwapBigAndLittleEndian(this.Flags.Flags));
 
             //PrimaryColor
             rawData.AddRange(this.PrimaryColor);
 
             //FrameCount
-            rawData.AddRange(this.FrameCount);
+            rawData.AddRange(CGeneric.SwapBigAndLittleEndian(CGeneric.ConvertIntToByteArray(this.Bff2Childs.Count)));
 
             if (this.Flags.SecondRGBAColor)
                 rawData.AddRange(this.SecondColor);
 
             if (this.Flags.Name)
             {
-                rawData.AddRange(this.NameLength);
+                rawData.AddRange(CGeneric.SwapBigAndLittleEndian(this.NameLength));
                 rawData.AddRange(this.Name);
             }
             foreach (var bff2 in this.Bff2Childs)
@@ -93,56 +95,25 @@ namespace N64PPLEditorC
 
 
 
-
-
-        //private Byte[] header3FIB;
-        //private Byte[] fibName;
-        private byte fibNameSize;
         //only for keep compression ratio
         public Compression compressionType;
 
-        public C3FIB(Byte[] rawData, Byte[] ressourceName) : base(rawData, ressourceName)
+        public C3FIB(Byte[] rawData, Byte[] ressourceName)
         {
-            //bff2Childs = new List<CBFF2>();
         }
 
-        private void TempPartInit()
+        private void TempPartInit(byte[] rawData,byte[] frameCount)
         {
             Bff2Childs = new List<CBFF2>();
 
             //exclude the header and prepare and Chunk each BFF2
             Byte[] bffData = new byte[rawData.Length - NameLengthInt - 20];
             Array.Copy(rawData, 20 + NameLengthInt, bffData, 0, bffData.Length);
-            MakeBFF2Chunks(bffData, CGeneric.ConvertByteArrayToInt(this.FrameCount));
+            MakeBFF2Chunks(bffData, CGeneric.ConvertByteArrayToInt(CGeneric.SwapBigAndLittleEndian(frameCount)));
 
             //keep compression information based on the first BFF2
             if (Bff2Childs.Count > 0)
                 compressionType = Bff2Childs[0].GetCompressionType();
-        }
-
-        public void Init()
-        {
-            //get bff count and fibName size
-            Byte bffCount = rawData[12];
-            fibNameSize = rawData[16];
-
-            //keep fibName
-            this.Name = new byte[16 + fibNameSize];
-            Array.Copy(rawData, 20, this.Name, 0, fibNameSize);
-
-            //keep header information
-            //header3FIB = new byte[20 + fibNameSize];
-            //Array.Copy(rawData, 0, header3FIB, 0, header3FIB.Length);
-
-            //exclude the header and prepare and Chunk each BFF2
-            Byte[] bffData = new byte[rawData.Length - fibNameSize - 20];
-            Array.Copy(rawData, 20 + fibNameSize, bffData, 0, bffData.Length);
-            MakeBFF2Chunks(bffData, bffCount);
-            
-            //keep compression information based on the first BFF2
-            if(Bff2Childs.Count > 0)
-                compressionType = Bff2Childs[0].GetCompressionType();
-
         }
 
         private void MakeBFF2Chunks(Byte[] bffsData, int bffCount)
@@ -227,38 +198,10 @@ namespace N64PPLEditorC
             return Bff2Childs[index].GetBmpTexture();
         }
 
-
-        public override Int32 GetSize()
-        {
-            int totalSize = fibNameSize + 20;
-            for (int i = 0; i < Bff2Childs.Count; i++)
-            {
-                totalSize += Bff2Childs[i].GetSize();
-            }
-            return totalSize;
-        }
-
         public string GetFIBName()
         {
             return System.Text.Encoding.UTF8.GetString(this.Name);
         }
-
-        //public override byte[] GetRawData()
-        //{
-        //    Byte[] res = new byte[this.GetSize()];
-
-        //    header3FIB[12] = (byte)Bff2Childs.Count();
-            
-        //    Array.Copy(header3FIB, 0, res, 0,header3FIB.Length);
-        //    int indexDst = header3FIB.Length;
-
-        //    for (int i = 0; i < Bff2Childs.Count; i++)
-        //    {
-        //        Array.Copy(Bff2Childs[i].GetRawData(),0,res, indexDst,Bff2Childs[i].GetSize());
-        //        indexDst += Bff2Childs[i].GetSize();
-        //    }
-        //    return res;
-        //}
 
         public CBFF2 GetBFF2(int index)
         {
@@ -273,7 +216,13 @@ namespace N64PPLEditorC
         } 
         public void SetTextureDisplayStyle(TextureDisplayStyle style)
         {
+            //TODO adapt.
             //this.header3FIB[4] = (byte)style;
+        }
+
+        internal string GetRessourceName()
+        {
+            return Encoding.Default.GetString(RessourceName);
         }
     }
 }

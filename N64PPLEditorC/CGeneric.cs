@@ -177,8 +177,9 @@ namespace N64PPLEditorC
 
         public static byte[] SwapBigAndLittleEndian(byte[] data)
         {
-            Array.Reverse(data);
-            return data;
+            byte[] cloneObj = (byte[])data.Clone();
+            Array.Reverse(cloneObj);
+            return cloneObj;
         }
 
         public static ushort ReadUInt16BigEndian(byte[] data, int offset)
