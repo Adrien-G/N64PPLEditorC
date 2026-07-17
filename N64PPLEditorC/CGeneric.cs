@@ -28,6 +28,7 @@ namespace N64PPLEditorC
         public static readonly Byte[] patternAbraBif = { 65, 66, 82, 65, 46, 66, 73, 70 };
         //public static readonly Byte[] patternAbraBif = {0x42, 0x41, 0x42, 0x59, 0x5F, 0x44, 0x52, 0x41, 0x2E, 0x42, 0x49, 0x46 };
         public static readonly Byte[] patternBFF2 = { 0x42,0x46,0x46, 0x32 };
+        public static readonly Byte[] pattern3FIB = { 0x33, 0x46, 0x49, 0x42 };
         public static readonly Byte[] patternSBF1 = { 0x53, 0x42, 0x46, 0x31};
         public static readonly Byte[] endOfRom = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
         public static readonly int romSize = 0x2000000;
@@ -172,6 +173,12 @@ namespace N64PPLEditorC
                 return BitConverter.ToInt16(tmp, 0);
             else
                 return BitConverter.ToInt32(tmp, 0);
+        }
+
+        public static byte[] SwapBigAndLittleEndian(byte[] data)
+        {
+            Array.Reverse(data);
+            return data;
         }
 
         public static ushort ReadUInt16BigEndian(byte[] data, int offset)

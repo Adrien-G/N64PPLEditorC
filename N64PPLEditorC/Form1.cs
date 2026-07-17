@@ -1,15 +1,16 @@
-﻿using System;
-using System.IO;
+﻿using N64PPLEditorC.ManagementAudio;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Diagnostics;
-using static N64PPLEditorC.CGeneric;
-using N64PPLEditorC.ManagementAudio;
 using System.Windows.Forms.DataVisualization.Charting;
+using static N64PPLEditorC.CGeneric;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace N64PPLEditorC
 {
@@ -276,7 +277,23 @@ namespace N64PPLEditorC
                 labelIsTextureContainer.Show();
                 pictureBoxTexture.SizeMode = PictureBoxSizeMode.AutoSize;
                 pictureBoxTexture.Hide();
-                labelTextureCompression.Text = "Compression : " + this.ressourceList.fibList[treeViewTextures.SelectedNode.Index].compressionType.ToString();
+
+                //flags
+                var fib = this.ressourceList.fibList[treeViewTextures.SelectedNode.Index];
+                checkBoxAutoScroll.Checked = fib.Flags.AutoScroll;
+                checkBoxUnk00000002.Checked = fib.Flags.Unk00000002;
+                checkBoxAnimationLoop.Checked = fib.Flags.AnimationLoop;
+                checkBoxName.Checked = fib.Flags.Name;
+                checkBoxSecondRGBAColor.Checked = fib.Flags.SecondRGBAColor;
+                checkBoxAnimated.Checked = fib.Flags.Animated;
+                checkBoxAdjustedLocation.Checked = fib.Flags.AdjustedLocation;
+                checkBoxLoopDataAdditional.Checked = fib.Flags.LoopDataAdditional;
+                checkBoxUnknow00000100.Checked = fib.Flags.Unknow00000100;
+                checkBoxUsesSharedFrameBuffers.Checked = fib.Flags.UsesSharedFrameBuffers;
+                checkBoxPingPongAnimation.Checked = fib.Flags.PingPongAnimation;
+                checkBoxPingPongDirection.Checked = fib.Flags.PingPongDirection;
+
+                labelTextureCompression.Text = "Compression : " + fib.compressionType.ToString();
             }
             
         }

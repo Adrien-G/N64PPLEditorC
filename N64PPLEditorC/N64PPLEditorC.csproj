@@ -88,6 +88,7 @@
     <Compile Include="ManagementAudio\AudioDecode.cs" />
     <Compile Include="ManagementAudio\Song.cs" />
     <Compile Include="ManagementAudio\Sound.cs" />
+    <Compile Include="ManagementListRessources\3FIB\C3FIBFlags.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1DynamicObjectPoint.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1FourthObject.cs" />
     <Compile Include="ManagementListRessources\SBF1\SBF1Texture\CSBF1TextureAnimation.cs" />
@@ -106,7 +107,7 @@
     <Compile Include="ManagementAudio\AudioList.cs" />
     <Compile Include="ManagementAudio\SoundBank.cs" />
     <Compile Include="ManagementRomData\UncompressedRomTextureData.cs" />
-    <Compile Include="ManagementListRessources\C3FIB.cs" />
+    <Compile Include="ManagementListRessources\3FIB\C3FIB.cs" />
     <Compile Include="ManagementListRessources\CBFF2.cs" />
     <Compile Include="CGeneric.cs" />
     <Compile Include="ManagementListRessources\CHVQM.cs" />

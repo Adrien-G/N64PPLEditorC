@@ -75,8 +75,9 @@ namespace N64PPLEditorC
                 switch (CGeneric.ConvertByteArrayToInt(dataPattern))
                 {
                     case (int)CGeneric.RessourceType.FIB:
-                        fibList.Add(new C3FIB(tmpContainerData, ressourcesList[i].ressourceName));
-                        fibList[fibList.Count - 1].Init();
+                        fibList.Add(new C3FIB(tmpContainerData, ressourcesList[i].ressourceName,true));
+                        //fibList.Add(new C3FIB(tmpContainerData, ressourcesList[i].ressourceName));
+                        //fibList[fibList.Count - 1].Init();
                         break;
                     case (int)CGeneric.RessourceType.HVQM:
                         hvqmList.Add(new CHVQM(tmpContainerData, ressourcesList[i].ressourceName));
