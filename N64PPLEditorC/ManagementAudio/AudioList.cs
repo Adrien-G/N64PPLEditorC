@@ -94,7 +94,7 @@ namespace N64PPLEditorC.ManagementAudio
         private byte[] Set16BitAlignment(byte[] data)
         {
             //add 00 byte for 16 bit alignment and return it
-            int difference = 16 - (data.Length % 16);
+            int difference = 16 - (16 - (data.Length % 16)) % 16;
 
             byte[] finalArray = new byte[data.Length + difference];
             Array.Copy(data, 0, finalArray, 0, data.Length);
@@ -105,7 +105,7 @@ namespace N64PPLEditorC.ManagementAudio
         public void WriteAllData(FileStream fs)
         {
             //set 16bit alignment for first soundbank 
-            int alignment = 16 - ((int)fs.Position % 16);
+            int alignment = (16 - ((int)fs.Position % 16)) % 16;
             for (int i = 0; i < alignment; i++)
                 fs.WriteByte(0);
 

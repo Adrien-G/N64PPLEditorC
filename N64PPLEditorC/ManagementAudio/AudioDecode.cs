@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,13 +35,17 @@ namespace N64PPLEditorC.ManagementAudio
         /// <returns></returns>
         public static short[] Decode(byte[] wavData, int predictorOrder, short[] predictors, int npredictors)
         {
+            if (predictorOrder != 2)
+                throw new NotSupportedException("Only order-2 N64 ADPCM codebooks are supported.");
+
             int index;
             int pred;
-            short[] output = new short[wavData.Length * 2];
+            int frameCount = wavData.Length / 9;
+            short[] output = new short[frameCount * 16];
             short[] tmpOut = new short[8];
 
             //flip the predictors
-            short[] preds = new short[32 * npredictors];
+            short[] preds = new short[8 * predictorOrder * npredictors];
             for (int j = 0; j < (8 * predictorOrder * npredictors); j++)
                 preds[j] = predictors[j];
 
@@ -48,6 +53,10 @@ namespace N64PPLEditorC.ManagementAudio
             int indexOut = 0;
 
             int i = (wavData.Length / 9) * 9;
+            if (wavData.Length % 9 != 0)
+            {
+                throw new InvalidDataException( "N64 ADPCM data length must be a multiple of 9.");
+            }
             while (i > 0)
             {
                 index = (wavData[indexIn] >> 4) & 0xF;
@@ -56,17 +65,21 @@ namespace N64PPLEditorC.ManagementAudio
                 i--;
 
                 short[] pred1 = new short[16];
+                if (pred >= npredictors)
+                {
+                    throw new InvalidDataException($"Invalid predictor {pred}; codebook contains {npredictors} predictors.");
+                }
                 for (int j = 0; j < 16; j++)
                     pred1[j] = preds[pred * 16 + j];
 
                 indexIn++;
-                tmpOut = Decode8(CGeneric.GiveMeArray(wavData, indexIn, 8), index, pred1, tmpOut, pred);
+                tmpOut = Decode8(CGeneric.GiveMeArray(wavData, indexIn, 4), index, pred1, tmpOut);
                 Array.Copy(tmpOut, 0, output, indexOut, 8);
                 indexIn += 4;
                 i -= 4;
                 indexOut += 8;
 
-                tmpOut = Decode8(CGeneric.GiveMeArray(wavData, indexIn, i == 4 ? i:8), index, pred1, tmpOut, pred);
+                tmpOut = Decode8(CGeneric.GiveMeArray(wavData, indexIn, 4), index, pred1, tmpOut);
                 Array.Copy(tmpOut, 0, output, indexOut, 8);
                 indexIn += 4;
                 i -= 4;
@@ -78,7 +91,7 @@ namespace N64PPLEditorC.ManagementAudio
             return output.Take(indexOut).ToArray();
         }
 
-        private static short[] Decode8(byte[] input, int index, short[] preds, short[] lastsmp, int pred)
+        private static short[] Decode8(byte[] input, int index, short[] preds, short[] lastsmp)
         {
             short[] tmp = new short[8];
             long total = 0;
@@ -112,12 +125,12 @@ namespace N64PPLEditorC.ManagementAudio
                     for (int x = i - 1; x > -1; x--)
                         total += (tmp[((i - 1) - x)] * preds[x + 8]);
 
-                float result = ((tmp[i] << 0xb) + total) >> 0xb;
+                long result = ((tmp[i] << 0xb) + total) >> 0xb;
 
-                if (result > 32767)
-                    sample = 32767;
-                else if (result < -32768)
-                    sample = -32768;
+                if (result > short.MaxValue)
+                    sample = short.MaxValue;
+                else if (result < short.MinValue)
+                    sample = short.MinValue;
                 else
                     sample = (short)result;
 

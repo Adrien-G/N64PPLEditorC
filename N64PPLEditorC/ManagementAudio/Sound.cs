@@ -47,11 +47,16 @@ namespace N64PPLEditorC.ManagementAudio
 
         private byte[] GetWavBottom()
         {
-            byte[] wavBottom = CGeneric.patternBottomWavFile;
-            if (loop.count > 0)
+            bool hasLoop = loop.count != 0;
+            int loopDataLength = hasLoop ? 24 : 0;
+
+            byte[] wavBottom = new byte[CGeneric.patternBottomWavFile.Length + loopDataLength];
+            Array.Copy((byte[])CGeneric.patternBottomWavFile.Clone(), wavBottom,CGeneric.patternBottomWavFile.Length);
+
+            if (hasLoop)
             {
-                wavBottom[0x4] = 0x3C;
-                wavBottom[0x24] = 0x01;
+                wavBottom[0x4] = hasLoop ? (byte)0x3C : (byte)0x24;
+                wavBottom[0x24] = hasLoop ? (byte)1 : (byte)0;
 
                 var loopStartByte = CGeneric.ConvertIntToByteArray(loop.start);
                 var loopEndByte = CGeneric.ConvertIntToByteArray(loop.end);
@@ -87,7 +92,7 @@ namespace N64PPLEditorC.ManagementAudio
 
         private byte[] GetWavHeader(int soundBank, int instrument,int lengthWave)
         {
-            byte[] wavHeader = CGeneric.patternHeaderWavFile;
+            byte[] wavHeader = (byte[])CGeneric.patternHeaderWavFile.Clone();
 
             int loopHeader = 0;
             if (loop.count > 0) loopHeader = 0x18;
