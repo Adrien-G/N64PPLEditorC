@@ -535,15 +535,14 @@ namespace N64PPLEditorC
                 {
                     treeViewAudio.Nodes.Add("Soundbank " + Convert.ToString(audioSoundbank, 10).ToUpper());
                     for (int j = 0; j < this.audioList?.soundBankList[audioSoundbank].songList?.Count; j++)
-                    {
-                        treeViewAudio.Nodes[audioSoundbank].Nodes.Add("Song " + (j+1));
-                    }
+                        treeViewAudio.Nodes[audioSoundbank].Nodes.Add("Song " + (j + 1));
                     for (int j = 0; j < this.audioList?.soundBankList[audioSoundbank].soundList?.Count; j++)
                     {
-                        treeViewAudio.Nodes[audioSoundbank].Nodes.Add("Sound " + (j + 1));
+                        TreeNode soundNode = new TreeNode("Sound " + (j + 1));
+                        soundNode.Tag = j;
+                        treeViewAudio.Nodes[audioSoundbank].Nodes.Add(soundNode);
                     }
                 }
-
             }
             CheckIfTreeViewEmpty(treeViewTextures);
             CheckIfTreeViewEmpty(treeViewTexturesUncompressed);
@@ -1376,6 +1375,28 @@ namespace N64PPLEditorC
             {
                 //récupération des données en fin..
                 sbf.SetScene(form2.Scene,treeViewSBF.SelectedNode.Index);
+            }
+        }
+
+        private void toolStripMenuItemReplaceByWav_Click(object sender, EventArgs e)
+        {
+            
+           
+        }
+
+        private void buttonReplaceByWav_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openWavFile = new OpenFileDialog())
+            {
+                openWavFile.Filter = "WAV files (*.wav;*.wave)|*.wav;*.wave";
+                openWavFile.FilterIndex = 1;
+                openWavFile.RestoreDirectory = true;
+
+                if (openWavFile.ShowDialog() == DialogResult.OK)
+                {
+                    Byte[] buffWav = File.ReadAllBytes(openWavFile.FileName);
+                    this.audioList.ReplaceSound(treeViewAudio.SelectedNode.Parent.Index, (int)treeViewAudio.SelectedNode.Tag, buffWav);
+                }
             }
         }
     }

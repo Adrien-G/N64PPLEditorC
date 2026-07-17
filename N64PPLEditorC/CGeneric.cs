@@ -187,6 +187,13 @@ namespace N64PPLEditorC
             return (ushort)((data[offset] << 8) | data[offset + 1]);
         }
 
+        public static short ReadInt16BigEndian(byte[] data, int offset)
+        {
+            return unchecked((short)(
+                (data[offset] << 8) |
+                 data[offset + 1]));
+        }
+
         public static byte[] ConvertUShortToByteArray(ushort value)
         {
             byte[] bytes =

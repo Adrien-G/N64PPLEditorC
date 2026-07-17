@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +49,7 @@ namespace N64PPLEditorC.ManagementAudio
             address = new SoundBankAddressStruct();
             soundList = new List<Sound>();
             songList = new List<Song>();
+            this.id = id;
             this.rawData = rawData;
             this.positionPtrStart = positionPtrStart;
             this.songDataAddress = startingEndingAddress;
@@ -60,19 +62,24 @@ namespace N64PPLEditorC.ManagementAudio
             nbInstruments = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, 0x20, 4));
 
             int indexSoundPtr = 0;
+
             int soundLength = 0;
             for (int i = 0; i < nbInstruments; i++)
             {
                 Sound sound = new Sound();
-                
-                sound.start = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable,indexSoundPtr + 0x30, 4));
-                soundLength = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable,indexSoundPtr + 0x34, 4));
+
+                sound.descriptorOffset = indexSoundPtr + 0x30;
+                sound.start = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, sound.descriptorOffset, 4));
+                soundLength = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, sound.descriptorOffset + 4, 4));
+                sound.index = i;
+                sound.samplingRate = Sound.GetSamplingRate(id, i);
 
                 //grab sound data
                 sound.rawData = CGeneric.GiveMeArray(waveTable, sound.start, soundLength);
 
-                sound.loop.offset =      CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, indexSoundPtr + 0x3C, 4));
-                sound.predictor.offset = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, indexSoundPtr + 0x40, 4));
+                sound.loop.offset =      CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, sound.descriptorOffset + 0x0C, 4));
+                sound.predictor.offset = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, sound.descriptorOffset + 0x10, 4));
+                
 
                 //loop
                 if (sound.loop.offset != 0)
@@ -80,7 +87,11 @@ namespace N64PPLEditorC.ManagementAudio
                     sound.loop.start = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, sound.loop.offset, 4));
                     sound.loop.end = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, sound.loop.offset + 4, 4));
                     sound.loop.count = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, sound.loop.offset + 8, 4));
-                    sound.loop.state = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(ptrTable, sound.loop.offset + 0xC, 0x20));
+                    byte[] loopStateRaw = CGeneric.GiveMeArray(ptrTable,sound.loop.offset + 0x0C, 0x20);
+                    sound.loop.state = new short[16];
+
+                    for (int j = 0; j < sound.loop.state.Length; j++)
+                        sound.loop.state[j] = CGeneric.ReadInt16BigEndian(loopStateRaw, j * 2);
                 }
 
                 //predictors
@@ -90,7 +101,7 @@ namespace N64PPLEditorC.ManagementAudio
 
                 sound.predictor.predictorShort = new short[sound.predictor.predictors.Length / 2];
                 for (int j = 0; j < sound.predictor.predictorShort.Length; j++)
-                    sound.predictor.predictorShort[j] = BitConverter.ToInt16(new[] {sound.predictor.predictors[j*2+1], sound.predictor.predictors[j * 2] }, 0);
+                    sound.predictor.predictorShort[j] = CGeneric.ReadInt16BigEndian( sound.predictor.predictors, j * 2);
 
                 if (sound.loop.offset != 0)
                     indexSoundPtr = sound.loop.offset;
@@ -98,6 +109,66 @@ namespace N64PPLEditorC.ManagementAudio
                     indexSoundPtr += 0xA0;
                 soundList.Add(sound);
             }
+        }
+
+        public void ReplaceSound(int soundIndex, byte[] wavFile)
+        {
+            Sound target = soundList[soundIndex];
+
+            WavPcmData pcm = WavPcmReader.Read(wavFile);
+
+            short[] normalizedSamples = PcmSampleConverter.Resample( pcm.Samples, pcm.SampleRate, target.samplingRate);
+            byte[] encoded = N64AdpcmEncoder.Encode( normalizedSamples, target.predictor.order, target.predictor.predictorShort, target.predictor.nPredictors);
+
+            target.rawData = encoded;
+
+            if (target.loop.offset != 0)
+            {
+                target.loop.count = 0;
+
+                WriteInt32BigEndian(ptrTable,target.loop.offset + 8, 0);
+
+                Array.Clear(target.loop.state,0,target.loop.state.Length);
+                Array.Clear(ptrTable,target.loop.offset + 0x0C, 0x20);
+            }
+
+            RebuildWaveTable();
+        }
+
+        private void RebuildWaveTable()
+        {
+            using (MemoryStream output = new MemoryStream())
+            {
+                // Préserver "N64 WaveTables \0"
+                output.Write(waveTable, 0, 0x10);
+
+                foreach (Sound sound in soundList)
+                {
+                    while ((output.Position % 16) != 0)
+                        output.WriteByte(0);
+
+                    sound.start = (int)output.Position;
+
+                    WriteInt32BigEndian(ptrTable,sound.descriptorOffset,sound.start);
+                    WriteInt32BigEndian(ptrTable,sound.descriptorOffset + 4, sound.rawData.Length);
+
+                    output.Write(sound.rawData, 0, sound.rawData.Length);
+                }
+
+                // Aligner également la fin de la waveTable.
+                while ((output.Position % 16) != 0)
+                    output.WriteByte(0);
+
+                waveTable = output.ToArray();
+            }
+        }
+
+        public static void WriteInt32BigEndian(byte[] destination,int offset, int value)
+        {
+            destination[offset] =     (byte)(value >> 24);
+            destination[offset + 1] = (byte)(value >> 16);
+            destination[offset + 2] = (byte)(value >> 8);
+            destination[offset + 3] = (byte)value;
         }
 
 

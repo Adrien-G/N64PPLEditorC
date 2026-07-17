@@ -33,6 +33,11 @@ namespace N64PPLEditorC.ManagementAudio
             return totalSize;
         }
 
+        public void ReplaceSound(int soundBankIndex, int soundIndex, byte[] wavFile)
+        {
+            soundBankList[soundBankIndex].ReplaceSound(soundIndex, wavFile);
+        }
+
         //search for N64 PtrTable V2 for cutting soundbank
         private void ChunkSoundBank()
         {
@@ -94,7 +99,7 @@ namespace N64PPLEditorC.ManagementAudio
         private byte[] Set16BitAlignment(byte[] data)
         {
             //add 00 byte for 16 bit alignment and return it
-            int difference = 16 - (16 - (data.Length % 16)) % 16;
+            int difference = (16 - (data.Length % 16)) % 16;
 
             byte[] finalArray = new byte[data.Length + difference];
             Array.Copy(data, 0, finalArray, 0, data.Length);
@@ -129,19 +134,6 @@ namespace N64PPLEditorC.ManagementAudio
                 fs.Write(CGeneric.ConvertIntToByteArray(valueToStore1 + lengthData), 0, 4);
                 adder += lengthData;
             }
-
-            /*for (int i = 0; i < addressHeaderSb0.Length; i += 4)
-            {
-                int tmpValue = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(addressHeaderSb0, i, 4));
-                if (finalIndexAudioStart > initialIndexAudioStart)
-                    tmpValue += finalIndexAudioStart - initialIndexAudioStart;
-                else
-                    tmpValue -= initialIndexAudioStart - finalIndexAudioStart;
-                byte[] tmpBytesNew = CGeneric.ConvertIntToByteArray(tmpValue);
-                for(int j = 0; j < tmpBytesNew.Length; j++)
-                    addressHeaderSb0[i + j] = tmpBytesNew[j];
-                
-            }*/
 
             //write rawData soundBank
             fs.Position = finalIndexAudioStart;

@@ -14,6 +14,7 @@ namespace N64PPLEditorC.ManagementAudio
         public loopData loop;
         public predictorData predictor;
         public int samplingRate;
+        public int descriptorOffset;
 
         public struct loopData
         {
@@ -21,7 +22,7 @@ namespace N64PPLEditorC.ManagementAudio
             public int start;
             public int end;
             public int count;
-            public int state;
+            public short[] state;
         }
         
         public struct predictorData
@@ -35,7 +36,10 @@ namespace N64PPLEditorC.ManagementAudio
 
         public Sound()
         {
-            loop = new loopData();
+            loop = new loopData()
+            {
+                state = new short[16]
+            };
             predictor = new predictorData();
         }
 
@@ -51,7 +55,7 @@ namespace N64PPLEditorC.ManagementAudio
             int loopDataLength = hasLoop ? 24 : 0;
 
             byte[] wavBottom = new byte[CGeneric.patternBottomWavFile.Length + loopDataLength];
-            Array.Copy((byte[])CGeneric.patternBottomWavFile.Clone(), wavBottom,CGeneric.patternBottomWavFile.Length);
+            Array.Copy(CGeneric.patternBottomWavFile, wavBottom,CGeneric.patternBottomWavFile.Length);
 
             if (hasLoop)
             {
@@ -59,7 +63,8 @@ namespace N64PPLEditorC.ManagementAudio
                 wavBottom[0x24] = hasLoop ? (byte)1 : (byte)0;
 
                 var loopStartByte = CGeneric.ConvertIntToByteArray(loop.start);
-                var loopEndByte = CGeneric.ConvertIntToByteArray(loop.end);
+                int wavLoopEnd = loop.end > loop.start ? loop.end - 1 : loop.end;
+                var loopEndByte = CGeneric.ConvertIntToByteArray(wavLoopEnd);
                 wavBottom[0x34] = loopStartByte[3];
                 wavBottom[0x35] = loopStartByte[2];
                 wavBottom[0x36] = loopStartByte[1];
@@ -94,10 +99,11 @@ namespace N64PPLEditorC.ManagementAudio
         {
             byte[] wavHeader = (byte[])CGeneric.patternHeaderWavFile.Clone();
 
-            int loopHeader = 0;
-            if (loop.count > 0) loopHeader = 0x18;
+            bool hasLoop = loop.offset != 0 && loop.count != 0;
+            int loopDataLength = hasLoop ? 0x18 : 0;
+            int riffChunkSize = lengthWave + 0x50 + loopDataLength;
+            byte[] fileSize = CGeneric.ConvertIntToByteArray(riffChunkSize);
 
-            byte[] fileSize = CGeneric.ConvertIntToByteArray(0x4C + lengthWave + loopHeader);
             wavHeader[0x04] = fileSize[3];
             wavHeader[0x05] = fileSize[2];
             wavHeader[0x06] = fileSize[1];
@@ -141,7 +147,12 @@ namespace N64PPLEditorC.ManagementAudio
             return byteArray;
         }
 
-        private bool IsHalfSamplingRate(int soundBank,int instrument)
+        public static int GetSamplingRate(int soundBank, int instrument)
+        {
+            return IsHalfSamplingRate(soundBank, instrument) ? 11025 : 22050;
+        }
+
+        private static bool IsHalfSamplingRate(int soundBank,int instrument)
         {
             switch (soundBank)
             {
