@@ -72,7 +72,7 @@ namespace N64PPLEditorC
             AddTexture(0x95984C, 104, 98, 32, "oui non multiples…");
             AddTexture(0x9635F0, 104, 18, 32, "appuyez sur un bouton!");
         }
-            private void InitGraphicsFr()
+        private void InitGraphicsFr()
         {
             //32bpp textures
             AddTexture(0x97C850, 104, 88, 32, "1 - stage fini (cœur)");
@@ -213,7 +213,7 @@ namespace N64PPLEditorC
             AddTexture(0xF7E78, 64, 32, 8, "130 - ready 1 2 3", 0x0F7C60, 0x200);
             AddTexture(0x126A80, 192, 47, 8, "131 - game over", 0x126690, 0x200);
             AddTexture(0x128DC0, 64, 116, 8, "132 - game over OUI NON", 0x126880, 0x200);
-            AddTexture(0x131FBF, 320, 232, 8, "133 - boiteJeu modeTemps", 0x1441C0, 0x200);
+            AddTexture(0x131FC0, 320, 232, 8, "133 - boiteJeu modeTemps", 0x1441C0, 0x200);
             AddTexture(0x1443C0, 320, 232, 8, "134 - boiteJeu 2 joueurs", 0x1565C0, 0x200);
             AddTexture(0x1567C0, 320, 232, 8, "135 - boiteJeu modeTemps 3D", 0x1689C0, 0x200);
             AddTexture(0x168BC0, 320, 232, 8, "136 - boiteJeu 2 joueurs 3D", 0x17ADC0, 0x200);

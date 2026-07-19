@@ -150,7 +150,7 @@ namespace N64PPLEditorC
                                 if (safeFileName.Split(',').Count() == 2)
                                     safeFileName = safeFileName.Split(',')[1].Trim();
 
-                                byte[] finalBFF2 = CBFF2.GenerateBFF2(palette, compressedData, compressionMethod, img.Width, img.Height, safeFileName);
+                                byte[] finalBFF2 = C3FIBContainer.GenerateBFF2(palette, compressedData, compressionMethod, img.Width, img.Height, safeFileName);
 
                                 //add texture to the bff2 files and update treeview
                                 if (treeViewTextures.SelectedNode.Level == 0)
@@ -387,17 +387,25 @@ namespace N64PPLEditorC
 
         private void UpdateFreeSpaceLeft()
         {
-            if (extendedRom)
-                freeSpaceLeft = CGeneric.romSizeExtended;
-            else
-                freeSpaceLeft = CGeneric.romSize;
+            try
+            {
+                if (extendedRom)
+                    freeSpaceLeft = CGeneric.romSizeExtended;
+                else
+                    freeSpaceLeft = CGeneric.romSize;
 
-            freeSpaceLeft -= ressourceList.indexRessourcesStart;
-            freeSpaceLeft -= ressourceList.GetSizeOfAllRessourceList();
-            if (audioList != null)//TODO To remove when ok
-                freeSpaceLeft -= audioList.GetSizeOfAllAudio();
+                freeSpaceLeft -= ressourceList.indexRessourcesStart;
+                freeSpaceLeft -= ressourceList.GetSizeOfAllRessourceList();
+                if (audioList != null)//TODO To remove when ok
+                    freeSpaceLeft -= audioList.GetSizeOfAllAudio();
 
-            labelFreeSpaceLeft.Text = freeSpaceLeft.ToString("### ### ### ###") + " bytes";
+                labelFreeSpaceLeft.Text = freeSpaceLeft.ToString("### ### ### ###") + " bytes";
+            }
+            catch
+            {
+
+            }
+           
         }
         private void buttonGetRomFolder_Click(object sender, EventArgs e)
         {
@@ -511,9 +519,9 @@ namespace N64PPLEditorC
 
             for (int fib = 0; fib < this.ressourceList.fibList.Count(); fib++)
             {
-                treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.fibList[fib].GetFIBName());
-                for (int bff = 0; bff < this.ressourceList.fibList[fib].GetBFFCount(); bff++)
-                    treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 + ", " + this.ressourceList.fibList[fib].GetBFFName(bff));
+                //treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.fibList[fib].GetFIBName());
+                //for (int bff = 0; bff < this.ressourceList.fibList[fib].GetBFFCount(); bff++)
+                //    treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 + ", " + this.ressourceList.fibList[fib].GetBFFName(bff));
             }
 
             for (int i = 0; i < this.ressourceList.GetHVQMCount(); i++)
@@ -1015,7 +1023,7 @@ namespace N64PPLEditorC
 
         private void ExtractBinaryTextureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            C3FIB fib;
+            C3FIBObject fib;
             if (treeViewTextures.SelectedNode.Level == 0)
                 fib = this.ressourceList.fibList[treeViewTextures.SelectedNode.Index];
             else

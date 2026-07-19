@@ -17,7 +17,7 @@ namespace N64PPLEditorC
 
         private List<ListFormat> ressourcesList;
 
-        public List<C3FIB> fibList;
+        public List<C3FIBObject> fibList;
         public List<CHVQM> hvqmList;
         public List<CSBF1> sbfList;
         public List<CRDF> rdfList;
@@ -26,7 +26,7 @@ namespace N64PPLEditorC
 
         public CRessourceList(int indexRessourcesStart)
         {
-            fibList = new List<C3FIB>();
+            fibList = new List<C3FIBObject>();
             hvqmList = new List<CHVQM>();
             sbfList = new List<CSBF1>();
             rdfList = new List<CRDF>();
@@ -74,7 +74,7 @@ namespace N64PPLEditorC
                 switch (CGeneric.ConvertByteArrayToInt(dataPattern))
                 {
                     case (int)CGeneric.RessourceType.FIB:
-                        fibList.Add(new C3FIB(tmpContainerData, ressourcesList[i].ressourceName,true));
+                        fibList.Add(new C3FIBObject(tmpContainerData, ressourcesList[i].ressourceName,true));
                         //fibList.Add(new C3FIB(tmpContainerData, ressourcesList[i].ressourceName));
                         //fibList[fibList.Count - 1].Init();
                         break;
@@ -103,7 +103,7 @@ namespace N64PPLEditorC
             rawData = rawData.Concat(byteName).ToArray();
 
             //add .fib to the end, and init the 3fib.
-            C3FIB new3Fib = new C3FIB(rawData,byteName.Concat(new Byte[] { 0x2E, 0x42, 0x49, 0x46 }).ToArray());
+            C3FIBObject new3Fib = new C3FIBObject(rawData,byteName.Concat(new Byte[] { 0x2E, 0x42, 0x49, 0x46 }).ToArray());
             //new3Fib.Init();
             fibList.Add(new3Fib);
 
@@ -225,7 +225,7 @@ namespace N64PPLEditorC
             }
         }
 
-        private void WriteRessourceDataSpecific(ref FileStream fs, List<C3FIB> listOfressource) 
+        private void WriteRessourceDataSpecific(ref FileStream fs, List<C3FIBObject> listOfressource) 
         {
             for (int index = 0; index < listOfressource.Count(); index++)
             {
@@ -242,7 +242,7 @@ namespace N64PPLEditorC
             }
         }
 
-        private void WriteListHeaderSpecific(ref FileStream fs, ref int indexData, List<C3FIB> listOfressource)
+        private void WriteListHeaderSpecific(ref FileStream fs, ref int indexData, List<C3FIBObject> listOfressource)
         {
             for (int index = 0; index < listOfressource.Count(); index++)
             {
@@ -296,7 +296,7 @@ namespace N64PPLEditorC
         public int GetSizeOfAllRessourceList()
         {
             int size = 0;
-            foreach (C3FIB c3fibdata in fibList)
+            foreach (C3FIBObject c3fibdata in fibList)
             {
                 var tmp = c3fibdata.RecomposeRawData().Length;
                 if (tmp % 2 == 0) size += tmp; else size += tmp + 1;

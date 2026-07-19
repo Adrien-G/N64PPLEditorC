@@ -45,8 +45,27 @@ namespace N64PPLEditorC
             return tupleNibble;
         }
 
-        public static byte[] DecompressTexture(CBFF2.BFFHeader headerBFF2)
+        public static byte[] DecompressTexture(byte[] compressedTexture, ref int globalIndex, int expectedSize)
         {
+            const int MaximumExtraPacketOutputSize = 128; //by security for avoiding error
+            byte[] decompressedTexture = new Byte[expectedSize + MaximumExtraPacketOutputSize];
+            int cursorDecompressed = 0;
+            do
+            {
+                if (compressedTexture[globalIndex] < 128)
+                    PerformSimpleReading(ref compressedTexture, ref globalIndex, ref decompressedTexture, ref cursorDecompressed);
+                else
+                {
+                    var tupleNibbleMtAndQt = getMultiplicatorAndPacketQuantity(compressedTexture[globalIndex]);
+                    PerformDecompressReading(tupleNibbleMtAndQt, ref compressedTexture, ref globalIndex, ref decompressedTexture, ref cursorDecompressed);
+                }
+            } while (cursorDecompressed < expectedSize);
+            return CGeneric.GiveMeArray(decompressedTexture, 0, expectedSize);
+        }
+
+        public static byte[] DecompressTexture(C3FIBContainer.BFFHeader headerBFF2)
+        {
+            
             byte[] decompressedTexture = new Byte[headerBFF2.sizeX*headerBFF2.sizeY*headerBFF2.bytePerPixel];
             byte[] compressedTexture = headerBFF2.dataCompressed;
             int cursorCompressed = 0;

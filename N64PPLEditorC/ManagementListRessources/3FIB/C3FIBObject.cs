@@ -8,9 +8,9 @@ using static N64PPLEditorC.CGeneric;
 
 namespace N64PPLEditorC
 {
-    public class C3FIB
+    public class C3FIBObject
     {
-        private List<CBFF2> Bff2Childs;
+        private List<C3FIBContainer> C3FibContainer;
         public C3FIBFlags Flags;
         private byte[] Name;
         private byte[] NameLength;
@@ -21,7 +21,7 @@ namespace N64PPLEditorC
         private byte[] SecondColor;
 
         //nouveau constructeur pour ré-écriture
-        public C3FIB(Byte[] rawData, Byte[] ressourceName, bool newVersion)
+        public C3FIBObject(Byte[] rawData, Byte[] ressourceName, bool newVersion)
         {
 
             int globalIndex = 0;
@@ -53,7 +53,13 @@ namespace N64PPLEditorC
             }
 
             this.RessourceName = ressourceName;
-            TempPartInit(rawData,FrameCount);
+
+            C3FibContainer = new List<C3FIBContainer>();
+            //TODO faire une boucle par la suite
+            while(rawData.Length > globalIndex)
+            {
+                C3FibContainer.Add(new C3FIBContainer(rawData, ref globalIndex));
+            }
 
         }
 
@@ -72,7 +78,7 @@ namespace N64PPLEditorC
             rawData.AddRange(this.PrimaryColor);
 
             //FrameCount
-            rawData.AddRange(CGeneric.SwapBigAndLittleEndian(CGeneric.ConvertIntToByteArray(this.Bff2Childs.Count)));
+            rawData.AddRange(CGeneric.SwapBigAndLittleEndian(CGeneric.ConvertIntToByteArray(this.C3FibContainer.Count)));
 
             if (this.Flags.SecondRGBAColor)
                 rawData.AddRange(this.SecondColor);
@@ -82,8 +88,8 @@ namespace N64PPLEditorC
                 rawData.AddRange(CGeneric.SwapBigAndLittleEndian(this.NameLength));
                 rawData.AddRange(this.Name);
             }
-            foreach (var bff2 in this.Bff2Childs)
-            rawData.AddRange(bff2.GetRawData());
+            foreach (var bff2 in this.C3FibContainer)
+                rawData.AddRange(bff2.GetRawData());
 
             return rawData.ToArray();
         }
@@ -98,13 +104,12 @@ namespace N64PPLEditorC
         //only for keep compression ratio
         public Compression compressionType;
 
-        public C3FIB(Byte[] rawData, Byte[] ressourceName)
+        public C3FIBObject(Byte[] rawData, Byte[] ressourceName)
         {
         }
 
         private void TempPartInit(byte[] rawData,byte[] frameCount)
         {
-            Bff2Childs = new List<CBFF2>();
 
             //exclude the header and prepare and Chunk each BFF2
             Byte[] bffData = new byte[rawData.Length - NameLengthInt - 20];
@@ -112,8 +117,8 @@ namespace N64PPLEditorC
             MakeBFF2Chunks(bffData, CGeneric.ConvertByteArrayToInt(CGeneric.SwapBigAndLittleEndian(frameCount)));
 
             //keep compression information based on the first BFF2
-            if (Bff2Childs.Count > 0)
-                compressionType = Bff2Childs[0].GetCompressionType();
+            if (C3FibContainer.Count > 0)
+                compressionType = C3FibContainer[0].GetCompressionType();
         }
 
         private void MakeBFF2Chunks(Byte[] bffsData, int bffCount)
@@ -151,51 +156,51 @@ namespace N64PPLEditorC
             {
                 Byte[] tmpByteBFF2 = new byte[sizeBFF2[i]];
                 Array.Copy(bffsData, indexBFF2[i], tmpByteBFF2, 0, sizeBFF2[i]);
-                Bff2Childs.Add(new CBFF2(tmpByteBFF2));
-                Bff2Childs[Bff2Childs.Count - 1].Init();
+                C3FibContainer.Add(new C3FIBContainer(tmpByteBFF2));
+                C3FibContainer[C3FibContainer.Count - 1].Init();
             }
         }
 
         public void AddBFF2Child(byte[] bff2Child)
         {
-            Bff2Childs.Add(new CBFF2(bff2Child));
-            Bff2Childs[Bff2Childs.Count - 1].Init();
+            C3FibContainer.Add(new C3FIBContainer(bff2Child));
+            C3FibContainer[C3FibContainer.Count - 1].Init();
         }
 
         public void RemoveBFF2Child(int index)
         {
-            Bff2Childs.RemoveAt(index);
+            C3FibContainer.RemoveAt(index);
         }
 
         public string GetBFFName(int index)
         {
-            return Bff2Childs[index].GetName();
+            return C3FibContainer[index].GetName();
         }
 
         public int GetBFFCount()
         {
-            return Bff2Childs.Count();
+            return C3FibContainer.Count();
         }
 
         public void SaveTexture(int indexFIB,int index)
         {
-            Bff2Childs[index].DecompressTexture();
-            Bitmap bmp = Bff2Childs[index].GetBmpTexture();
+            C3FibContainer[index].DecompressTexture();
+            Bitmap bmp = C3FibContainer[index].GetBmpTexture();
 
-            bmp.Save(CGeneric.pathExtractedTexture + (indexFIB + 1) + "-" + (index + 1) + ", " + Bff2Childs[index].GetName() + ".png");
+            bmp.Save(CGeneric.pathExtractedTexture + (indexFIB + 1) + "-" + (index + 1) + ", " + C3FibContainer[index].GetName() + ".png");
         }
 
         public void GetTexture(PictureBox pictureBox, int index)
         {
-            Bff2Childs[index].DecompressTexture();
-            Bitmap bmp = Bff2Childs[index].GetBmpTexture();
+            C3FibContainer[index].DecompressTexture();
+            Bitmap bmp = C3FibContainer[index].GetBmpTexture();
             pictureBox.Image = bmp;
         }
 
         public Bitmap GetBmpTexture(int index)
         {
-            Bff2Childs[index].DecompressTexture();
-            return Bff2Childs[index].GetBmpTexture();
+            C3FibContainer[index].DecompressTexture();
+            return C3FibContainer[index].GetBmpTexture();
         }
 
         public string GetFIBName()
@@ -203,9 +208,9 @@ namespace N64PPLEditorC
             return System.Text.Encoding.UTF8.GetString(this.Name);
         }
 
-        public CBFF2 GetBFF2(int index)
+        public C3FIBContainer GetBFF2(int index)
         {
-            return Bff2Childs[index];
+            return C3FibContainer[index];
         }
 
         public TextureDisplayStyle GetTextureDisplayStyle()

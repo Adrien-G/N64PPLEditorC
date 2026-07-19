@@ -5,8 +5,46 @@ using static N64PPLEditorC.CGeneric;
 
 namespace N64PPLEditorC
 { 
-    public class CBFF2
+    public class C3FIBContainer
     {
+        public C3FIBHeader Header {get;set;}
+        public BFF2Object BFF2Data { get; set;}
+
+        public C3FIBContainer(byte[] rawData, ref int globalIndex)
+        {
+            Header = new C3FIBHeader(rawData,ref globalIndex);
+            BFF2Data = new BFF2Object(rawData, ref globalIndex);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private Byte[] rawData;
         private BFFHeader headerBFF2;
 
@@ -30,11 +68,12 @@ namespace N64PPLEditorC
             public bool isIndexedColor;
         }
         
-        public CBFF2(Byte[] rawData)
+        public C3FIBContainer(Byte[] rawData)
         {
             this.rawData = rawData;
             this.headerBFF2 = new BFFHeader();
         }
+
 
         public void Init()
         {

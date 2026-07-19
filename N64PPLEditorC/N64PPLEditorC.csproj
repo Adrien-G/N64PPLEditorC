@@ -92,6 +92,13 @@
     <Compile Include="ManagementAudio\Decode\AudioDecode.cs" />
     <Compile Include="ManagementAudio\Song.cs" />
     <Compile Include="ManagementAudio\Sound.cs" />
+    <Compile Include="ManagementListRessources\3FIB\BFF2\BFF2Object.cs" />
+    <Compile Include="ManagementListRessources\3FIB\BFF2\CBFF2Palette.cs" />
+    <Compile Include="ManagementListRessources\3FIB\BFF2\CBFF2SubImage.cs" />
+    <Compile Include="ManagementListRessources\3FIB\BFF2\CBFF2SubImageData.cs" />
+    <Compile Include="ManagementListRessources\3FIB\C3FIBHeader.cs" />
+    <Compile Include="ManagementListRessources\3FIB\BFF2\CBFF2Base.cs" />
+    <Compile Include="ManagementListRessources\3FIB\BFF2\CBFF2Flags.cs" />
     <Compile Include="ManagementListRessources\3FIB\C3FIBFlags.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1DynamicObjectPoint.cs" />
     <Compile Include="ManagementListRessources\SBF1\CSBF1FourthObject.cs" />
@@ -111,8 +118,8 @@
     <Compile Include="ManagementAudio\AudioList.cs" />
     <Compile Include="ManagementAudio\SoundBank.cs" />
     <Compile Include="ManagementRomData\UncompressedRomTextureData.cs" />
-    <Compile Include="ManagementListRessources\3FIB\C3FIB.cs" />
-    <Compile Include="ManagementListRessources\CBFF2.cs" />
+    <Compile Include="ManagementListRessources\3FIB\C3FIBObject.cs" />
+    <Compile Include="ManagementListRessources\3FIB\C3FIBContainer.cs" />
     <Compile Include="CGeneric.cs" />
     <Compile Include="ManagementListRessources\CHVQM.cs" />
     <Compile Include="ManagementListRessources\CRDF.cs" />
@@ -208,6 +215,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ManagementRomData\UncompressedTextures\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
