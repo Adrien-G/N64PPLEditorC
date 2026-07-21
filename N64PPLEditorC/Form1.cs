@@ -268,9 +268,14 @@ namespace N64PPLEditorC
             if (level != 0)
             {
                 labelIsTextureContainer.Hide();
-                this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].GetTexture(pictureBoxTexture, treeViewTextures.SelectedNode.Index);
+                var bff2Data = this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].C3FibContainer[0].BFF2Data;
+                if (!bff2Data.Flags.HasSubImages)
+                    pictureBoxTexture.Image = this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].C3FibContainer[treeViewTextures.SelectedNode.Index].BFF2Data.GetBmpTexture();
+                else
+                    pictureBoxTexture.Image = bff2Data.GetSubImageBitmap(treeViewTextures.SelectedNode.Index);
+
                 pictureBoxTexture.Show();
-                numericUpDownTextureDisplayTime.Value = this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].GetBFF2(treeViewTextures.SelectedNode.Index).GetTextureDisplayTime();
+                //numericUpDownTextureDisplayTime.Value = this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].GetBFF2(treeViewTextures.SelectedNode.Index).GetTextureDisplayTime();
             }
             if (level == 0)
             {
@@ -519,9 +524,17 @@ namespace N64PPLEditorC
 
             for (int fib = 0; fib < this.ressourceList.fibList.Count(); fib++)
             {
-                //treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.fibList[fib].GetFIBName());
-                //for (int bff = 0; bff < this.ressourceList.fibList[fib].GetBFFCount(); bff++)
-                //    treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 + ", " + this.ressourceList.fibList[fib].GetBFFName(bff));
+                treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.fibList[fib].NameString);
+                for (int bff = 0; bff < this.ressourceList.fibList[fib].C3FibContainer.Count; bff++)
+                {
+                    var bff2Data = this.ressourceList.fibList[fib].C3FibContainer[bff].BFF2Data;
+                    if (!bff2Data.Flags.HasSubImages)
+                        treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 + ", " + bff2Data.Name);
+                    else
+                        for(int i = 0; i < bff2Data.SubImageData.ImageData.Count; i++)
+                            treeViewTextures.Nodes[fib].Nodes.Add(i + 1 + "");
+                }
+                    
             }
 
             for (int i = 0; i < this.ressourceList.GetHVQMCount(); i++)
@@ -563,7 +576,6 @@ namespace N64PPLEditorC
             treeViewHVQM.EndUpdate();
             treeViewSBF.EndUpdate();
             treeViewAudio.EndUpdate();
-
         }
 
         private void CheckIfTreeViewEmpty(TreeView tv)

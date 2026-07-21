@@ -65,8 +65,8 @@ namespace N64PPLEditorC
 
         public static byte[] DecompressTexture(C3FIBContainer.BFFHeader headerBFF2)
         {
-            
-            byte[] decompressedTexture = new Byte[headerBFF2.sizeX*headerBFF2.sizeY*headerBFF2.bytePerPixel];
+
+            byte[] decompressedTexture = new Byte[headerBFF2.sizeX * headerBFF2.sizeY * headerBFF2.bytePerPixel];
             byte[] compressedTexture = headerBFF2.dataCompressed;
             int cursorCompressed = 0;
             int cursorDecompressed = 0;
@@ -76,7 +76,7 @@ namespace N64PPLEditorC
                 try
                 {
                     if (compressedTexture[cursorCompressed] < 128)
-                        PerformSimpleReading(ref compressedTexture,ref cursorCompressed,ref decompressedTexture,ref cursorDecompressed);
+                        PerformSimpleReading(ref compressedTexture, ref cursorCompressed, ref decompressedTexture, ref cursorDecompressed);
                     else
                     {
                         var tupleNibbleMtAndQt = getMultiplicatorAndPacketQuantity(compressedTexture[cursorCompressed]);

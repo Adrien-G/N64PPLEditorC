@@ -10,10 +10,11 @@ namespace N64PPLEditorC
 {
     public class C3FIBObject
     {
-        private List<C3FIBContainer> C3FibContainer;
+        public List<C3FIBContainer> C3FibContainer;
         public C3FIBFlags Flags;
         private byte[] Name;
         private byte[] NameLength;
+        public string NameString { get { return Encoding.ASCII.GetString(Name).TrimEnd('\0'); } }
         public int NameLengthInt { get { return CGeneric.ConvertByteArrayToInt(NameLength); } }
         private byte[] RessourceName;
 
@@ -107,60 +108,6 @@ namespace N64PPLEditorC
         public C3FIBObject(Byte[] rawData, Byte[] ressourceName)
         {
         }
-
-        private void TempPartInit(byte[] rawData,byte[] frameCount)
-        {
-
-            //exclude the header and prepare and Chunk each BFF2
-            Byte[] bffData = new byte[rawData.Length - NameLengthInt - 20];
-            Array.Copy(rawData, 20 + NameLengthInt, bffData, 0, bffData.Length);
-            MakeBFF2Chunks(bffData, CGeneric.ConvertByteArrayToInt(CGeneric.SwapBigAndLittleEndian(frameCount)));
-
-            //keep compression information based on the first BFF2
-            if (C3FibContainer.Count > 0)
-                compressionType = C3FibContainer[0].GetCompressionType();
-        }
-
-        private void MakeBFF2Chunks(Byte[] bffsData, int bffCount)
-        {
-            //store position and size of all BFF2
-            List<int> indexBFF2 = new List<int>();
-            List<int> sizeBFF2 = new List<int>();
-
-            int tmpPositionBFF2;
-            //search all bff2 present in the 3FIB and grab index
-            
-            do
-            {
-                tmpPositionBFF2 = CGeneric.SearchBytesInArray(bffsData, CGeneric.patternBFF2, indexBFF2.Count()) - 12;
-
-                if (tmpPositionBFF2 != -13)
-                {
-                    //add index
-                    indexBFF2.Add(tmpPositionBFF2);
-                    //calculate size of previous BFF2 (if not the last)
-                    if (tmpPositionBFF2 != 0)
-                        sizeBFF2.Add(indexBFF2[indexBFF2.Count() - 1] - indexBFF2[indexBFF2.Count() - 2]);
-                }
-                else
-                    //calculate size of last BFF2
-                    try
-                    {
-                        sizeBFF2.Add(bffsData.Length - indexBFF2[indexBFF2.Count() - 1]);
-                    } catch { } //can occur only when modified rom doesn't have any BFF2
-                    
-            } while (tmpPositionBFF2 != -13);
-
-            //add bff2 list in the bff2Childs
-            for (int i = 0; i < indexBFF2.Count(); i++)
-            {
-                Byte[] tmpByteBFF2 = new byte[sizeBFF2[i]];
-                Array.Copy(bffsData, indexBFF2[i], tmpByteBFF2, 0, sizeBFF2[i]);
-                C3FibContainer.Add(new C3FIBContainer(tmpByteBFF2));
-                C3FibContainer[C3FibContainer.Count - 1].Init();
-            }
-        }
-
         public void AddBFF2Child(byte[] bff2Child)
         {
             C3FibContainer.Add(new C3FIBContainer(bff2Child));
@@ -172,10 +119,6 @@ namespace N64PPLEditorC
             C3FibContainer.RemoveAt(index);
         }
 
-        public string GetBFFName(int index)
-        {
-            return C3FibContainer[index].GetName();
-        }
 
         public int GetBFFCount()
         {
@@ -192,7 +135,6 @@ namespace N64PPLEditorC
 
         public void GetTexture(PictureBox pictureBox, int index)
         {
-            C3FibContainer[index].DecompressTexture();
             Bitmap bmp = C3FibContainer[index].GetBmpTexture();
             pictureBox.Image = bmp;
         }

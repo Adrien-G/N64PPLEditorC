@@ -333,7 +333,7 @@ namespace N64PPLEditorC
                 palette32bitColor = palette;
                
             //with the good palette create the good texture
-            for (int i = 0; i < texture.Length - 1; i++)
+            for (int i = 0; i < texture.Length; i++)
                 Array.Copy(palette32bitColor, texture[i]*4, rgbaArray, i * 4, 4);
 
             return rgbaArray;
@@ -345,7 +345,7 @@ namespace N64PPLEditorC
             byte tmpB1;
             byte tmpB2;
 
-            for (int i = 0; i < texture.Length - 1; i++)
+            for (int i = 0; i < texture.Length; i++)
             {
                 tmpB1 = texture[i];
                 tmpB1 >>= 4;

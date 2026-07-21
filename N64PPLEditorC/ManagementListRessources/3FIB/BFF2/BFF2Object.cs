@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Text;
 
 namespace N64PPLEditorC
@@ -44,12 +46,12 @@ namespace N64PPLEditorC
                 globalIndex += NameSize;
             }
 
-            var subImageCount = 0;
-            var subImagePayloadSize = 0;
+            uint subImageCount = 0;
+            uint subImagePayloadSize = 0;
             if (this.Flags.HasSubImages)
             {
-                subImageCount = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex, 4));
-                subImagePayloadSize = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex+4, 4));
+                subImageCount = (uint)CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex, 4));
+                subImagePayloadSize = (uint)CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex+4, 4));
                 globalIndex += 8;
             }
 
@@ -61,7 +63,7 @@ namespace N64PPLEditorC
 
             if (this.Flags.HasSubImages)
             {
-                this.SubImageData = new CBFF2SubImage(rawData,ref globalIndex);
+                this.SubImageData = new CBFF2SubImage(rawData,ref globalIndex,subImageCount,subImagePayloadSize,this.Flags.PixelFormat);
             }
             else
             {
@@ -81,8 +83,22 @@ namespace N64PPLEditorC
                     globalIndex += size;
                 }
             }
-               
+        }
 
+        public Bitmap GetBmpTexture()
+        {
+            byte[] rgbaData = CTextureManager.ConvertByteArrayToRGBA(DecodedPixelData, (CGeneric.Compression)Flags.PixelFormat, Palette?.RawData);
+            return CTextureManager.ConvertRGBAByteArrayToBitmap(rgbaData, (int)this.Base.PixelWidth, (int)this.Base.DisplayHeight);
+           
+        }
+
+
+
+        public Bitmap GetSubImageBitmap(int index)
+        {
+            CBFF2SubImageData image = SubImageData.ImageData[index];
+            byte[] rgbaData = CTextureManager.ConvertByteArrayToRGBA( image.PixelData,(CGeneric.Compression)Flags.PixelFormat);
+            return CTextureManager.ConvertRGBAByteArrayToBitmap(rgbaData, (int)image.Width, (int)image.Height);
         }
     }
 }
