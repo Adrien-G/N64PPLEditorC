@@ -2,16 +2,21 @@
 {
     public class C3FIBHeader
     {
-        public uint Unk04 { get; private set; }
-        public uint Unk08 { get; private set; }
+        //TODO reste a comprendre l'utilité, toujours a 0 coté N64, définit dans la version GC
+        public int FrameX { get; private set; }
+
+        //TODO reste a comprendre l'utilité, toujours a 0 coté N64, définit dans la version GC
+        public int FrameY { get; private set; }
+
+        //Durée d'affichage du BFF2 avant passage du suivant
         public uint DisplayTime { get; set; }
         public C3FIBHeader(byte[] rawData, ref int globalIndex)
         {
-            var unk04 = CGeneric.SwapBigAndLittleEndian(CGeneric.GiveMeArray(rawData, globalIndex, 4));
-            Unk04 = (uint)CGeneric.ConvertByteArrayToInt(unk04);
+            var frameX = CGeneric.SwapBigAndLittleEndian(CGeneric.GiveMeArray(rawData, globalIndex, 4));
+            FrameX = CGeneric.ConvertByteArrayToInt(frameX);
 
-            var unk08 = CGeneric.SwapBigAndLittleEndian(CGeneric.GiveMeArray(rawData, globalIndex+4, 4));
-            Unk08 = (uint)CGeneric.ConvertByteArrayToInt(unk08);
+            var frameY = CGeneric.SwapBigAndLittleEndian(CGeneric.GiveMeArray(rawData, globalIndex+4, 4));
+            FrameY = CGeneric.ConvertByteArrayToInt(frameY);
 
             var displayTime = CGeneric.SwapBigAndLittleEndian(CGeneric.GiveMeArray(rawData, globalIndex + 8, 4));
             DisplayTime = (uint)CGeneric.ConvertByteArrayToInt(displayTime);

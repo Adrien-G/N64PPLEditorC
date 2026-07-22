@@ -10,12 +10,17 @@ namespace N64PPLEditorC
         //représentations sur un int
         public int FlagsInt { get { return CGeneric.ConvertByteArrayToInt(Flags); } }
 
-        public bool AutoScroll { get;private set; }
+        //Animations
+        public bool AnimationLoop { get; set; }
+        public bool Animated { get; set; }
+        public bool AnimationLoopXY { get; set; }
+
+
         public bool Unk00000002 { get; private set; }
-        public bool AnimationLoop { get; private set; }
+       
         public bool Name { get; private set; }
         public bool SecondRGBAColor { get; private set; }
-        public bool Animated { get; private set; }
+       
         public bool AdjustedLocation { get; private set; }
         public bool LoopDataAdditional { get; private set; }
         public bool Unknow00000100 { get; private set; }
@@ -28,7 +33,7 @@ namespace N64PPLEditorC
         {
             this.Flags = CGeneric.SwapBigAndLittleEndian(flags);
 
-            this.AutoScroll =             CGeneric.GetBitInMask(FlagsInt, 0x00000001);
+            this.AnimationLoopXY =        CGeneric.GetBitInMask(FlagsInt, 0x00000001);
             this.Unk00000002 =            CGeneric.GetBitInMask(FlagsInt, 0x00000002);
             this.AnimationLoop =          CGeneric.GetBitInMask(FlagsInt, 0x00000004);
             this.Name =                   CGeneric.GetBitInMask(FlagsInt, 0x00000008);
@@ -46,7 +51,7 @@ namespace N64PPLEditorC
         public void UpdateFlags()
         {
             var newFlags = this.FlagsInt;
-            CGeneric.SetBitInMask(ref newFlags, 0x00000001, this.AutoScroll);
+            CGeneric.SetBitInMask(ref newFlags, 0x00000001, this.AnimationLoopXY);
             CGeneric.SetBitInMask(ref newFlags,0x00000002 , this.Unk00000002);
             CGeneric.SetBitInMask(ref newFlags,0x00000004 , this.AnimationLoop);
             CGeneric.SetBitInMask(ref newFlags,0x00000008 , this.Name);

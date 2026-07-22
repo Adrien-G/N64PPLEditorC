@@ -21,8 +21,17 @@ namespace N64PPLEditorC
             Bff2 = new BFF2Object();
         }
 
-        
 
+
+        public byte[] RecomposeRawData()
+        {
+            var rawData = new List<byte>();
+            rawData.AddRange(CGeneric.SwapBigAndLittleEndian(CGeneric.ConvertIntToByteArray((int)Header.FrameX))); 
+            rawData.AddRange(CGeneric.SwapBigAndLittleEndian(CGeneric.ConvertIntToByteArray((int)Header.FrameY)));
+            rawData.AddRange(CGeneric.SwapBigAndLittleEndian(CGeneric.ConvertIntToByteArray((int)Header.DisplayTime)));
+            rawData.AddRange(Bff2.RecomposeRawData());
+            return rawData.ToArray();
+        }
 
 
 
@@ -248,12 +257,6 @@ namespace N64PPLEditorC
             
 
             return headerBFF2;
-        }
-
-        [Obsolete]
-        public Byte[] GetRawData()
-        {
-            return rawData;
         }
 
         [Obsolete]

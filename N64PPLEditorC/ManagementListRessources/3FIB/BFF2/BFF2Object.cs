@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace N64PPLEditorC
 {
@@ -105,7 +106,15 @@ namespace N64PPLEditorC
             rawData.AddRange(this.Flags.Flags);
 
             //Base
-            //TODO revoir pour recomposer la base
+            uint width;
+
+            if (Flags.HasPackedWidths)
+                width = (Base.DisplayWidth << 16) | Base.PixelWidth;
+            else
+                width = Base.DisplayWidth;
+
+            rawData.AddRange(CGeneric.ConvertIntToByteArray((int)width));
+            rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.Base.DisplayHeight));
 
             //bytes per line
             rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.BytePerLines));
@@ -121,16 +130,19 @@ namespace N64PPLEditorC
 
                 else
                 {
+                    
                     rawData.AddRange(CGeneric.ConvertIntToByteArray(nameLenght + 1));
-                    rawData.AddRange(this.Name); //TODO attention a rajouter un 0x00en cas de nom a longueur impaire
+                    rawData.AddRange(this.Name);
+                    rawData.Add(0);
                 }
             }
 
             if (this.Flags.HasSubImages)
             {
                 rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.SubImageData.SubImageCount));
-                rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.SubImageData.PayloadSize));
+                rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.SubImageData.Payload.Length));
             }
+
             if ((this.Flags.PixelFormat & 0xF0) == 0x30)
             {
                 rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.Palette.ColorCount));
@@ -139,11 +151,22 @@ namespace N64PPLEditorC
 
             if (this.Flags.HasSubImages)
             {
-                //TODO
+                foreach(var image in SubImageData.ImageData)
+                    rawData.AddRange(image.Header);
+                rawData.AddRange(SubImageData.Payload);
             }
             else
             {
-                rawData.AddRange(this.EncodedPixelData);
+                byte[] pixelData;
+
+                if (Flags.IsCompressed)
+                    pixelData = this.EncodedPixelData;
+                else
+                {
+                    pixelData = DecodedPixelData ?? EncodedPixelData;
+                }
+
+                rawData.AddRange(pixelData);
             }
 
 

@@ -86,7 +86,7 @@ namespace N64PPLEditorC
                 rawData.AddRange(this.Name);
             }
             foreach (var bff2 in this.Container)
-                rawData.AddRange(bff2.GetRawData());
+                rawData.AddRange(bff2.RecomposeRawData());
 
             return rawData.ToArray();
         }
@@ -118,21 +118,6 @@ namespace N64PPLEditorC
         {
             Container.Add(new C3FIBContainer(bff2Child));
             Container[Container.Count - 1].Init();
-        }
-
-        [Obsolete]
-        public TextureDisplayStyle GetTextureDisplayStyle()
-        {
-            //TODO adapt.
-            return TextureDisplayStyle.Fixed;
-            //return (TextureDisplayStyle)this.header3FIB[4];
-        }
-
-        [Obsolete]
-        public void SetTextureDisplayStyle(TextureDisplayStyle style)
-        {
-            //TODO adapt.
-            //this.header3FIB[4] = (byte)style;
         }
     }
 }

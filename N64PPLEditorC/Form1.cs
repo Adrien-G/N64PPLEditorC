@@ -193,43 +193,9 @@ namespace N64PPLEditorC
         private void contextMenuStripForTreeview_Opening(object sender, CancelEventArgs e)
         {
             if (treeViewTextures.SelectedNode.Level == 1)
-            {
                 removeThisTextureToolStripMenuItem.Enabled = true;
-                containerTypetoolStripMenuItem.Enabled = false;
-            }
-
             else
-            {
                 removeThisTextureToolStripMenuItem.Enabled = false;
-                containerTypetoolStripMenuItem.Enabled = true;
-
-                var textureDisplay = this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].GetTextureDisplayStyle();
-
-                fixedToolStripMenuItem.Checked = false;
-                animatedBadgesToolStripMenuItem.Checked = false;
-                textureScrollbluePokeballBackgroundToolStripMenuItem.Checked = false;
-                switch (textureDisplay)
-                {
-                    case TextureDisplayStyle.Fixed: fixedToolStripMenuItem.Checked = true; break;
-                    case TextureDisplayStyle.Animated: animatedBadgesToolStripMenuItem.Checked = true; break;
-                    case TextureDisplayStyle.AnimatedScroll: textureScrollbluePokeballBackgroundToolStripMenuItem.Checked = true; break;
-                }
-            }
-
-
-        }
-
-        private void fixedToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].SetTextureDisplayStyle(TextureDisplayStyle.Fixed);
-        }
-        private void animatedBadgesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].SetTextureDisplayStyle(TextureDisplayStyle.Animated);
-        }
-        private void textureScrollbluePokeballBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].SetTextureDisplayStyle(TextureDisplayStyle.AnimatedScroll);
         }
 
         #endregion
@@ -258,7 +224,7 @@ namespace N64PPLEditorC
         private void numericUpDownTextureDisplayTime_ValueChanged(object sender, EventArgs e)
         {
             if(treeViewTextures.SelectedNode.Level == 1)
-                this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[treeViewTextures.SelectedNode.Index].SetTextureDisplayTime((byte)numericUpDownTextureDisplayTime.Value);
+                this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[treeViewTextures.SelectedNode.Index].Header.DisplayTime = (uint)numericUpDownTextureDisplayTime.Value;
 
         }
 
@@ -275,7 +241,7 @@ namespace N64PPLEditorC
                     pictureBoxTexture.Image = bff2Data.GetSubImageBitmap(treeViewTextures.SelectedNode.Index);
 
                 pictureBoxTexture.Show();
-                //numericUpDownTextureDisplayTime.Value = this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].GetBFF2(treeViewTextures.SelectedNode.Index).GetTextureDisplayTime();
+                numericUpDownTextureDisplayTime.Value = this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[treeViewTextures.SelectedNode.Index].Header.DisplayTime;
             }
             if (level == 0)
             {
@@ -285,12 +251,12 @@ namespace N64PPLEditorC
 
                 //flags
                 var fib = this.ressourceList.Fib[treeViewTextures.SelectedNode.Index];
-                checkBoxAutoScroll.Checked = fib.Flags.AutoScroll;
+                checkBoxAutoScroll.Checked = fib.Flags.AnimationLoopXY;
                 checkBoxUnk00000002.Checked = fib.Flags.Unk00000002;
                 checkBoxAnimationLoop.Checked = fib.Flags.AnimationLoop;
                 checkBoxName.Checked = fib.Flags.Name;
                 checkBoxSecondRGBAColor.Checked = fib.Flags.SecondRGBAColor;
-                checkBoxAnimated.Checked = fib.Flags.Animated;
+                checkBoxAnimatedSequence.Checked = fib.Flags.Animated;
                 checkBoxAdjustedLocation.Checked = fib.Flags.AdjustedLocation;
                 checkBoxLoopDataAdditional.Checked = fib.Flags.LoopDataAdditional;
                 checkBoxUnknow00000100.Checked = fib.Flags.Unknow00000100;
@@ -529,7 +495,7 @@ namespace N64PPLEditorC
                 {
                     var bff2Data = this.ressourceList.Fib[fib].Container[bff].Bff2;
                     if (!bff2Data.Flags.HasSubImages)
-                        treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 + ", " + bff2Data.Name);
+                        treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 + ", " + bff2Data.NameString);
                     else
                         for(int i = 0; i < bff2Data.SubImageData.ImageData.Count; i++)
                             treeViewTextures.Nodes[fib].Nodes.Add(i + 1 + "");
