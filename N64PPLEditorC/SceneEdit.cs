@@ -45,10 +45,10 @@ namespace N64PPLEditorC
             //list all the textures present in the rom (pretty name)
             int indexData = 0;
             comboBoxSceneAddTexture.Items.Clear();
-            for (int i = 0; i < RessourceList.fibList.Count; i++)
+            for (int i = 0; i < RessourceList.Fib.Count; i++)
             {
-                indexData = RessourceList.Get3FIBIndexWithFIBName(RessourceList.fibList[i].GetRessourceName());
-                comboBoxSceneAddTexture.Items.Add(RessourceList.fibList[indexData].GetFIBName());
+                indexData = RessourceList.Get3FIBIndexWithFIBName(RessourceList.Fib[i].RessourceNameString);
+                comboBoxSceneAddTexture.Items.Add(RessourceList.Fib[indexData].NameString);
             }
 
             //text objects
@@ -103,7 +103,7 @@ namespace N64PPLEditorC
                 {
                     try
                     {
-                        var bmp = RessourceList.fibList[indexData].GetBmpTexture(0);
+                        var bmp = RessourceList.Fib[indexData].Container[0].Bff2.GetBmpTexture();
                         var posY = Scene.GetTextureManagementObject(i).Base.Y;
                         var posX = Scene.GetTextureManagementObject(i).Base.X;
                         this.drawScene1.AddBmp(bmp, new Point(posX, posY));
@@ -654,7 +654,7 @@ namespace N64PPLEditorC
 
         private void buttonScenesTextureAdd_Click(object sender, EventArgs e)
         {
-            string fibName = this.RessourceList.fibList[comboBoxSceneAddTexture.SelectedIndex].GetRessourceName();
+            string fibName = this.RessourceList.Fib[comboBoxSceneAddTexture.SelectedIndex].RessourceNameString;
 
             Sbf.AddBifToSbf(fibName);
 

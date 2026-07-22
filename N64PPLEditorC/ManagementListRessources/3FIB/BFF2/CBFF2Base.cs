@@ -23,5 +23,9 @@
             this.DisplayHeight = (uint)CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex + 4, 4));
             globalIndex += 8;
         }
+
+        public CBFF2Base()
+        {
+        }
     }
 }

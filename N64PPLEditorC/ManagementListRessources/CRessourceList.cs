@@ -17,19 +17,19 @@ namespace N64PPLEditorC
 
         private List<ListFormat> ressourcesList;
 
-        public List<C3FIBObject> fibList;
-        public List<CHVQM> hvqmList;
-        public List<CSBF1> sbfList;
-        public List<CRDF> rdfList;
+        public List<C3FIBObject> Fib;
+        public List<CHVQM> Hvqm;
+        public List<CSBF1> Sbf1;
+        public List<CRDF> Rdf;
 
         public int indexRessourcesStart { get; private set; }
 
         public CRessourceList(int indexRessourcesStart)
         {
-            fibList = new List<C3FIBObject>();
-            hvqmList = new List<CHVQM>();
-            sbfList = new List<CSBF1>();
-            rdfList = new List<CRDF>();
+            Fib = new List<C3FIBObject>();
+            Hvqm = new List<CHVQM>();
+            Sbf1 = new List<CSBF1>();
+            Rdf = new List<CRDF>();
             this.indexRessourcesStart = indexRessourcesStart;
         }
 
@@ -74,18 +74,16 @@ namespace N64PPLEditorC
                 switch (CGeneric.ConvertByteArrayToInt(dataPattern))
                 {
                     case (int)CGeneric.RessourceType.FIB:
-                        fibList.Add(new C3FIBObject(tmpContainerData, ressourcesList[i].ressourceName,true));
-                        //fibList.Add(new C3FIB(tmpContainerData, ressourcesList[i].ressourceName));
-                        //fibList[fibList.Count - 1].Init();
+                        Fib.Add(new C3FIBObject(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                     case (int)CGeneric.RessourceType.HVQM:
-                        hvqmList.Add(new CHVQM(tmpContainerData, ressourcesList[i].ressourceName));
+                        Hvqm.Add(new CHVQM(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                     case (int)CGeneric.RessourceType.SBF:
-                        sbfList.Add(new CSBF1(tmpContainerData, ressourcesList[i].ressourceName));
+                        Sbf1.Add(new CSBF1(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                     default:
-                        rdfList.Add(new CRDF(tmpContainerData, ressourcesList[i].ressourceName));
+                        Rdf.Add(new CRDF(tmpContainerData, ressourcesList[i].ressourceName));
                         break;
                 }
                 generalIndex += sizeElement;
@@ -98,18 +96,12 @@ namespace N64PPLEditorC
         public void Add3FIB(string name)
         {
             //set name and header initial data
-            byte[] byteName = CGeneric.ConvertStringToByteArray(name);
-            byte[] rawData = new byte[] { 0x33, 0x46, 0x49, 0x42, 8, 1, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0, (byte)byteName.Length, 0, 0, 0 };
-            rawData = rawData.Concat(byteName).ToArray();
 
-            //add .fib to the end, and init the 3fib.
-            C3FIBObject new3Fib = new C3FIBObject(rawData,byteName.Concat(new Byte[] { 0x2E, 0x42, 0x49, 0x46 }).ToArray());
-            //new3Fib.Init();
-            fibList.Add(new3Fib);
+            Fib.Add(new C3FIBObject(name));
 
             var element = new ListFormat();
-            element.ressourceIndex = new byte[4]; //don't care, will be recalculated
-            element.ressourceSize = new byte[4];  //don't care, will be recalculated
+            element.ressourceIndex = new byte[4];
+            element.ressourceSize = new byte[4];
             element.ressourceName = new byte[16];
 
             //write name of FIB (BIF Name)
@@ -120,22 +112,13 @@ namespace N64PPLEditorC
 
         public CSBF1 GetSBF1(int index)
         {
-            return sbfList[index];
-        }
-
-        public CSBF1 GetSBF1(string name)
-        {
-            foreach(var element in sbfList)
-                if (element.GetRessourceName().ToUpper().Replace("\0", "") == name)
-                    return element;
-                
-            return null;
+            return Sbf1[index];
         }
 
         public void SetSBF1(byte[] scene, int index)
         {
-            var name = CGeneric.ConvertStringToByteArray(sbfList[index].GetRessourceName());
-            sbfList[index] = new CSBF1(scene,name);
+            var name = CGeneric.ConvertStringToByteArray(Sbf1[index].GetRessourceName());
+            Sbf1[index] = new CSBF1(scene,name);
         }
 
         public int Get3FIBIndexWithFIBName(string name)
@@ -158,30 +141,20 @@ namespace N64PPLEditorC
 
         public CHVQM GetHVQM(int indexHVQM)
         {
-            return hvqmList[indexHVQM];
+            return Hvqm[indexHVQM];
         }
 
         public int GetSBFCount()
         {
-            return sbfList.Count();
+            return Sbf1.Count();
         }
         public int GetHVQMCount()
         {
-            return hvqmList.Count();
+            return Hvqm.Count();
         }
         public int GetRTFCount()
         {
-            return rdfList.Count();
-        }
-
-        public int GetTotalBFFCount()
-        {
-            int total = 0;
-            for (int i = 0; i < fibList.Count; i++)
-            {
-                total += this.fibList[i].GetBFFCount();
-            }
-            return total;
+            return Rdf.Count();
         }
 
         public void WriteAllData(FileStream fs)
@@ -189,22 +162,22 @@ namespace N64PPLEditorC
             fs.Position = indexRessourcesStart;
 
             // write the number of elements
-            fs.Write(CGeneric.ConvertIntToByteArray(fibList.Count() + GetHVQMCount() + GetSBFCount() + GetRTFCount()), 0, 4);
+            fs.Write(CGeneric.ConvertIntToByteArray(Fib.Count() + GetHVQMCount() + GetSBFCount() + GetRTFCount()), 0, 4);
 
             // index of data (for writing header)
-            int indexData = (fibList.Count() + GetHVQMCount() + GetSBFCount() + GetRTFCount()) * 24 + 4;
+            int indexData = (Fib.Count() + GetHVQMCount() + GetSBFCount() + GetRTFCount()) * 24 + 4;
 
             //write list header (FIB,HVQM,SBF1,RDF1)
-            WriteListHeaderSpecific(ref fs, ref indexData, fibList);
-            WriteListHeader(ref fs, ref indexData, hvqmList);
-            WriteListHeader(ref fs, ref indexData, sbfList);
-            WriteListHeader(ref fs, ref indexData, rdfList);
+            WriteListHeaderSpecific(ref fs, ref indexData, Fib);
+            WriteListHeader(ref fs, ref indexData, Hvqm);
+            WriteListHeader(ref fs, ref indexData, Sbf1);
+            WriteListHeader(ref fs, ref indexData, Rdf);
 
             //write data associated
-            WriteRessourceDataSpecific(ref fs, fibList);
-            WriteRessourceData(ref fs, hvqmList);
-            WriteRessourceData(ref fs, sbfList);
-            WriteRessourceData(ref fs, rdfList);
+            WriteRessourceDataSpecific(ref fs, Fib);
+            WriteRessourceData(ref fs, Hvqm);
+            WriteRessourceData(ref fs, Sbf1);
+            WriteRessourceData(ref fs, Rdf);
 
 
         }
@@ -253,7 +226,7 @@ namespace N64PPLEditorC
                 fs.Write(CGeneric.ConvertIntToByteArray(indexData), 0, 4);
 
                 //write name of FIB (BIF Name)
-                byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(listOfressource[index].GetRessourceName().ToUpper());
+                byte[] nameBIF = System.Text.Encoding.UTF8.GetBytes(listOfressource[index].RessourceNameString.ToUpper());
                 fs.Write(nameBIF, 0, nameBIF.Length);
 
                 //fill free space (of name) by 0
@@ -296,22 +269,22 @@ namespace N64PPLEditorC
         public int GetSizeOfAllRessourceList()
         {
             int size = 0;
-            foreach (C3FIBObject c3fibdata in fibList)
+            foreach (C3FIBObject c3fibdata in Fib)
             {
                 var tmp = c3fibdata.RecomposeRawData().Length;
                 if (tmp % 2 == 0) size += tmp; else size += tmp + 1;
             }
-            foreach (CHVQM hvqmdata in hvqmList)
+            foreach (CHVQM hvqmdata in Hvqm)
             {
                 var tmp = hvqmdata.GetRawData().Length;
                 if (tmp % 2 == 0) size += tmp; else size += tmp + 1;
             }
-            foreach (CSBF1 csbf1data in sbfList)
+            foreach (CSBF1 csbf1data in Sbf1)
             {
                 var tmp = csbf1data.GetRawData().Length;
                 if (tmp % 2 == 0) size += tmp; else size += tmp + 1;
             }
-            foreach (CRDF crdfdata in rdfList)
+            foreach (CRDF crdfdata in Rdf)
             {
                 var tmp = crdfdata.GetRawData().Length;
                 if (tmp % 2 == 0) size += tmp; else size += tmp + 1;

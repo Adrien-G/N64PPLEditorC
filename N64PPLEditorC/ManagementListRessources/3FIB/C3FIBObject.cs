@@ -10,19 +10,18 @@ namespace N64PPLEditorC
 {
     public class C3FIBObject
     {
-        public List<C3FIBContainer> C3FibContainer;
+        public List<C3FIBContainer> Container;
         public C3FIBFlags Flags;
         private byte[] Name;
         private byte[] NameLength;
         public string NameString { get { return Encoding.ASCII.GetString(Name).TrimEnd('\0'); } }
         public int NameLengthInt { get { return CGeneric.ConvertByteArrayToInt(NameLength); } }
         private byte[] RessourceName;
-
+        public string RessourceNameString { get { return Encoding.ASCII.GetString(RessourceName).TrimEnd('\0'); } }
         private byte[] PrimaryColor;
         private byte[] SecondColor;
 
-        //nouveau constructeur pour ré-écriture
-        public C3FIBObject(Byte[] rawData, Byte[] ressourceName, bool newVersion)
+        public C3FIBObject(Byte[] rawData, Byte[] ressourceName)
         {
 
             int globalIndex = 0;
@@ -55,12 +54,9 @@ namespace N64PPLEditorC
 
             this.RessourceName = ressourceName;
 
-            C3FibContainer = new List<C3FIBContainer>();
-            //TODO faire une boucle par la suite
+            Container = new List<C3FIBContainer>();
             while(rawData.Length > globalIndex)
-            {
-                C3FibContainer.Add(new C3FIBContainer(rawData, ref globalIndex));
-            }
+                Container.Add(new C3FIBContainer(rawData, ref globalIndex));
 
         }
 
@@ -79,7 +75,7 @@ namespace N64PPLEditorC
             rawData.AddRange(this.PrimaryColor);
 
             //FrameCount
-            rawData.AddRange(CGeneric.SwapBigAndLittleEndian(CGeneric.ConvertIntToByteArray(this.C3FibContainer.Count)));
+            rawData.AddRange(CGeneric.SwapBigAndLittleEndian(CGeneric.ConvertIntToByteArray(this.Container.Count)));
 
             if (this.Flags.SecondRGBAColor)
                 rawData.AddRange(this.SecondColor);
@@ -89,11 +85,23 @@ namespace N64PPLEditorC
                 rawData.AddRange(CGeneric.SwapBigAndLittleEndian(this.NameLength));
                 rawData.AddRange(this.Name);
             }
-            foreach (var bff2 in this.C3FibContainer)
+            foreach (var bff2 in this.Container)
                 rawData.AddRange(bff2.GetRawData());
 
             return rawData.ToArray();
         }
+
+        public C3FIBObject(string name)
+        {
+            this.Name = CGeneric.ConvertStringToByteArray(name);
+            Container = new List<C3FIBContainer>();
+        }
+
+
+
+
+
+
 
 
 
@@ -105,71 +113,26 @@ namespace N64PPLEditorC
         //only for keep compression ratio
         public Compression compressionType;
 
-        public C3FIBObject(Byte[] rawData, Byte[] ressourceName)
-        {
-        }
+        
         public void AddBFF2Child(byte[] bff2Child)
         {
-            C3FibContainer.Add(new C3FIBContainer(bff2Child));
-            C3FibContainer[C3FibContainer.Count - 1].Init();
+            Container.Add(new C3FIBContainer(bff2Child));
+            Container[Container.Count - 1].Init();
         }
 
-        public void RemoveBFF2Child(int index)
-        {
-            C3FibContainer.RemoveAt(index);
-        }
-
-
-        public int GetBFFCount()
-        {
-            return C3FibContainer.Count();
-        }
-
-        public void SaveTexture(int indexFIB,int index)
-        {
-            C3FibContainer[index].DecompressTexture();
-            Bitmap bmp = C3FibContainer[index].GetBmpTexture();
-
-            bmp.Save(CGeneric.pathExtractedTexture + (indexFIB + 1) + "-" + (index + 1) + ", " + C3FibContainer[index].GetName() + ".png");
-        }
-
-        public void GetTexture(PictureBox pictureBox, int index)
-        {
-            Bitmap bmp = C3FibContainer[index].GetBmpTexture();
-            pictureBox.Image = bmp;
-        }
-
-        public Bitmap GetBmpTexture(int index)
-        {
-            C3FibContainer[index].DecompressTexture();
-            return C3FibContainer[index].GetBmpTexture();
-        }
-
-        public string GetFIBName()
-        {
-            return System.Text.Encoding.UTF8.GetString(this.Name);
-        }
-
-        public C3FIBContainer GetBFF2(int index)
-        {
-            return C3FibContainer[index];
-        }
-
+        [Obsolete]
         public TextureDisplayStyle GetTextureDisplayStyle()
         {
             //TODO adapt.
             return TextureDisplayStyle.Fixed;
             //return (TextureDisplayStyle)this.header3FIB[4];
-        } 
+        }
+
+        [Obsolete]
         public void SetTextureDisplayStyle(TextureDisplayStyle style)
         {
             //TODO adapt.
             //this.header3FIB[4] = (byte)style;
-        }
-
-        internal string GetRessourceName()
-        {
-            return Encoding.Default.GetString(RessourceName);
         }
     }
 }

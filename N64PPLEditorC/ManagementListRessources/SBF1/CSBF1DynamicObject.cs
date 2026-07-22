@@ -156,6 +156,7 @@ namespace N64PPLEditorC
 
         }
 
+        [Obsolete]
         public static int GetHeaderLength(int headerValue,int extra)
         {
             int finalValue = 28;
@@ -180,11 +181,7 @@ namespace N64PPLEditorC
             return finalValue;
         }
 
-        public int GetSize()
-        {
-           return rawData.Length;
-        }
-
+        [Obsolete]
         public byte[] GetRawData()
         {
             //todo reconstruire une sortie de rawData à partir des données du dynamic object, pour l'instant on retourne juste le rawData d'origine

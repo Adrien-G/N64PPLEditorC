@@ -19,6 +19,11 @@
             globalIndex += 12;
         }
 
+        public C3FIBHeader()
+        {
+            DisplayTime = 1;
+        }
+
 
     }
 }

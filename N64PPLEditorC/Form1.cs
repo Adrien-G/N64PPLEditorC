@@ -110,7 +110,7 @@ namespace N64PPLEditorC
                                 pictureBoxTexture.Image = img;
 
                                 //test the best compression available
-                                Compression compressionMethod = this.ressourceList.fibList[treeViewTextures.SelectedNode.Index].compressionType;
+                                Compression compressionMethod = this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].compressionType;
                                 if (!checkBoxKeepSameCompression.Checked)
                                     compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
 
@@ -155,13 +155,13 @@ namespace N64PPLEditorC
                                 //add texture to the bff2 files and update treeview
                                 if (treeViewTextures.SelectedNode.Level == 0)
                                 {
-                                    ressourceList.fibList[treeViewTextures.SelectedNode.Index].AddBFF2Child(finalBFF2);
+                                    ressourceList.Fib[treeViewTextures.SelectedNode.Index].AddBFF2Child(finalBFF2);
                                     treeViewTextures.SelectedNode.Nodes.Add("[added] , " + safeFileName);
                                     treeViewTextures.SelectedNode = treeViewTextures.Nodes[treeViewTextures.SelectedNode.Index].LastNode;
                                 }
                                 else
                                 {
-                                    ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].AddBFF2Child(finalBFF2);
+                                    ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].AddBFF2Child(finalBFF2);
                                     treeViewTextures.SelectedNode.Parent.Nodes.Add("[added] , " + safeFileName);
                                     treeViewTextures.SelectedNode = treeViewTextures.Nodes[treeViewTextures.SelectedNode.Parent.Index].LastNode;
                                 }
@@ -184,7 +184,7 @@ namespace N64PPLEditorC
         {
             if (treeViewTextures.SelectedNode.Level == 1)
             {
-                ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
+                ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container.RemoveAt(treeViewTextures.SelectedNode.Index);
                 treeViewTextures.SelectedNode.Remove();
                 UpdateFreeSpaceLeft();
             }
@@ -203,7 +203,7 @@ namespace N64PPLEditorC
                 removeThisTextureToolStripMenuItem.Enabled = false;
                 containerTypetoolStripMenuItem.Enabled = true;
 
-                var textureDisplay = this.ressourceList.fibList[treeViewTextures.SelectedNode.Index].GetTextureDisplayStyle();
+                var textureDisplay = this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].GetTextureDisplayStyle();
 
                 fixedToolStripMenuItem.Checked = false;
                 animatedBadgesToolStripMenuItem.Checked = false;
@@ -221,15 +221,15 @@ namespace N64PPLEditorC
 
         private void fixedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ressourceList.fibList[treeViewTextures.SelectedNode.Index].SetTextureDisplayStyle(TextureDisplayStyle.Fixed);
+            this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].SetTextureDisplayStyle(TextureDisplayStyle.Fixed);
         }
         private void animatedBadgesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ressourceList.fibList[treeViewTextures.SelectedNode.Index].SetTextureDisplayStyle(TextureDisplayStyle.Animated);
+            this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].SetTextureDisplayStyle(TextureDisplayStyle.Animated);
         }
         private void textureScrollbluePokeballBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ressourceList.fibList[treeViewTextures.SelectedNode.Index].SetTextureDisplayStyle(TextureDisplayStyle.AnimatedScroll);
+            this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].SetTextureDisplayStyle(TextureDisplayStyle.AnimatedScroll);
         }
 
         #endregion
@@ -258,7 +258,7 @@ namespace N64PPLEditorC
         private void numericUpDownTextureDisplayTime_ValueChanged(object sender, EventArgs e)
         {
             if(treeViewTextures.SelectedNode.Level == 1)
-                this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].GetBFF2(treeViewTextures.SelectedNode.Index).SetTextureDisplayTime((byte)numericUpDownTextureDisplayTime.Value);
+                this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[treeViewTextures.SelectedNode.Index].SetTextureDisplayTime((byte)numericUpDownTextureDisplayTime.Value);
 
         }
 
@@ -268,9 +268,9 @@ namespace N64PPLEditorC
             if (level != 0)
             {
                 labelIsTextureContainer.Hide();
-                var bff2Data = this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].C3FibContainer[0].BFF2Data;
+                var bff2Data = this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[0].Bff2;
                 if (!bff2Data.Flags.HasSubImages)
-                    pictureBoxTexture.Image = this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].C3FibContainer[treeViewTextures.SelectedNode.Index].BFF2Data.GetBmpTexture();
+                    pictureBoxTexture.Image = this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[treeViewTextures.SelectedNode.Index].Bff2.GetBmpTexture();
                 else
                     pictureBoxTexture.Image = bff2Data.GetSubImageBitmap(treeViewTextures.SelectedNode.Index);
 
@@ -284,7 +284,7 @@ namespace N64PPLEditorC
                 pictureBoxTexture.Hide();
 
                 //flags
-                var fib = this.ressourceList.fibList[treeViewTextures.SelectedNode.Index];
+                var fib = this.ressourceList.Fib[treeViewTextures.SelectedNode.Index];
                 checkBoxAutoScroll.Checked = fib.Flags.AutoScroll;
                 checkBoxUnk00000002.Checked = fib.Flags.Unk00000002;
                 checkBoxAnimationLoop.Checked = fib.Flags.AnimationLoop;
@@ -308,7 +308,7 @@ namespace N64PPLEditorC
             if (treeViewTextures.SelectedNode.Level == 1)
                 if (e.KeyCode == Keys.Delete && treeViewTextures.SelectedNode != null)
                 {
-                    ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index].RemoveBFF2Child(treeViewTextures.SelectedNode.Index);
+                    ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container.RemoveAt(treeViewTextures.SelectedNode.Index);
                     treeViewTextures.SelectedNode.Remove();
                     UpdateFreeSpaceLeft();
                 }
@@ -522,12 +522,12 @@ namespace N64PPLEditorC
             treeViewAudio.Nodes.Clear();
 
 
-            for (int fib = 0; fib < this.ressourceList.fibList.Count(); fib++)
+            for (int fib = 0; fib < this.ressourceList.Fib.Count(); fib++)
             {
-                treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.fibList[fib].NameString);
-                for (int bff = 0; bff < this.ressourceList.fibList[fib].C3FibContainer.Count; bff++)
+                treeViewTextures.Nodes.Add(fib + 1 + ", " + ressourceList.Fib[fib].NameString);
+                for (int bff = 0; bff < this.ressourceList.Fib[fib].Container.Count; bff++)
                 {
-                    var bff2Data = this.ressourceList.fibList[fib].C3FibContainer[bff].BFF2Data;
+                    var bff2Data = this.ressourceList.Fib[fib].Container[bff].Bff2;
                     if (!bff2Data.Flags.HasSubImages)
                         treeViewTextures.Nodes[fib].Nodes.Add(bff + 1 + ", " + bff2Data.Name);
                     else
@@ -542,7 +542,7 @@ namespace N64PPLEditorC
 
             for (int sbf = 0; sbf < this.ressourceList.GetSBFCount(); sbf++)
             {
-                treeViewSBF.Nodes.Add(sbf + 1 + ", " + ressourceList.GetSBF1(sbf).GetRessourceName());
+                treeViewSBF.Nodes.Add(sbf + 1 + ", " + ressourceList.Sbf1[sbf].GetRessourceName());
 
                 for (int scene = 0; scene < this.ressourceList.GetSBF1(sbf).GetSceneCount(); scene++)
                     treeViewSBF.Nodes[sbf].Nodes.Add(scene + 1 + ", " + this.ressourceList.GetSBF1(sbf).GetScene(scene).GetSceneName());
@@ -639,14 +639,14 @@ namespace N64PPLEditorC
         private void bWDecompress_DoWork(object sender, DoWorkEventArgs e)
         {
             int index = 1;
-            for (int i = 0; i < ressourceList.fibList.Count(); i++)
+            for (int i = 0; i < ressourceList.Fib.Count(); i++)
             {
-                for (int j = 0; j < ressourceList.fibList[i].GetBFFCount(); j++)
+                for (int j = 0; j < ressourceList.Fib[i].Container.Count; j++)
                 {
                     try
                     {
                         index++;
-                        this.ressourceList.fibList[i].SaveTexture(i, j);
+                        this.ressourceList.Fib[i].Container[j].Bff2.SaveTexture(i,j);
                         bWDecompress.ReportProgress(index);
                     }
                     catch { }
@@ -656,7 +656,10 @@ namespace N64PPLEditorC
 
         private void bWDecompress_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            buttonExtractAllTextures.Text = e.ProgressPercentage + "/" + ressourceList.GetTotalBFFCount();
+            var total = 0;
+            foreach (var fib in ressourceList.Fib)
+                total += fib.Container.Count();
+            buttonExtractAllTextures.Text = e.ProgressPercentage + "/" + total;
         }
         private void bWDecompress_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -776,7 +779,7 @@ namespace N64PPLEditorC
                 {
                     try
                     {
-                        var bmp = this.ressourceList.fibList[indexData].GetBmpTexture(0);
+                        var bmp = this.ressourceList.Fib[indexData].Container[0].Bff2.GetBmpTexture();
                         var posY = scene.GetTextureManagementObject(i).Base.Y;
                         var posX = scene.GetTextureManagementObject(i).Base.X;
                         this.drawScene1.AddBmp(bmp, new Point(posX, posY));
@@ -796,7 +799,7 @@ namespace N64PPLEditorC
 
         private void buttonHVQMExtract_Click(object sender, EventArgs e)
         {
-            foreach (CHVQM video in ressourceList.hvqmList)
+            foreach (CHVQM video in ressourceList.Hvqm)
             {
                 var fileName = video.GetRessourceName().Replace("\0", "");
                 FileStream file = new FileStream(CGeneric.pathOtherContent + fileName, FileMode.Create);
@@ -818,7 +821,7 @@ namespace N64PPLEditorC
                 if (openHvqm.ShowDialog() == DialogResult.OK)
                 {
                     Byte[] buffRom = File.ReadAllBytes(openHvqm.FileName);
-                    this.ressourceList.hvqmList[treeViewHVQM.SelectedNode.Index].SetRawData(buffRom);
+                    this.ressourceList.Hvqm[treeViewHVQM.SelectedNode.Index].SetRawData(buffRom);
                     UpdateFreeSpaceLeft();
                 }
             }
@@ -826,7 +829,7 @@ namespace N64PPLEditorC
 
         private void buttonHVQMRemove_Click(object sender, EventArgs e)
         {
-            this.ressourceList.hvqmList.RemoveAt(treeViewHVQM.SelectedNode.Index);
+            this.ressourceList.Hvqm.RemoveAt(treeViewHVQM.SelectedNode.Index);
             treeViewHVQM.Nodes.RemoveAt(treeViewHVQM.SelectedNode.Index);
             UpdateFreeSpaceLeft();
         }
@@ -1037,14 +1040,14 @@ namespace N64PPLEditorC
         {
             C3FIBObject fib;
             if (treeViewTextures.SelectedNode.Level == 0)
-                fib = this.ressourceList.fibList[treeViewTextures.SelectedNode.Index];
+                fib = this.ressourceList.Fib[treeViewTextures.SelectedNode.Index];
             else
-                fib = this.ressourceList.fibList[treeViewTextures.SelectedNode.Parent.Index];
+                fib = this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index];
 
             Stream myStream;
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             saveFileDialog1.Filter = "3fib files (*.3fib)|*.3fib";
-            saveFileDialog1.FileName = fib.GetFIBName();
+            saveFileDialog1.FileName = fib.NameString;
             saveFileDialog1.FilterIndex = 1;
             saveFileDialog1.RestoreDirectory = true;
 
@@ -1196,7 +1199,7 @@ namespace N64PPLEditorC
                 {
                     Byte[] buffRom = File.ReadAllBytes(openSbfFile.FileName);
                     var name = CGeneric.ConvertStringToByteArray(openSbfFile.SafeFileName);
-                    this.ressourceList.sbfList.Add(new CSBF1(buffRom,name));
+                    this.ressourceList.Sbf1.Add(new CSBF1(buffRom,name));
                 }
             }
             LoadTreeView();
@@ -1274,7 +1277,7 @@ namespace N64PPLEditorC
                 if (open4thFile.ShowDialog() == DialogResult.OK)
                 {
                     Byte[] buffRom = File.ReadAllBytes(open4thFile.FileName);
-                    ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].AddNew4thObject(buffRom);
+                    ressourceList.Sbf1[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].AddNew4thObject(buffRom);
                 }
             }
 
@@ -1283,7 +1286,7 @@ namespace N64PPLEditorC
 
         private void button4thremove_Click(object sender, EventArgs e)
         {
-            ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].fourthObjectList = new List<CSBF1FourthObject>();
+            ressourceList.Sbf1[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].fourthObjectList = new List<CSBF1FourthObject>();
         }
 
         private void buttonDynamicObjectAdd_Click(object sender, EventArgs e)
@@ -1297,7 +1300,7 @@ namespace N64PPLEditorC
                 if (dynamicObjectFile.ShowDialog() == DialogResult.OK)
                 {
                     Byte[] buffRom = File.ReadAllBytes(dynamicObjectFile.FileName);
-                    ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].AddNewDynamicObject(buffRom);
+                    ressourceList.Sbf1[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].AddNewDynamicObject(buffRom);
                 }
             }
 
@@ -1306,12 +1309,12 @@ namespace N64PPLEditorC
 
         private void buttonDynamicObjectRemove_Click(object sender, EventArgs e)
         {
-            ressourceList.sbfList[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].dynamicObjectList = new List<CSBF1DynamicObject>();
+            ressourceList.Sbf1[treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].dynamicObjectList = new List<CSBF1DynamicObject>();
         }
 
         private void buttonDynamicObjectExport_Click(object sender, EventArgs e)
         {
-            var DynamicList = this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].dynamicObjectList;
+            var DynamicList = this.ressourceList.Sbf1[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index].dynamicObjectList;
 
             byte[] res = new byte[0];
             foreach (CSBF1DynamicObject dynObj in DynamicList)
@@ -1339,7 +1342,7 @@ namespace N64PPLEditorC
 
         private void ToolStripMenuItemReplaceScene_Click(object sender, EventArgs e)
         {
-            var scene = this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index];
+            var scene = this.ressourceList.Sbf1[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index];
 
 
             using (OpenFileDialog openSceneFile = new OpenFileDialog())
@@ -1351,7 +1354,7 @@ namespace N64PPLEditorC
                 if (openSceneFile.ShowDialog() == DialogResult.OK)
                 {
                     Byte[] buffRaw = File.ReadAllBytes(openSceneFile.FileName);
-                    this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index] = new CSBF1Scene(buffRaw);
+                    this.ressourceList.Sbf1[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index] = new CSBF1Scene(buffRaw);
                 }
             }
             UpdateFreeSpaceLeft();
@@ -1359,7 +1362,7 @@ namespace N64PPLEditorC
 
         private void ToolStripMenuItemExportScene_Click(object sender, EventArgs e)
         {
-            var scene = this.ressourceList.sbfList[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index];
+            var scene = this.ressourceList.Sbf1[this.treeViewSBF.SelectedNode.Parent.Index].scenesList[treeViewSBF.SelectedNode.Index];
 
             Stream myStream;
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();

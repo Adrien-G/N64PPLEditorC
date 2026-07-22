@@ -18,7 +18,15 @@ namespace N64PPLEditorC
         public byte[] EncodedPixelData { get; set; }
         public byte[] DecodedPixelData { get; set; }
 
-        public string Name { get; set; }
+        public byte[] Name { get; set; }
+        public string NameString { get { return Encoding.ASCII.GetString(Name)?.TrimEnd('\0'); } }
+
+        public BFF2Object()
+        {
+            var rawData = new List<byte>();
+            rawData.AddRange(CGeneric.patternBFF2);
+            this.Base = new CBFF2Base();
+        }
 
         public BFF2Object(byte[] rawData, ref int globalIndex)
         {
@@ -42,7 +50,7 @@ namespace N64PPLEditorC
                 var NameSize = CGeneric.ConvertByteArrayToInt(CGeneric.GiveMeArray(rawData, globalIndex, 4));
                 globalIndex += 4;
                 //doit toujours rester pair (supprimer le 0 inutile a la fin si besoin)
-                this.Name = Encoding.ASCII.GetString(CGeneric.GiveMeArray(rawData,globalIndex, NameSize)).TrimEnd('\0');
+                this.Name = CGeneric.GiveMeArray(rawData,globalIndex, NameSize);
                 globalIndex += NameSize;
             }
 
@@ -85,6 +93,64 @@ namespace N64PPLEditorC
             }
         }
 
+        public byte[] RecomposeRawData()
+        {
+            var rawData = new List<byte>();
+
+            //BFF2
+            rawData.AddRange(CGeneric.patternBFF2);
+
+            //Flags
+            this.Flags.UpdateFlags();
+            rawData.AddRange(this.Flags.Flags);
+
+            //Base
+            //TODO revoir pour recomposer la base
+
+            //bytes per line
+            rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.BytePerLines));
+
+            if (this.Flags.HasName)
+            {
+                var nameLenght = (int)this.Name.Length;
+                if (nameLenght % 2 == 0)
+                {
+                    rawData.AddRange(CGeneric.ConvertIntToByteArray(nameLenght));
+                    rawData.AddRange(this.Name);
+                }
+
+                else
+                {
+                    rawData.AddRange(CGeneric.ConvertIntToByteArray(nameLenght + 1));
+                    rawData.AddRange(this.Name); //TODO attention a rajouter un 0x00en cas de nom a longueur impaire
+                }
+            }
+
+            if (this.Flags.HasSubImages)
+            {
+                rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.SubImageData.SubImageCount));
+                rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.SubImageData.PayloadSize));
+            }
+            if ((this.Flags.PixelFormat & 0xF0) == 0x30)
+            {
+                rawData.AddRange(CGeneric.ConvertIntToByteArray((int)this.Palette.ColorCount));
+                rawData.AddRange(this.Palette.RawData);
+            }
+
+            if (this.Flags.HasSubImages)
+            {
+                //TODO
+            }
+            else
+            {
+                rawData.AddRange(this.EncodedPixelData);
+            }
+
+
+            return rawData.ToArray();
+        }
+
+
         public Bitmap GetBmpTexture()
         {
             byte[] rgbaData = CTextureManager.ConvertByteArrayToRGBA(DecodedPixelData, (CGeneric.Compression)Flags.PixelFormat, Palette?.RawData);
@@ -92,13 +158,22 @@ namespace N64PPLEditorC
            
         }
 
-
-
         public Bitmap GetSubImageBitmap(int index)
         {
             CBFF2SubImageData image = SubImageData.ImageData[index];
             byte[] rgbaData = CTextureManager.ConvertByteArrayToRGBA( image.PixelData,(CGeneric.Compression)Flags.PixelFormat);
             return CTextureManager.ConvertRGBAByteArrayToBitmap(rgbaData, (int)image.Width, (int)image.Height);
+        }
+
+        public void SaveTexture(int indexFIB, int index)
+        {
+            if(Flags.HasSubImages)
+            {
+                for(int i = 0; i < SubImageData.SubImageCount; i++)
+                    GetSubImageBitmap(i).Save(CGeneric.pathExtractedTexture + (indexFIB + 1) + "-" + i + ".png");
+            }
+            else
+                GetBmpTexture().Save(CGeneric.pathExtractedTexture + (indexFIB + 1) + "-" + (index + 1) + ", " + Name + ".png");
         }
     }
 }

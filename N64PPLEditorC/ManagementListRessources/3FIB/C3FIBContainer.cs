@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using static N64PPLEditorC.CGeneric;
 
 namespace N64PPLEditorC
@@ -8,14 +7,21 @@ namespace N64PPLEditorC
     public class C3FIBContainer
     {
         public C3FIBHeader Header {get;set;}
-        public BFF2Object BFF2Data { get; set;}
+        public BFF2Object Bff2 { get; set;}
 
         public C3FIBContainer(byte[] rawData, ref int globalIndex)
         {
             Header = new C3FIBHeader(rawData,ref globalIndex);
-            BFF2Data = new BFF2Object(rawData, ref globalIndex);
+            Bff2 = new BFF2Object(rawData, ref globalIndex);
         }
 
+        public C3FIBContainer()
+        {
+            Header = new C3FIBHeader();
+            Bff2 = new BFF2Object();
+        }
+
+        
 
 
 
@@ -41,14 +47,13 @@ namespace N64PPLEditorC
 
 
 
-
-
-
-
+        [Obsolete]
         private Byte[] rawData;
+        [Obsolete]
         private BFFHeader headerBFF2;
 
         //create the BFF2 struct, represent information of the BFF header and also calculated fields.
+        [Obsolete]
         public struct BFFHeader
         {
             public int sizeX, sizeY;
@@ -67,14 +72,15 @@ namespace N64PPLEditorC
             public bool isCompressedTexture;
             public bool isIndexedColor;
         }
-        
+
+        [Obsolete]
         public C3FIBContainer(Byte[] rawData)
         {
             this.rawData = rawData;
             this.headerBFF2 = new BFFHeader();
         }
 
-
+        [Obsolete]
         public void Init()
         {
             //init header...
@@ -129,6 +135,7 @@ namespace N64PPLEditorC
             Array.Copy(rawData, startingData, headerBFF2.dataCompressed, 0, headerBFF2.dataCompressed.Length); 
         }
 
+        [Obsolete] //Voir Init()
         private void ExtractPalette(int indexPalette)
         {
             //get palette size
@@ -141,6 +148,7 @@ namespace N64PPLEditorC
             Array.Copy(rawData, indexPalette + headerBFF2.paletteSize.Length, headerBFF2.palette, 0, headerBFF2.palette.Length);
         }
 
+        [Obsolete]
         public static byte[] GenerateBFF2(byte[] palette, byte[] data,CGeneric.Compression compressionMethod, int sizeX, int sizeY,string bffName)
         {
             //generate header
@@ -173,6 +181,7 @@ namespace N64PPLEditorC
             return finalData;
         }
 
+        [Obsolete]
         //specific format for BFF header
         private static byte[] SetHeader(CGeneric.Compression textureType, byte greenAlphaIndex,byte compressedValue, byte[] displayedWidth, byte[] pixelWidth, byte[] displayHeight, byte[] bffName, byte[] colorCount)
         {
@@ -241,63 +250,18 @@ namespace N64PPLEditorC
             return headerBFF2;
         }
 
-        public int GetSize()
-        {
-            return rawData.Length;
-        }
-
-        public int GetSizeX()
-        {
-            return headerBFF2.sizeX;
-        }
-
-        public int GetSizeY()
-        {
-            return headerBFF2.sizeY;
-        }
+        [Obsolete]
         public Byte[] GetRawData()
         {
             return rawData;
         }
 
-        public Compression GetCompressionType()
-        {
-            return (Compression)headerBFF2.textureType;
-        }
-
-        public void DecompressTexture()
-        {
-            Byte[] compressedTex;
-            compressedTex = new Byte[rawData.Length - 35 + headerBFF2.nameLength];
-
-            Byte[] decompressedTex;
-
-            //if texture is compressed, decompress it.
-            if (headerBFF2.isCompressedTexture)
-                decompressedTex = CTextureDecompress.DecompressTexture(headerBFF2);
-            else
-                decompressedTex = headerBFF2.dataCompressed;
-
-            //convert all textures to 32 bit RGBA for display to user.
-            decompressedTex = CTextureManager.ConvertByteArrayToRGBA(decompressedTex,(CGeneric.Compression)headerBFF2.textureType,headerBFF2.palette);
-
-            headerBFF2.dataUncompressed = decompressedTex;
-        }
-
-        public Bitmap GetBmpTexture(){
-            return CTextureManager.ConvertRGBAByteArrayToBitmap(headerBFF2.dataUncompressed, headerBFF2.sizeX, headerBFF2.sizeY);
-        }
-        
-        public string GetName()
-        {
-            return System.Text.Encoding.UTF8.GetString(headerBFF2.name);
-        }
-
+        [Obsolete]
         public int GetTextureDisplayTime()
         {
             return headerBFF2.displayLength;
         }
-
+        [Obsolete]
         public void SetTextureDisplayTime(byte displayTime)
         {
             rawData[8] = displayTime;
