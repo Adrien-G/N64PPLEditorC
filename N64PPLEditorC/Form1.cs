@@ -91,93 +91,39 @@ namespace N64PPLEditorC
         {
             using (OpenFileDialog openTexture = new OpenFileDialog())
             {
-                //openTexture.InitialDirectory = Application.StartupPath;
                 openTexture.RestoreDirectory = true;
                 openTexture.Multiselect = true;
-                if (openTexture.ShowDialog() == DialogResult.OK)
+
+                if (openTexture.ShowDialog() != DialogResult.OK)
+                    return;
+
+                foreach (String inputTexture in openTexture.FileNames)
                 {
-                    try
-                    {
-                        foreach (String inputTexture in openTexture.FileNames)
-                        {
+                    Image img = Image.FromFile(inputTexture);
 
-                            Image img = Image.FromFile(inputTexture);
-                            if (img.Width <= 320 && img.Height <= 240)
-                            {
-                                //load texture
-                                pictureBoxTexture.Width = img.Width;
-                                pictureBoxTexture.Height = img.Height;
-                                pictureBoxTexture.Image = img;
 
-                                //test the best compression available
-                                Compression compressionMethod = this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].compressionType;
-                                if (!checkBoxKeepSameCompression.Checked)
-                                    compressionMethod = CTextureManager.TestBestCompression((Bitmap)pictureBoxTexture.Image);
+                    if (img.Width > 320 || img.Height > 240)
+                        MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                                //convert texture to byte array for future treatment 
-                                byte[] rawData = CTextureManager.ConvertRGBABitmapToByteArrayRGBA((Bitmap)pictureBoxTexture.Image);
+                    //load texture
+                    pictureBoxTexture.Width = img.Width;
+                    pictureBoxTexture.Height = img.Height;
+                    pictureBoxTexture.Image = img;
 
-                                //make it at good format
-                                byte[] palette;
-                                (palette, rawData) = CTextureManager.ConvertPixelsToGoodFormat(rawData, compressionMethod);
+                    //add to th container
+                    string safeFileName = Path.GetFileNameWithoutExtension(inputTexture);
 
-                                //compress data
-                                byte[] compressedData = CTextureCompress.MakeCompression(rawData);
+                    //check if the name has same naming convention than the extract (remove index before coma)
+                    if (safeFileName.Split(',').Count() == 2)
+                        safeFileName = safeFileName.Split(',')[1].Trim();
 
-                                //check if the size of the new data is not too much than the free space
-                                UpdateFreeSpaceLeft();
-                                if (freeSpaceLeft < compressedData.Length)
-                                {
-                                    MessageBox.Show("There is not enought space...", "Free space in rom is needed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                                    //if it's lower than 64Mb.
-                                    if (!extendedRom)
-                                    {
-                                        var res = MessageBox.Show("Do you want to make extended rom file ? (32 to 64Mb)", "Extend PPL rom ?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                                        if (res == DialogResult.Yes)
-                                        {
-                                            extendedRom = true;
-                                            labelExtendedRom.Visible = true;
-                                        }
-                                    }
-                                    else
-                                        break;
-                                }
-
-                                //add header and generate the bff2
-                                string safeFileName = Path.GetFileNameWithoutExtension(inputTexture);
-                                //check if the name has same naming convention than the extract (remove index before coma)
-                                if (safeFileName.Split(',').Count() == 2)
-                                    safeFileName = safeFileName.Split(',')[1].Trim();
-
-                                byte[] finalBFF2 = C3FIBContainer.GenerateBFF2(palette, compressedData, compressionMethod, img.Width, img.Height, safeFileName);
-
-                                //add texture to the bff2 files and update treeview
-                                if (treeViewTextures.SelectedNode.Level == 0)
-                                {
-                                    ressourceList.Fib[treeViewTextures.SelectedNode.Index].AddBFF2Child(finalBFF2);
-                                    treeViewTextures.SelectedNode.Nodes.Add("[added] , " + safeFileName);
-                                    treeViewTextures.SelectedNode = treeViewTextures.Nodes[treeViewTextures.SelectedNode.Index].LastNode;
-                                }
-                                else
-                                {
-                                    ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].AddBFF2Child(finalBFF2);
-                                    treeViewTextures.SelectedNode.Parent.Nodes.Add("[added] , " + safeFileName);
-                                    treeViewTextures.SelectedNode = treeViewTextures.Nodes[treeViewTextures.SelectedNode.Parent.Index].LastNode;
-                                }
-                                img.Dispose();
-
-                            }
-                            else
-                                MessageBox.Show("Texture must be at maximum of size 320x240 !", "Size too big...", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Unrecognized image format :( " + Environment.NewLine + "Error details : " + ex.Message, "Error loading texture", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    UpdateFreeSpaceLeft();
+                    this.ressourceList.Fib[treeViewTextures.SelectedNode.Index].Container.Add(new C3FIBContainer(pictureBoxTexture,safeFileName));
+                    treeViewTextures.SelectedNode.Nodes.Add("[added] , " + safeFileName);
                 }
+
+               treeViewTextures.Nodes[treeViewTextures.SelectedNode.Index].Expand();
+
+                UpdateFreeSpaceLeft();
             }
         }
         private void removeThisTextureToolStripMenuItem_Click(object sender, EventArgs e)
@@ -193,9 +139,17 @@ namespace N64PPLEditorC
         private void contextMenuStripForTreeview_Opening(object sender, CancelEventArgs e)
         {
             if (treeViewTextures.SelectedNode.Level == 1)
+            {
                 removeThisTextureToolStripMenuItem.Enabled = true;
+                addNewTextureToolStripMenuItem.Enabled = false;
+            }
+
             else
+            {
                 removeThisTextureToolStripMenuItem.Enabled = false;
+                addNewTextureToolStripMenuItem.Enabled = true;
+            }
+               
         }
 
         #endregion
@@ -224,7 +178,13 @@ namespace N64PPLEditorC
         private void numericUpDownTextureDisplayTime_ValueChanged(object sender, EventArgs e)
         {
             if(treeViewTextures.SelectedNode.Level == 1)
-                this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[treeViewTextures.SelectedNode.Index].Header.DisplayTime = (uint)numericUpDownTextureDisplayTime.Value;
+            {
+                var index = 0;
+                if (!this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[0].Bff2.Flags.HasSubImages)
+                    index = treeViewTextures.SelectedNode.Index;
+                this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[index].Header.DisplayTime = (uint)numericUpDownTextureDisplayTime.Value;
+
+            }
 
         }
 
@@ -235,13 +195,18 @@ namespace N64PPLEditorC
             {
                 labelIsTextureContainer.Hide();
                 var bff2Data = this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[0].Bff2;
+                var index = 0;
                 if (!bff2Data.Flags.HasSubImages)
+                {
                     pictureBoxTexture.Image = this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[treeViewTextures.SelectedNode.Index].Bff2.GetBmpTexture();
+                    index = treeViewTextures.SelectedNode.Index;
+                }
                 else
                     pictureBoxTexture.Image = bff2Data.GetSubImageBitmap(treeViewTextures.SelectedNode.Index);
 
+                numericUpDownTextureDisplayTime.Value = this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[index].Header.DisplayTime;
                 pictureBoxTexture.Show();
-                numericUpDownTextureDisplayTime.Value = this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[treeViewTextures.SelectedNode.Index].Header.DisplayTime;
+                labelTextureCompression.Text = "Compression : " + this.ressourceList.Fib[treeViewTextures.SelectedNode.Parent.Index].Container[index].Bff2.Flags.CompressionType.ToString();
             }
             if (level == 0)
             {
@@ -263,8 +228,7 @@ namespace N64PPLEditorC
                 checkBoxUsesSharedFrameBuffers.Checked = fib.Flags.UsesSharedFrameBuffers;
                 checkBoxPingPongAnimation.Checked = fib.Flags.PingPongAnimation;
                 checkBoxPingPongDirection.Checked = fib.Flags.PingPongDirection;
-
-                labelTextureCompression.Text = "Compression : " + fib.compressionType.ToString();
+                labelTextureCompression.Text = "Compression : -";
             }
             
         }
@@ -369,6 +333,22 @@ namespace N64PPLEditorC
                 freeSpaceLeft -= ressourceList.GetSizeOfAllRessourceList();
                 if (audioList != null)//TODO To remove when ok
                     freeSpaceLeft -= audioList.GetSizeOfAllAudio();
+
+                if (freeSpaceLeft < 0)
+                {
+                    MessageBox.Show("There is not enought space...", "Free space in rom is needed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    //if it's lower than 64Mb.
+                    if (!extendedRom)
+                    {
+                        var res = MessageBox.Show("Do you want to make extended rom file ? (32 to 64Mb)", "Extend PPL rom ?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (res == DialogResult.Yes)
+                        {
+                            extendedRom = true;
+                            labelExtendedRom.Visible = true;
+                        }
+                    }
+                }
 
                 labelFreeSpaceLeft.Text = freeSpaceLeft.ToString("### ### ### ###") + " bytes";
             }

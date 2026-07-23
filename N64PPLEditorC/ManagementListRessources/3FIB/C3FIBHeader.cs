@@ -26,7 +26,7 @@
 
         public C3FIBHeader()
         {
-            DisplayTime = 1;
+            DisplayTime = 8;
         }
 
 

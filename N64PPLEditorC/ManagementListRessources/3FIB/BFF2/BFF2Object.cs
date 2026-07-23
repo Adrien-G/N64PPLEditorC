@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
+using System.Windows.Forms;
+using static N64PPLEditorC.CGeneric;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace N64PPLEditorC
@@ -16,17 +18,33 @@ namespace N64PPLEditorC
 
         public uint BytePerLines { get; set; }
 
-        public byte[] EncodedPixelData { get; set; }
-        public byte[] DecodedPixelData { get; set; }
+        private byte[] EncodedPixelData { get; set; }
+        private byte[] DecodedPixelData { get; set; }
 
-        public byte[] Name { get; set; }
+        private byte[] Name { get; set; }
         public string NameString { get { return Encoding.ASCII.GetString(Name)?.TrimEnd('\0'); } }
 
-        public BFF2Object()
+        public BFF2Object(PictureBox pictureBox, string name)
         {
-            var rawData = new List<byte>();
-            rawData.AddRange(CGeneric.patternBFF2);
-            this.Base = new CBFF2Base();
+            //test the best compression available
+            this.Flags = new CBFF2Flags((byte)CTextureManager.TestBestCompression((Bitmap)pictureBox.Image));
+
+            if (Flags.CompressionType == CGeneric.Compression.max16Colors && pictureBox.Image.Width % 2 != 0)
+                Flags = new CBFF2Flags((byte)CGeneric.Compression.max256Colors);
+
+            //convert texture to byte array for future treatment 
+            DecodedPixelData = CTextureManager.ConvertRGBABitmapToByteArrayRGBA((Bitmap)pictureBox.Image);
+
+            //make it at good format
+            byte[] palette;
+            (palette, DecodedPixelData) = CTextureManager.ConvertPixelsToGoodFormat(DecodedPixelData, Flags.CompressionType);
+            this.Palette = new CBFF2Palette(palette);
+            //compress data
+            EncodedPixelData = CTextureCompress.MakeCompression(DecodedPixelData);
+
+            Name = CGeneric.ConvertStringToByteArray(name);
+            BytePerLines = CalculateBytesPerLine(pictureBox.Image.Width, Flags.CompressionType);
+            this.Base = new CBFF2Base(pictureBox);
         }
 
         public BFF2Object(byte[] rawData, ref int globalIndex)
@@ -196,7 +214,23 @@ namespace N64PPLEditorC
                     GetSubImageBitmap(i).Save(CGeneric.pathExtractedTexture + (indexFIB + 1) + "-" + i + ".png");
             }
             else
-                GetBmpTexture().Save(CGeneric.pathExtractedTexture + (indexFIB + 1) + "-" + (index + 1) + ", " + Name + ".png");
+                GetBmpTexture().Save(CGeneric.pathExtractedTexture + (indexFIB + 1) + "-" + (index + 1) + ", " + NameString + ".png");
+        }
+
+        private static uint CalculateBytesPerLine(int width, CGeneric.Compression format)
+        {
+            switch (format)
+            {
+                case CGeneric.Compression.max16Colors: return (uint)((width + 1) / 2);
+                case CGeneric.Compression.max256Colors:return (uint)width;
+                case CGeneric.Compression.greyscale:
+                case CGeneric.Compression.trueColor16Bits:
+                    return (uint)(width * 2);
+                case CGeneric.Compression.trueColor32Bits:
+                    return (uint)(width * 4);
+                default:
+                    throw new NotSupportedException();
+            }
         }
     }
 }

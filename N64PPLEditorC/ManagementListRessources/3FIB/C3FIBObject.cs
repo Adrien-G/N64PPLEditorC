@@ -96,28 +96,5 @@ namespace N64PPLEditorC
             this.Name = CGeneric.ConvertStringToByteArray(name);
             Container = new List<C3FIBContainer>();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //only for keep compression ratio
-        public Compression compressionType;
-
-        
-        public void AddBFF2Child(byte[] bff2Child)
-        {
-            Container.Add(new C3FIBContainer(bff2Child));
-            Container[Container.Count - 1].Init();
-        }
     }
 }

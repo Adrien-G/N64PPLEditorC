@@ -11,7 +11,9 @@ namespace N64PPLEditorC
         //représentations sur un int
         public int FlagsInt { get { return CGeneric.ConvertByteArrayToInt(Flags); } }
 
-        public byte PixelFormat { get; private set; }
+        public byte PixelFormat { get; set; }
+
+        public CGeneric.Compression CompressionType { get { return (CGeneric.Compression)PixelFormat;}}
         public bool HasName { get; private set; }
         public bool HasTransparentPaletteIndex { get; private set; }
         public bool IsCompressed { get; private set; }
@@ -19,7 +21,13 @@ namespace N64PPLEditorC
         public bool HasPackedWidths { get; private set; }
         public bool HasSubImages { get; private set; }
 
-
+        public CBFF2Flags(byte pixelFormat)
+        {
+            PixelFormat = pixelFormat;
+            HasName = true;
+            IsCompressed = true;
+            Flags = new byte[] { 0, 0, 0, 0 };
+        }
         public CBFF2Flags(byte[] rawData,ref int index)
         {
             var flags = CGeneric.GiveMeArray(rawData, index, 4);

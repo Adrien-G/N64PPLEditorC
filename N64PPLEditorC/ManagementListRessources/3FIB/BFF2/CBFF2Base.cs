@@ -1,4 +1,6 @@
-﻿namespace N64PPLEditorC
+﻿using System.Windows.Forms;
+
+namespace N64PPLEditorC
 {
     public class CBFF2Base
     {
@@ -24,8 +26,12 @@
             globalIndex += 8;
         }
 
-        public CBFF2Base()
+        public CBFF2Base(PictureBox picture)
         {
+            DisplayWidth = (uint)picture.Image.Width;
+            DisplayHeight = (uint)picture.Image.Height;
+            PixelWidth = (uint)picture.Image.Width;
+
         }
     }
 }
